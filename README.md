@@ -1,43 +1,75 @@
-# EVCharging (Sistemas Distribuidos 25/26)
+## EV Charging (SD 25/26)
 
-Alcance: el objetivo es realizar un sistema que simula la gestión de una red de postere recargar (charging point) de vehículos eléctricos
+Pequeño sistema de ejemplo para simular una Central de Carga de VE y un Monitor de Punto de Carga (CP). Incluye:
+- `ev_central/EV_Central.py`: servidor TCP que acepta conexiones de CP y gestiona el registro/autenticación y mensajes síncronos.
+- `ev_cp_monitor/EV_CP_M.py`: cliente que simula un CP, se registra en la central y escucha comandos.
 
-Partiendo de un mapa fiction tendremos una serie de puntos de recarga de vehículos eléctricos en los que los usuarios (conductores) podrán hacer uso.
-Nos basaremos en una serie de componentes distribuidos que estarán interconectados.
+### Estructura del proyecto
+- `ev_central/EV_Central.py`
+- `ev_cp_monitor/EV_CP_M.py`
+- `ev_common/` (utilidades comunes futuras)
+- `requirements.txt`
 
-CENTRAL
-Tendremos un cuadro de mandos donde se podrá observar el funcionamiento en timepo real de todo el sistema, incluyendo putnos de recarga, peticiones de suministro y estado del sistema central.
-La información a visualizar será: ID del punto de recarga, precio al que tiene el suministro €/Kwh / Estado.
-El Estado puede ser:
-.Activado (disponible): El CP funciona correctamente y a la espera de solicitud de recarga. Se mostrará con un fondo de color verde.
-.Parado(fuera de servicio): El cp está en correcto funcionamiento, pero no puede usarse deliberadamente por orden de la central. Color Naranja y con la leyenda "Out of Order"
-.Suministrando: El PR funciona correctamente, y está suministrando energía a un vehículo. Color verde y los siguientes datos: Consumo en KW en tiempo real, importe en € en tiempo real, id del conductor al que se está suministrando.
-.Averiado: EL PR está conectado al sistema central, pero tiene una avería y no se puede usar. Color rojo
-.Desconectado: El PR no está conectado al sistema central (por cualquier motivo). Color gris.
+### Requisitos
+- Python 3.10+ (recomendado)
+- Pip para instalar dependencias
+- Opcional: Kafka (`confluent-kafka`) y MySQL (por ahora impresos/logs; integración futura)
 
-CONDUCTORES
-los usuarios tendrán una aplicación que permita recargar su vehiculo en un punto determinado. Dicha app enviará a la central la petición de un servicio y esta responderá autorizándolo.
+Instala dependencias:
+```bash
+pip install -r requirements.txt
+```
 
-PUNTOS DE RECARGA
-Los estados en los que puede estar son los expresados anteriormente.
-Perminten las siguientes funcionalidades:
-.Registrarse en la central: Enviarán su id y ubicación a la central.
-.Activarse o pararse
-.Suministrar: Dos formas: Manualmente mediante una opción en el propio punto; a través de una petición proviniente de la aplicación del conductor (via central)
-Además los PR tienen un módulo independiente que permite monitorizar localmente el hardware y software del local.
+### Ejecución rápida (local)
+1) Iniciar la Central:
+```bash
+python ev_central/EV_Central.py --port 5000 --kafka "localhost:9092" --db "mysql://user:pass@host/db"
+```
 
-MECANICA DE LA SOLUCIÓN
-Central permanecerá en ejecución sin límite de tiempo sin apagarse nunca. Entonces pasará la siguiente secuencia:
-1- Ante cualquier ejecución o reinicio, central comprobará (en su BD) si ya tiene puntos de recarga disponibles registrados y los mostrará en el panel de monitorización y control en su estado. Importante: hasta que un PR no conecte con central, esta no podrá conocer el estado real del punto. En ese caso, lo mostrará como desconectado.
+2) Iniciar un Monitor de CP (otro terminal):
+```bash
+python ev_cp_monitor/EV_CP_M.py --engine_ip 127.0.0.1 --engine_port 5001 --central_ip 127.0.0.1 --central_port 5000 --cp_id CP001
+```
 
-2- Central siempre estará a la espera de: Recibir peticiones de registro y alta de un nuevo punto de recarga; Recibir peticiones de autorización de un suministro.
+Si todo va bien, verás en la Central un `REG` recibido y una respuesta `AUTH#OK` enviada; en el Monitor aparecerá el registro exitoso y quedará escuchando comandos.
 
-....
-...
-..
+### Parámetros principales
+- Central (`EV_Central.py`):
+  - `--port`: puerto TCP de escucha (obligatorio)
+  - `--kafka`: broker Kafka `host:puerto` (obligatorio para el arranque; aún no se usa)
+  - `--db`: URL de la base de datos (opcional; aún no se usa)
 
+- Monitor (`EV_CP_M.py`): Aplicación que simula un módulo de gestión de observación de todo el CP
+  - `--engine_ip` y `--engine_port`: datos del Engine local (placeholder)
+  - `--central_ip` y `--central_port`: dirección de la Central
+  - `--cp_id`: identificador del punto de carga
 
+### Qué hace cada proceso
+- Central:
+  - Abre servidor TCP, acepta múltiples CP en hilos.
+  - Al recibir `REG`, valida la trama y responde `AUTH#OK` si es correcta.
+  - Mantiene un bucle para mensajes posteriores (pendiente de ampliar: AVR, telemetría, etc.).
 
-Comando Central:  python EV_Central.py --port 5000 --kafka "localhost:9092" --db "mysql://user:pass@host/db"
+- Monitor:
+  - Se conecta a la Central y envía `REG` con `cp_id`, ubicación y precio.
+  - Valida `AUTH#OK` y, si es correcto, inicia un hilo para escuchar comandos.
+  - Mantiene un bucle de vida (lógica adicional pendiente).
 
-Comando monitor: python EV_CP_M.py --engine_ip 127.0.0.1 --engine_port 5001 --central_ip 127.0.0.1 --central_port 5000 --cp_id CP001
+### Protocolo de comunicación (resumen)
+- Envoltura binaria: `STX` + `DATA` + `ETX` + `LRC` (XOR de bytes de `DATA`).
+- `DATA` se forma como: `COD_OP#campo1#campo2#...`.
+- Ejemplos lógicos (sin STX/ETX/LRC):
+  - Envío CP → Central: `REG#CP001#C/Mayor, 45#0.48`
+  - Respuesta Central → CP: `AUTH#OK#Autenticacion exitosa`
+
+### Solución de problemas
+- Puerto en uso: cambia `--port` o cierra procesos previos.
+- Firewall: permite conexiones locales en el puerto elegido.
+- Dirección Central: asegúrate de que `--central_ip` y `--central_port` coinciden con la Central.
+- Encoding/console en Windows: usa PowerShell o CMD; si ves caracteres raros, prueba otra consola.
+
+### Siguientes pasos (roadmap)
+- Integrar realmente Kafka (`confluent-kafka`) para eventos asíncronos.
+- Persistencia en MySQL: estados de CP y auditoría.
+- Ampliar comandos síncronos (p. ej., `START`, `STOP`) y validaciones.
+- Extraer utilidades de protocolo a `ev_common/` compartido.
