@@ -19,17 +19,21 @@ Instala dependencias:
 ```bash
 pip install -r requirements.txt
 ```
+---NUEVO
+ Terminal para EV_Central (Servidor Central)
+El Central actúa como el servidor principal, escuchando en el puerto 5000
+python EV_Central.py --port 5000 --kafka "localhost:9092" --db "mysql://user:pass@host/db"
 
-### Ejecución rápida (local)
-1) Iniciar la Central:
-```bash
-python ev_central/EV_Central.py --port 5000 --kafka "localhost:9092" --db "mysql://user:pass@host/db"
-```
+2. Terminal para EV_CP_E (Servidor Local - Engine)
+El Engine actúa como un servidor local, escuchando en el puerto 5001.
+python EV_CP_E.py --port 5001
 
-2) Iniciar un Monitor de CP (otro terminal):
-```bash
-python ev_cp_monitor/EV_CP_M.py --engine_ip 127.0.0.1 --engine_port 5001 --central_ip 127.0.0.1 --central_port 5000 --cp_id CP001
-```
+3. Terminal para EV_CP_M (Cliente/Monitor)
+El Monitor es el cliente que se conecta a ambos servidores. Necesita saber dónde encontrarlos.
+
+python EV_CP_M.py --cp_id CP001 --central_ip 127.0.0.1 --central_port 5000 --engine_ip 127.0.0.1 --engine_port 5001
+
+
 
 Si todo va bien, verás en la Central un `REG` recibido y una respuesta `AUTH#OK` enviada; en el Monitor aparecerá el registro exitoso y quedará escuchando comandos.
 
