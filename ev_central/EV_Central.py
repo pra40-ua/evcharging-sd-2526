@@ -1,6 +1,9 @@
 import socket
 import argparse
 import threading
+import mysql.connector
+from mysql.connector import Error
+from datetime import datetime
 
 # =================================================================
 #                 ESTADO GLOBAL DE CONEXIONES ACTIVAS
@@ -86,10 +89,111 @@ def descomponer_trama(trama_bytes: bytes) -> tuple:
         return None, None
 
 # =================================================================
+#                      FUNCIONES DE BASE DE DATOS
+# =================================================================
+
+def conectar_bd(db_config: str) -> mysql.connector.connection.MySQLConnection:
+    """Establece conexión con la base de datos MySQL."""
+    try:
+        # Parsear la configuración de BD (formato: host:port:user:password:database)
+        if not db_config:
+            raise ValueError("Configuración de BD no proporcionada")
+        
+        parts = db_config.split(':')
+        if len(parts) != 5:
+            raise ValueError("Formato de BD incorrecto. Use: host:port:user:password:database")
+        
+        host, port, user, password, database = parts
+        
+        connection = mysql.connector.connect(
+            host=host,
+            port=int(port),
+            user=user,
+            password=password,
+            database=database,
+            autocommit=True
+        )
+        
+        if connection.is_connected():
+            print(f"[CENTRAL] Conectado a MySQL en {host}:{port}")
+            return connection
+            
+    except Error as e:
+        print(f"[CENTRAL] Error conectando a MySQL: {e}")
+        raise
+    except Exception as e:
+        print(f"[CENTRAL] Error inesperado en conexión BD: {e}")
+        raise
+
+def registrar_cp_en_bd(connection: mysql.connector.connection.MySQLConnection, 
+                       cp_id: str, ubicacion: str, precio_kwh: float) -> bool:
+    """Registra o actualiza un CP en la base de datos y lo marca como Activado."""
+    try:
+        cursor = connection.cursor()
+        
+        # Verificar si el CP ya existe
+        cursor.execute("SELECT id, estado FROM charging_points WHERE cp_id = %s", (cp_id,))
+        result = cursor.fetchone()
+        
+        if result:
+            # CP existe, actualizar estado y fecha de conexión
+            cp_db_id, estado_actual = result
+            cursor.execute("""
+                UPDATE charging_points 
+                SET estado = 'Activado', fecha_ultima_conexion = %s 
+                WHERE cp_id = %s
+            """, (datetime.now(), cp_id))
+            print(f"[CENTRAL] CP {cp_id} actualizado en BD. Estado anterior: {estado_actual} -> Activado")
+        else:
+            # CP nuevo, insertar
+            cursor.execute("""
+                INSERT INTO charging_points (cp_id, ubicacion, precio_kwh, estado, fecha_ultima_conexion)
+                VALUES (%s, %s, %s, 'Activado', %s)
+            """, (cp_id, ubicacion, precio_kwh, datetime.now()))
+            print(f"[CENTRAL] CP {cp_id} registrado en BD como nuevo")
+        
+        cursor.close()
+        return True
+        
+    except Error as e:
+        print(f"[CENTRAL] Error en BD al registrar CP {cp_id}: {e}")
+        return False
+    except Exception as e:
+        print(f"[CENTRAL] Error inesperado al registrar CP {cp_id}: {e}")
+        return False
+
+def actualizar_estado_cp(connection: mysql.connector.connection.MySQLConnection, 
+                         cp_id: str, nuevo_estado: str) -> bool:
+    """Actualiza el estado de un CP en la base de datos."""
+    try:
+        cursor = connection.cursor()
+        cursor.execute("""
+            UPDATE charging_points 
+            SET estado = %s, fecha_ultima_conexion = %s 
+            WHERE cp_id = %s
+        """, (nuevo_estado, datetime.now(), cp_id))
+        
+        if cursor.rowcount > 0:
+            print(f"[CENTRAL] Estado de CP {cp_id} actualizado a: {nuevo_estado}")
+            cursor.close()
+            return True
+        else:
+            print(f"[CENTRAL] CP {cp_id} no encontrado en BD para actualizar estado")
+            cursor.close()
+            return False
+            
+    except Error as e:
+        print(f"[CENTRAL] Error actualizando estado de CP {cp_id}: {e}")
+        return False
+    except Exception as e:
+        print(f"[CENTRAL] Error inesperado actualizando estado de CP {cp_id}: {e}")
+        return False
+
+# =================================================================
 #                       LÓGICA DEL SERVIDOR CENTRAL
 # =================================================================
 
-def manejar_cliente(conn: socket.socket, addr: tuple):
+def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.connector.connection.MySQLConnection):
     """Función ejecutada por un hilo para manejar la conexión de un CP."""
     
     print(f"[CENTRAL] Conexión establecida con {addr[0]}:{addr[1]}")
@@ -104,17 +208,33 @@ def manejar_cliente(conn: socket.socket, addr: tuple):
         cod_op, campos = descomponer_trama(trama_bytes)
 
         if cod_op == 'REG' and len(campos) >= 3:
-            cp_id = campos[0] 
+            cp_id = campos[0]
+            ubicacion = campos[1]
+            precio_kwh = float(campos[2])
+            
             # --- NUEVA LÓGICA: Almacenar la conexión ---
             with CONEXIONES_ACTIVAS_LOCK:
                 CONEXIONES_ACTIVAS[cp_id] = conn
                 print(f"[CENTRAL] Socket de {cp_id} guardado. Total: {len(CONEXIONES_ACTIVAS)}")
             
-            # [Lógica BD: Insertar/Actualizar CP y marcar como ACTIVADO]
-            
-            respuesta_trama = construir_trama('AUTH', ['OK', 'Autenticacion exitosa'])
-            conn.sendall(respuesta_trama)
-            print(f"[CENTRAL] <- Enviada respuesta AUTH: OK a {cp_id}")
+            # --- LÓGICA BD: Insertar/Actualizar CP y marcar como ACTIVADO ---
+            if db_connection and db_connection.is_connected():
+                if registrar_cp_en_bd(db_connection, cp_id, ubicacion, precio_kwh):
+                    respuesta_trama = construir_trama('AUTH', ['OK', 'Autenticacion exitosa'])
+                    conn.sendall(respuesta_trama)
+                    print(f"[CENTRAL] <- Enviada respuesta AUTH: OK a {cp_id}")
+                else:
+                    # Error en BD, rechazar conexión
+                    respuesta_trama = construir_trama('AUTH', ['FAIL', 'Error en base de datos'])
+                    conn.sendall(respuesta_trama)
+                    print(f"[CENTRAL] <- Enviada respuesta AUTH: FAIL a {cp_id} (Error BD)")
+                    return
+            else:
+                # Sin BD, aceptar conexión pero advertir
+                print(f"[CENTRAL] ADVERTENCIA: Sin conexión a BD, aceptando {cp_id} sin persistencia")
+                respuesta_trama = construir_trama('AUTH', ['OK', 'Autenticacion exitosa (sin BD)'])
+                conn.sendall(respuesta_trama)
+                print(f"[CENTRAL] <- Enviada respuesta AUTH: OK a {cp_id} (sin BD)")
 
         else:
             print(f"[CENTRAL] Error: Mensaje inicial no válido ({cod_op}). Cerrando conexión.")
@@ -143,7 +263,10 @@ def manejar_cliente(conn: socket.socket, addr: tuple):
     except Exception as e:
         print(f"[CENTRAL] Error en bucle de cliente {cp_id}: {e}")
     finally:
-        # [Lógica DB: Marcar el CP como DESCONECTADO (Gris)]
+        # --- LÓGICA DB: Marcar el CP como DESCONECTADO ---
+        if cp_id != "Desconocido" and db_connection and db_connection.is_connected():
+            actualizar_estado_cp(db_connection, cp_id, "Desconectado")
+        
         if cp_id in CONEXIONES_ACTIVAS:
             with CONEXIONES_ACTIVAS_LOCK:
                 del CONEXIONES_ACTIVAS[cp_id]
@@ -205,6 +328,18 @@ def main():
     print(f"Base de datos: {args.db if args.db else 'Ninguna'}")
     print("="*40)
 
+    # Inicialización de la base de datos
+    db_connection = None
+    if args.db:
+        try:
+            db_connection = conectar_bd(args.db)
+        except Exception as e:
+            print(f"[EV_Central] ADVERTENCIA: No se pudo conectar a BD: {e}")
+            print("[EV_Central] Continuando sin persistencia de datos...")
+    else:
+        print("[EV_Central] ADVERTENCIA: No se proporcionó configuración de BD")
+        print("[EV_Central] Continuando sin persistencia de datos...")
+
     # Inicialización del servidor de Sockets
     try:
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -220,7 +355,7 @@ def main():
             # Bloqueante: Espera una conexión
             conn, addr = server_socket.accept()
             # Iniciar un nuevo hilo para manejar la conexión de forma concurrente
-            client_thread = threading.Thread(target=manejar_cliente, args=(conn, addr))
+            client_thread = threading.Thread(target=manejar_cliente, args=(conn, addr, db_connection))
             client_thread.start()
 
     
@@ -231,6 +366,9 @@ def main():
     finally:
         if 'server_socket' in locals():
             server_socket.close()
+        if db_connection and db_connection.is_connected():
+            db_connection.close()
+            print("[EV_Central] Conexión a BD cerrada.")
 
 if __name__ == "__main__":
     main()
