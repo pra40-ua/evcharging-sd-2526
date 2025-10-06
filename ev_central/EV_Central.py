@@ -3,6 +3,14 @@ import argparse
 import threading
 
 # =================================================================
+#                 ESTADO GLOBAL DE CONEXIONES ACTIVAS
+# =================================================================
+
+# Diccionario de CP_ID -> socket
+CONEXIONES_ACTIVAS = {}
+CONEXIONES_ACTIVAS_LOCK = threading.Lock()
+
+# =================================================================
 #                         FUNCIONES DE PROTOCOLO
 # =================================================================
 
@@ -96,8 +104,11 @@ def manejar_cliente(conn: socket.socket, addr: tuple):
         cod_op, campos = descomponer_trama(trama_bytes)
 
         if cod_op == 'REG' and len(campos) >= 3:
-            cp_id = campos[0] # Almacena el ID para usarlo en el hilo
-            print(f"[CENTRAL] -> Recibido REG de CP ID: {cp_id}...")
+            cp_id = campos[0] 
+            # --- NUEVA LÓGICA: Almacenar la conexión ---
+            with CONEXIONES_ACTIVAS_LOCK:
+                CONEXIONES_ACTIVAS[cp_id] = conn
+                print(f"[CENTRAL] Socket de {cp_id} guardado. Total: {len(CONEXIONES_ACTIVAS)}")
             
             # [Lógica BD: Insertar/Actualizar CP y marcar como ACTIVADO]
             
@@ -133,9 +144,53 @@ def manejar_cliente(conn: socket.socket, addr: tuple):
         print(f"[CENTRAL] Error en bucle de cliente {cp_id}: {e}")
     finally:
         # [Lógica DB: Marcar el CP como DESCONECTADO (Gris)]
+        if cp_id in CONEXIONES_ACTIVAS:
+            with CONEXIONES_ACTIVAS_LOCK:
+                del CONEXIONES_ACTIVAS[cp_id]
+                print(f"[CENTRAL] Socket de {cp_id} eliminado. Total: {len(CONEXIONES_ACTIVAS)}")
+        
         conn.close()
-        print(f"[CENTRAL] Hilo de conexión con {cp_id} finalizado. Socket cerrado.")
+        print(f"[CENTRAL] Hilo de conexión con {addr[0]}:{addr[1]} finalizado.")
 
+
+def consola_central():
+    """Hilo que permite al operador enviar comandos STOP/START desde la consola."""
+    while True:
+        try:
+            # Esperamos comandos del operador, ej: STOP CP001
+            comando_str = input("\n[CENTRAL CMD] (Ej: STOP CP001): ").strip().upper()
+            if not comando_str:
+                continue
+
+            partes = comando_str.split()
+            cod_op = partes[0]
+            
+            if cod_op in ('STOP', 'START') and len(partes) == 2:
+                cp_id = partes[1]
+                
+                with CONEXIONES_ACTIVAS_LOCK:
+                    conn = CONEXIONES_ACTIVAS.get(cp_id)
+                
+                if conn:
+                    # Construir y enviar la trama de control
+                    trama_control = construir_trama(cod_op, [cp_id])
+                    conn.sendall(trama_control)
+                    print(f"[CENTRAL] -> Enviado {cod_op} a {cp_id}.")
+                else:
+                    print(f"[CENTRAL] ERROR: CP ID {cp_id} no está conectado o no se registró.")
+                    
+            elif cod_op == 'EXIT':
+                print("[CENTRAL] Saliendo de la consola...")
+                break # Salir del bucle de comandos
+            
+            else:
+                print("[CENTRAL] Comando inválido. Use STOP <ID> o START <ID>.")
+                
+        except EOFError:
+            print("\n[CENTRAL] Consola terminada por EOF (Ctrl+Z o Ctrl+D).")
+            break
+        except Exception as e:
+            print(f"[CENTRAL] Error en consola de comandos: {e}")
 def main():
     parser = argparse.ArgumentParser(description="Proceso EV_Central")
     parser.add_argument("--port", type=int, required=True, help="Puerto de escucha")
@@ -157,7 +212,8 @@ def main():
         
         server_socket.bind(('', args.port)) 
         server_socket.listen(5)
-        
+        consola_thread = threading.Thread(target=consola_central, daemon=True)
+        consola_thread.start()
         print(f"[EV_Central] Servidor escuchando en TCP (:{args.port})...")
 
         while True:
@@ -167,6 +223,7 @@ def main():
             client_thread = threading.Thread(target=manejar_cliente, args=(conn, addr))
             client_thread.start()
 
+    
     except KeyboardInterrupt:
         print("\n[EV_Central] Apagando por interrupción de usuario...")
     except Exception as e:

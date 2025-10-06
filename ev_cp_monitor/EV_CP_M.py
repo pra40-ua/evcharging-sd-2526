@@ -3,6 +3,7 @@ import argparse
 import socket
 import sys
 import threading
+from queue import Queue, Empty
 
 # =================================================================
 #                         FUNCIONES DE PROTOCOLO
@@ -53,6 +54,13 @@ def construir_trama(cod_op: str, campos: list) -> bytes:
     return trama
 
 # =================================================================
+#                     COLA DE ORDENES (STOP/START)
+# =================================================================
+
+# Cola compartida entre el hilo de escucha de la Central y el hilo HCK
+COMMAND_QUEUE: Queue = Queue()
+
+# =================================================================
 #                       LÓGICA DE COMUNICACIÓN CENTRAL
 # =================================================================
 
@@ -67,6 +75,30 @@ def notificar_averia_central(central_socket: socket.socket, cp_id: str, motivo: 
     except Exception as e:
         print(f"[{cp_id}] ERROR al notificar avería a la Central: {e}. Conexión perdida.")
         # La conexión con Central está caída. El hilo de escucha ya debería manejar esto.
+
+
+def enviar_orden_a_engine(engine_ip: str, engine_port: int, orden: str, cp_id: str) -> None:
+    """Abre una conexión corta con el Engine para enviar una orden (CMD) y esperar ACK."""
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.settimeout(2)
+            s.connect((engine_ip, engine_port))
+            trama_cmd = construir_trama('CMD', [orden])
+            s.sendall(trama_cmd)
+
+            resp = s.recv(1024)
+            if not resp:
+                print(f"[{cp_id}] Engine no respondió al comando {orden}.")
+                return
+
+            cod_op, campos = descomponer_trama(resp)
+            if cod_op == 'ACK':
+                detalle = campos[0] if campos else ''
+                print(f"[{cp_id}] ACK del Engine recibido: {detalle}")
+            else:
+                print(f"[{cp_id}] Respuesta inesperada del Engine: {cod_op}")
+    except Exception as e:
+        print(f"[{cp_id}] Error enviando orden '{orden}' al Engine: {e}")
 
 def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str) -> socket.socket:
     # ... [Tu lógica de registro permanece igual] ...
@@ -105,10 +137,13 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str) -> sock
             client_socket.close()
         raise
 
-# ... [La función escuchar_central permanece igual] ...
-def escuchar_central(central_socket: socket.socket, cp_id: str):
-    # ... [Tu lógica de escucha de la Central permanece igual] ...
+def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, engine_port: int):
+    """Bucle de escucha permanente para comandos síncronos de la Central."""
     print(f"[{cp_id}] Hilo de escucha de Central iniciado.")
+    # NOTA: Necesitamos el socket del Engine para enviar la orden de START/STOP. 
+    # Lo más limpio es reabrir la conexión brevemente o usar el hilo HCK.
+    # Por ahora, vamos a notificar la recepción.
+    
     try:
         while True:
             trama_bytes = central_socket.recv(1024)
@@ -116,17 +151,27 @@ def escuchar_central(central_socket: socket.socket, cp_id: str):
                 print(f"[{cp_id}] Central cerró la conexión. Socket de comando cerrado.")
                 break
             
-            # TODO: Descomponer y procesar comandos de la Central (STOP, START, etc.)
-            print(f"[{cp_id}] <--- Comando Central recibido: {trama_bytes.decode(errors='ignore')}")
+            cod_op, campos = descomponer_trama(trama_bytes)
+            
+            if cod_op in ('STOP', 'START'):
+                print(f"[{cp_id}] <--- COMANDO CENTRAL RECIBIDO: {cod_op}")
+                # Encolamos la orden para que la ejecute el hilo HCK sobre su socket
+                try:
+                    COMMAND_QUEUE.put_nowait((cod_op, time.time()))
+                    print(f"[{cp_id}] Orden '{cod_op}' encolada para Engine.")
+                except Exception as e:
+                    print(f"[{cp_id}] No se pudo encolar la orden {cod_op}: {e}")
+
+            else:
+                 # Manejo de otros códigos, como AVR, o tramas inesperadas
+                print(f"[{cp_id}] <--- Trama Central recibida (No comando): {cod_op}")
+
 
     except Exception as e:
         print(f"[{cp_id}] Error en hilo de escucha de Central: {e}")
     finally:
         central_socket.close()
 
-# =================================================================
-#                       LÓGICA DE MONITORIZACIÓN LOCAL (HCK)
-# =================================================================
 
 def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: socket.socket, cp_id: str):
     """Hilo para enviar HCK al Engine cada 1 segundo y gestionar la respuesta."""
@@ -139,13 +184,39 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                 engine_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 engine_socket.connect((engine_ip, engine_port))
                 print(f"[{cp_id}] Conexión con Engine establecida.")
+                engine_socket.settimeout(HCK_INTERVAL * 0.8)
             
-            # 2. Enviar HCK
+            # 2. Antes de enviar HCK, consumir órdenes pendientes y enviarlas por el mismo socket
+            #    Consumimos todas las que haya disponibles sin bloquear
+            while True:
+                try:
+                    orden, ts = COMMAND_QUEUE.get_nowait()
+                except Empty:
+                    break
+                try:
+                    trama_cmd = construir_trama('CMD', [orden])
+                    engine_socket.sendall(trama_cmd)
+                    resp_cmd = engine_socket.recv(1024)
+                    cod_cmd, campos_cmd = descomponer_trama(resp_cmd)
+                    if cod_cmd == 'ACK':
+                        detalle = campos_cmd[0] if campos_cmd else ''
+                        print(f"[{cp_id}] ACK Engine a '{orden}': {detalle}")
+                    else:
+                        print(f"[{cp_id}] Respuesta inesperada a CMD '{orden}': {cod_cmd}")
+                except Exception as e:
+                    print(f"[{cp_id}] Error enviando CMD '{orden}' por HCK socket: {e}")
+                    # Reencolar para reintentar cuando se restablezca la conexión
+                    try:
+                        COMMAND_QUEUE.put_nowait((orden, ts))
+                    except Exception:
+                        pass
+                    raise
+
+            # 3. Enviar HCK
             trama_hck = construir_trama('HCK', [cp_id])
             engine_socket.sendall(trama_hck)
             
-            # 3. Recibir respuesta (establecer un timeout corto)
-            engine_socket.settimeout(HCK_INTERVAL * 0.8) 
+            # 4. Recibir respuesta HCK
             respuesta_bytes = engine_socket.recv(1024)
             
             if not respuesta_bytes:
@@ -213,12 +284,12 @@ def main():
 
         # 2. Hilo de escucha de comandos de la Central
         central_listener_thread = threading.Thread(
-            target=escuchar_central, 
-            args=(central_socket, args.cp_id), 
+            target=escuchar_central,
+            args=(central_socket, args.cp_id, args.engine_ip, args.engine_port),
             daemon=True
         )
         central_listener_thread.start()
-        
+
         # 3. Hilo de Chequeo de Salud local (HCK)
         health_check_thread = threading.Thread(
             target=chequear_salud_engine,
@@ -226,15 +297,15 @@ def main():
             daemon=True
         )
         health_check_thread.start()
-        
+
         print("\n[CP_M] Sistema ACTIVADO. Monitorización local de Engine iniciada.")
-        
+
         # Bucle principal para mantener el proceso vivo
         while True:
-            time.sleep(1) 
+            time.sleep(1)
 
-    except Exception:
-        print(f"[{args.cp_id}] Proceso EC_CP_M finalizado debido a un error crítico.")
+    except Exception as e:
+        print(f"[{args.cp_id}] Proceso EC_CP_M finalizado debido a un error crítico: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":

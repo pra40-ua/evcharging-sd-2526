@@ -81,8 +81,17 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple):
                 respuesta = construir_trama('HCK_RESP', [status])
                 conn.sendall(respuesta)
                 # print(f"[ENGINE] Recibido HCK, Enviado: {status}") # (Opcional, si quieres ver el tráfico HCK)
+            elif cod_op == 'CMD':
+                orden = campos[0]
+                print(f"[ENGINE] === RECIBIDA ORDEN DE CONTROL: {orden} ===")
+                # Aquí iría la lógica para interactuar con el hardware (simulada)
+                
+                # Enviar confirmación al Monitor (ACK)
+                respuesta = construir_trama('ACK', [f'{orden}_OK'])
+                conn.sendall(respuesta)
+                
             else:
-                 print(f"[ENGINE] Recibido mensaje no HCK: {cod_op}")
+                 print(f"[ENGINE] Recibido mensaje desconocido: {cod_op}")
             
     except ConnectionResetError:
         print(f"[ENGINE] Conexión con Monitor ({addr[0]}) perdida inesperadamente.")
