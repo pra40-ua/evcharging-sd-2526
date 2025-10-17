@@ -22,7 +22,8 @@ pip install -r requirements.txt
 ---NUEVO
  Terminal para EV_Central (Servidor Central)
 El Central actúa como el servidor principal, escuchando en el puerto 5000
-python EV_Central.py --port 5000 --kafka "localhost:9092" --db "mysql://user:pass@host/db"
+# Cambia localhost por 127.0.0.1
+python EV_Central.py --port 5000 --kafka "127.0.0.1:9092" --db "127.0.0.1:3306:root::evcharging"
 
 2. Terminal para EV_CP_E (Servidor Local - Engine)
 El Engine actúa como un servidor local, escuchando en el puerto 5001.
@@ -33,6 +34,8 @@ El Monitor es el cliente que se conecta a ambos servidores. Necesita saber dónd
 
 python EV_CP_M.py --cp_id CP001 --central_ip 127.0.0.1 --central_port 5000 --engine_ip 127.0.0.1 --engine_port 5001
 
+4.DRIVER
+python EV_Driver.py --kafka "127.0.0.1:9092" --id DRIVER_456 --cp CP_001 --kw 25.0
 
 
 Si todo va bien, verás en la Central un `REG` recibido y una respuesta `AUTH#OK` enviada; en el Monitor aparecerá el registro exitoso y quedará escuchando comandos.
@@ -77,3 +80,12 @@ Si todo va bien, verás en la Central un `REG` recibido y una respuesta `AUTH#OK
 - Persistencia en MySQL: estados de CP y auditoría.
 - Ampliar comandos síncronos (p. ej., `START`, `STOP`) y validaciones.
 - Extraer utilidades de protocolo a `ev_common/` compartido.
+
+# Para solicitudes del conductor a la Central
+kafka-topics.bat --create --topic driver_requests --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+# Para telemetría del punto de carga a la Central
+kafka-topics.bat --create --topic cp_telemetry --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+# Para comandos de la Central a los puntos de carga
+kafka-topics.bat --create --topic central_commands --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1

@@ -14,6 +14,74 @@ STX = b'\x02'
 ETX = b'\x03'
 DELIMITER = '#'
 
+import json
+import time
+from kafka import KafkaProducer
+import threading # Necesario si el Engine está corriendo en un bucle principal
+
+# --- CONFIGURACIÓN ---
+KAFKA_SERVER = '127.0.0.1:9092' # Usamos la IP explícita que ya te funciona
+TOPIC_TELEMETRY = 'telemetria_cp'
+
+# Definición del Productor de Kafka (se puede inicializar una sola vez)
+try:
+    TELEMETRY_PRODUCER = KafkaProducer(
+        bootstrap_servers=[KAFKA_SERVER],
+        value_serializer=lambda v: json.dumps(v).encode('utf-8')
+    )
+    print("[KAFKA PRODUCER] Productor de Telemetría inicializado.")
+except Exception as e:
+    print(f"[KAFKA PRODUCER] ERROR al inicializar el Productor de Telemetría: {e}")
+    TELEMETRY_PRODUCER = None
+
+# --- FUNCIÓN DE TELEMETRÍA ---
+def generar_y_enviar_telemetria(cp_id: str, estado_carga: str, kw_entregados: float, tiempo_carga_s: int):
+    """
+    Crea el mensaje de telemetría y lo envía al topic 'cp_telemetry'.
+    """
+    if TELEMETRY_PRODUCER is None:
+        return
+
+    telemetria_msg = {
+        'cp_id': cp_id,
+        'timestamp': time.time(),
+        'estado_carga': estado_carga, # Ej: 'CONECTADO', 'CARGANDO', 'FINALIZADO'
+        'kw_entregados': kw_entregados,
+        'tiempo_carga_s': tiempo_carga_s
+    }
+
+    try:
+        # Envía el mensaje de forma asíncrona
+        future = TELEMETRY_PRODUCER.send(TOPIC_TELEMETRY, value=telemetria_msg)
+        # Opcional: Para verificar el envío (bloqueante, no recomendado en bucle rápido)
+        # record_metadata = future.get(timeout=1) 
+        # print(f"[{cp_id}] Telemetría enviada. Offset: {record_metadata.offset}")
+
+    except Exception as e:
+        print(f"[{cp_id}] ERROR al enviar telemetría a Kafka: {e}")
+
+# --- EJEMPLO DE USO DENTRO DEL ENGINE ---
+# Esta lógica debe integrarse en el bucle principal de tu Engine, por ejemplo,
+# cada vez que se produce una nueva medición.
+
+def bucle_simulacion_carga(cp_id):
+    kw_acumulados = 0.0
+    segundos = 0
+    print(f"[{cp_id}] Simulador de carga iniciado. Enviando telemetría...")
+
+    while True:
+        segundos += 1
+        kw_acumulados += 0.05 # Simular la entrega de energía
+        
+        # Simular una carga en curso
+        generar_y_enviar_telemetria(
+            cp_id=cp_id,
+            estado_carga='CARGANDO',
+            kw_entregados=round(kw_acumulados, 2),
+            tiempo_carga_s=segundos
+        )
+        time.sleep(1) # Simular la frecuencia de envío de telemetría
+        
 def calcular_lrc(data_bytes: bytes) -> bytes:
     """Calcula el Longitudinal Redundancy Check (XOR de todos los bytes)."""
     lrc = 0
@@ -105,12 +173,23 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple):
 def main():
     parser = argparse.ArgumentParser(description="Proceso EV_CP_E (Charging Point Engine)")
     parser.add_argument("--port", type=int, required=True, help="Puerto de escucha local")
+    parser.add_argument("--cp-id", type=str, default="CP001", help="ID del Charging Point")
     args = parser.parse_args()
     
     print("="*40)
     print("[EV_CP_E] INICIADO")
     print(f"Puerto de escucha: {args.port}")
+    print(f"CP ID: {args.cp_id}")
     print("="*40)
+
+    # Iniciar el bucle de telemetría en un hilo separado
+    telemetry_thread = threading.Thread(
+        target=bucle_simulacion_carga, 
+        args=(args.cp_id,),
+        daemon=True
+    )
+    telemetry_thread.start()
+    print(f"[EV_CP_E] Hilo de telemetría iniciado para {args.cp_id}")
 
     try:
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
