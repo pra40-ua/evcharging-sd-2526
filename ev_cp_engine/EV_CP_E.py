@@ -60,27 +60,41 @@ def generar_y_enviar_telemetria(cp_id: str, estado_carga: str, kw_entregados: fl
     except Exception as e:
         print(f"[{cp_id}] ERROR al enviar telemetría a Kafka: {e}")
 
-# --- EJEMPLO DE USO DENTRO DEL ENGINE ---
-# Esta lógica debe integrarse en el bucle principal de tu Engine, por ejemplo,
-# cada vez que se produce una nueva medición.
+# --- ESTADO DE CARGA ---
+CHARGING_FLAG = threading.Event()  # START activa, STOP desactiva
+STATE_LOCK = threading.Lock()
+kw_acumulados_global = 0.0
+segundos_global = 0
 
-def bucle_simulacion_carga(cp_id):
-    kw_acumulados = 0.0
-    segundos = 0
-    print(f"[{cp_id}] Simulador de carga iniciado. Enviando telemetría...")
-
-    while True:
-        segundos += 1
-        kw_acumulados += 0.05 # Simular la entrega de energía
-        
-        # Simular una carga en curso
+def bucle_telemetria(cp_id: str, stop_event: threading.Event):
+    """Emite telemetría de CARGANDO únicamente mientras dure la sesión (START..STOP)."""
+    global kw_acumulados_global, segundos_global
+    print(f"[{cp_id}] Bucle de telemetría de CARGANDO iniciado.")
+    while not stop_event.is_set():
+        time.sleep(1)
+        with STATE_LOCK:
+            segundos_global += 1
+            kw_acumulados_global += 0.05
+            estado = 'CARGANDO'
+            kw = round(kw_acumulados_global, 2)
+            secs = segundos_global
         generar_y_enviar_telemetria(
             cp_id=cp_id,
-            estado_carga='CARGANDO',
-            kw_entregados=round(kw_acumulados, 2),
-            tiempo_carga_s=segundos
+            estado_carga=estado,
+            kw_entregados=kw,
+            tiempo_carga_s=secs
         )
-        time.sleep(1) # Simular la frecuencia de envío de telemetría
+    # Al salir por STOP, publicar un último latido en REPOSO con valores finales
+    with STATE_LOCK:
+        estado_final = 'REPOSO'
+        kw_final = round(kw_acumulados_global, 2)
+        secs_final = segundos_global
+    generar_y_enviar_telemetria(
+        cp_id=cp_id,
+        estado_carga=estado_final,
+        kw_entregados=kw_final,
+        tiempo_carga_s=secs_final
+    )
         
 def calcular_lrc(data_bytes: bytes) -> bytes:
     """Calcula el Longitudinal Redundancy Check (XOR de todos los bytes)."""
@@ -128,8 +142,14 @@ def construir_trama(cod_op: str, campos: list) -> bytes:
 #                       LÓGICA DEL ENGINE
 # =================================================================
 
-def handle_monitor_connection(conn: socket.socket, addr: tuple):
+# Gestión del hilo de telemetría bajo demanda (arranca con START, se detiene con STOP)
+TELEMETRY_THREAD = None
+TELEMETRY_STOP_EVENT = threading.Event()
+
+def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
     """Maneja el chequeo de salud HCK del Monitor."""
+    # Declarar variables globales al inicio para evitar errores de ámbito
+    global kw_acumulados_global, segundos_global, TELEMETRY_THREAD, TELEMETRY_STOP_EVENT
     print(f"[ENGINE] Monitor conectado desde {addr[0]}:{addr[1]}")
     try:
         while True:
@@ -150,13 +170,40 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple):
                 conn.sendall(respuesta)
                 # print(f"[ENGINE] Recibido HCK, Enviado: {status}") # (Opcional, si quieres ver el tráfico HCK)
             elif cod_op == 'CMD':
-                orden = campos[0]
-                print(f"[ENGINE] === RECIBIDA ORDEN DE CONTROL: {orden} ===")
-                # Aquí iría la lógica para interactuar con el hardware (simulada)
-                
-                # Enviar confirmación al Monitor (ACK)
-                respuesta = construir_trama('ACK', [f'{orden}_OK'])
-                conn.sendall(respuesta)
+                orden = (campos[0] if campos else '').upper()
+                if orden == 'START':
+                    with STATE_LOCK:
+                        # Reinicia contadores al iniciar nueva sesión de carga
+                        kw_acumulados_global = 0.0
+                        segundos_global = 0
+                        CHARGING_FLAG.set()
+                        # Lanzar hilo de telemetría solo si no está ya activo
+                        if TELEMETRY_THREAD is None or not TELEMETRY_THREAD.is_alive():
+                            TELEMETRY_STOP_EVENT = threading.Event()
+                            TELEMETRY_THREAD = threading.Thread(
+                                target=bucle_telemetria,
+                                args=(cp_id, TELEMETRY_STOP_EVENT),
+                                daemon=True
+                            )
+                            TELEMETRY_THREAD.start()
+                    print("[ENGINE] === START recibido: iniciando carga (telemetría activa) ===")
+                    respuesta = construir_trama('ACK', ['START_OK'])
+                    conn.sendall(respuesta)
+                elif orden == 'STOP':
+                    with STATE_LOCK:
+                        CHARGING_FLAG.clear()
+                        # Señal de parada al hilo de telemetría (si estaba en marcha)
+                        try:
+                            TELEMETRY_STOP_EVENT.set()
+                        except Exception:
+                            pass
+                    print("[ENGINE] === STOP recibido: deteniendo carga (telemetría detenida) ===")
+                    respuesta = construir_trama('ACK', ['STOP_OK'])
+                    conn.sendall(respuesta)
+                else:
+                    print(f"[ENGINE] === ORDEN DESCONOCIDA: {orden} ===")
+                    respuesta = construir_trama('ACK', [f'{orden}_IGN'])
+                    conn.sendall(respuesta)
                 
             else:
                  print(f"[ENGINE] Recibido mensaje desconocido: {cod_op}")
@@ -182,14 +229,8 @@ def main():
     print(f"CP ID: {args.cp_id}")
     print("="*40)
 
-    # Iniciar el bucle de telemetría en un hilo separado
-    telemetry_thread = threading.Thread(
-        target=bucle_simulacion_carga, 
-        args=(args.cp_id,),
-        daemon=True
-    )
-    telemetry_thread.start()
-    print(f"[EV_CP_E] Hilo de telemetría iniciado para {args.cp_id}")
+    # El hilo de telemetría NO se inicia en arranque; solo tras recibir START
+    print(f"[EV_CP_E] Telemetría en reposo. A la espera de START para {args.cp_id}")
 
     try:
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -201,7 +242,7 @@ def main():
 
         # El Engine solo acepta una conexión: la del Monitor
         conn, addr = server_socket.accept()
-        handle_monitor_connection(conn, addr)
+        handle_monitor_connection(conn, addr, args.cp_id)
         
     except KeyboardInterrupt:
         print("\n[EV_CP_E] Apagando...")

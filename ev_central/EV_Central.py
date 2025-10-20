@@ -1,11 +1,20 @@
 import socket
 import argparse
 import threading
+import time
+from collections import deque
+from queue import Queue, Empty
 import mysql.connector
 from mysql.connector import Error
 from datetime import datetime
 from kafka import KafkaConsumer, KafkaProducer
 import json
+import os
+import sys
+try:
+    import msvcrt as MSVCRT
+except Exception:
+    MSVCRT = None
 
 # =================================================================
 #                 ESTADO GLOBAL DE CONEXIONES ACTIVAS
@@ -19,6 +28,18 @@ CONEXIONES_ACTIVAS_LOCK = threading.Lock()
 TELEMETRIA_ACTUAL = {}
 TELEMETRIA_ACTUAL_LOCK = threading.Lock()
 
+# Estado manual (START/STOP ordenado por la Central) para reflejar en TUI
+CP_ESTADO_MANUAL = {}
+CP_ESTADO_MANUAL_LOCK = threading.Lock()
+
+# Estado de alerta/avería detectado (por AVR o telemetría)
+CP_ALERTA = {}
+CP_ALERTA_LOCK = threading.Lock()
+
+# Estado explícito de cada CP (pilar de la TUI y lógica)
+CP_ESTADO = {}
+CP_ESTADO_LOCK = threading.Lock()
+
 # Lista de hilos de clientes para cierre ordenado
 CLIENT_THREADS = []
 CLIENT_THREADS_LOCK = threading.Lock()
@@ -26,6 +47,162 @@ CLIENT_THREADS_LOCK = threading.Lock()
 # Variable global para controlar el apagado limpio
 SHUTDOWN_REQUESTED = False
 SHUTDOWN_LOCK = threading.Lock()
+
+# Cola de comandos ingresados por el operador (desde consola)
+COMMAND_QUEUE: Queue = Queue()
+
+# Registro de eventos (histórico en memoria)
+EVENT_LOG = deque(maxlen=300)
+EVENT_LOG_LOCK = threading.Lock()
+
+# =================================================================
+#                         REGISTRO / LOGS
+# =================================================================
+
+def registrar_evento(mensaje: str) -> None:
+    """Añade una línea al log interno y lo imprime por consola."""
+    timestamp = datetime.now().strftime('%H:%M:%S')
+    linea = f"[{timestamp}] {mensaje}"
+    with EVENT_LOG_LOCK:
+        EVENT_LOG.append(linea)
+    try:
+        print(linea)
+    except Exception:
+        pass
+
+def resumen_telemetria(telemetria: dict) -> str:
+    """Devuelve un breve resumen textual de una telemetría para logs."""
+    if not isinstance(telemetria, dict):
+        return "-"
+    estado = telemetria.get('estado') or telemetria.get('estado_carga') or 'N/D'
+    energia = (
+        telemetria.get('energia_total')
+        if 'energia_total' in telemetria
+        else telemetria.get('kwh', telemetria.get('kw_entregados', 'N/D'))
+    )
+    potencia = telemetria.get('potencia_actual', 'N/D')
+    try:
+        energia_str = f"{float(energia):.2f}" if energia not in ('N/D', None) else 'N/D'
+    except Exception:
+        energia_str = str(energia)
+    return f"est={estado}, E={energia_str}, P={potencia}"
+
+def bucle_entrada_comandos_windows() -> None:
+    """Lector no bloqueante de teclado en Windows usando msvcrt.
+    Acepta:
+      - Teclas rápidas: '1' y '3' (si el buffer está vacío)
+      - Comandos completos: escribir texto y pulsar Enter (\r)
+    """
+    if MSVCRT is None:
+        # Fallback: usar entrada clásica por consola si MSVCRT no está disponible
+        interfaz_consola_central()
+        return
+    buffer_chars = []
+    while True:
+        with SHUTDOWN_LOCK:
+            if SHUTDOWN_REQUESTED:
+                return
+        try:
+            if MSVCRT.kbhit():
+                ch = MSVCRT.getwch()
+                if ch in ('\r', '\n'):
+                    cmd = ''.join(buffer_chars).strip()
+                    buffer_chars = []
+                    if cmd:
+                        COMMAND_QUEUE.put(cmd)
+                        registrar_evento(f"Entrada recibida: {cmd}")
+                elif ch in ('\x08', '\x7f'):  # Backspace
+                    if buffer_chars:
+                        buffer_chars.pop()
+                elif not buffer_chars and ch in ('1', '3'):
+                    # Atajos rápidos cuando no hay texto previo
+                    COMMAND_QUEUE.put(ch)
+                    registrar_evento(f"Entrada rápida: {ch}")
+                elif ch == '\x03':  # Ctrl+C
+                    COMMAND_QUEUE.put('3')
+                    registrar_evento("Entrada Ctrl+C -> 3 (Salir)")
+                else:
+                    # Acumular caracteres para comandos largos (ej.: 2 START CP001)
+                    # Filtrar caracteres no imprimibles básicos
+                    if ch.isprintable() or ch == ' ':
+                        buffer_chars.append(ch)
+            else:
+                time.sleep(0.05)
+        except Exception:
+            # En caso de error inesperado, pequeño backoff
+            time.sleep(0.1)
+
+def _enviar_comando_cp(cp_id: str, orden: str) -> bool:
+    with CONEXIONES_ACTIVAS_LOCK:
+        cp_socket = CONEXIONES_ACTIVAS.get(cp_id)
+    if not cp_socket:
+        registrar_evento(f"ERROR: CP {cp_id} no conectado")
+        return False
+    try:
+        trama = construir_trama(orden, ['MANUAL'])
+        cp_socket.sendall(trama)
+        if orden.upper() == 'STOP':
+            with CP_ESTADO_MANUAL_LOCK:
+                CP_ESTADO_MANUAL[cp_id] = 'PARADO'
+            try:
+                cambiar_estado_cp(cp_id, 'PARADO')
+            except Exception:
+                pass
+        elif orden.upper() == 'START':
+            with CP_ESTADO_MANUAL_LOCK:
+                CP_ESTADO_MANUAL[cp_id] = 'ACTIVADO'
+            try:
+                cambiar_estado_cp(cp_id, 'ACTIVADO')
+            except Exception:
+                pass
+        registrar_evento(f"Comando {orden} enviado a {cp_id}")
+        return True
+    except Exception as e:
+        registrar_evento(f"ERROR enviando {orden} a {cp_id}: {e}")
+        return False
+
+def bucle_procesador_comandos() -> None:
+    global SHUTDOWN_REQUESTED
+    while True:
+        with SHUTDOWN_LOCK:
+            if SHUTDOWN_REQUESTED:
+                return
+        try:
+            cmd = COMMAND_QUEUE.get(timeout=0.25)
+        except Empty:
+            continue
+        texto = cmd.strip()
+        up = texto.upper()
+        if up == '1':
+            registrar_evento("Refresco solicitado (TUI actualiza automáticamente)")
+            continue
+        if up == '3' or up == 'EXIT' or up == 'QUIT':
+            registrar_evento("Apagado solicitado por operador")
+            with SHUTDOWN_LOCK:
+                SHUTDOWN_REQUESTED = True
+            continue
+        # Comando tipo: admite "2 CP_001 START" o "2 START CP_001"
+        if up.startswith('2'):
+            partes = texto.split()
+            if len(partes) < 3:
+                registrar_evento("Uso: 2 START|STOP CP_ID (ej.: 2 START CP001)")
+                continue
+            token_a = partes[1].upper()
+            token_b = partes[2].upper()
+            orden = None
+            cp_id = None
+            if token_a in ("START", "STOP") and token_b not in ("START", "STOP"):
+                orden = token_a
+                cp_id = partes[2]
+            elif token_b in ("START", "STOP") and token_a not in ("START", "STOP"):
+                orden = token_b
+                cp_id = partes[1]
+            else:
+                registrar_evento("Uso: 2 START|STOP CP_ID (ej.: 2 START CP001)")
+                continue
+            _enviar_comando_cp(cp_id, orden)
+            continue
+        registrar_evento(f"Comando no reconocido: {texto}")
 
 # =================================================================
 #                         FUNCIONES DE PROTOCOLO
@@ -55,8 +232,9 @@ def consumir_telemetria_kafka(broker_list: str):
             bootstrap_servers=[broker_list],
             # Deserializador para convertir los bytes del mensaje a un diccionario de Python
             value_deserializer=lambda m: json.loads(m.decode('utf-8')),
-            # Empieza a leer mensajes recientes si no hay offset previo
-            auto_offset_reset='latest', 
+            # Si hay offset confirmado previo, retomamos desde ahí; si no, desde lo más reciente
+            auto_offset_reset='latest',
+            enable_auto_commit=True,
             group_id='central-telemetry-group' # Grupo para distribuir la carga si hay múltiples centrales
         )
         
@@ -80,12 +258,37 @@ def consumir_telemetria_kafka(broker_list: str):
                     telemetria = message.value
                     cp_id = telemetria.get('cp_id', 'UNKNOWN')
 
+                    # Validar que el CP esté REGISTRADO/CONECTADO por socket
+                    with CONEXIONES_ACTIVAS_LOCK:
+                        conectado = cp_id in CONEXIONES_ACTIVAS
+                    if not conectado:
+                        continue
+
                     # --- Almacenar telemetría en estructura global ---
                     with TELEMETRIA_ACTUAL_LOCK:
                         TELEMETRIA_ACTUAL[cp_id] = telemetria
 
                     # --- Lógica principal del Central ---
+                    registrar_evento(f"Telemetría recibida de {cp_id}: {resumen_telemetria(telemetria)}")
                     print(f"[KAFKA CONSUMER] -> Telemetría de {cp_id} recibida: {telemetria}")
+
+                    # Promover estados por telemetría
+                    est_raw = telemetria.get('estado') or telemetria.get('estado_carga')
+                    est = str(est_raw or '').strip().lower()
+                    try:
+                        if est in ("cargando", "suministrando", "charging", "en_carga"):
+                            cambiar_estado_cp(cp_id, 'SUMINISTRANDO')
+                        elif est in ("finalizado", "reposo", "idle", "ready"):
+                            # Fin de sesión -> volver a ACTIVADO
+                            cambiar_estado_cp(cp_id, 'ACTIVADO')
+                    except Exception:
+                        pass
+
+            # Confirmar offsets tras procesar el batch para retomar desde el último confirmado
+            try:
+                consumer.commit()
+            except Exception:
+                pass
             
     except Exception as e:
         print(f"[KAFKA CONSUMER] Error crítico de consumo de Kafka: {e}")
@@ -129,6 +332,7 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
             for _tp, batch in records.items():
                 for message in batch:
                     solicitud = message.value
+                    registrar_evento("Solicitud de recarga recibida")
                     print("--- NUEVA SOLICITUD RECIBIDA ---")
                     print(f"\tDriver ID: {solicitud.get('id_driver')}")
                     print(f"\tCP ID:     {solicitud.get('id_charging_point')}")
@@ -207,6 +411,13 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                             trama_auth = construir_trama('AUTH_REQ', [id_driver, kw_deseados])
                             cp_socket.sendall(trama_auth)
                             print(f"[CENTRAL] -> AUTH_REQ enviado a {cp_id} para driver {id_driver}")
+                            registrar_evento(f"[CONTROL] AUTH_REQ enviado a {cp_id} (kW: {kw_deseados}).")
+                            registrar_evento(f"[LOGICA] Solicitud {id_driver} validada y autorizada.")
+                            # Estado: PRE-SUMINISTRO tras AUTH_REQ (esperando ACK/arranque)
+                            try:
+                                cambiar_estado_cp(cp_id, 'PRE-SUMINISTRO', db_connection)
+                            except Exception:
+                                pass
                             notificar_driver(id_driver, 'PENDIENTE_RESPUESTA_CP', {
                                 'mensaje': 'Solicitud enviada al CP. Esperando confirmación.'
                             })
@@ -457,32 +668,24 @@ def notificar_driver(id_driver: str, evento: str, detalle=None):
 #                       LÓGICA DEL SERVIDOR CENTRAL
 # =================================================================
 def mostrar_estado_red():
-    """Muestra el estado actual de los Puntos de Carga conectados."""
+    """Compat: imprime estado (modo no-TUI); preservado por si se usa sin Rich."""
     print("\n" + "="*60)
     print(f"| ESTADO DE LA RED DE CARGA (Total: {len(CONEXIONES_ACTIVAS)} CP(s) Activos) |")
     print("="*60)
-    
     if not CONEXIONES_ACTIVAS:
         print(">> No hay Puntos de Carga conectados actualmente.")
         print("="*60)
         return
-
-    # Iterar sobre los datos en tiempo real (Telemetría y Registro)
     for cp_id, socket_obj in CONEXIONES_ACTIVAS.items():
         print(f"| CP ID: {cp_id}")
         print(f"|   Socket: Conectado en {socket_obj.getsockname()[1]}")
-        
-        # Obtener telemetría actual si está disponible
         with TELEMETRIA_ACTUAL_LOCK:
             telemetria = TELEMETRIA_ACTUAL.get(cp_id)
-        
         if telemetria:
-            # Mostrar datos reales de telemetría
             estado = telemetria.get('estado', 'DESCONOCIDO')
             potencia_actual = telemetria.get('potencia_actual', 'N/A')
             energia_total = telemetria.get('energia_total', 'N/A')
             timestamp = telemetria.get('timestamp', 'N/A')
-            
             print(f"|   Estado: {estado}")
             print(f"|   Potencia Actual: {potencia_actual} kW")
             print(f"|   Energía Total: {energia_total} kWh")
@@ -490,59 +693,17 @@ def mostrar_estado_red():
         else:
             print(f"|   Estado: Sin telemetría disponible")
             print(f"|   (Conectado pero sin datos de Kafka)")
-        
         print("-"*60)
 
 def interfaz_consola_central():
-    """Bucle principal para la interacción del operador (UI)."""
+    """Deprecado por TUI Rich. Mantener por compatibilidad si TUI no está disponible."""
+    registrar_evento("Modo consola simple activado")
     while True:
-        print("\n[CENTRAL CMD] Opciones:")
-        print("  1. MOSTRAR ESTADO DE LA RED")
-        print("  2. ENVIAR COMANDO MANUAL (STOP/START)")
-        print("  3. SALIR")
-        
-        # Usamos input() para capturar comandos del operador.
-        comando = input("\n[CENTRAL CMD] (Ej: 2 CP_001 STOP) > ").strip().upper()
-        
-        if comando == '1':
-            mostrar_estado_red()
-        
-        elif comando.startswith('2'):
-            partes = comando.split()
-            if len(partes) < 3:
-                print("Uso: 2 <CP_ID> <ORDEN> (Ej: 2 CP_001 STOP)")
-                continue
-                
-            _, cp_id, orden = partes
-            
-            if cp_id not in CONEXIONES_ACTIVAS:
-                print(f"ERROR: CP {cp_id} no está conectado o registrado via Socket.")
-                continue
-
-            # Construcción y envío del comando (Igual que en el Kafka Consumer, pero manual)
-            try:
-                cp_socket = CONEXIONES_ACTIVAS[cp_id]
-                
-                # Usamos el código de operación que el Engine espera (Ej: START/STOP)
-                trama_comando = construir_trama(orden, ['MANUAL']) # Datos extra para el Engine
-                cp_socket.sendall(trama_comando)
-                
-                print(f"[CONTROL MANUAL] Orden '{orden}' enviada a {cp_id} con éxito.")
-                
-            except Exception as e:
-                print(f"[CONTROL MANUAL] ERROR al enviar comando a {cp_id}: {e}. Conexión perdida.")
-                
-        elif comando == '3':
-            print("Cerrando la Central...")
-            # Activar el apagado limpio
-            with SHUTDOWN_LOCK:
-                global SHUTDOWN_REQUESTED
-                SHUTDOWN_REQUESTED = True
-            print("[CENTRAL] Señal de apagado enviada a todos los hilos...")
-            break
-            
-        else:
-            print("Comando no reconocido. Use 1, 2, o 3.")
+        comando = input("\n[CENTRAL CMD] (ej.: 2 START CP001 | 3=salir) > ").strip()
+        if not comando:
+            continue
+        COMMAND_QUEUE.put(comando)
+        time.sleep(0.1)
             
 def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.connector.connection.MySQLConnection):
     """Función ejecutada por un hilo para manejar la conexión de un CP."""
@@ -581,6 +742,12 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
             with CONEXIONES_ACTIVAS_LOCK:
                 CONEXIONES_ACTIVAS[cp_id] = conn
                 print(f"[CENTRAL] Socket de {cp_id} guardado. Total: {len(CONEXIONES_ACTIVAS)}")
+            registrar_evento(f"CP registrado y conectado: {cp_id} ({ubicacion})")
+            # Estado: ACTIVADO tras registro exitoso
+            try:
+                cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection)
+            except Exception:
+                pass
             
             # --- LÓGICA BD: Insertar/Actualizar CP y marcar como ACTIVADO ---
             if db_connection and db_connection.is_connected():
@@ -588,6 +755,7 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     respuesta_trama = construir_trama('AUTH', ['OK', 'Autenticacion exitosa'])
                     conn.sendall(respuesta_trama)
                     print(f"[CENTRAL] <- Enviada respuesta AUTH: OK a {cp_id}")
+                    registrar_evento(f"AUTH OK enviado a {cp_id}")
                 else:
                     # Error en BD, rechazar conexión
                     respuesta_trama = construir_trama('AUTH', ['FAIL', 'Error en base de datos'])
@@ -600,6 +768,7 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                 respuesta_trama = construir_trama('AUTH', ['OK', 'Autenticacion exitosa (sin BD)'])
                 conn.sendall(respuesta_trama)
                 print(f"[CENTRAL] <- Enviada respuesta AUTH: OK a {cp_id} (sin BD)")
+                registrar_evento(f"AUTH OK enviado a {cp_id} (sin BD)")
 
         else:
             print(f"[CENTRAL] Error: Mensaje inicial no válido ({cod_op}). Cerrando conexión.")
@@ -636,20 +805,44 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                         resultado = campos[1].upper()
                         mensaje = campos[2] if len(campos) >= 3 else ''
                         if resultado == 'OK':
+                            registrar_evento(f"[CONTROL] Confirmación síncrona de {cp_id}: AUTH_ACK#OK.")
                             notificar_driver(driver_id, 'AUTORIZADO', {
                                 'cp_id': cp_id,
                                 'mensaje': mensaje or 'Autorización concedida por CP'
                             })
+                            # Estado se mantiene en PRE-SUMINISTRO hasta ver telemetría de CARGANDO
+                            try:
+                                cambiar_estado_cp(cp_id, 'PRE-SUMINISTRO')
+                            except Exception:
+                                pass
                         else:
+                            registrar_evento(f"[CONTROL] Confirmación síncrona de {cp_id}: AUTH_ACK#KO ({mensaje}).")
                             notificar_driver(driver_id, 'DENEGADO', {
                                 'cp_id': cp_id,
                                 'motivo': mensaje or 'CP denegó la autorización'
                             })
+                            # Volver a ACTIVADO si denegado
+                            try:
+                                cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection)
+                            except Exception:
+                                pass
                     except Exception as e:
                         print(f"[CENTRAL] Error procesando AUTH_RESP: {e}")
                 else:
                     # [Lógica para manejar AVR, Suministro síncrono, etc.]
-                    pass
+                    if cod_op == 'AVR' and len(campos) >= 2:
+                        try:
+                            motivo = campos[0]
+                            codigo = campos[1]
+                            with CP_ALERTA_LOCK:
+                                CP_ALERTA[cp_id] = True
+                            registrar_evento(f"⚠️ Avería reportada por {cp_id}: {motivo} ({codigo})")
+                            try:
+                                cambiar_estado_cp(cp_id, 'AVERÍA', db_connection, motivo=f"{motivo} ({codigo})")
+                            except Exception:
+                                pass
+                        except Exception:
+                            registrar_evento(f"⚠️ Avería reportada por {cp_id}")
             else:
                 print(f"[CENTRAL] Trama inválida de {cp_id}.")
 
@@ -658,9 +851,16 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
     except Exception as e:
         print(f"[CENTRAL] Error en bucle de cliente {cp_id}: {e}")
     finally:
+        if cp_id != "Desconocido":
+            registrar_evento(f"Monitor desconectado: {cp_id}")
         # --- LÓGICA DB: Marcar el CP como DESCONECTADO ---
         if cp_id != "Desconocido" and db_connection and db_connection.is_connected():
             actualizar_estado_cp(db_connection, cp_id, "Desconectado")
+        try:
+            if cp_id != "Desconocido":
+                cambiar_estado_cp(cp_id, 'DESCONECTADO', db_connection)
+        except Exception:
+            pass
         
         if cp_id in CONEXIONES_ACTIVAS:
             with CONEXIONES_ACTIVAS_LOCK:
@@ -670,6 +870,34 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
         conn.close()
         print(f"[CENTRAL] Hilo de conexión con {addr[0]}:{addr[1]} finalizado.")
 
+def cambiar_estado_cp(cp_id: str, nuevo_estado: str, db_connection: mysql.connector.connection.MySQLConnection | None = None, motivo: str | None = None) -> None:
+    """Actualiza el estado interno y la BD, y registra en el log/TUI.
+    Estados esperados: DESCONECTADO, ACTIVADO, PRE-SUMINISTRO, SUMINISTRANDO, PARADO, AVERÍA.
+    """
+    nuevo_estado_norm = nuevo_estado.strip().upper() if isinstance(nuevo_estado, str) else str(nuevo_estado)
+    with CP_ESTADO_LOCK:
+        anterior = CP_ESTADO.get(cp_id)
+        CP_ESTADO[cp_id] = nuevo_estado_norm
+    detalle = f" (antes: {anterior})" if anterior and anterior != nuevo_estado_norm else ""
+    extra = f" Motivo: {motivo}" if motivo else ""
+    registrar_evento(f"[ESTADO] {cp_id} -> {nuevo_estado_norm}{detalle}.{extra}")
+    # Persistir en BD si está disponible
+    try:
+        if db_connection and db_connection.is_connected():
+            # Mapear a nombres en BD (usar Title case como en funciones existentes)
+            mapa_bd = {
+                'DESCONECTADO': 'Desconectado',
+                'ACTIVADO': 'Activado',
+                'PRE-SUMINISTRO': 'Pre-Suministro',
+                'SUMINISTRANDO': 'Suministrando',
+                'PARADO': 'Parado',
+                'AVERÍA': 'Averiado',
+                'AVERIA': 'Averiado',
+            }
+            estado_bd = mapa_bd.get(nuevo_estado_norm, nuevo_estado_norm.title())
+            actualizar_estado_cp(db_connection, cp_id, estado_bd)
+    except Exception as e:
+        print(f"[CENTRAL] No se pudo persistir estado de {cp_id}: {e}")
 
 
 def main():
@@ -677,6 +905,7 @@ def main():
     parser.add_argument("--port", type=int, required=True, help="Puerto de escucha")
     parser.add_argument("--kafka", type=str, required=True, help="Broker Kafka (IP:puerto)")
     parser.add_argument("--db", type=str, help="Ruta/URL de la base de datos")
+    parser.add_argument("--no-tui", action="store_true", help="Desactiva la TUI y usa modo consola simple")
     args = parser.parse_args()
 
     print("="*40)
@@ -685,6 +914,10 @@ def main():
     print(f"Broker Kafka: {args.kafka}")
     print(f"Base de datos: {args.db if args.db else 'Ninguna'}")
     print("="*40)
+    print("Comandos disponibles:")
+    print("  1 -> Refrescar")
+    print("  2 START CP001  o  2 STOP CP001 -> Enviar orden al CP")
+    print("  3 -> Salir")
 
     # Inicialización de la base de datos
     db_connection = None
@@ -711,9 +944,14 @@ def main():
         # Timeout corto para aceptar conexiones y poder revisar el flag de apagado
         server_socket.settimeout(1.0)
         
-        # Hilo para la interfaz de consola del operador
-        consola_thread = threading.Thread(target=interfaz_consola_central, daemon=True)
-        consola_thread.start()
+        # Forzar modo consola simple siempre (sin TUI ni Rich)
+        console_input_thread = threading.Thread(target=interfaz_consola_central, daemon=True)
+        console_input_thread.start()
+
+        # Hilo de procesamiento de comandos (común a ambos modos)
+        cmd_thread = threading.Thread(target=bucle_procesador_comandos, daemon=True)
+        cmd_thread.start()
+
         # Hilo consumidor de Kafka para telemetría
         kafka_consumer_thread = threading.Thread(
             target=consumir_telemetria_kafka,
@@ -764,6 +1002,7 @@ def main():
                 except:
                     pass
             CONEXIONES_ACTIVAS.clear()
+        registrar_evento("Central cerrando...")
         # Esperar a que terminen los hilos de clientes (con timeout)
         with CLIENT_THREADS_LOCK:
             for t in CLIENT_THREADS:

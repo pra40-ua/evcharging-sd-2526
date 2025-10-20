@@ -1,12 +1,13 @@
 import json
 import time
-from kafka import KafkaProducer
+from kafka import KafkaProducer, KafkaConsumer
 import argparse
 from kafka import KafkaProducer
 
 # --- CONFIGURACIÓN ---
 KAFKA_SERVER = 'localhost:9092'
 TOPIC_REQUESTS = 'driver_requests'
+EVENT_PREFIX = 'driver_status_'
 
 # --- 1. DEFINICIÓN DEL MENSAJE (Estructura de la Solicitud) ---
 def generar_solicitud(id_driver, id_charging_point, matricula, kw_deseados):
@@ -48,6 +49,33 @@ def enviar_solicitud(solicitud, broker):
         print(f"ERROR al conectar o enviar a Kafka: {e}")
         print("Asegúrate de que tu Broker de Kafka está corriendo en localhost:9092.")
 
+def consumir_notificaciones_driver(driver_id: str, broker: str, procesar_ticket_callback=None):
+    """Escucha el tópico driver_status_<driver_id> y muestra mensajes, incluyendo TICKET_FINAL."""
+    topic = f"{EVENT_PREFIX}{driver_id}"
+    try:
+        consumer = KafkaConsumer(
+            topic,
+            bootstrap_servers=[broker],
+            auto_offset_reset='latest',
+            enable_auto_commit=True,
+            group_id=f'driver-{driver_id}-group',
+            value_deserializer=lambda m: json.loads(m.decode('utf-8'))
+        )
+        print(f"[DRIVER {driver_id}] Escuchando notificaciones en '{topic}'...")
+        for msg in consumer:
+            payload = msg.value
+            evento = payload.get('evento')
+            detalle = payload.get('detalle')
+            ts = payload.get('timestamp')
+            print(f"[DRIVER {driver_id}] Evento={evento} @ {ts} -> {detalle}")
+            if evento == 'TICKET_FINAL' and procesar_ticket_callback:
+                try:
+                    procesar_ticket_callback(detalle)
+                except Exception:
+                    pass
+    except Exception as e:
+        print(f"[DRIVER {driver_id}] Error consumiendo notificaciones: {e}")
+
 # --- 3. EJECUCIÓN (Simulación del Driver) ---
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='EV Charging Driver Simulator.')
@@ -56,6 +84,7 @@ if __name__ == '__main__':
     parser.add_argument('--cp', type=str, required=True, help='ID del punto de carga deseado (CP_XXX).')
     parser.add_argument('--mat', type=str, default='ABC-1234', help='Matrícula del vehículo.')
     parser.add_argument('--kw', type=float, required=True, help='Potencia deseada en kW.')
+    parser.add_argument('--listen', action='store_true', help='Escuchar tickets/notificaciones del driver')
 
     args = parser.parse_args()
 
@@ -70,22 +99,18 @@ if __name__ == '__main__':
     )
     
     enviar_solicitud(solicitud, broker)
-    # Simulación 1: Driver A solicita carga en CP001
-    solicitud_A = generar_solicitud(
-        id_driver="DRIVER_456",
-        id_charging_point="CP_001",
-        matricula="ABC-1234",
-        kw_deseados=2.0 
-    )
-    enviar_solicitud(solicitud_A, broker)
 
-    time.sleep(2)
+    if args.listen:
+        def mostrar_ticket(ticket):
+            try:
+                cp = ticket.get('cp_id')
+                energia = ticket.get('energia_kwh')
+                importe = ticket.get('importe_eur')
+                print(f"[DRIVER {args.id}] Ticket final: CP={cp}, E={energia} kWh, €={importe}")
+            except Exception:
+                print(f"[DRIVER {args.id}] Ticket final: {ticket}")
+            # Si estuviera procesando por fichero, esperar 4s y continuar
+            time.sleep(4)
+            print(f"[DRIVER {args.id}] Listo para solicitar siguiente servicio (si procede).")
 
-    # Simulación 2: Driver B solicita carga en CP002
-    solicitud_B = generar_solicitud(
-        id_driver="DRIVER_789",
-        id_charging_point="CP_002",
-        matricula="DEF-5678",
-        kw_deseados=1.0 
-    )
-    enviar_solicitud(solicitud_B, broker)
+        consumir_notificaciones_driver(args.id, broker, procesar_ticket_callback=mostrar_ticket)

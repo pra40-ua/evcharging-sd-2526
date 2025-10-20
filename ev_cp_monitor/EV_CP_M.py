@@ -216,26 +216,43 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
             trama_hck = construir_trama('HCK', [cp_id])
             engine_socket.sendall(trama_hck)
             
-            # 4. Recibir respuesta HCK
+            # 4. Recibir respuesta (puede ser HCK_RESP u otros como FIN/STATE)
             respuesta_bytes = engine_socket.recv(1024)
-            
             if not respuesta_bytes:
                 raise ConnectionResetError("Engine cerró la conexión o respondió vacío.")
-            
             cod_op, campos = descomponer_trama(respuesta_bytes)
 
             if cod_op == 'HCK_RESP' and campos:
                 status = campos[0]
                 if status == 'OK':
-                    # print(f"[{cp_id}] HCK OK.") # No saturar la salida si todo va bien
                     pass
                 elif status == 'KO':
                     print(f"[{cp_id}] HCK KO recibido. Notificando avería a Central.")
                     notificar_averia_central(central_socket, cp_id, "Fallo reportado por Engine")
                 else:
                     print(f"[{cp_id}] Respuesta HCK_RESP inválida: {status}")
+            elif cod_op == 'FIN':
+                # FIN#CP_ID#DRIVER_ID#ENERGIA#IMPORTE
+                try:
+                    cp_fin = campos[0] if len(campos) > 0 else cp_id
+                    driver_id = campos[1] if len(campos) > 1 else 'UNKNOWN'
+                    energia = campos[2] if len(campos) > 2 else '0.00'
+                    importe = campos[3] if len(campos) > 3 else '0.00'
+                    print(f"[{cp_id}] FIN recibido del Engine. Reenviando a Central: {cp_fin}, {driver_id}, {energia}, {importe}")
+                    trama_fin = construir_trama('FIN', [cp_fin, driver_id, energia, importe])
+                    central_socket.sendall(trama_fin)
+                except Exception as e:
+                    print(f"[{cp_id}] Error reenviando FIN a Central: {e}")
+            elif cod_op == 'STATE':
+                try:
+                    estado = campos[1] if len(campos) > 1 else 'ACTIVADO'
+                    print(f"[{cp_id}] STATE desde Engine: {estado}. Avisando a Central.")
+                    trama_state = construir_trama('STATE', [cp_id, estado])
+                    central_socket.sendall(trama_state)
+                except Exception as e:
+                    print(f"[{cp_id}] Error reenviando STATE a Central: {e}")
             else:
-                 print(f"[{cp_id}] Trama HCK_RESP inválida o ilegible.")
+                print(f"[{cp_id}] Trama inesperada desde Engine: {cod_op}")
 
         except socket.timeout:
             print(f"[{cp_id}] ERROR: Timeout HCK. Engine no responde. Notificando avería.")
