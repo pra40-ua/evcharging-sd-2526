@@ -3,6 +3,29 @@ Arranca kafka
     docker compose up -d
 
 
+🔮​BASE DE DATOS
+Arranca MySQL con volumen y el script (solo se ejecuta en el primer arranque del datadir):
+
+  docker network create evnet
+docker volume create ev_mysql_data
+
+docker run -d --name mysql --network evnet -p 3306:3306 `
+  -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=evcharging `
+  -v ev_mysql_data:/var/lib/mysql `
+  -v ${PWD}\db\init.sql:/docker-entrypoint-initdb.d/01_schema.sql `
+  mysql:8
+**********************************************
+🔮​Lanza la Central usando el hostname mysql (misma red)
+docker run --rm --name central --network evnet -p 5000:5000 `
+  -e CENTRAL_PORT=5000 `
+  -e KAFKA_BROKER=10.191.221.61:9092 `
+  -e DB_URL="mysql:3306:root:root:evcharging" `
+  ev_central:local
+  ********************************************
+🔮​Nota: si ya levantaste MySQL antes con el mismo volumen, el script no se ejecutará. En ese caso, borra el contenedor y el volumen y vuelve a crear:
+docker rm -f mysql
+docker volume rm ev_mysql_data
+*******************************************************
 
 **** Ejecutar Engine y Monitor (EN B)
 # Imagen Engine y Monitor

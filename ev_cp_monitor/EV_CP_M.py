@@ -153,6 +153,25 @@ def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, 
             
             cod_op, campos = descomponer_trama(trama_bytes)
             
+            if cod_op == 'AUTH_REQ':
+                # AUTH_REQ#<driver_id>#<kw_deseados>
+                try:
+                    driver_id = campos[0] if len(campos) > 0 else 'UNKNOWN'
+                    kw_deseados = campos[1] if len(campos) > 1 else '0'
+                    print(f"[{cp_id}] <--- AUTH_REQ recibido de Central. Driver={driver_id}, kW={kw_deseados}")
+                    # Responder a la Central con autorización OK
+                    resp = construir_trama('AUTH_RESP', [driver_id, 'OK', 'Autorizacion concedida'])
+                    central_socket.sendall(resp)
+                    # Encolar START hacia el Engine para iniciar la carga
+                    try:
+                        COMMAND_QUEUE.put_nowait(('START', time.time()))
+                        print(f"[{cp_id}] START encolado para Engine tras AUTH_OK")
+                    except Exception as e:
+                        print(f"[{cp_id}] No se pudo encolar START: {e}")
+                except Exception as e:
+                    print(f"[{cp_id}] Error procesando AUTH_REQ: {e}")
+                continue
+
             if cod_op in ('STOP', 'START'):
                 print(f"[{cp_id}] <--- COMANDO CENTRAL RECIBIDO: {cod_op}")
                 # Encolamos la orden para que la ejecute el hilo HCK sobre su socket
