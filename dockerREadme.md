@@ -1,5 +1,25 @@
 Arranca kafka
+    docker compose down
     docker compose up -d
+
+
+
+**** Ejecutar Engine y Monitor (EN B)
+# Imagen Engine y Monitor
+docker build --no-cache -t ev_engine:local  -f ev_cp_engine/Dockerfile .
+docker build --no-cache
+
+# Imagen driver
+docker build -t ev_driver:local -f ev_driver/Dockerfile .
+
+# Arrancar Engine
+docker run --rm -p 5001:5001 --name engine -e ENGINE_PORT=5001 -e CP_ID=CP_001 -e KAFKA_SERVER=10.191.221.61:9092 ev_engine:local
+
+# Arrancar Monitor
+docker run --rm --name monitor -e CP_ID=CP_001 -e CENTRAL_IP=10.191.221.61 -e CENTRAL_PORT=5000 -e ENGINE_IP=10.191.221.77 -e ENGINE_PORT=5001 ev_monitor:local
+
+# Arrancar Driver
+docker run --rm --name driver -e KAFKA_BROKER=10.191.221.61:9092 -e DRIVER_ID=DRIVER_456 -e CP_ID=CP_001 -e MAT=ABC-1234 -e KW=25.0 -e LISTEN=true ev_driver:local
 
 construir la imagen
     docker build -t ev_central:local ./ev_central
