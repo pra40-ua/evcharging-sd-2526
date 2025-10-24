@@ -737,6 +737,20 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
             cp_id = campos[0]
             ubicacion = campos[1]
             precio_kwh = float(campos[2])
+
+            # ====== NUEVO BLOQUE AÑADIDO: DETECCIÓN DE RECONEXIÓN ======
+            with CONEXIONES_ACTIVAS_LOCK:
+                ya_conectado = cp_id in CONEXIONES_ACTIVAS
+
+            if ya_conectado:
+                registrar_evento(f"[RECONEXIÓN] CP {cp_id} se ha reconectado correctamente.")
+                try:
+                    cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection)
+                except Exception:
+                    pass
+            else:
+                registrar_evento(f"[NUEVO CP] Registro inicial de {cp_id}.")
+
             
             # --- NUEVA LÓGICA: Almacenar la conexión ---
             with CONEXIONES_ACTIVAS_LOCK:
@@ -828,21 +842,50 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                                 pass
                     except Exception as e:
                         print(f"[CENTRAL] Error procesando AUTH_RESP: {e}")
-                else:
-                    # [Lógica para manejar AVR, Suministro síncrono, etc.]
-                    if cod_op == 'AVR' and len(campos) >= 2:
+                
+                # ====== NUEVO BLOQUE AÑADIDO: MANEJO DE FIN ====== 
+                elif cod_op == 'FIN' and len(campos) >= 4:
+                    cp_fin = campos[0]
+                    driver_id = campos[1]
+                    energia = campos[2]
+                    importe = campos[3]
+
+                    registrar_evento(f"[CONTROL] Fin de carga recibido de {cp_id}: {energia} kWh, {importe} €")
+
+                    notificar_driver(driver_id, 'TICKET_FINAL', {
+                        'cp_id': cp_id,
+                        'energia_kwh': energia,
+                        'importe_eur': importe
+                    })
+
+                    cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection)
+
+                # [Lógica para manejar AVR, Suministro síncrono, etc.]
+                elif cod_op == 'AVR' and len(campos) >= 2:
+                    try:
+                        motivo = campos[0]
+                        codigo = campos[1]
+                        with CP_ALERTA_LOCK:
+                            CP_ALERTA[cp_id] = True
+                        registrar_evento(f"⚠️ Avería reportada por {cp_id}: {motivo} ({codigo})")
                         try:
-                            motivo = campos[0]
-                            codigo = campos[1]
-                            with CP_ALERTA_LOCK:
-                                CP_ALERTA[cp_id] = True
-                            registrar_evento(f"⚠️ Avería reportada por {cp_id}: {motivo} ({codigo})")
-                            try:
-                                cambiar_estado_cp(cp_id, 'AVERÍA', db_connection, motivo=f"{motivo} ({codigo})")
-                            except Exception:
-                                pass
+                            cambiar_estado_cp(cp_id, 'AVERÍA', db_connection, motivo=f"{motivo} ({codigo})")
                         except Exception:
-                            registrar_evento(f"⚠️ Avería reportada por {cp_id}")
+                            pass
+                    except Exception:
+                        registrar_evento(f"⚠️ Avería reportada por {cp_id}")
+                
+                # ====== NUEVO BLOQUE AÑADIDO: MANEJO DE STATE ====== 
+                elif cod_op == 'STATE' and len(campos) >= 2:
+                    cp_state = campos[0]
+                    nuevo_estado = campos[1]
+                    registrar_evento(f"[CONTROL] Estado reportado por {cp_state}: {nuevo_estado}")
+                    
+                    try:
+                        cambiar_estado_cp(cp_state, nuevo_estado, db_connection)
+                    except Exception as e:
+                        registrar_evento(f"[ERROR] No se pudo actualizar el estado de {cp_state}: {e}")
+
             else:
                 print(f"[CENTRAL] Trama inválida de {cp_id}.")
 
@@ -866,6 +909,10 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
             with CONEXIONES_ACTIVAS_LOCK:
                 del CONEXIONES_ACTIVAS[cp_id]
                 print(f"[CENTRAL] Socket de {cp_id} eliminado. Total: {len(CONEXIONES_ACTIVAS)}")
+        
+        # ====== OPCIONAL: MARCAR CP PARA RECONEXIÓN ======
+        if cp_id != "Desconocido":
+            registrar_evento(f"[INFO] {cp_id} podrá reconectarse automáticamente al reiniciar su Monitor.")
         
         conn.close()
         print(f"[CENTRAL] Hilo de conexión con {addr[0]}:{addr[1]} finalizado.")
