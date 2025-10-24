@@ -18,21 +18,29 @@ import json
 import time
 from kafka import KafkaProducer
 import threading # Necesario si el Engine está corriendo en un bucle principal
+import os
 
 # --- CONFIGURACIÓN ---
-KAFKA_SERVER = '127.0.0.1:9092' # Usamos la IP explícita que ya te funciona
+KAFKA_SERVER = os.getenv('KAFKA_SERVER', '127.0.0.1:9092')
 TOPIC_TELEMETRY = 'telemetria_cp'
 
-# Definición del Productor de Kafka (se puede inicializar una sola vez)
-try:
-    TELEMETRY_PRODUCER = KafkaProducer(
-        bootstrap_servers=[KAFKA_SERVER],
-        value_serializer=lambda v: json.dumps(v).encode('utf-8')
-    )
-    print("[KAFKA PRODUCER] Productor de Telemetría inicializado.")
-except Exception as e:
-    print(f"[KAFKA PRODUCER] ERROR al inicializar el Productor de Telemetría: {e}")
-    TELEMETRY_PRODUCER = None
+# Definición del Productor de Kafka (inicialización perezosa)
+TELEMETRY_PRODUCER = None
+
+def initialize_producer(broker: str):
+    global TELEMETRY_PRODUCER
+    if TELEMETRY_PRODUCER is not None:
+        return TELEMETRY_PRODUCER
+    try:
+        TELEMETRY_PRODUCER = KafkaProducer(
+            bootstrap_servers=[broker],
+            value_serializer=lambda v: json.dumps(v).encode('utf-8')
+        )
+        print(f"[KAFKA PRODUCER] Productor de Telemetría inicializado en {broker}.")
+    except Exception as e:
+        print(f"[KAFKA PRODUCER] ERROR al inicializar el Productor de Telemetría: {e}")
+        TELEMETRY_PRODUCER = None
+    return TELEMETRY_PRODUCER
 
 # --- FUNCIÓN DE TELEMETRÍA ---
 def generar_y_enviar_telemetria(cp_id: str, estado_carga: str, kw_entregados: float, tiempo_carga_s: int):
@@ -96,12 +104,14 @@ def bucle_telemetria(cp_id: str, stop_event: threading.Event):
         tiempo_carga_s=secs_final
     )
         
+
 def calcular_lrc(data_bytes: bytes) -> bytes:
     """Calcula el Longitudinal Redundancy Check (XOR de todos los bytes)."""
     lrc = 0
     for byte in data_bytes:
         lrc ^= byte
     return bytes([lrc])
+
 
 def descomponer_trama(trama_bytes: bytes) -> tuple:
     """
@@ -129,6 +139,7 @@ def descomponer_trama(trama_bytes: bytes) -> tuple:
         return partes[0], partes[1:]
     except UnicodeDecodeError:
         return None, None
+
 
 def construir_trama(cod_op: str, campos: list) -> bytes:
     """Construye la trama completa para enviar una respuesta (HCK_RESP)."""
@@ -221,12 +232,19 @@ def main():
     parser = argparse.ArgumentParser(description="Proceso EV_CP_E (Charging Point Engine)")
     parser.add_argument("--port", type=int, required=True, help="Puerto de escucha local")
     parser.add_argument("--cp-id", type=str, default="CP001", help="ID del Charging Point")
+    parser.add_argument("--kafka", type=str, default=os.getenv('KAFKA_SERVER', '127.0.0.1:9092'), help="Broker Kafka (IP:puerto)")
     args = parser.parse_args()
+    
+    # Configurar broker Kafka efectivo y productor
+    global KAFKA_SERVER
+    KAFKA_SERVER = args.kafka
+    initialize_producer(KAFKA_SERVER)
     
     print("="*40)
     print("[EV_CP_E] INICIADO")
     print(f"Puerto de escucha: {args.port}")
     print(f"CP ID: {args.cp_id}")
+    print(f"Kafka: {KAFKA_SERVER}")
     print("="*40)
 
     # El hilo de telemetría NO se inicia en arranque; solo tras recibir START
@@ -239,7 +257,7 @@ def main():
         server_socket.listen(1) 
         
         print(f"[EV_CP_E] Servidor escuchando en TCP (:{args.port}). Esperando Monitor...")
-
+        
         # El Engine solo acepta una conexión: la del Monitor
         conn, addr = server_socket.accept()
         handle_monitor_connection(conn, addr, args.cp_id)
