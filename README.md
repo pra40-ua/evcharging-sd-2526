@@ -109,3 +109,7 @@ kafka-topics.bat --create --topic driver_status_DRIVER_456 --bootstrap-server lo
 
 
     New-NetFirewallRule -DisplayName "EV_Central TCP 5000" -Direction Inbound -LocalPort 5000 -Protocol TCP -Action Allow
+
+    netstat -an | findstr :5000
+
+    Test-NetConnection -ComputerName <IP_REAL_PC_A> -Port 5000
