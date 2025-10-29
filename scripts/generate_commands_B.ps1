@@ -29,9 +29,9 @@ $outPath = Join-Path $projectRoot 'commands_PC_B.txt'
 
 $lines = @()
 $lines += '# Construir imágenes (si no existen)'
-$lines += 'docker build -t ev_engine:local ./ev_cp_engine'
-$lines += 'docker build -t ev_monitor:local ./ev_cp_monitor'
-$lines += 'docker build -t ev_driver:local ./ev_driver'
+$lines += 'docker build -t ev_engine:local -f ev_cp_engine/Dockerfile .'
+$lines += 'docker build -t ev_monitor:local -f ev_cp_monitor/Dockerfile .'
+$lines += 'docker build -t ev_driver:local -f ev_driver/Dockerfile .'
 $lines += ''
 $lines += '# Arrancar Engine'
 $lines += 'docker run --rm -p 5001:5001 --name engine `'
