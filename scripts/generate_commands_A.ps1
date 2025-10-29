@@ -42,6 +42,23 @@ try {
     Write-Warning "No se pudo escribir central_ip.txt: $_"
 }
 
+# Actualizar docker-compose.yml para que Kafka anuncie la IP real (en lugar de host.docker.internal)
+$composePath = Join-Path $projectRoot 'docker-compose.yml'
+if (Test-Path $composePath) {
+    try {
+        $compose = Get-Content -Path $composePath -Raw -Encoding UTF8
+        $newCompose = $compose -replace 'KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://[^\n\r]+:9092', "KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://$localIp:9092"
+        if ($newCompose -ne $compose) {
+            [System.IO.File]::WriteAllText($composePath, $newCompose, (New-Object System.Text.UTF8Encoding($false)))
+            Write-Host "docker-compose.yml actualizado con KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://$localIp:9092"
+        } else {
+            Write-Host "docker-compose.yml ya contenía la IP adecuada o no se encontró la línea a reemplazar."
+        }
+    } catch {
+        Write-Warning "No se pudo actualizar docker-compose.yml: $_"
+    }
+}
+
 $lines = @()
 $lines += '# Arrancar Kafka (en el host, accesible desde contenedores vía host.docker.internal)'
 $lines += 'docker compose down'
@@ -61,14 +78,14 @@ $lines += ''
 $lines += '# Construir imagen de la central (si no existe)'
 $lines += 'docker build -t ev_central:local -f ev_central/Dockerfile .'
 $lines += ''
-$lines += '# Arrancar Central (usa hostname mysql en la misma red y host.docker.internal para Kafka)'
+$lines += '# Arrancar Central (usa hostname mysql en la misma red y la IP real para Kafka)'
 $lines += 'docker run --rm -it --name central --network evnet -p 5000:5000 `'
 $lines += '  -e CENTRAL_PORT=5000 `'
-$lines += '  -e KAFKA_BROKER="host.docker.internal:9092" `'
+$lines += '  -e KAFKA_BROKER="' + $localIp + ':9092" `'
 $lines += '  -e DB_URL="mysql:3306:root:root:evcharging" `'
 $lines += '  ev_central:local'
 $lines += ''
-$lines += '# Nota: Kafka debe estar corriendo en el host (puerto 9092) accesible vía host.docker.internal'
+$lines += '# Nota: Kafka debe estar corriendo en el host (puerto 9092) accesible por IP'
 $lines += '# Abre puertos 5000 y 9092 en el firewall de este PC.'
 $lines += "# IP Central detectada (PC_A): ${localIp}"
 $lines += '# Se ha guardado también en central_ip.txt para facilitar la configuración de PC_B.'
@@ -78,5 +95,5 @@ $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 
 Write-Host "Generado: $outPath"
 Write-Host "IP local detectada: $localIp"
-Write-Host "KAFKA_BROKER configurado como: host.docker.internal:9092"
+Write-Host "KAFKA_BROKER configurado como: $localIp:9092"
 if (Test-Path $centralIpFile) { Write-Host "IP Central escrita en: $centralIpFile" }
