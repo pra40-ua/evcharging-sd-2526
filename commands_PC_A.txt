@@ -25,3 +25,5 @@ docker run --rm -it --name central --network evnet -p 5000:5000 `
 
 # Nota: Kafka debe estar corriendo en el host (puerto 9092) accesible vÃ­a host.docker.internal
 # Abre puertos 5000 y 9092 en el firewall de este PC.
+# IP Central detectada (PC_A): 172.17.48.1
+# Se ha guardado tambiÃ©n en central_ip.txt para facilitar la configuraciÃ³n de PC_B.

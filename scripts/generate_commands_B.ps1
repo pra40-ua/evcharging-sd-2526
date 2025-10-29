@@ -38,6 +38,7 @@ if (-not $localIp) {
 }
 
 $centralIpForText = if ([string]::IsNullOrWhiteSpace($CentralIp)) { '<CENTRAL_IP>' } else { $CentralIp }
+$sameHost = ($centralIpForText -ne '<CENTRAL_IP>') -and ($CentralIp -eq $localIp)
 
 # Ruta de salida (coloca el txt en la raíz del proyecto evcharging-sd-2526)
 $projectRoot = Split-Path $PSScriptRoot -Parent
@@ -50,30 +51,52 @@ $lines += 'docker build -t ev_monitor:local -f ev_cp_monitor/Dockerfile .'
 $lines += 'docker build -t ev_driver:local -f ev_driver/Dockerfile .'
 $lines += ''
 $lines += '# Arrancar Engine'
-$lines += 'docker run --rm -p 5001:5001 --name engine `'
-$lines += '  -e ENGINE_PORT=5001 -e CP_ID=CP_001 `'
-$kafkaServerLine = '  -e KAFKA_SERVER="' + $centralIpForText + ':9092" `'
-$lines += $kafkaServerLine
-$lines += '  ev_engine:local'
+if ($sameHost) {
+    $lines += 'docker run --rm --network evnet -p 5001:5001 --name engine `'
+    $lines += '  -e ENGINE_PORT=5001 -e CP_ID=CP_001 `'
+    $lines += '  -e KAFKA_SERVER="host.docker.internal:9092" `'
+    $lines += '  ev_engine:local'
+} else {
+    $lines += 'docker run --rm -p 5001:5001 --name engine `'
+    $lines += '  -e ENGINE_PORT=5001 -e CP_ID=CP_001 `'
+    $kafkaServerLine = '  -e KAFKA_SERVER="' + $centralIpForText + ':9092" `'
+    $lines += $kafkaServerLine
+    $lines += '  ev_engine:local'
+}
 $lines += ''
 $lines += '# Arrancar Monitor'
-$lines += 'docker run --rm --name monitor `'
-$lines += '  -e CP_ID=CP_001 `'
-$centralIpLine = '  -e CENTRAL_IP=' + $centralIpForText + ' -e CENTRAL_PORT=5000 `'
-$lines += $centralIpLine
-$engineIpLine = '  -e ENGINE_IP=' + $localIp + ' -e ENGINE_PORT=5001 `'
-$lines += $engineIpLine
-$lines += '  ev_monitor:local'
+if ($sameHost) {
+    $lines += 'docker run --rm --network evnet --name monitor `'
+    $lines += '  -e CP_ID=CP_001 `'
+    $lines += '  -e CENTRAL_IP=central -e CENTRAL_PORT=5000 `'
+    $lines += '  -e ENGINE_IP=engine -e ENGINE_PORT=5001 `'
+    $lines += '  ev_monitor:local'
+} else {
+    $lines += 'docker run --rm --name monitor `'
+    $lines += '  -e CP_ID=CP_001 `'
+    $centralIpLine = '  -e CENTRAL_IP=' + $centralIpForText + ' -e CENTRAL_PORT=5000 `'
+    $lines += $centralIpLine
+    $engineIpLine = '  -e ENGINE_IP=' + $localIp + ' -e ENGINE_PORT=5001 `'
+    $lines += $engineIpLine
+    $lines += '  ev_monitor:local'
+}
 $lines += ''
 $lines += '# Arrancar Driver'
-$lines += 'docker run --rm --name driver `'
-$kafkaBrokerLineDriver = '  -e KAFKA_BROKER="' + $centralIpForText + ':9092" `'
-$lines += $kafkaBrokerLineDriver
-$lines += '  -e DRIVER_ID=DRIVER_456 -e CP_ID=CP_001 -e MAT=ABC-1234 -e KW=25.0 -e LISTEN=true `'
-$lines += '  ev_driver:local'
+if ($sameHost) {
+    $lines += 'docker run --rm --name driver `'
+    $lines += '  -e KAFKA_BROKER="host.docker.internal:9092" `'
+    $lines += '  -e DRIVER_ID=DRIVER_456 -e CP_ID=CP_001 -e MAT=ABC-1234 -e KW=25.0 -e LISTEN=true `'
+    $lines += '  ev_driver:local'
+} else {
+    $lines += 'docker run --rm --name driver `'
+    $kafkaBrokerLineDriver = '  -e KAFKA_BROKER="' + $centralIpForText + ':9092" `'
+    $lines += $kafkaBrokerLineDriver
+    $lines += '  -e DRIVER_ID=DRIVER_456 -e CP_ID=CP_001 -e MAT=ABC-1234 -e KW=25.0 -e LISTEN=true `'
+    $lines += '  ev_driver:local'
+}
 $lines += ''
 $lines += "# IP local detectada (PC_B): ${localIp}"
-$lines += (if (-not [string]::IsNullOrWhiteSpace($CentralIp)) { "# IP Central usada (PC_A): ${CentralIp}" } else { "# IP Central: <CENTRAL_IP> (reemplazar por la IP de PC_A)" })
+$lines += $( if (-not [string]::IsNullOrWhiteSpace($CentralIp)) { "# IP Central usada (PC_A): ${CentralIp}" } else { "# IP Central: <CENTRAL_IP> (reemplazar por la IP de PC_A)" } )
 $lines += '# Nota: abre puertos 5001 en este PC y 9092 en PC_A.'
 
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)

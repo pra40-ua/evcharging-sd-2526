@@ -46,7 +46,7 @@ $lines += ''
 $lines += '# Arrancar Central (usa hostname mysql en la misma red y host.docker.internal para Kafka)'
 $lines += 'docker run --rm -it --name central --network evnet -p 5000:5000 `'
 $lines += '  -e CENTRAL_PORT=5000 `'
-$lines += "  -e KAFKA_BROKER=\"$localIp:9092\" `"
+$lines += '  -e KAFKA_BROKER="host.docker.internal:9092" `'
 $lines += '  -e DB_URL="mysql:3306:root:root:evcharging" `'
 $lines += '  ev_central:local'
 $lines += ''
@@ -60,5 +60,5 @@ $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 
 Write-Host "Generado: $outPath"
 Write-Host "IP local detectada: $localIp"
-Write-Host "KAFKA_BROKER configurado como: $localIp:9092"
+Write-Host "KAFKA_BROKER configurado como: host.docker.internal:9092"
 if (Test-Path $centralIpFile) { Write-Host "IP Central escrita en: $centralIpFile" }
