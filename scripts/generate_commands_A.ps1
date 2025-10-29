@@ -17,6 +17,10 @@ $projectRoot = Split-Path $PSScriptRoot -Parent
 $outPath = Join-Path $projectRoot 'commands_PC_A.txt'
 
 $lines = @()
+$lines += '# Arrancar Kafka (en el host, accesible desde contenedores vía host.docker.internal)'
+$lines += 'docker compose down'
+$lines += 'docker compose up -d'
+$lines += ''
 $lines += '# Crear red y volumen para MySQL'
 $lines += 'docker network create evnet'
 $lines += 'docker volume create ev_mysql_data'
@@ -31,20 +35,19 @@ $lines += ''
 $lines += '# Construir imagen de la central (si no existe)'
 $lines += 'docker build -t ev_central:local -f ev_central/Dockerfile .'
 $lines += ''
-$lines += '# Arrancar Central (usa hostname mysql en la misma red)'
-$lines += 'docker run --rm --name central --network evnet -p 5000:5000 `'
+$lines += '# Arrancar Central (usa hostname mysql en la misma red y host.docker.internal para Kafka)'
+$lines += 'docker run --rm -it --name central --network evnet -p 5000:5000 `'
 $lines += '  -e CENTRAL_PORT=5000 `'
-$kafkaBrokerLine = '  -e KAFKA_BROKER="' + $localIp + ':9092" `'
-$lines += $kafkaBrokerLine
-$dbUrlLine = '  -e DB_URL="mysql:3306:root:root:evcharging" `'
-$lines += $dbUrlLine
+$lines += '  -e KAFKA_BROKER="host.docker.internal:9092" `'
+$lines += '  -e DB_URL="mysql:3306:root:root:evcharging" `'
 $lines += '  ev_central:local'
 $lines += ''
-$lines += "# IP local detectada para KAFKA_BROKER: ${localIp}"
-$lines += '# Nota: abre puertos 5000 y 9092 en el firewall de este PC.'
+$lines += '# Nota: Kafka debe estar corriendo en el host (puerto 9092) accesible vía host.docker.internal'
+$lines += '# Abre puertos 5000 y 9092 en el firewall de este PC.'
 
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 [System.IO.File]::WriteAllLines($outPath, $lines, $utf8NoBom)
 
 Write-Host "Generado: $outPath"
 Write-Host "IP local detectada: $localIp"
+Write-Host "KAFKA_BROKER configurado como: host.docker.internal:9092"
