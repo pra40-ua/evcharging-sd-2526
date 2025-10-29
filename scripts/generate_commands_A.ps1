@@ -1,12 +1,30 @@
 # Genera commands_PC_A.txt con los comandos para PC_A (Central + MySQL)
 
-# Detectar IPv4 local (no loopback/APIPA)
-$localIp = (
-    Get-NetIPAddress -AddressFamily IPv4 |
-        Where-Object { $_.IPAddress -ne '127.0.0.1' -and $_.IPAddress -notlike '169.254*' } |
-        Sort-Object -Property PrefixLength |
-        Select-Object -First 1 -ExpandProperty IPAddress
-)
+# Detectar IPv4 local principal usando la ruta por defecto (evita IPs secundarias/virtuales)
+$localIp = $null
+try {
+    $defaultRoute = Get-NetRoute -DestinationPrefix '0.0.0.0/0' -AddressFamily IPv4 -ErrorAction SilentlyContinue |
+        Sort-Object -Property RouteMetric, InterfaceMetric |
+        Select-Object -First 1
+    if ($defaultRoute) {
+        $ifIndex = $defaultRoute.ifIndex
+        $candidate = Get-NetIPAddress -AddressFamily IPv4 -InterfaceIndex $ifIndex -ErrorAction SilentlyContinue |
+            Where-Object { $_.IPAddress -ne '127.0.0.1' -and $_.IPAddress -notlike '169.254*' }
+        if ($candidate) {
+            $localIp = ($candidate | Select-Object -First 1 -ExpandProperty IPAddress)
+        }
+    }
+} catch {}
+
+# Fallback: método anterior si no se obtuvo desde la ruta por defecto
+if (-not $localIp) {
+    $localIp = (
+        Get-NetIPAddress -AddressFamily IPv4 |
+            Where-Object { $_.IPAddress -ne '127.0.0.1' -and $_.IPAddress -notlike '169.254*' } |
+            Sort-Object -Property PrefixLength -Descending |
+            Select-Object -First 1 -ExpandProperty IPAddress
+    )
+}
 if (-not $localIp) {
     Write-Error 'No se pudo detectar la IP IPv4 local.'
     exit 1

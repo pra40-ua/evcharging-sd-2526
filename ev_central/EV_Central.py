@@ -174,7 +174,11 @@ def bucle_procesador_comandos() -> None:
         texto = cmd.strip()
         up = texto.upper()
         if up == '1':
-            registrar_evento("Refresco solicitado (TUI actualiza automáticamente)")
+            # Mostrar todos los CP (engines/monitores) conectados y su estado
+            try:
+                mostrar_estado_red()
+            except Exception:
+                registrar_evento("Error mostrando estado de la red")
             continue
         if up == '3' or up == 'EXIT' or up == 'QUIT':
             registrar_evento("Apagado solicitado por operador")
