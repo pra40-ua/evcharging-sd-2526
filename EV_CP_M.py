@@ -101,8 +101,7 @@ def enviar_orden_a_engine(engine_ip: str, engine_port: int, orden: str, cp_id: s
         print(f"[{cp_id}] Error enviando orden '{orden}' al Engine: {e}")
 
 def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str) -> socket.socket:
-    # ... [Tu lógica de registro permanece igual] ...
-    # Asegúrate de que esta función usa el socket.settimeout(None) por defecto
+    """Conecta al EV_Central y realiza el registro. Retorna el socket conectado."""
     
     ubicacion_cp = "C/Mayor, 45"
     precio_kwh = "0.48"
@@ -110,9 +109,30 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str) -> sock
 
     try:
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # Timeout de conexión para evitar bloqueos indefinidos
+        client_socket.settimeout(10)
+        
         print(f"[CP_M] Intentando conectar a EV_Central en {central_ip}:{central_port}...")
-        client_socket.connect((central_ip, central_port))
+        
+        try:
+            client_socket.connect((central_ip, central_port))
+        except socket.timeout:
+            raise Exception(f"Timeout al conectar (10s). Verifica que EV_Central esté ejecutándose en {central_ip}:{central_port}")
+        except ConnectionRefusedError:
+            raise Exception(
+                f"Connection refused. Posibles causas:\n"
+                f"  1. EV_Central no está ejecutándose en {central_ip}:{central_port}\n"
+                f"  2. El firewall de PC_A está bloqueando el puerto {central_port}\n"
+                f"  3. La IP {central_ip} es incorrecta (debe ser la IP del PC_A, no 127.0.0.1)\n"
+                f"  4. El contenedor de la Central no tiene el puerto 5000 mapeado correctamente"
+            )
+        except socket.gaierror as e:
+            raise Exception(f"No se pudo resolver el hostname/IP {central_ip}: {e}")
+        
         print("[CP_M] Conexión con Central establecida. Enviando REG...")
+        
+        # Quitar timeout para la comunicación posterior
+        client_socket.settimeout(None)
 
         trama_registro = construir_trama('REG', [cp_id, ubicacion_cp, precio_kwh])
         client_socket.sendall(trama_registro)

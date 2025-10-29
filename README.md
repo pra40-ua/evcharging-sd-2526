@@ -106,3 +106,6 @@ kafka-topics.bat --create --topic central_commands --bootstrap-server localhost:
 # Para notificaciones por driver (cada driver tiene su propio tópico)
 # Ejemplo para DRIVER_456:
 kafka-topics.bat --create --topic driver_status_DRIVER_456 --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+
+    New-NetFirewallRule -DisplayName "EV_Central TCP 5000" -Direction Inbound -LocalPort 5000 -Protocol TCP -Action Allow
