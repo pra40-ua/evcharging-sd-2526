@@ -4,9 +4,25 @@ param(
 
 # Genera commands_PC_B.txt con los comandos para PC_B (Engine, Monitor y Driver)
 
+# Si no se pasa -CentralIp, intentar leerlo de central_ip.txt (generado en PC_A)
 if ([string]::IsNullOrWhiteSpace($CentralIp)) {
-    Write-Host 'Uso: .\generate_commands_B.ps1 -CentralIp <IP_DE_PC_A>' -ForegroundColor Yellow
-    Write-Host 'No se proporcionó CentralIp. El fichero contendrá marcadores <CENTRAL_IP> que deberás reemplazar.' -ForegroundColor Yellow
+    $projectRoot = Split-Path $PSScriptRoot -Parent
+    $centralIpFile = Join-Path $projectRoot 'central_ip.txt'
+    if (Test-Path $centralIpFile) {
+        try {
+            $CentralIp = (Get-Content -Path $centralIpFile -Raw).Trim()
+            if (-not [string]::IsNullOrWhiteSpace($CentralIp)) {
+                Write-Host "Leído CENTRAL_IP desde central_ip.txt: $CentralIp" -ForegroundColor Green
+            }
+        } catch {
+            Write-Warning "No se pudo leer central_ip.txt: $_"
+        }
+    }
+
+    if ([string]::IsNullOrWhiteSpace($CentralIp)) {
+        Write-Host 'Uso: .\generate_commands_B.ps1 -CentralIp <IP_DE_PC_A>' -ForegroundColor Yellow
+        Write-Host 'No se proporcionó CentralIp y no se encontró central_ip.txt. El fichero contendrá marcadores <CENTRAL_IP> que deberás reemplazar.' -ForegroundColor Yellow
+    }
 }
 
 # Detectar IPv4 local (no loopback/APIPA)
@@ -57,11 +73,7 @@ $lines += '  -e DRIVER_ID=DRIVER_456 -e CP_ID=CP_001 -e MAT=ABC-1234 -e KW=25.0 
 $lines += '  ev_driver:local'
 $lines += ''
 $lines += "# IP local detectada (PC_B): ${localIp}"
-if (-not [string]::IsNullOrWhiteSpace($CentralIp)) {
-    $lines += "# IP Central usada (PC_A): ${CentralIp}"
-} else {
-    $lines += "# IP Central: <CENTRAL_IP> (reemplazar por la IP de PC_A)"
-}
+$lines += (if (-not [string]::IsNullOrWhiteSpace($CentralIp)) { "# IP Central usada (PC_A): ${CentralIp}" } else { "# IP Central: <CENTRAL_IP> (reemplazar por la IP de PC_A)" })
 $lines += '# Nota: abre puertos 5001 en este PC y 9092 en PC_A.'
 
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
