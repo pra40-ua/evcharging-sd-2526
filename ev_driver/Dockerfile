@@ -16,7 +16,7 @@ ENV KAFKA_BROKER=127.0.0.1:9092 \
     DRIVER_ID=DRIVER_456 \
     CP_ID=CP_001 \
     MAT=ABC-1234 \
-    KW=25.0 \
+    KW=1.0 \
     LISTEN=false
 
 # Comando por defecto: enviar una solicitud simple; sobreescribe con docker run ... si quieres otro flujo
