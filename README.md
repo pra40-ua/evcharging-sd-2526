@@ -108,8 +108,23 @@ kafka-topics.bat --create --topic central_commands --bootstrap-server localhost:
 kafka-topics.bat --create --topic driver_status_DRIVER_456 --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
 
 
-    New-NetFirewallRule -DisplayName "EV_Central TCP 5000" -Direction Inbound -LocalPort 5000 -Protocol TCP -Action Allow
+    
+    
+    CHAT
 
-    netstat -an | findstr :5000
+    ============================================================
+| ESTADO DE LA RED DE CARGA (Total: 1 CP(s) Activos) |
+============================================================
+| CP ID: CP_001
+|   Socket: Conectado en 5000
+|   Estado: Sin telemetría disponible
+|   (Conectado pero sin datos de Kafka)
+------------------------------------------------------------
 
-    Test-NetConnection -ComputerName <IP_REAL_PC_A> -Port 5000
+[CENTRAL CMD] (ej.: 2 START CP001 | 3=salir) > STOP CP_001
+[18:57:58] Comando no reconocido: STOP CP_001
+
+[CENTRAL CMD] (ej.: 2 START CP001 | 3=salir) > START CP_001
+[18:58:03] Comando no reconocido: START CP_001
+
+[CENTRAL CMD] (ej.: 2 START CP001 | 3=salir) >
