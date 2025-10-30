@@ -206,6 +206,14 @@ def bucle_procesador_comandos() -> None:
                 continue
             _enviar_comando_cp(cp_id, orden)
             continue
+        # También admitir formato directo: START CP_ID o STOP CP_ID
+        if up.startswith('START ') or up.startswith('STOP '):
+            partes = texto.split()
+            if len(partes) >= 2:
+                orden = partes[0].upper()
+                cp_id = partes[1]
+                _enviar_comando_cp(cp_id, orden)
+                continue
         registrar_evento(f"Comando no reconocido: {texto}")
 
 # =================================================================
@@ -276,15 +284,20 @@ def consumir_telemetria_kafka(broker_list: str):
                     registrar_evento(f"Telemetría recibida de {cp_id}: {resumen_telemetria(telemetria)}")
                     print(f"[KAFKA CONSUMER] -> Telemetría de {cp_id} recibida: {telemetria}")
 
-                    # Promover estados por telemetría
+                    # Promover estados por telemetría (respetando PARADO manual)
                     est_raw = telemetria.get('estado') or telemetria.get('estado_carga')
                     est = str(est_raw or '').strip().lower()
                     try:
+                        manual_parado = False
+                        with CP_ESTADO_MANUAL_LOCK:
+                            manual_parado = CP_ESTADO_MANUAL.get(cp_id) == 'PARADO'
                         if est in ("cargando", "suministrando", "charging", "en_carga"):
-                            cambiar_estado_cp(cp_id, 'SUMINISTRANDO')
+                            if not manual_parado:
+                                cambiar_estado_cp(cp_id, 'SUMINISTRANDO')
                         elif est in ("finalizado", "reposo", "idle", "ready"):
-                            # Fin de sesión -> volver a ACTIVADO
-                            cambiar_estado_cp(cp_id, 'ACTIVADO')
+                            # Solo volver a ACTIVADO si no está PARADO manualmente
+                            if not manual_parado:
+                                cambiar_estado_cp(cp_id, 'ACTIVADO')
                     except Exception:
                         pass
 
@@ -683,6 +696,11 @@ def mostrar_estado_red():
     for cp_id, socket_obj in CONEXIONES_ACTIVAS.items():
         print(f"| CP ID: {cp_id}")
         print(f"|   Socket: Conectado en {socket_obj.getsockname()[1]}")
+        # Mostrar estado consolidado conocido por la Central
+        with CP_ESTADO_LOCK:
+            estado_central = CP_ESTADO.get(cp_id, 'DESCONOCIDO')
+        if estado_central == 'PARADO':
+            print(f"|   Estado: PARADO  (Out of Order)")
         with TELEMETRIA_ACTUAL_LOCK:
             telemetria = TELEMETRIA_ACTUAL.get(cp_id)
         if telemetria:

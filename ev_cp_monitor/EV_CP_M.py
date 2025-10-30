@@ -200,6 +200,14 @@ def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, 
                     print(f"[{cp_id}] Orden '{cod_op}' encolada para Engine.")
                 except Exception as e:
                     print(f"[{cp_id}] No se pudo encolar la orden {cod_op}: {e}")
+                # Notificar inmediatamente a la Central el estado administrativo
+                try:
+                    nuevo_estado = 'PARADO' if cod_op == 'STOP' else 'ACTIVADO'
+                    trama_state = construir_trama('STATE', [cp_id, nuevo_estado])
+                    central_socket.sendall(trama_state)
+                    print(f"[{cp_id}] STATE inmediato enviado a Central: {nuevo_estado}")
+                except Exception as e:
+                    print(f"[{cp_id}] Error enviando STATE a Central: {e}")
 
             else:
                  # Manejo de otros códigos, como AVR, o tramas inesperadas
