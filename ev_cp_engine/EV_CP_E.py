@@ -74,6 +74,15 @@ STATE_LOCK = threading.Lock()
 kw_acumulados_global = 0.0
 segundos_global = 0
 
+# Objetivo y sesión
+TARGET_KWH = None
+CURRENT_DRIVER_ID = 'UNKNOWN'
+SESSION_START_TS = None
+CURRENT_TX_ID = None
+
+# Conexión activa con Monitor (para poder enviar FIN desde el hilo de telemetría)
+ACTIVE_MONITOR_CONN: socket.socket | None = None
+
 def bucle_telemetria(cp_id: str, stop_event: threading.Event):
     """Emite telemetría de CARGANDO únicamente mientras dure la sesión (START..STOP)."""
     global kw_acumulados_global, segundos_global
@@ -92,6 +101,15 @@ def bucle_telemetria(cp_id: str, stop_event: threading.Event):
             kw_entregados=kw,
             tiempo_carga_s=secs
         )
+        # Auto-stop cuando se alcance el objetivo
+        try:
+            objetivo = globals()['TARGET_KWH']
+            if objetivo is not None and kw >= float(objetivo):
+                print(f"[{cp_id}] Objetivo de {objetivo} kWh alcanzado. Deteniendo suministro.")
+                stop_event.set()
+                CHARGING_FLAG.clear()
+        except Exception:
+            pass
     # Al salir por STOP, publicar un último latido en REPOSO con valores finales
     with STATE_LOCK:
         estado_final = 'REPOSO'
@@ -103,6 +121,20 @@ def bucle_telemetria(cp_id: str, stop_event: threading.Event):
         kw_entregados=kw_final,
         tiempo_carga_s=secs_final
     )
+    # Si el stop fue por objetivo alcanzado, enviar FIN a Monitor
+    try:
+        conn = globals()['ACTIVE_MONITOR_CONN']
+        if conn is not None:
+            precio_kwh = 0.48  # Mantener coherencia con registro del Monitor
+            importe = round(kw_final * precio_kwh, 2)
+            driver_id = globals()['CURRENT_DRIVER_ID']
+            tx_id = globals()['CURRENT_TX_ID'] or f"TX-{cp_id}-{int(time.time())}"
+            motivo = 'Consumo completado'
+            trama_fin = construir_trama('FIN', [cp_id, driver_id, f"{kw_final:.2f}", f"{importe:.2f}", str(secs_final), motivo, tx_id])
+            conn.sendall(trama_fin)
+            print(f"[{cp_id}] FIN enviado a Monitor (auto-stop). kWh={kw_final}, €={importe}, dur_s={secs_final}, tx={tx_id}")
+    except Exception as e:
+        print(f"[{cp_id}] No se pudo enviar FIN a Monitor: {e}")
         
 
 def calcular_lrc(data_bytes: bytes) -> bytes:
@@ -183,11 +215,27 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
             elif cod_op == 'CMD':
                 orden = (campos[0] if campos else '').upper()
                 if orden == 'START':
+                    # Campos opcionales: kw_objetivo, driver_id
+                    kw_objetivo = None
+                    driver_id = 'UNKNOWN'
+                    try:
+                        if len(campos) > 1 and campos[1] != '':
+                            kw_objetivo = float(campos[1])
+                        if len(campos) > 2 and campos[2] != '':
+                            driver_id = str(campos[2])
+                    except Exception:
+                        pass
+                    # Inicializar sesión
                     with STATE_LOCK:
                         # Reinicia contadores al iniciar nueva sesión de carga
                         kw_acumulados_global = 0.0
                         segundos_global = 0
                         CHARGING_FLAG.set()
+                        globals()['TARGET_KWH'] = kw_objetivo
+                        globals()['CURRENT_DRIVER_ID'] = driver_id
+                        globals()['SESSION_START_TS'] = time.time()
+                        globals()['CURRENT_TX_ID'] = f"TX-{cp_id}-{int(globals()['SESSION_START_TS'])}"
+                        globals()['ACTIVE_MONITOR_CONN'] = conn
                         # Lanzar hilo de telemetría solo si no está ya activo
                         if TELEMETRY_THREAD is None or not TELEMETRY_THREAD.is_alive():
                             TELEMETRY_STOP_EVENT = threading.Event()
@@ -198,7 +246,10 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                             )
                             TELEMETRY_THREAD.start()
                     print("[ENGINE] === START recibido: iniciando carga (telemetría activa) ===")
-                    respuesta = construir_trama('ACK', ['START_OK'])
+                    info_ack = 'START_OK'
+                    if kw_objetivo is not None:
+                        info_ack = f"START_OK {kw_objetivo}kWh"
+                    respuesta = construir_trama('ACK', [info_ack])
                     conn.sendall(respuesta)
                 elif orden == 'STOP':
                     with STATE_LOCK:

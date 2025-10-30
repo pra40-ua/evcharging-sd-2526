@@ -60,6 +60,10 @@ def construir_trama(cod_op: str, campos: list) -> bytes:
 # Cola compartida entre el hilo de escucha de la Central y el hilo HCK
 COMMAND_QUEUE: Queue = Queue()
 
+# Sesión actual (se establece al recibir AUTH_REQ de Central)
+SESION_DRIVER_ID = None
+SESION_KW_SOLICITADOS = None
+
 # =================================================================
 #                       LÓGICA DE COMUNICACIÓN CENTRAL
 # =================================================================
@@ -179,12 +183,19 @@ def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, 
                     driver_id = campos[0] if len(campos) > 0 else 'UNKNOWN'
                     kw_deseados = campos[1] if len(campos) > 1 else '0'
                     print(f"[{cp_id}] <--- AUTH_REQ recibido de Central. Driver={driver_id}, kW={kw_deseados}")
+                    # Guardar sesión actual
+                    try:
+                        globals()['SESION_DRIVER_ID'] = driver_id
+                        globals()['SESION_KW_SOLICITADOS'] = float(kw_deseados)
+                    except Exception:
+                        globals()['SESION_DRIVER_ID'] = driver_id
+                        globals()['SESION_KW_SOLICITADOS'] = None
                     # Responder a la Central con autorización OK
                     resp = construir_trama('AUTH_RESP', [driver_id, 'OK', 'Autorizacion concedida'])
                     central_socket.sendall(resp)
                     # Encolar START hacia el Engine para iniciar la carga
                     try:
-                        COMMAND_QUEUE.put_nowait(('START', time.time()))
+                        COMMAND_QUEUE.put_nowait(('START', time.time(), globals()['SESION_KW_SOLICITADOS'], globals()['SESION_DRIVER_ID']))
                         print(f"[{cp_id}] START encolado para Engine tras AUTH_OK")
                     except Exception as e:
                         print(f"[{cp_id}] No se pudo encolar START: {e}")
@@ -196,7 +207,8 @@ def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, 
                 print(f"[{cp_id}] <--- COMANDO CENTRAL RECIBIDO: {cod_op}")
                 # Encolamos la orden para que la ejecute el hilo HCK sobre su socket
                 try:
-                    COMMAND_QUEUE.put_nowait((cod_op, time.time()))
+                    # STOP no requiere argumentos
+                    COMMAND_QUEUE.put_nowait((cod_op, time.time(), None, None))
                     print(f"[{cp_id}] Orden '{cod_op}' encolada para Engine.")
                 except Exception as e:
                     print(f"[{cp_id}] No se pudo encolar la orden {cod_op}: {e}")
@@ -237,11 +249,28 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
             #    Consumimos todas las que haya disponibles sin bloquear
             while True:
                 try:
-                    orden, ts = COMMAND_QUEUE.get_nowait()
+                    item = COMMAND_QUEUE.get_nowait()
                 except Empty:
                     break
                 try:
-                    trama_cmd = construir_trama('CMD', [orden])
+                    # item puede ser (orden, ts) o (orden, ts, kw, driver)
+                    if isinstance(item, tuple) and len(item) >= 2:
+                        orden = item[0]
+                        ts = item[1]
+                        kw = item[2] if len(item) > 2 else None
+                        driver = item[3] if len(item) > 3 else None
+                    else:
+                        orden = str(item)
+                        ts = time.time()
+                        kw = None
+                        driver = None
+
+                    campos_cmd = [orden]
+                    if orden == 'START' and kw is not None:
+                        campos_cmd.append(str(kw))
+                        if driver:
+                            campos_cmd.append(str(driver))
+                    trama_cmd = construir_trama('CMD', campos_cmd)
                     engine_socket.sendall(trama_cmd)
                     resp_cmd = engine_socket.recv(1024)
                     cod_cmd, campos_cmd = descomponer_trama(resp_cmd)
@@ -254,7 +283,7 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                     print(f"[{cp_id}] Error enviando CMD '{orden}' por HCK socket: {e}")
                     # Reencolar para reintentar cuando se restablezca la conexión
                     try:
-                        COMMAND_QUEUE.put_nowait((orden, ts))
+                        COMMAND_QUEUE.put_nowait(item)
                     except Exception:
                         pass
                     raise
@@ -279,14 +308,10 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                 else:
                     print(f"[{cp_id}] Respuesta HCK_RESP inválida: {status}")
             elif cod_op == 'FIN':
-                # FIN#CP_ID#DRIVER_ID#ENERGIA#IMPORTE
+                # FIN con campos completos desde el Engine. Reenviar tal cual a Central.
                 try:
-                    cp_fin = campos[0] if len(campos) > 0 else cp_id
-                    driver_id = campos[1] if len(campos) > 1 else 'UNKNOWN'
-                    energia = campos[2] if len(campos) > 2 else '0.00'
-                    importe = campos[3] if len(campos) > 3 else '0.00'
-                    print(f"[{cp_id}] FIN recibido del Engine. Reenviando a Central: {cp_fin}, {driver_id}, {energia}, {importe}")
-                    trama_fin = construir_trama('FIN', [cp_fin, driver_id, energia, importe])
+                    print(f"[{cp_id}] FIN recibido del Engine. Reenviando a Central. Campos: {campos}")
+                    trama_fin = construir_trama('FIN', campos)
                     central_socket.sendall(trama_fin)
                 except Exception as e:
                     print(f"[{cp_id}] Error reenviando FIN a Central: {e}")

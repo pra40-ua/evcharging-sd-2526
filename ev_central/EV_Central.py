@@ -867,20 +867,32 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                 
                 # ====== NUEVO BLOQUE AÑADIDO: MANEJO DE FIN ====== 
                 elif cod_op == 'FIN' and len(campos) >= 4:
+                    # FIN puede traer campos extra: [cp_id, driver_id, energia, importe, dur_s?, motivo?, tx_id?]
                     cp_fin = campos[0]
                     driver_id = campos[1]
                     energia = campos[2]
                     importe = campos[3]
+                    dur_s = campos[4] if len(campos) > 4 else None
+                    motivo = campos[5] if len(campos) > 5 else 'Consumo completado'
+                    tx_id = campos[6] if len(campos) > 6 else None
 
-                    registrar_evento(f"[CONTROL] Fin de carga recibido de {cp_id}: {energia} kWh, {importe} €")
+                    registrar_evento(f"[CONTROL] Fin de carga recibido de {cp_fin}: {energia} kWh, {importe} €")
 
-                    notificar_driver(driver_id, 'TICKET_FINAL', {
-                        'cp_id': cp_id,
+                    detalle_ticket = {
+                        'cp_id': cp_fin,
                         'energia_kwh': energia,
-                        'importe_eur': importe
-                    })
+                        'importe_eur': importe,
+                    }
+                    if dur_s is not None:
+                        detalle_ticket['duracion_seg'] = dur_s
+                    if motivo is not None:
+                        detalle_ticket['motivo'] = motivo
+                    if tx_id is not None:
+                        detalle_ticket['tx_id'] = tx_id
 
-                    cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection)
+                    notificar_driver(driver_id, 'TICKET_FINAL', detalle_ticket)
+
+                    cambiar_estado_cp(cp_fin, 'ACTIVADO', db_connection)
 
                 # [Lógica para manejar AVR, Suministro síncrono, etc.]
                 elif cod_op == 'AVR' and len(campos) >= 2:
