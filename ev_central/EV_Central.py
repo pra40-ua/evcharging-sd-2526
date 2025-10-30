@@ -40,6 +40,14 @@ CP_ALERTA_LOCK = threading.Lock()
 CP_ESTADO = {}
 CP_ESTADO_LOCK = threading.Lock()
 
+# Objetivo de kWh solicitado por Driver (por CP) para mostrar durante la sesión
+CP_SESION_OBJETIVO_KWH = {}
+CP_SESION_OBJETIVO_KWH_LOCK = threading.Lock()
+
+# Driver actual de la sesión (por CP) para tickets y referencia
+CP_SESION_DRIVER_ID = {}
+CP_SESION_DRIVER_ID_LOCK = threading.Lock()
+
 # Lista de hilos de clientes para cierre ordenado
 CLIENT_THREADS = []
 CLIENT_THREADS_LOCK = threading.Lock()
@@ -146,6 +154,19 @@ def _enviar_comando_cp(cp_id: str, orden: str) -> bool:
                 CP_ESTADO_MANUAL[cp_id] = 'PARADO'
             try:
                 cambiar_estado_cp(cp_id, 'PARADO')
+            except Exception:
+                pass
+            # Al parar manualmente, limpiar objetivo y sesión
+            try:
+                with CP_SESION_OBJETIVO_KWH_LOCK:
+                    if cp_id in CP_SESION_OBJETIVO_KWH:
+                        del CP_SESION_OBJETIVO_KWH[cp_id]
+            except Exception:
+                pass
+            try:
+                with CP_SESION_DRIVER_ID_LOCK:
+                    if cp_id in CP_SESION_DRIVER_ID:
+                        del CP_SESION_DRIVER_ID[cp_id]
             except Exception:
                 pass
         elif orden.upper() == 'START':
@@ -281,7 +302,16 @@ def consumir_telemetria_kafka(broker_list: str):
                         TELEMETRIA_ACTUAL[cp_id] = telemetria
 
                     # --- Lógica principal del Central ---
-                    registrar_evento(f"Telemetría recibida de {cp_id}: {resumen_telemetria(telemetria)}")
+                    # Mostrar objetivo solicitado si existe
+                    objetivo_txt = ''
+                    try:
+                        with CP_SESION_OBJETIVO_KWH_LOCK:
+                            obj = CP_SESION_OBJETIVO_KWH.get(cp_id)
+                        if obj is not None:
+                            objetivo_txt = f" | objetivo={float(obj):.2f} kWh"
+                    except Exception:
+                        objetivo_txt = ''
+                    registrar_evento(f"Telemetría recibida de {cp_id}: {resumen_telemetria(telemetria)}{objetivo_txt}")
                     print(f"[KAFKA CONSUMER] -> Telemetría de {cp_id} recibida: {telemetria}")
 
                     # Promover estados por telemetría (respetando PARADO manual)
@@ -419,7 +449,19 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                             })
                             continue
 
-                        # Paso 4: Enviar solicitud de autorización al Monitor
+                        # Paso 4: Registrar objetivo de sesión y enviar solicitud de autorización al Monitor
+                        try:
+                            with CP_SESION_OBJETIVO_KWH_LOCK:
+                                CP_SESION_OBJETIVO_KWH[cp_id] = float(kw_deseados)
+                        except Exception:
+                            with CP_SESION_OBJETIVO_KWH_LOCK:
+                                CP_SESION_OBJETIVO_KWH[cp_id] = kw_deseados
+                        try:
+                            with CP_SESION_DRIVER_ID_LOCK:
+                                CP_SESION_DRIVER_ID[cp_id] = id_driver
+                        except Exception:
+                            pass
+
                         notificar_driver(id_driver, 'AUTORIZACION_EN_PROCESO', {
                             'mensaje': f'Contactando Monitor de {cp_id}...'
                         })
@@ -712,6 +754,13 @@ def mostrar_estado_red():
             print(f"|   Potencia Actual: {potencia_actual} kW")
             print(f"|   Energía Total: {energia_total} kWh")
             print(f"|   Última Actualización: {timestamp}")
+            try:
+                with CP_SESION_OBJETIVO_KWH_LOCK:
+                    obj = CP_SESION_OBJETIVO_KWH.get(cp_id)
+                if obj is not None:
+                    print(f"|   Objetivo: {float(obj):.2f} kWh")
+            except Exception:
+                pass
         else:
             print(f"|   Estado: Sin telemetría disponible")
             print(f"|   (Conectado pero sin datos de Kafka)")
@@ -893,6 +942,19 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     notificar_driver(driver_id, 'TICKET_FINAL', detalle_ticket)
 
                     cambiar_estado_cp(cp_fin, 'ACTIVADO', db_connection)
+                    # Limpiar información de sesión
+                    try:
+                        with CP_SESION_OBJETIVO_KWH_LOCK:
+                            if cp_fin in CP_SESION_OBJETIVO_KWH:
+                                del CP_SESION_OBJETIVO_KWH[cp_fin]
+                    except Exception:
+                        pass
+                    try:
+                        with CP_SESION_DRIVER_ID_LOCK:
+                            if cp_fin in CP_SESION_DRIVER_ID:
+                                del CP_SESION_DRIVER_ID[cp_fin]
+                    except Exception:
+                        pass
 
                 # [Lógica para manejar AVR, Suministro síncrono, etc.]
                 elif cod_op == 'AVR' and len(campos) >= 2:
