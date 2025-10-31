@@ -153,11 +153,23 @@ Los mensajes de telemetría ahora muestran de forma clara el objetivo solicitado
 
 ## Comandos Disponibles
 
-### Engine (Terminal Interactivo)
+### Engine (Terminal Interactivo) ⭐ MEJORADO
+**IMPORTANTE**: Ya NO necesitas presionar Enter después de los comandos. Solo presiona la tecla y el comando se ejecuta inmediatamente.
+
 - **'p'** - Enchufar (Plug): Notifica al Monitor que el vehículo está conectado
 - **'f'** - Finalizar (Finish): **NUEVO** - Finaliza la carga y envía ticket
 - **'x'** - Detener (Stop): Detiene inmediatamente y desenchufa
 - **'h'** - Ayuda: Muestra información de comandos
+
+**Ejemplo de uso rápido:**
+```powershell
+# Cuando veas este mensaje, simplemente presiona 'p' (sin Enter)
+[ENGINE] Listo para siguiente comando...
+p    ← Solo presiona la tecla 'p'
+[ENGINE] >>> Enviando señal PLUGGED al Monitor...
+[ENGINE] ✓ STATE enviado al Monitor: PLUGGED
+[ENGINE] Listo para siguiente comando...
+```
 
 ### Central (Terminal)
 - **'1'** - Refrescar estado de red
@@ -177,6 +189,60 @@ Todos los cambios son **retrocompatibles** con el flujo existente:
 
 ---
 
+## 5. Menú Interactivo Mejorado (Windows)
+
+### Problema Original
+El menú interactivo del Engine no funcionaba correctamente en Windows porque:
+- El thread estaba bloqueado esperando la conexión del Monitor
+- `input()` no funciona bien en threads secundarios en Windows
+- La consola no respondía a las teclas presionadas
+
+### Solución Implementada
+Se ha reescrito el menú interactivo con dos versiones:
+1. **Windows**: Usa `msvcrt` para lectura no bloqueante de teclado
+2. **Unix/Linux**: Usa `input()` estándar
+
+### Características del Nuevo Menú
+- ✅ **Teclas rápidas**: Puedes presionar solo 'p', 'f', 'x' o 'h' SIN presionar Enter
+- ✅ **No bloqueante**: El Engine sigue funcionando mientras esperas comandos
+- ✅ **Feedback visual**: Muestra ✓ cuando el comando se ejecuta correctamente, ✗ si hay error
+- ✅ **Compatible**: Funciona tanto en Windows como en Unix/Linux
+
+### Archivos Modificados
+
+#### `ev_cp_engine\EV_CP_E.py`
+- **Líneas 11-15**: Importación de `msvcrt` con detección de disponibilidad
+- **Líneas 307-374**: Nueva función `procesar_comando_engine()` para procesar comandos
+- **Líneas 376-427**: Nueva función `menu_interactivo_engine_windows()` con lectura no bloqueante
+- **Líneas 429-447**: Nueva función `menu_interactivo_engine_unix()` para sistemas Unix
+- **Líneas 476-486**: Detección automática del sistema operativo y lanzamiento del menú correcto
+
+### Uso del Menú
+
+**Opción 1 - Tecla rápida (recomendado):**
+- Simplemente presiona `p`, `f`, `x` o `h` (sin Enter)
+- El comando se ejecuta inmediatamente
+
+**Opción 2 - Comando completo:**
+- Escribe el comando y presiona Enter
+- Útil si necesitas escribir algo más complejo en el futuro
+
+**Ejemplos:**
+```
+[ENGINE] Listo para siguiente comando...
+p                                    ← Solo presiona 'p'
+[ENGINE] >>> Enviando señal PLUGGED al Monitor...
+[ENGINE] ✓ STATE enviado al Monitor: PLUGGED
+[ENGINE] Listo para siguiente comando...
+
+f                                    ← Solo presiona 'f'
+[ENGINE] >>> FINISH solicitado: finalizando carga de forma ordenada...
+[ENGINE] ✓ FIN enviado a Monitor. kWh=2.50, €=1.20, duración=50s
+[ENGINE] Listo para siguiente comando...
+```
+
+---
+
 ## Testing Recomendado
 
 1. **Probar STOP manual desde Central**
@@ -184,19 +250,92 @@ Todos los cambios son **retrocompatibles** con el flujo existente:
    - Confirmar que puede recibir nueva solicitud
 
 2. **Probar comando FINISH desde Engine**
-   - Durante una carga activa, escribir 'f'
+   - Durante una carga activa, presionar 'f' (sin Enter)
    - Verificar que se envía FIN
    - Confirmar que Driver recibe ticket
    - Verificar que CP vuelve a ACTIVADO
 
-3. **Verificar mensajes de telemetría**
+3. **Probar menú interactivo en Windows**
+   - Presionar 'h' para ver ayuda
+   - Presionar 'p' para enchufar
+   - Presionar 'f' para finalizar
+   - Verificar que cada comando responde inmediatamente
+
+4. **Verificar mensajes de telemetría**
    - Confirmar que se muestra "Objetivo: X.XX kWh"
    - Verificar que aparece en todos los mensajes durante carga
 
-4. **Probar reconexión tras STOP**
+5. **Probar reconexión tras STOP**
    - Ejecutar STOP
    - Enviar nueva solicitud desde Driver
    - Verificar que se acepta correctamente
+
+---
+
+## 6. Monitor de Heartbeat Corregido
+
+### Problema Original
+El monitor de heartbeat marcaba los CPs como DESCONECTADOS cuando no recibía telemetría en 15 segundos. Sin embargo:
+- La telemetría **solo se envía durante CARGANDO** (sesión activa)
+- Cuando el CP está ACTIVADO (esperando), **NO envía telemetría**
+- Por tanto, CPs ACTIVADOS eran incorrectamente marcados como DESCONECTADOS
+
+### Solución Implementada
+El monitor ahora verifica el **estado del socket TCP** en lugar de la telemetría:
+- **DESCONECTADO**: Solo cuando el socket TCP se cierra
+- **ACTIVADO**: Cuando hay socket TCP activo pero no está cargando
+- **SUMINISTRANDO**: Cuando hay socket activo Y telemetría de CARGANDO
+
+### Archivos Modificados
+
+#### `ev_central\EV_Central.py`
+- **Líneas 825-857**: Reescrita función `monitorizar_actividad_cps()`
+  - Ahora verifica sockets TCP activos, no telemetría
+  - Auto-corrección si un CP con socket está marcado como DESCONECTADO
+  - Limpieza de CPs sin socket activo
+  - Intervalo aumentado a 10 segundos
+
+```python
+def monitorizar_actividad_cps(db_connection):
+    """
+    Monitoriza la actividad de los CPs basándose en la conexión TCP, NO en telemetría.
+    La telemetría solo se envía durante CARGANDO, por lo que no es un indicador de conexión.
+    El estado DESCONECTADO solo se establece cuando el socket TCP se cierra.
+    """
+    # ... verifica CONEXIONES_ACTIVAS en lugar de TELEMETRIA_ACTUAL
+```
+
+#### `ev_central\EV_Central.py` - TUI Mejorado
+- **Líneas 908-947**: Actualizada función `render_panel()`
+  - Muestra **todos los CPs conectados** por socket TCP
+  - Ya no depende de telemetría reciente para mostrar CPs
+  - Muestra "Sin telemetría" cuando CP está ACTIVADO (es normal)
+  - Añadidos colores para PRE-SUMINISTRO (amarillo) y PARADO (naranja)
+
+### Ejemplo de Salida
+
+**Antes (incorrecto):**
+```
+[19:24:49] [⚠️] CP CP_001 sin actividad → DESCONECTADO
+```
+
+**Ahora (correcto):**
+```
+╭─────────────────────── 🚗 ESTADO CENTRAL DE CARGA ───────────────────────╮
+│   CP ID   │       Estado       │  Energía (kWh)  │  Última telemetría  │
+├───────────┼────────────────────┼─────────────────┼─────────────────────┤
+│  CP_001   │     ACTIVADO       │      0.00       │   Sin telemetría    │
+╰───────────────────────────────────────────────────────────────────────────╯
+```
+
+Durante carga:
+```
+╭─────────────────────── 🚗 ESTADO CENTRAL DE CARGA ───────────────────────╮
+│   CP ID   │       Estado       │  Energía (kWh)  │  Última telemetría  │
+├───────────┼────────────────────┼─────────────────┼─────────────────────┤
+│  CP_001   │   SUMINISTRANDO    │      2.50       │        1.2s         │
+╰───────────────────────────────────────────────────────────────────────────╯
+```
 
 ---
 
@@ -207,6 +346,8 @@ Todos los cambios son **retrocompatibles** con el flujo existente:
 - No se requieren cambios en Docker Compose
 - Compatible con la versión actual de Kafka
 - No se requieren migraciones
+- **El estado DESCONECTADO ahora es confiable** (solo cuando socket TCP se cierra)
+- **Es normal que CPs ACTIVADOS no tengan telemetría** (solo envían durante carga)
 
 ---
 
