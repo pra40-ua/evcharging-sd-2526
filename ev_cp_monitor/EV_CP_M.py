@@ -63,6 +63,7 @@ COMMAND_QUEUE: Queue = Queue()
 # Sesión actual (se establece al recibir AUTH_REQ de Central)
 SESION_DRIVER_ID = None
 SESION_KW_SOLICITADOS = None
+WAITING_FOR_PLUG = False
 
 # =================================================================
 #                       LÓGICA DE COMUNICACIÓN CENTRAL
@@ -190,15 +191,12 @@ def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, 
                     except Exception:
                         globals()['SESION_DRIVER_ID'] = driver_id
                         globals()['SESION_KW_SOLICITADOS'] = None
+                    # Marcar que estamos autorizados y a la espera del 'enchufado' físico
+                    globals()['WAITING_FOR_PLUG'] = True
                     # Responder a la Central con autorización OK
                     resp = construir_trama('AUTH_RESP', [driver_id, 'OK', 'Autorizacion concedida'])
                     central_socket.sendall(resp)
-                    # Encolar START hacia el Engine para iniciar la carga
-                    try:
-                        COMMAND_QUEUE.put_nowait(('START', time.time(), globals()['SESION_KW_SOLICITADOS'], globals()['SESION_DRIVER_ID']))
-                        print(f"[{cp_id}] START encolado para Engine tras AUTH_OK")
-                    except Exception as e:
-                        print(f"[{cp_id}] No se pudo encolar START: {e}")
+                    print(f"[{cp_id}] Autorización concedida. Esperando acción de 'enchufar' en el Engine...")
                 except Exception as e:
                     print(f"[{cp_id}] Error procesando AUTH_REQ: {e}")
                 continue
@@ -318,7 +316,23 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
             elif cod_op == 'STATE':
                 try:
                     estado = campos[1] if len(campos) > 1 else 'ACTIVADO'
-                    print(f"[{cp_id}] STATE desde Engine: {estado}. Avisando a Central.")
+                    print(f"[{cp_id}] STATE desde Engine: {estado}.")
+                    # Si el Engine indica que el vehículo ha sido 'enchufado', iniciar START si hay autorización previa
+                    try:
+                        if estado.upper() == 'PLUGGED' and globals().get('WAITING_FOR_PLUG') and globals().get('SESION_DRIVER_ID'):
+                            # Enviar START al Engine con objetivo y driver
+                            try:
+                                objetivo = globals().get('SESION_KW_SOLICITADOS')
+                                driver = globals().get('SESION_DRIVER_ID')
+                                COMMAND_QUEUE.put_nowait(('START', time.time(), objetivo, driver))
+                                globals()['WAITING_FOR_PLUG'] = False
+                                print(f"[{cp_id}] Accion PLUG detectada. START encolado hacia Engine (driver={driver}, objetivo={objetivo}).")
+                            except Exception as e:
+                                print(f"[{cp_id}] No se pudo encolar START tras PLUG: {e}")
+                    except Exception:
+                        pass
+                    # Reenviar el estado a la Central para trazabilidad
+                    print(f"[{cp_id}] Avisando a Central del estado: {estado}.")
                     trama_state = construir_trama('STATE', [cp_id, estado])
                     central_socket.sendall(trama_state)
                 except Exception as e:

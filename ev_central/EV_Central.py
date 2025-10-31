@@ -40,6 +40,10 @@ CP_ALERTA_LOCK = threading.Lock()
 CP_ESTADO = {}
 CP_ESTADO_LOCK = threading.Lock()
 
+# Precio kWh anunciado por cada CP (desde REG)
+CP_PRECIO_KWH = {}
+CP_PRECIO_KWH_LOCK = threading.Lock()
+
 # Objetivo de kWh solicitado por Driver (por CP) para mostrar durante la sesión
 CP_SESION_OBJETIVO_KWH = {}
 CP_SESION_OBJETIVO_KWH_LOCK = threading.Lock()
@@ -328,6 +332,39 @@ def consumir_telemetria_kafka(broker_list: str):
                             # Solo volver a ACTIVADO si no está PARADO manualmente
                             if not manual_parado:
                                 cambiar_estado_cp(cp_id, 'ACTIVADO')
+                    except Exception:
+                        pass
+
+                    # Reenviar actualización periódica al Driver asociado (si existe)
+                    try:
+                        with CP_SESION_DRIVER_ID_LOCK:
+                            driver_id = CP_SESION_DRIVER_ID.get(cp_id)
+                        if driver_id:
+                            # Calcular importe aproximado en tiempo real
+                            energia = (
+                                telemetria.get('energia_total')
+                                if 'energia_total' in telemetria
+                                else telemetria.get('kwh', telemetria.get('kw_entregados', 0.0))
+                            )
+                            try:
+                                energia_val = float(energia)
+                            except Exception:
+                                energia_val = 0.0
+                            with CP_PRECIO_KWH_LOCK:
+                                precio = CP_PRECIO_KWH.get(cp_id, 0.0)
+                            try:
+                                precio_val = float(precio)
+                            except Exception:
+                                precio_val = 0.0
+                            importe = round(energia_val * precio_val, 2)
+                            notificar_driver(driver_id, 'TELEMETRIA', {
+                                'cp_id': cp_id,
+                                'energia_kwh': energia_val,
+                                'importe_eur': importe,
+                                'estado': telemetria.get('estado') or telemetria.get('estado_carga'),
+                                'potencia_kw': telemetria.get('potencia_actual'),
+                                'timestamp': telemetria.get('timestamp'),
+                            })
                     except Exception:
                         pass
 
@@ -831,6 +868,12 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
             # Estado: ACTIVADO tras registro exitoso
             try:
                 cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection)
+            except Exception:
+                pass
+            # Guardar el precio comunicado por el CP para cálculos de importe en tiempo real
+            try:
+                with CP_PRECIO_KWH_LOCK:
+                    CP_PRECIO_KWH[cp_id] = precio_kwh
             except Exception:
                 pass
             

@@ -82,6 +82,7 @@ CURRENT_TX_ID = None
 
 # Conexión activa con Monitor (para poder enviar FIN desde el hilo de telemetría)
 ACTIVE_MONITOR_CONN: socket.socket | None = None
+ENGINE_CP_ID = None
 
 def bucle_telemetria(cp_id: str, stop_event: threading.Event):
     """Emite telemetría de CARGANDO únicamente mientras dure la sesión (START..STOP)."""
@@ -194,6 +195,11 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
     # Declarar variables globales al inicio para evitar errores de ámbito
     global kw_acumulados_global, segundos_global, TELEMETRY_THREAD, TELEMETRY_STOP_EVENT
     print(f"[ENGINE] Monitor conectado desde {addr[0]}:{addr[1]}")
+    # Guardar conexión activa para permitir al menú enviar señales de 'enchufado'
+    try:
+        globals()['ACTIVE_MONITOR_CONN'] = conn
+    except Exception:
+        pass
     try:
         while True:
             # Esperar la trama HCK
@@ -279,6 +285,51 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
         print("[ENGINE] Conexión con Monitor cerrada.")
 
 
+def enviar_estado_al_monitor(estado: str) -> None:
+    """Envía un mensaje STATE al Monitor si hay conexión."""
+    try:
+        conn = globals().get('ACTIVE_MONITOR_CONN')
+        cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
+        if conn is None:
+            print("[ENGINE] No hay conexión con Monitor para enviar STATE.")
+            return
+        trama_state = construir_trama('STATE', [cp_id, estado])
+        conn.sendall(trama_state)
+        print(f"[ENGINE] STATE enviado al Monitor: {estado}")
+    except Exception as e:
+        print(f"[ENGINE] Error enviando STATE al Monitor: {e}")
+
+
+def menu_interactivo_engine() -> None:
+    """Menú simple para simular acciones físicas en el CP."""
+    print("\n[ENGINE] Menú CP: 'p' Enchufar (Plug) | 'x' Detener (Stop) | 'h' Ayuda")
+    while True:
+        try:
+            cmd = input("[ENGINE] Acción (p/x/h): ").strip().lower()
+        except Exception:
+            time.sleep(1)
+            continue
+        if not cmd:
+            continue
+        if cmd == 'h':
+            print("[ENGINE] Opciones: p=Enchufar (avisar Monitor), x=Detener carga si activa")
+            continue
+        if cmd == 'p':
+            enviar_estado_al_monitor('PLUGGED')
+            continue
+        if cmd == 'x':
+            try:
+                # Señal de stop local; el Monitor también puede ordenar STOP
+                with STATE_LOCK:
+                    if 'TELEMETRY_STOP_EVENT' in globals() and TELEMETRY_STOP_EVENT:
+                        TELEMETRY_STOP_EVENT.set()
+                        CHARGING_FLAG.clear()
+                enviar_estado_al_monitor('UNPLUGGED')
+            except Exception:
+                pass
+            continue
+        print(f"[ENGINE] Comando desconocido: {cmd}")
+
 def main():
     parser = argparse.ArgumentParser(description="Proceso EV_CP_E (Charging Point Engine)")
     parser.add_argument("--port", type=int, required=True, help="Puerto de escucha local")
@@ -302,6 +353,11 @@ def main():
     print(f"[EV_CP_E] Telemetría en reposo. A la espera de START para {args.cp_id}")
 
     try:
+        # Guardar CP_ID global para el menú/estado
+        globals()['ENGINE_CP_ID'] = args.cp_id
+        # Lanzar menú interactivo en un hilo para permitir acciones físicas simuladas
+        menu_thread = threading.Thread(target=menu_interactivo_engine, daemon=True)
+        menu_thread.start()
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_socket.bind(('', args.port))
