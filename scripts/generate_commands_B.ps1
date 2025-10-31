@@ -76,8 +76,8 @@ if ($sameHost) {
     $lines += '  -e CP_ID=CP_001 `'
     $centralIpLine = '  -e CENTRAL_IP=' + $centralIpForText + ' -e CENTRAL_PORT=5000 `'
     $lines += $centralIpLine
-    $engineIpLine = '  -e ENGINE_IP=' + $localIp + ' -e ENGINE_PORT=5001 `'
-    $lines += $engineIpLine
+    # Usar host.docker.internal para conectar desde contenedor al host (Windows/Mac)
+    $lines += '  -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=5001 `'
     $lines += '  ev_monitor:local'
 }
 $lines += ''
@@ -143,7 +143,8 @@ if ($sameHost) {
     $monitorLines += 'docker run --rm --name monitor `'
     $monitorLines += '  -e CP_ID=CP_001 `'
     $monitorLines += ('  -e CENTRAL_IP=' + $centralIpForText + ' -e CENTRAL_PORT=5000 `')
-    $monitorLines += ('  -e ENGINE_IP=' + $localIp + ' -e ENGINE_PORT=5001 `')
+    # Usar host.docker.internal para conectar desde contenedor al host (Windows/Mac)
+    $monitorLines += '  -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=5001 `'
     $monitorLines += '  ev_monitor:local'
 }
 
@@ -175,12 +176,25 @@ $batLines = @(
     '@echo off',
     'setlocal',
     'cd /d "%~dp0"',
-    'REM Ventana 1: Build de imágenes y Engine',
+    'echo Iniciando componentes del Charging Point (PC_B)...',
+    'echo.',
+    'REM Ventana 1: Build de imagenes y Engine',
+    'echo [1/3] Iniciando Build+Engine...',
     'start "Build+Engine" powershell -NoLogo -NoExit -ExecutionPolicy Bypass -File "%~dp0commands_PC_B_build_engine.ps1"',
+    'echo Esperando 10 segundos para que Engine este listo...',
+    'timeout /t 10 /nobreak >nul',
     'REM Ventana 2: Monitor',
+    'echo [2/3] Iniciando Monitor...',
     'start "Monitor" powershell -NoLogo -NoExit -ExecutionPolicy Bypass -File "%~dp0commands_PC_B_monitor.ps1"',
+    'echo Esperando 5 segundos...',
+    'timeout /t 5 /nobreak >nul',
     'REM Ventana 3: Driver',
-    'start "Driver" powershell -NoLogo -NoExit -ExecutionPolicy Bypass -File "%~dp0commands_PC_B_driver.ps1"'
+    'echo [3/3] Iniciando Driver...',
+    'start "Driver" powershell -NoLogo -NoExit -ExecutionPolicy Bypass -File "%~dp0commands_PC_B_driver.ps1"',
+    'echo.',
+    'echo Todos los componentes han sido iniciados.',
+    'echo Presiona cualquier tecla para cerrar esta ventana...',
+    'pause >nul'
 )
 $ascii = New-Object System.Text.ASCIIEncoding
 [System.IO.File]::WriteAllLines($batPath, $batLines, $ascii)
