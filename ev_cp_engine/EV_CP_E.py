@@ -3,6 +3,16 @@ import argparse
 import sys
 import threading
 import time
+import json
+from kafka import KafkaProducer
+import os
+
+# Importar msvcrt para entrada no bloqueante en Windows
+try:
+    import msvcrt
+    MSVCRT_AVAILABLE = True
+except ImportError:
+    MSVCRT_AVAILABLE = False
 
 # =================================================================
 #                         FUNCIONES DE PROTOCOLO
@@ -13,12 +23,6 @@ import time
 STX = b'\x02'
 ETX = b'\x03'
 DELIMITER = '#'
-
-import json
-import time
-from kafka import KafkaProducer
-import threading # Necesario si el Engine está corriendo en un bucle principal
-import os
 
 # --- CONFIGURACIÓN ---
 KAFKA_SERVER = os.getenv('KAFKA_SERVER', '127.0.0.1:9092')
@@ -194,7 +198,8 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
     """Maneja el chequeo de salud HCK del Monitor."""
     # Declarar variables globales al inicio para evitar errores de ámbito
     global kw_acumulados_global, segundos_global, TELEMETRY_THREAD, TELEMETRY_STOP_EVENT
-    print(f"[ENGINE] Monitor conectado desde {addr[0]}:{addr[1]}")
+    print(f"\n[ENGINE] ✓ Monitor conectado desde {addr[0]}:{addr[1]}")
+    print(f"[ENGINE] ✓ Conexión HCK establecida. CP listo para operar.")
     # Guardar conexión activa para permitir al menú enviar señales de 'enchufado'
     try:
         globals()['ACTIVE_MONITOR_CONN'] = conn
@@ -300,35 +305,170 @@ def enviar_estado_al_monitor(estado: str) -> None:
         print(f"[ENGINE] Error enviando STATE al Monitor: {e}")
 
 
-def menu_interactivo_engine() -> None:
-    """Menú simple para simular acciones físicas en el CP."""
-    print("\n[ENGINE] Menú CP: 'p' Enchufar (Plug) | 'x' Detener (Stop) | 'h' Ayuda")
+def procesar_comando_engine(cmd: str) -> None:
+    """Procesa un comando del menú interactivo."""
+    cmd = cmd.strip().lower()
+    if not cmd:
+        return
+    
+    if cmd == 'h':
+        print("\n[ENGINE] === COMANDOS DISPONIBLES ===")
+        print("  p = Enchufar (Plug) - Avisar al Monitor que el vehículo está conectado")
+        print("  f = FINISH - Finalizar carga normalmente y enviar ticket al Driver")
+        print("  x = Stop - Detener carga inmediatamente (desenchufar)")
+        print("  h = Ayuda - Mostrar este mensaje")
+        print("  Cualquier otro texto = Mensaje informativo (registrado en consola)")
+        print("=====================================\n")
+        return
+        
+    if cmd == 'p':
+        print("[ENGINE] >>> Enviando señal PLUGGED al Monitor...")
+        enviar_estado_al_monitor('PLUGGED')
+        return
+        
+    if cmd == 'f':
+        # FINISH: Detener suministro de forma ordenada y enviar FIN
+        try:
+            print("[ENGINE] >>> FINISH solicitado: finalizando carga de forma ordenada...")
+            # Detener el hilo de telemetría
+            with STATE_LOCK:
+                if 'TELEMETRY_STOP_EVENT' in globals() and TELEMETRY_STOP_EVENT:
+                    TELEMETRY_STOP_EVENT.set()
+                    CHARGING_FLAG.clear()
+                # Obtener valores finales
+                kw_final = round(kw_acumulados_global, 2)
+                secs_final = segundos_global
+            # Enviar FIN al Monitor
+            try:
+                conn = globals()['ACTIVE_MONITOR_CONN']
+                cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
+                if conn is not None:
+                    precio_kwh = 0.48
+                    importe = round(kw_final * precio_kwh, 2)
+                    driver_id = globals()['CURRENT_DRIVER_ID']
+                    tx_id = globals()['CURRENT_TX_ID'] or f"TX-{cp_id}-{int(time.time())}"
+                    motivo = 'Finalizado por operador (FINISH)'
+                    trama_fin = construir_trama('FIN', [cp_id, driver_id, f"{kw_final:.2f}", f"{importe:.2f}", str(secs_final), motivo, tx_id])
+                    conn.sendall(trama_fin)
+                    print(f"[ENGINE] ✓ FIN enviado a Monitor. kWh={kw_final}, €={importe}, duración={secs_final}s")
+                else:
+                    print("[ENGINE] ✗ No hay conexión con Monitor para enviar FIN.")
+            except Exception as e:
+                print(f"[ENGINE] ✗ Error enviando FIN: {e}")
+        except Exception as e:
+            print(f"[ENGINE] ✗ Error ejecutando FINISH: {e}")
+        return
+        
+    if cmd == 'x':
+        try:
+            print("[ENGINE] >>> Deteniendo carga y desenchufando...")
+            # Señal de stop local; el Monitor también puede ordenar STOP
+            with STATE_LOCK:
+                if 'TELEMETRY_STOP_EVENT' in globals() and TELEMETRY_STOP_EVENT:
+                    TELEMETRY_STOP_EVENT.set()
+                    CHARGING_FLAG.clear()
+            enviar_estado_al_monitor('UNPLUGGED')
+            print("[ENGINE] ✓ Señal UNPLUGGED enviada.")
+        except Exception as e:
+            print(f"[ENGINE] ✗ Error: {e}")
+        return
+    
+    # Si no es un comando conocido, tratarlo como mensaje informativo
+    # (similar a como el Central permite escribir mensajes)
+    print(f"[ENGINE] 💬 Mensaje: {cmd}")
+
+def menu_interactivo_engine_windows() -> None:
+    """Menú interactivo usando msvcrt para lectura no bloqueante en Windows.
+    Similar al bucle de entrada de comandos del Central."""
+    # Esperar un poco para que el servidor inicie
+    time.sleep(0.5)
+    
+    print("\n" + "="*70)
+    print("[ENGINE] 🎮 MENÚ INTERACTIVO ACTIVADO")
+    print("="*70)
+    print("  Comandos disponibles:")
+    print("    p = Plug (Enchufar vehículo)")
+    print("    f = Finish (Finalizar carga y enviar ticket)")
+    print("    x = Stop (Detener inmediatamente)")
+    print("    h = Help (Mostrar ayuda completa)")
+    print("  Puedes presionar teclas rápidas o escribir comandos completos.")
+    print("="*70 + "\n")
+    
+    buffer_chars = []
+    
     while True:
         try:
-            cmd = input("[ENGINE] Acción (p/x/h): ").strip().lower()
-        except Exception:
-            time.sleep(1)
+            if msvcrt.kbhit():
+                ch = msvcrt.getwch()
+                
+                if ch in ('\r', '\n'):
+                    # Enter presionado - procesar comando completo
+                    cmd = ''.join(buffer_chars).strip()
+                    buffer_chars = []
+                    if cmd:
+                        print()  # Nueva línea después del input
+                        print(f"[ENGINE] Procesando: {cmd}")
+                        procesar_comando_engine(cmd)
+                    else:
+                        # Solo Enter sin comando - nueva línea
+                        print()
+                        
+                elif ch in ('\x08', '\x7f'):  # Backspace
+                    if buffer_chars:
+                        buffer_chars.pop()
+                        # Borrar el carácter en pantalla
+                        sys.stdout.write('\b \b')
+                        sys.stdout.flush()
+                        
+                elif ch == '\x03':  # Ctrl+C
+                    print("\n[ENGINE] ⚠️ Ctrl+C detectado (ignorado)")
+                    buffer_chars = []
+                    
+                else:
+                    # Teclas rápidas (sin buffer previo): procesar inmediatamente
+                    if not buffer_chars and ch.lower() in ('p', 'f', 'x', 'h'):
+                        print(ch)  # Mostrar la tecla
+                        print(f"[ENGINE] Comando rápido: {ch}")
+                        procesar_comando_engine(ch)
+                    # Acumular caracteres para comandos largos
+                    elif ch.isprintable() or ch == ' ':
+                        buffer_chars.append(ch)
+                        sys.stdout.write(ch)
+                        sys.stdout.flush()
+            else:
+                time.sleep(0.05)
+                
+        except Exception as e:
+            print(f"\n[ENGINE] ⚠️ Error en menú: {e}")
+            time.sleep(0.1)
+
+def menu_interactivo_engine_unix() -> None:
+    """Menú interactivo usando input() para sistemas Unix."""
+    print("\n" + "="*70)
+    print("[ENGINE] MENÚ INTERACTIVO ACTIVO")
+    print("="*70)
+    print("  Comandos disponibles:")
+    print("    p = Plug (Enchufar vehículo)")
+    print("    f = Finish (Finalizar carga y enviar ticket)")
+    print("    x = Stop (Detener inmediatamente)")
+    print("    h = Help (Mostrar ayuda completa)")
+    print("  Puedes escribir comandos completos o mensajes informativos.")
+    print("="*70 + "\n")
+    
+    while True:
+        try:
+            cmd = input("[ENGINE] > ").strip()
+            if cmd:
+                procesar_comando_engine(cmd)
+        except EOFError:
+            print("\n[ENGINE] EOF detectado, saliendo del menú...")
+            break
+        except KeyboardInterrupt:
+            print("\n[ENGINE] ⚠️ Ctrl+C detectado (ignorado)")
             continue
-        if not cmd:
-            continue
-        if cmd == 'h':
-            print("[ENGINE] Opciones: p=Enchufar (avisar Monitor), x=Detener carga si activa")
-            continue
-        if cmd == 'p':
-            enviar_estado_al_monitor('PLUGGED')
-            continue
-        if cmd == 'x':
-            try:
-                # Señal de stop local; el Monitor también puede ordenar STOP
-                with STATE_LOCK:
-                    if 'TELEMETRY_STOP_EVENT' in globals() and TELEMETRY_STOP_EVENT:
-                        TELEMETRY_STOP_EVENT.set()
-                        CHARGING_FLAG.clear()
-                enviar_estado_al_monitor('UNPLUGGED')
-            except Exception:
-                pass
-            continue
-        print(f"[ENGINE] Comando desconocido: {cmd}")
+        except Exception as e:
+            print(f"[ENGINE] ⚠️ Error: {e}")
+            time.sleep(0.5)
 
 def main():
     parser = argparse.ArgumentParser(description="Proceso EV_CP_E (Charging Point Engine)")
@@ -355,12 +495,20 @@ def main():
     try:
         # Guardar CP_ID global para el menú/estado
         globals()['ENGINE_CP_ID'] = args.cp_id
-        # Lanzar menú interactivo solo si hay TTY; si no, evitar bucle de prompts
-        if sys.stdin and sys.stdin.isatty():
-            menu_thread = threading.Thread(target=menu_interactivo_engine, daemon=True)
+        
+        # Lanzar menú interactivo (Windows usa msvcrt, Unix usa input())
+        if MSVCRT_AVAILABLE:
+            print("[ENGINE] Detectado Windows - usando menú interactivo optimizado")
+            menu_thread = threading.Thread(target=menu_interactivo_engine_windows, daemon=True)
+            menu_thread.start()
+        elif sys.stdin and sys.stdin.isatty():
+            print("[ENGINE] Detectado sistema Unix - usando menú interactivo estándar")
+            menu_thread = threading.Thread(target=menu_interactivo_engine_unix, daemon=True)
             menu_thread.start()
         else:
-            print("[ENGINE] Menú deshabilitado (STDIN no interactivo). Use el Monitor para PLUG/STOP.")
+            print("[ENGINE] Menú interactivo deshabilitado (STDIN no disponible)")
+            print("[ENGINE] Use el Monitor para controlar PLUG/STOP")
+        
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_socket.bind(('', args.port))
@@ -370,6 +518,9 @@ def main():
         
         # El Engine solo acepta una conexión: la del Monitor
         conn, addr = server_socket.accept()
+        print(f"\n{'='*70}")
+        print(f"[EV_CP_E] ✓ Conexión aceptada. Procesando comunicación con Monitor...")
+        print(f"{'='*70}\n")
         handle_monitor_connection(conn, addr, args.cp_id)
         
     except KeyboardInterrupt:

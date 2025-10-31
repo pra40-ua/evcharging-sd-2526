@@ -211,8 +211,9 @@ def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, 
                 except Exception as e:
                     print(f"[{cp_id}] No se pudo encolar la orden {cod_op}: {e}")
                 # Notificar inmediatamente a la Central el estado administrativo
+                # CAMBIO: Tras STOP, el CP vuelve a ACTIVADO (no PARADO)
                 try:
-                    nuevo_estado = 'PARADO' if cod_op == 'STOP' else 'ACTIVADO'
+                    nuevo_estado = 'ACTIVADO'  # Siempre ACTIVADO tras START o STOP
                     trama_state = construir_trama('STATE', [cp_id, nuevo_estado])
                     central_socket.sendall(trama_state)
                     print(f"[{cp_id}] STATE inmediato enviado a Central: {nuevo_estado}")
@@ -242,6 +243,13 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                 engine_socket.connect((engine_ip, engine_port))
                 print(f"[{cp_id}] Conexión con Engine establecida.")
                 engine_socket.settimeout(HCK_INTERVAL * 0.8)
+                # Notificar al Central que el Engine está conectado y operativo (ACTIVADO)
+                try:
+                    trama_state = construir_trama('STATE', [cp_id, 'ACTIVADO'])
+                    central_socket.sendall(trama_state)
+                    print(f"[{cp_id}] STATE ACTIVADO enviado a Central tras conectar con Engine.")
+                except Exception as e:
+                    print(f"[{cp_id}] Error notificando ACTIVADO a Central: {e}")
             
             # 2. Antes de enviar HCK, consumir órdenes pendientes y enviarlas por el mismo socket
             #    Consumimos todas las que haya disponibles sin bloquear
