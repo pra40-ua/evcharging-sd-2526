@@ -11,6 +11,11 @@ from kafka import KafkaConsumer, KafkaProducer
 import json
 import os
 import sys
+from rich.console import Console
+from rich.table import Table
+from rich.live import Live
+from rich import box
+import logging
 try:
     import msvcrt as MSVCRT
 except Exception:
@@ -71,14 +76,25 @@ EVENT_LOG_LOCK = threading.Lock()
 #                         REGISTRO / LOGS
 # =================================================================
 
-def registrar_evento(mensaje: str) -> None:
-    """Añade una línea al log interno y lo imprime por consola."""
+console = Console()
+logging.basicConfig(filename='/app/central.log', level=logging.INFO, format='%(asctime)s - %(message)s')
+
+def registrar_evento(mensaje: str, tipo="info") -> None:
+    """Registro de eventos con Rich + logging a archivo."""
     timestamp = datetime.now().strftime('%H:%M:%S')
     linea = f"[{timestamp}] {mensaje}"
+    color = {"info": "cyan", "warn": "yellow", "error": "red", "ok": "green"}.get(tipo, "white")
     with EVENT_LOG_LOCK:
         EVENT_LOG.append(linea)
     try:
-        print(linea)
+        console.print(f"[{color}]{linea}[/{color}]")
+    except Exception:
+        try:
+            print(linea)
+        except Exception:
+            pass
+    try:
+        logging.info(linea)
     except Exception:
         pass
 
@@ -302,8 +318,32 @@ def consumir_telemetria_kafka(broker_list: str):
                         continue
 
                     # --- Almacenar telemetría en estructura global ---
+                    # Asegurar timestamp presente para heartbeat/TUI
+                    if 'timestamp' not in telemetria or not telemetria.get('timestamp'):
+                        telemetria['timestamp'] = time.time()
                     with TELEMETRIA_ACTUAL_LOCK:
                         TELEMETRIA_ACTUAL[cp_id] = telemetria
+
+                    # --- Guardar histórico de telemetría en BD si disponible ---
+                    try:
+                        # Intentar usar variable cerrada sobre db_connection si existe en enclosing scope
+                        db_conn = globals().get('_DB_CONN_FOR_CONSUMER')
+                        if db_conn and db_conn.is_connected():
+                            cursor = db_conn.cursor()
+                            cursor.execute("""
+                                INSERT INTO telemetria_log (cp_id, timestamp, estado_carga, kw_entregados, tiempo_carga_s)
+                                VALUES (%s, %s, %s, %s, %s)
+                            """, (
+                                cp_id,
+                                telemetria.get('timestamp', time.time()),
+                                telemetria.get('estado_carga', telemetria.get('estado', 'N/D')),
+                                telemetria.get('kw_entregados', telemetria.get('energia_total', 0.0)),
+                                telemetria.get('tiempo_carga_s', 0)
+                            ))
+                            db_conn.commit()
+                            cursor.close()
+                    except Exception as e:
+                        registrar_evento(f"[WARN] No se pudo registrar telemetría: {e}", "warn")
 
                     # --- Lógica principal del Central ---
                     # Mostrar objetivo solicitado si existe
@@ -763,6 +803,21 @@ def notificar_driver(id_driver: str, evento: str, detalle=None):
 # =================================================================
 #                       LÓGICA DEL SERVIDOR CENTRAL
 # =================================================================
+
+def monitorizar_actividad_cps(db_connection):
+    while not SHUTDOWN_REQUESTED:
+        ahora = time.time()
+        try:
+            with TELEMETRIA_ACTUAL_LOCK:
+                for cp_id, data in list(TELEMETRIA_ACTUAL.items()):
+                    ultima = data.get("timestamp", 0)
+                    if ahora - ultima > 15:
+                        if CP_ESTADO.get(cp_id) != "DESCONECTADO":
+                            registrar_evento(f"[⚠️] CP {cp_id} sin actividad → DESCONECTADO", "warn")
+                            cambiar_estado_cp(cp_id, "DESCONECTADO", db_connection)
+        except Exception as e:
+            registrar_evento(f"[WARN] Heartbeat error: {e}", "warn")
+        time.sleep(5)
 def mostrar_estado_red():
     """Compat: imprime estado (modo no-TUI); preservado por si se usa sin Rich."""
     print("\n" + "="*60)
@@ -812,6 +867,33 @@ def interfaz_consola_central():
             continue
         COMMAND_QUEUE.put(comando)
         time.sleep(0.1)
+
+def render_panel():
+    table = Table(title="🚗 ESTADO CENTRAL DE CARGA", box=box.ROUNDED)
+    table.add_column("CP ID", justify="center", style="bold white")
+    table.add_column("Estado", justify="center")
+    table.add_column("Energía (kWh)", justify="center")
+    table.add_column("Última actualización", justify="center")
+
+    with TELEMETRIA_ACTUAL_LOCK:
+        for cp_id, data in TELEMETRIA_ACTUAL.items():
+            estado = CP_ESTADO.get(cp_id, "N/D")
+            energia = data.get("kw_entregados") or data.get("energia_total") or 0.0
+            t_ago = round(time.time() - data.get("timestamp", 0), 1)
+            color = {
+                "ACTIVADO": "green",
+                "SUMINISTRANDO": "cyan",
+                "DESCONECTADO": "red",
+                "AVERÍA": "magenta"
+            }.get(str(estado).upper(), "white")
+            table.add_row(cp_id, f"[{color}]{estado}[/{color}]", f"{float(energia):.2f}", f"{t_ago}s")
+    return table
+
+def iniciar_interfaz_visual():
+    with Live(render_panel(), refresh_per_second=1, console=console) as live:
+        while not SHUTDOWN_REQUESTED:
+            live.update(render_panel())
+            time.sleep(2)
             
 def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.connector.connection.MySQLConnection):
     """Función ejecutada por un hilo para manejar la conexión de un CP."""
@@ -1117,6 +1199,24 @@ def main():
         print("[EV_Central] ADVERTENCIA: No se proporcionó configuración de BD")
         print("[EV_Central] Continuando sin persistencia de datos...")
 
+    # Hacer accesible la conexión BD para el consumidor de telemetría (histórico)
+    globals()['_DB_CONN_FOR_CONSUMER'] = db_connection
+
+    # Restaurar estado de CPs desde BD al inicio
+    try:
+        if db_connection and db_connection.is_connected():
+            cursor = db_connection.cursor()
+            cursor.execute("SELECT cp_id, estado FROM charging_points")
+            for cp_id, estado in cursor.fetchall():
+                with CP_ESTADO_LOCK:
+                    CP_ESTADO[cp_id] = estado
+                with TELEMETRIA_ACTUAL_LOCK:
+                    TELEMETRIA_ACTUAL[cp_id] = {'timestamp': time.time(), 'estado': estado}
+                registrar_evento(f"[RESTORE] {cp_id} restaurado con estado {estado}", "ok")
+            cursor.close()
+    except Exception as e:
+        registrar_evento(f"[ERROR] No se pudo restaurar el estado inicial: {e}", "error")
+
     # Inicialización del productor Kafka para notificaciones
     inicializar_kafka_producer(args.kafka)
 
@@ -1130,9 +1230,11 @@ def main():
         # Timeout corto para aceptar conexiones y poder revisar el flag de apagado
         server_socket.settimeout(1.0)
         
-        # Forzar modo consola simple siempre (sin TUI ni Rich)
+        # Forzar modo consola simple siempre (compat) y lanzar TUI Rich
         console_input_thread = threading.Thread(target=interfaz_consola_central, daemon=True)
         console_input_thread.start()
+        tui_thread = threading.Thread(target=iniciar_interfaz_visual, daemon=True)
+        tui_thread.start()
 
         # Hilo de procesamiento de comandos (común a ambos modos)
         cmd_thread = threading.Thread(target=bucle_procesador_comandos, daemon=True)
@@ -1152,6 +1254,8 @@ def main():
             daemon=True
         )
         driver_requests_thread.start()
+        # Lanzar monitor de actividad (heartbeat)
+        threading.Thread(target=monitorizar_actividad_cps, args=(db_connection,), daemon=True).start()
         print(f"[EV_Central] Servidor escuchando en TCP (:{args.port})...")
 
         while True:
