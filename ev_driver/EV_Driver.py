@@ -25,12 +25,15 @@ def generar_solicitud(id_driver, id_charging_point, matricula, kw_deseados):
 
 # --- 2. FUNCIÓN PRODUCTORA ---
 def enviar_solicitud(solicitud, broker):
-<<<<<<< HEAD
+    """
+    Envía la solicitud de carga al broker Kafka con reintentos en caso de error.
+    """
     for intento in range(3):
         try:
             producer = KafkaProducer(
                 bootstrap_servers=[broker],
-                value_serializer=lambda v: json.dumps(v).encode('utf-8')
+                value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+                api_version=(2, 8, 0)
             )
             producer.send(TOPIC_REQUESTS, value=solicitud)
             producer.flush()
@@ -40,33 +43,8 @@ def enviar_solicitud(solicitud, broker):
             break
         except Exception as e:
             print(f"ERROR enviando a Kafka (intento {intento+1}/3): {e}")
-            time.sleep(2)
-=======
-    try:
-        # Crea el objeto productor de Kafka
-        # value_serializer convierte el diccionario a bytes JSON
-        producer = KafkaProducer(
-            bootstrap_servers=[broker],
-            value_serializer=lambda v: json.dumps(v).encode('utf-8'),
-            api_version=(2, 8, 0)
-        )
-
-        # Envía el mensaje al topic
-        future = producer.send(TOPIC_REQUESTS, value=solicitud)
-        
-        # Espera a que el envío se complete (opcional, para confirmar la entrega)
-        record_metadata = future.get(timeout=10)
-        
-        print(f"[{solicitud['id_driver']}] Solicitud enviada a Kafka:")
-        print(f"  Topic: {record_metadata.topic}, Partition: {record_metadata.partition}, Offset: {record_metadata.offset}")
-        print(f"  Datos: {json.dumps(solicitud)}")
-
-        producer.close()
-        
-    except Exception as e:
-        print(f"ERROR al conectar o enviar a Kafka: {e}")
-        print("Asegúrate de que tu Broker de Kafka está corriendo en localhost:9092.")
->>>>>>> luis
+            if intento < 2:
+                time.sleep(2)
 
 def consumir_notificaciones_driver(driver_id: str, broker: str, procesar_ticket_callback=None):
     """Escucha el tópico driver_status_<driver_id> y muestra mensajes, incluyendo TICKET_FINAL."""
