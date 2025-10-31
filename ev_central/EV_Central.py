@@ -283,6 +283,8 @@ def consumir_telemetria_kafka(broker_list: str):
         consumer = KafkaConsumer(
             TELEMETRIA_TOPIC,
             bootstrap_servers=[broker_list],
+            security_protocol='PLAINTEXT',
+            api_version=(2, 5, 0),
             # Deserializador para convertir los bytes del mensaje a un diccionario de Python
             value_deserializer=lambda m: json.loads(m.decode('utf-8')),
             # Si hay offset confirmado previo, retomamos desde ahí; si no, desde lo más reciente
@@ -435,6 +437,8 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
         consumer = KafkaConsumer(
             DRIVER_REQUESTS_TOPIC,
             bootstrap_servers=[broker_list],
+            security_protocol='PLAINTEXT',
+            api_version=(2, 5, 0),
             auto_offset_reset='earliest',
             group_id='central_processing_group',
             value_deserializer=lambda x: json.loads(x.decode('utf-8'))
@@ -770,6 +774,8 @@ def inicializar_kafka_producer(broker_list: str):
             try:
                 KAFKA_PRODUCER = KafkaProducer(
                     bootstrap_servers=[broker_list],
+                    security_protocol='PLAINTEXT',
+                    api_version=(2, 5, 0),
                     value_serializer=lambda v: json.dumps(v).encode('utf-8')
                 )
                 print("[KAFKA PRODUCER] Productor inicializado para notificaciones a drivers.")
