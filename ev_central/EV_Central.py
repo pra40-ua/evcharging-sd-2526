@@ -352,7 +352,7 @@ def consumir_telemetria_kafka(broker_list: str):
                         with CP_SESION_OBJETIVO_KWH_LOCK:
                             obj = CP_SESION_OBJETIVO_KWH.get(cp_id)
                         if obj is not None:
-                            objetivo_txt = f" | objetivo={float(obj):.2f} kWh"
+                            objetivo_txt = f" | solicitado={float(obj):.2f} kWh"
                     except Exception:
                         objetivo_txt = ''
                     registrar_evento(f"Telemetría recibida de {cp_id}: {resumen_telemetria(telemetria)}{objetivo_txt}")
