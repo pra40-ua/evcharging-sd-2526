@@ -30,7 +30,8 @@ def enviar_solicitud(solicitud, broker):
         # value_serializer convierte el diccionario a bytes JSON
         producer = KafkaProducer(
             bootstrap_servers=[broker],
-            value_serializer=lambda v: json.dumps(v).encode('utf-8')
+            value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+            api_version=(2, 8, 0)
         )
 
         # Envía el mensaje al topic
@@ -59,7 +60,8 @@ def consumir_notificaciones_driver(driver_id: str, broker: str, procesar_ticket_
             auto_offset_reset='latest',
             enable_auto_commit=True,
             group_id=f'driver-{driver_id}-group',
-            value_deserializer=lambda m: json.loads(m.decode('utf-8'))
+            value_deserializer=lambda m: json.loads(m.decode('utf-8')),
+            api_version=(2, 8, 0)
         )
         print(f"[DRIVER {driver_id}] Escuchando notificaciones en '{topic}'...")
         for msg in consumer:
