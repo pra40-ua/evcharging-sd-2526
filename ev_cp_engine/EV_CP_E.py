@@ -355,9 +355,12 @@ def main():
     try:
         # Guardar CP_ID global para el menú/estado
         globals()['ENGINE_CP_ID'] = args.cp_id
-        # Lanzar menú interactivo en un hilo para permitir acciones físicas simuladas
-        menu_thread = threading.Thread(target=menu_interactivo_engine, daemon=True)
-        menu_thread.start()
+        # Lanzar menú interactivo solo si hay TTY; si no, evitar bucle de prompts
+        if sys.stdin and sys.stdin.isatty():
+            menu_thread = threading.Thread(target=menu_interactivo_engine, daemon=True)
+            menu_thread.start()
+        else:
+            print("[ENGINE] Menú deshabilitado (STDIN no interactivo). Use el Monitor para PLUG/STOP.")
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_socket.bind(('', args.port))
