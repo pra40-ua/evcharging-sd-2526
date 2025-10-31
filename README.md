@@ -112,19 +112,14 @@ kafka-topics.bat --create --topic driver_status_DRIVER_456 --bootstrap-server lo
     
     CHAT
 
-    ============================================================
-| ESTADO DE LA RED DE CARGA (Total: 1 CP(s) Activos) |
-============================================================
-| CP ID: CP_001
-|   Socket: Conectado en 5000
-|   Estado: Sin telemetría disponible
-|   (Conectado pero sin datos de Kafka)
-------------------------------------------------------------
+========================================
+[EV_CP_E] INICIADO
+Puerto de escucha: 5001
+CP ID: CP_001
+Kafka: 172.21.42.3:9092
+========================================
+[EV_CP_E] Telemetría en reposo. A la espera de START para CP_001
 
-[CENTRAL CMD] (ej.: 2 START CP001 | 3=salir) > STOP CP_001
-[18:57:58] Comando no reconocido: STOP CP_001
-
-[CENTRAL CMD] (ej.: 2 START CP001 | 3=salir) > START CP_001
-[18:58:03] Comando no reconocido: START CP_001
-
-[CENTRAL CMD] (ej.: 2 START CP001 | 3=salir) >
+[ENGINE] Menú CP: 'p' Enchufar (Plug) | 'x' Detener (Stop) | 'h' Ayuda
+[ENGINE] Acción (p/x/h): [EV_CP_E] Servidor escuchando en TCP (:5001). Esperando Monitor...
+[ENGINE] Acción (p/x/h): [ENGINE] Acción (p/x/h): [ENGINE] Acción
