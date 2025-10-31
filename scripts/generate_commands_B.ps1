@@ -85,13 +85,13 @@ $lines += '# Arrancar Driver'
 if ($sameHost) {
     $lines += 'docker run --rm --name driver `'
     $lines += '  -e KAFKA_BROKER="host.docker.internal:9092" `'
-    $lines += '  -e DRIVER_ID=DRIVER_456 -e CP_ID=CP_001 -e MAT=ABC-1234 -e KW=25.0 -e LISTEN=true `'
+    $lines += '  -e DRIVER_ID=DRIVER_456 -e CP_ID=CP_001 -e MAT=ABC-1234 -e KW=1.0 -e LISTEN=true `'
     $lines += '  ev_driver:local'
 } else {
     $lines += 'docker run --rm --name driver `'
     $kafkaBrokerLineDriver = '  -e KAFKA_BROKER="' + $centralIpForText + ':9092" `'
     $lines += $kafkaBrokerLineDriver
-    $lines += '  -e DRIVER_ID=DRIVER_456 -e CP_ID=CP_001 -e MAT=ABC-1234 -e KW=25.0 -e LISTEN=true `'
+    $lines += '  -e DRIVER_ID=DRIVER_456 -e CP_ID=CP_001 -e MAT=ABC-1234 -e KW=1.0 -e LISTEN=true `'
     $lines += '  ev_driver:local'
 }
 $lines += ''
@@ -153,12 +153,12 @@ $driverLines += '# Arrancar Driver'
 if ($sameHost) {
     $driverLines += 'docker run --rm --name driver `'
     $driverLines += '  -e KAFKA_BROKER="host.docker.internal:9092" `'
-    $driverLines += '  -e DRIVER_ID=DRIVER_456 -e CP_ID=CP_001 -e MAT=ABC-1234 -e KW=25.0 -e LISTEN=true `'
+    $driverLines += '  -e DRIVER_ID=DRIVER_456 -e CP_ID=CP_001 -e MAT=ABC-1234 -e KW=1.0 -e LISTEN=true `'
     $driverLines += '  ev_driver:local'
 } else {
     $driverLines += 'docker run --rm --name driver `'
     $driverLines += ('  -e KAFKA_BROKER="' + $centralIpForText + ':9092" `')
-    $driverLines += '  -e DRIVER_ID=DRIVER_456 -e CP_ID=CP_001 -e MAT=ABC-1234 -e KW=25.0 -e LISTEN=true `'
+    $driverLines += '  -e DRIVER_ID=DRIVER_456 -e CP_ID=CP_001 -e MAT=ABC-1234 -e KW=1.0 -e LISTEN=true `'
     $driverLines += '  ev_driver:local'
 }
 
