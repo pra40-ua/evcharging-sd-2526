@@ -350,15 +350,17 @@ def consumir_telemetria_kafka(broker_list: str):
                     # --- Lógica principal del Central ---
                     # Mostrar objetivo solicitado si existe
                     objetivo_txt = ''
+                    objetivo_kwh = None
                     try:
                         with CP_SESION_OBJETIVO_KWH_LOCK:
                             obj = CP_SESION_OBJETIVO_KWH.get(cp_id)
                         if obj is not None:
-                            objetivo_txt = f" | solicitado={float(obj):.2f} kWh"
+                            objetivo_kwh = float(obj)
+                            objetivo_txt = f" | Solicitado={objetivo_kwh:.2f} kWh"
                     except Exception:
                         objetivo_txt = ''
                     registrar_evento(f"Telemetría recibida de {cp_id}: {resumen_telemetria(telemetria)}{objetivo_txt}")
-                    print(f"[KAFKA CONSUMER] -> Telemetría de {cp_id} recibida: {telemetria}")
+                    print(f"[KAFKA CONSUMER] -> Telemetría de {cp_id} recibida: {telemetria}{objetivo_txt}")
 
                     # Promover estados por telemetría (respetando PARADO manual)
                     est_raw = telemetria.get('estado') or telemetria.get('estado_carga')
@@ -369,7 +371,16 @@ def consumir_telemetria_kafka(broker_list: str):
                             manual_parado = CP_ESTADO_MANUAL.get(cp_id) == 'PARADO'
                         if est in ("cargando", "suministrando", "charging", "en_carga"):
                             if not manual_parado:
+                                # Mostrar objetivo en el mensaje de cambio de estado
+                                estado_info = f'SUMINISTRANDO{objetivo_txt}'
                                 cambiar_estado_cp(cp_id, 'SUMINISTRANDO')
+                                if objetivo_kwh:
+                                    energia_actual = telemetria.get('kw_entregados', 0.0)
+                                    try:
+                                        progreso = (float(energia_actual) / objetivo_kwh) * 100
+                                        print(f"[{cp_id}] Progreso: {energia_actual:.2f}/{objetivo_kwh:.2f} kWh ({progreso:.1f}%)")
+                                    except Exception:
+                                        pass
                         elif est in ("finalizado", "reposo", "idle", "ready"):
                             # Solo volver a ACTIVADO si no está PARADO manualmente
                             if not manual_parado:
