@@ -25,29 +25,26 @@ def generar_solicitud(id_driver, id_charging_point, matricula, kw_deseados):
 
 # --- 2. FUNCIÓN PRODUCTORA ---
 def enviar_solicitud(solicitud, broker):
-    try:
-        # Crea el objeto productor de Kafka
-        # value_serializer convierte el diccionario a bytes JSON
-        producer = KafkaProducer(
-            bootstrap_servers=[broker],
-            value_serializer=lambda v: json.dumps(v).encode('utf-8')
-        )
-
-        # Envía el mensaje al topic
-        future = producer.send(TOPIC_REQUESTS, value=solicitud)
-        
-        # Espera a que el envío se complete (opcional, para confirmar la entrega)
-        record_metadata = future.get(timeout=10)
-        
-        print(f"[{solicitud['id_driver']}] Solicitud enviada a Kafka:")
-        print(f"  Topic: {record_metadata.topic}, Partition: {record_metadata.partition}, Offset: {record_metadata.offset}")
-        print(f"  Datos: {json.dumps(solicitud)}")
-
-        producer.close()
-        
-    except Exception as e:
-        print(f"ERROR al conectar o enviar a Kafka: {e}")
-        print("Asegúrate de que tu Broker de Kafka está corriendo en localhost:9092.")
+    """
+    Envía la solicitud de carga al broker Kafka con reintentos en caso de error.
+    """
+    for intento in range(3):
+        try:
+            producer = KafkaProducer(
+                bootstrap_servers=[broker],
+                value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+                api_version=(2, 8, 0)
+            )
+            producer.send(TOPIC_REQUESTS, value=solicitud)
+            producer.flush()
+            print(f"[{solicitud['id_driver']}] Solicitud enviada correctamente (intento {intento+1})")
+            print(f"[DRIVER {solicitud['id_driver']}] Esperando respuesta de la Central...")
+            producer.close()
+            break
+        except Exception as e:
+            print(f"ERROR enviando a Kafka (intento {intento+1}/3): {e}")
+            if intento < 2:
+                time.sleep(2)
 
 def consumir_notificaciones_driver(driver_id: str, broker: str, procesar_ticket_callback=None):
     """Escucha el tópico driver_status_<driver_id> y muestra mensajes, incluyendo TICKET_FINAL."""
@@ -59,7 +56,8 @@ def consumir_notificaciones_driver(driver_id: str, broker: str, procesar_ticket_
             auto_offset_reset='latest',
             enable_auto_commit=True,
             group_id=f'driver-{driver_id}-group',
-            value_deserializer=lambda m: json.loads(m.decode('utf-8'))
+            value_deserializer=lambda m: json.loads(m.decode('utf-8')),
+            api_version=(2, 8, 0)
         )
         print(f"[DRIVER {driver_id}] Escuchando notificaciones en '{topic}'...")
         for msg in consumer:
@@ -68,6 +66,12 @@ def consumir_notificaciones_driver(driver_id: str, broker: str, procesar_ticket_
             detalle = payload.get('detalle')
             ts = payload.get('timestamp')
             print(f"[DRIVER {driver_id}] Evento={evento} @ {ts} -> {detalle}")
+            if evento == 'RECIBIDA':
+                print(f"[DRIVER {driver_id}] Solicitud recibida por Central. Validando CP...")
+            elif evento == 'AUTORIZADO':
+                print(f"[DRIVER {driver_id}] Autorizado por Central. Iniciando sesión de carga...")
+            elif evento == 'DENEGADA':
+                print(f"[DRIVER {driver_id}] Solicitud denegada: {detalle}")
             if evento == 'TICKET_FINAL' and procesar_ticket_callback:
                 try:
                     procesar_ticket_callback(detalle)
@@ -107,6 +111,8 @@ if __name__ == '__main__':
                 energia = ticket.get('energia_kwh')
                 importe = ticket.get('importe_eur')
                 print(f"[DRIVER {args.id}] Ticket final: CP={cp}, E={energia} kWh, €={importe}")
+                with open("tickets_driver.txt", "a", encoding="utf-8") as f:
+                    f.write(f"{time.strftime('%Y-%m-%d %H:%M:%S')} | Driver={args.id} | CP={cp} | Energía={energia} kWh | Importe={importe} €\n")
             except Exception:
                 print(f"[DRIVER {args.id}] Ticket final: {ticket}")
             # Si estuviera procesando por fichero, esperar 4s y continuar

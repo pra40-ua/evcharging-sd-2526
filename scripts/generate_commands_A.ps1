@@ -97,3 +97,20 @@ Write-Host "Generado: $outPath"
 Write-Host "IP local detectada: $localIp"
 Write-Host "KAFKA_BROKER configurado como: $localIp:9092"
 if (Test-Path $centralIpFile) { Write-Host "IP Central escrita en: $centralIpFile" }
+
+# Generar también un script PS1 equivalente para ejecución directa y un BAT que abre una terminal y lo ejecuta
+$ps1OutPath = Join-Path $projectRoot 'commands_PC_A.ps1'
+[System.IO.File]::WriteAllLines($ps1OutPath, $lines, $utf8NoBom)
+
+$batPath = Join-Path $projectRoot 'run_PC_A.bat'
+$batLines = @(
+    '@echo off',
+    'setlocal',
+    'cd /d "%~dp0"',
+    'REM Abre una nueva ventana de PowerShell y ejecuta todos los comandos de PC_A',
+    'start "Central-PC_A" powershell -NoLogo -NoExit -ExecutionPolicy Bypass -File "%~dp0commands_PC_A.ps1"'
+)
+$ascii = New-Object System.Text.ASCIIEncoding
+[System.IO.File]::WriteAllLines($batPath, $batLines, $ascii)
+Write-Host "Generado: $ps1OutPath"
+Write-Host "Generado: $batPath"

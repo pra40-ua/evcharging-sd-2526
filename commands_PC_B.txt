@@ -6,22 +6,22 @@ docker build -t ev_driver:local -f ev_driver/Dockerfile .
 # Arrancar Engine
 docker run --rm -p 5001:5001 --name engine `
   -e ENGINE_PORT=5001 -e CP_ID=CP_001 `
-  -e KAFKA_SERVER="172.21.42.3:9092" `
+  -e KAFKA_SERVER="172.21.42.5:9092" `
   ev_engine:local
 
 # Arrancar Monitor
 docker run --rm --name monitor `
   -e CP_ID=CP_001 `
-  -e CENTRAL_IP=172.21.42.3 -e CENTRAL_PORT=5000 `
-  -e ENGINE_IP=172.28.224.1 -e ENGINE_PORT=5001 `
+  -e CENTRAL_IP=172.21.42.5 -e CENTRAL_PORT=5000 `
+  -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=5001 `
   ev_monitor:local
 
 # Arrancar Driver
 docker run --rm --name driver `
-  -e KAFKA_BROKER="172.21.42.3:9092" `
-  -e DRIVER_ID=DRIVER_456 -e CP_ID=CP_001 -e MAT=ABC-1234 -e KW=25.0 -e LISTEN=true `
+  -e KAFKA_BROKER="172.21.42.5:9092" `
+  -e DRIVER_ID=DRIVER_456 -e CP_ID=CP_001 -e MAT=ABC-1234 -e KW=1.0 -e LISTEN=true `
   ev_driver:local
 
 # IP local detectada (PC_B): 172.28.224.1
-# IP Central usada (PC_A): 172.21.42.3
+# IP Central usada (PC_A): 172.21.42.5
 # Nota: abre puertos 5001 en este PC y 9092 en PC_A.

@@ -170,10 +170,11 @@ def _enviar_comando_cp(cp_id: str, orden: str) -> bool:
         trama = construir_trama(orden, ['MANUAL'])
         cp_socket.sendall(trama)
         if orden.upper() == 'STOP':
+            # CAMBIO: Tras STOP, volver a ACTIVADO (no PARADO)
             with CP_ESTADO_MANUAL_LOCK:
-                CP_ESTADO_MANUAL[cp_id] = 'PARADO'
+                CP_ESTADO_MANUAL[cp_id] = 'ACTIVADO'
             try:
-                cambiar_estado_cp(cp_id, 'PARADO')
+                cambiar_estado_cp(cp_id, 'ACTIVADO')
             except Exception:
                 pass
             # Al parar manualmente, limpiar objetivo y sesión
@@ -283,6 +284,8 @@ def consumir_telemetria_kafka(broker_list: str):
         consumer = KafkaConsumer(
             TELEMETRIA_TOPIC,
             bootstrap_servers=[broker_list],
+            security_protocol='PLAINTEXT',
+            api_version=(2, 5, 0),
             # Deserializador para convertir los bytes del mensaje a un diccionario de Python
             value_deserializer=lambda m: json.loads(m.decode('utf-8')),
             # Si hay offset confirmado previo, retomamos desde ahí; si no, desde lo más reciente
@@ -348,11 +351,13 @@ def consumir_telemetria_kafka(broker_list: str):
                     # --- Lógica principal del Central ---
                     # Mostrar objetivo solicitado si existe
                     objetivo_txt = ''
+                    objetivo_kwh = None
                     try:
                         with CP_SESION_OBJETIVO_KWH_LOCK:
                             obj = CP_SESION_OBJETIVO_KWH.get(cp_id)
                         if obj is not None:
-                            objetivo_txt = f" | objetivo={float(obj):.2f} kWh"
+                            objetivo_kwh = float(obj)
+                            objetivo_txt = f" | Objetivo: {objetivo_kwh:.2f} kWh"
                     except Exception:
                         objetivo_txt = ''
                     registrar_evento(f"Telemetría recibida de {cp_id}: {resumen_telemetria(telemetria)}{objetivo_txt}")
@@ -367,7 +372,16 @@ def consumir_telemetria_kafka(broker_list: str):
                             manual_parado = CP_ESTADO_MANUAL.get(cp_id) == 'PARADO'
                         if est in ("cargando", "suministrando", "charging", "en_carga"):
                             if not manual_parado:
+                                # Mostrar objetivo en el mensaje de cambio de estado
+                                estado_info = f'SUMINISTRANDO{objetivo_txt}'
                                 cambiar_estado_cp(cp_id, 'SUMINISTRANDO')
+                                if objetivo_kwh:
+                                    energia_actual = telemetria.get('kw_entregados', 0.0)
+                                    try:
+                                        progreso = (float(energia_actual) / objetivo_kwh) * 100
+                                        print(f"[{cp_id}] Progreso: {energia_actual:.2f}/{objetivo_kwh:.2f} kWh ({progreso:.1f}%)")
+                                    except Exception:
+                                        pass
                         elif est in ("finalizado", "reposo", "idle", "ready"):
                             # Solo volver a ACTIVADO si no está PARADO manualmente
                             if not manual_parado:
@@ -435,6 +449,8 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
         consumer = KafkaConsumer(
             DRIVER_REQUESTS_TOPIC,
             bootstrap_servers=[broker_list],
+            security_protocol='PLAINTEXT',
+            api_version=(2, 5, 0),
             auto_offset_reset='earliest',
             group_id='central_processing_group',
             value_deserializer=lambda x: json.loads(x.decode('utf-8'))
@@ -770,6 +786,8 @@ def inicializar_kafka_producer(broker_list: str):
             try:
                 KAFKA_PRODUCER = KafkaProducer(
                     bootstrap_servers=[broker_list],
+                    security_protocol='PLAINTEXT',
+                    api_version=(2, 5, 0),
                     value_serializer=lambda v: json.dumps(v).encode('utf-8')
                 )
                 print("[KAFKA PRODUCER] Productor inicializado para notificaciones a drivers.")
@@ -805,19 +823,38 @@ def notificar_driver(id_driver: str, evento: str, detalle=None):
 # =================================================================
 
 def monitorizar_actividad_cps(db_connection):
+    """
+    Monitoriza la actividad de los CPs basándose en la conexión TCP, NO en telemetría.
+    La telemetría solo se envía durante CARGANDO, por lo que no es un indicador de conexión.
+    El estado DESCONECTADO solo se establece cuando el socket TCP se cierra.
+    """
     while not SHUTDOWN_REQUESTED:
-        ahora = time.time()
         try:
-            with TELEMETRIA_ACTUAL_LOCK:
-                for cp_id, data in list(TELEMETRIA_ACTUAL.items()):
-                    ultima = data.get("timestamp", 0)
-                    if ahora - ultima > 15:
-                        if CP_ESTADO.get(cp_id) != "DESCONECTADO":
-                            registrar_evento(f"[⚠️] CP {cp_id} sin actividad → DESCONECTADO", "warn")
-                            cambiar_estado_cp(cp_id, "DESCONECTADO", db_connection)
+            # Verificar que los CPs con socket activo no estén marcados como DESCONECTADOS
+            with CONEXIONES_ACTIVAS_LOCK:
+                cps_conectados = set(CONEXIONES_ACTIVAS.keys())
+            
+            with CP_ESTADO_LOCK:
+                for cp_id in cps_conectados:
+                    estado_actual = CP_ESTADO.get(cp_id, 'DESCONOCIDO')
+                    # Si un CP tiene socket activo pero está marcado como DESCONECTADO, corregir
+                    if estado_actual == 'DESCONECTADO':
+                        registrar_evento(f"[CORRECCION] CP {cp_id} tiene socket activo, corrigiendo a ACTIVADO", "warn")
+                        cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection)
+                
+                # Verificar CPs en estado que no tienen socket (limpieza)
+                for cp_id in list(CP_ESTADO.keys()):
+                    if cp_id not in cps_conectados:
+                        estado_actual = CP_ESTADO.get(cp_id)
+                        # Solo marcar como DESCONECTADO si no está ya en ese estado
+                        if estado_actual and estado_actual != 'DESCONECTADO':
+                            registrar_evento(f"[LIMPIEZA] CP {cp_id} sin socket activo → DESCONECTADO", "warn")
+                            cambiar_estado_cp(cp_id, 'DESCONECTADO', db_connection)
+                            
         except Exception as e:
-            registrar_evento(f"[WARN] Heartbeat error: {e}", "warn")
-        time.sleep(5)
+            registrar_evento(f"[WARN] Monitor de actividad error: {e}", "warn")
+        
+        time.sleep(10)  # Verificar cada 10 segundos
 def mostrar_estado_red():
     """Compat: imprime estado (modo no-TUI); preservado por si se usa sin Rich."""
     print("\n" + "="*60)
@@ -873,20 +910,40 @@ def render_panel():
     table.add_column("CP ID", justify="center", style="bold white")
     table.add_column("Estado", justify="center")
     table.add_column("Energía (kWh)", justify="center")
-    table.add_column("Última actualización", justify="center")
+    table.add_column("Última telemetría", justify="center")
 
-    with TELEMETRIA_ACTUAL_LOCK:
-        for cp_id, data in TELEMETRIA_ACTUAL.items():
-            estado = CP_ESTADO.get(cp_id, "N/D")
+    # Mostrar todos los CPs conectados, tengan o no telemetría reciente
+    with CONEXIONES_ACTIVAS_LOCK:
+        cps_conectados = list(CONEXIONES_ACTIVAS.keys())
+    
+    with CP_ESTADO_LOCK:
+        for cp_id in sorted(cps_conectados):
+            estado = CP_ESTADO.get(cp_id, "ACTIVADO")
+            
+            # Obtener telemetría si existe
+            with TELEMETRIA_ACTUAL_LOCK:
+                data = TELEMETRIA_ACTUAL.get(cp_id, {})
+            
             energia = data.get("kw_entregados") or data.get("energia_total") or 0.0
-            t_ago = round(time.time() - data.get("timestamp", 0), 1)
+            
+            # Calcular tiempo desde última telemetría
+            if data.get("timestamp"):
+                t_ago = round(time.time() - data.get("timestamp", 0), 1)
+                tiempo_str = f"{t_ago}s"
+            else:
+                tiempo_str = "Sin telemetría"
+            
             color = {
                 "ACTIVADO": "green",
                 "SUMINISTRANDO": "cyan",
+                "PRE-SUMINISTRO": "yellow",
                 "DESCONECTADO": "red",
-                "AVERÍA": "magenta"
+                "AVERÍA": "magenta",
+                "PARADO": "orange1"
             }.get(str(estado).upper(), "white")
-            table.add_row(cp_id, f"[{color}]{estado}[/{color}]", f"{float(energia):.2f}", f"{t_ago}s")
+            
+            table.add_row(cp_id, f"[{color}]{estado}[/{color}]", f"{float(energia):.2f}", tiempo_str)
+    
     return table
 
 def iniciar_interfaz_visual():
@@ -946,10 +1003,11 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
             with CONEXIONES_ACTIVAS_LOCK:
                 CONEXIONES_ACTIVAS[cp_id] = conn
                 print(f"[CENTRAL] Socket de {cp_id} guardado. Total: {len(CONEXIONES_ACTIVAS)}")
-            registrar_evento(f"CP registrado y conectado: {cp_id} ({ubicacion})")
+            registrar_evento(f"CP registrado y conectado: {cp_id} ({ubicacion})", "ok")
             # Estado: ACTIVADO tras registro exitoso
             try:
                 cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection)
+                registrar_evento(f"✓ CP {cp_id} establecido en estado ACTIVADO (listo para recibir solicitudes)", "ok")
             except Exception:
                 pass
             # Guardar el precio comunicado por el CP para cálculos de importe en tiempo real
