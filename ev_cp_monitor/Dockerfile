@@ -19,3 +19,5 @@ ENV CENTRAL_IP=127.0.0.1 \
     CP_ID=CP001
 
 CMD ["sh", "-c", "python ev_cp_monitor/EV_CP_M.py --cp_id ${CP_ID} --central_ip ${CENTRAL_IP} --central_port ${CENTRAL_PORT} --engine_ip ${ENGINE_IP} --engine_port ${ENGINE_PORT}"]
+
+

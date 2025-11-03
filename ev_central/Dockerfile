@@ -22,3 +22,5 @@ ENV CENTRAL_PORT=5000 \
 EXPOSE 5000
 
 CMD ["sh", "-c", "python ev_central/EV_Central.py --port ${CENTRAL_PORT} --kafka ${KAFKA_BROKER} ${DB_URL:+--db ${DB_URL}}"]
+
+
