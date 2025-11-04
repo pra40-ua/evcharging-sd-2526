@@ -26,6 +26,9 @@ echo   [4] Inicio de Kafka + MySQL (Docker)
 echo   [5] Deteccion de IP local
 echo   [6] Inicio de EV_Central
 echo.
+echo ============================================================
+echo.
+echo Presiona ENTER para continuar con la instalacion...
 pause
 
 REM ============================================================
@@ -72,58 +75,26 @@ echo Actualizando pip...
 python -m pip install --upgrade pip --quiet --disable-pip-version-check 2>nul
 
 echo.
-echo Verificando dependencias...
+echo Instalando/verificando dependencias desde requirements.txt...
+echo (Esto puede tardar 1-2 minutos si necesita instalar paquetes)
 echo.
 
-REM Leer requirements.txt y verificar cada paquete
-set PACKAGES_TO_INSTALL=
-set ALL_OK=1
+REM Instalar directamente desde requirements.txt (pip salta los que ya estan instalados)
+python -m pip install -r requirements.txt --quiet --disable-pip-version-check
 
-for /F "tokens=1 delims==#" %%p in (requirements.txt) do (
-    set PACKAGE=%%p
-    set PACKAGE=!PACKAGE: =!
-    
-    REM Saltar líneas vacías y comentarios
-    if not "!PACKAGE!"=="" if not "!PACKAGE:~0,1!"=="#" (
-        REM Extraer nombre del paquete (sin versión)
-        for /F "tokens=1 delims==<>!" %%n in ("!PACKAGE!") do (
-            set PKG_NAME=%%n
-            
-            REM Verificar si el paquete ya está instalado
-            python -m pip show !PKG_NAME! >nul 2>&1
-            if !errorlevel! equ 0 (
-                echo   [OK] !PKG_NAME! - Ya instalado
-            ) else (
-                echo   [--] !PKG_NAME! - Necesita instalarse
-                set PACKAGES_TO_INSTALL=!PACKAGES_TO_INSTALL! !PACKAGE!
-                set ALL_OK=0
-            )
-        )
-    )
-)
-
-echo.
-
-REM Si hay paquetes por instalar, instalarlos
-if !ALL_OK! equ 0 (
-    echo Instalando paquetes faltantes...
-    echo (Esto puede tardar 1-2 minutos)
+if %errorlevel% equ 0 (
     echo.
-    
-    for %%p in (!PACKAGES_TO_INSTALL!) do (
-        echo Instalando %%p...
-        python -m pip install "%%p" --quiet --disable-pip-version-check
-        if !errorlevel! equ 0 (
-            echo   [OK] %%p instalado correctamente
-        ) else (
-            echo   [ERROR] No se pudo instalar %%p
-        )
-    )
+    echo [OK] Todas las dependencias estan instaladas y actualizadas.
     echo.
-    echo [OK] Instalacion completada.
 ) else (
-    echo [OK] Todas las dependencias ya estan instaladas.
+    echo.
+    echo [ADVERTENCIA] Hubo algun problema instalando dependencias.
+    echo El script continuara de todas formas...
+    echo.
 )
+
+echo Presiona una tecla para continuar al siguiente paso...
+pause
 echo.
 
 REM ============================================================
@@ -316,7 +287,7 @@ echo.
 echo Presiona cualquier tecla para cerrar esta ventana...
 echo (La Central seguira corriendo en la otra ventana)
 echo.
-pause >nul
+pause
 
 exit /b 0
 

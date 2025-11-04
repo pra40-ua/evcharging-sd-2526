@@ -21,3 +21,4 @@ ENV KAFKA_BROKER=127.0.0.1:9092 \
 
 # Comando por defecto: enviar una solicitud simple; sobreescribe con docker run ... si quieres otro flujo
 CMD ["sh", "-c", "python ev_driver/EV_Driver.py --kafka ${KAFKA_BROKER} --id ${DRIVER_ID} --cp ${CP_ID} --mat ${MAT} --kw ${KW} ${LISTEN:+--listen}"]
+

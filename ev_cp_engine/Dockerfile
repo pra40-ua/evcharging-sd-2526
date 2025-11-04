@@ -19,3 +19,4 @@ ENV ENGINE_PORT=5001 \
 EXPOSE 5001
 
 CMD ["sh", "-c", "python ev_cp_engine/EV_CP_E.py --port ${ENGINE_PORT} --cp-id ${CP_ID} --kafka ${KAFKA_SERVER}"]
+
