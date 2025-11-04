@@ -233,15 +233,29 @@ def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, 
 def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: socket.socket, cp_id: str):
     """Hilo para enviar HCK al Engine cada 1 segundo y gestionar la respuesta."""
     engine_socket = None
+    conexion_perdida_notificada = False
 
     while True:
         try:
             # 1. Intentar establecer/reestablecer conexión con el Engine
             if engine_socket is None:
-                engine_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                engine_socket.connect((engine_ip, engine_port))
-                print(f"[{cp_id}] Conexión con Engine establecida.")
-                engine_socket.settimeout(HCK_INTERVAL * 0.8)
+                try:
+                    print(f"[{cp_id}] Intentando conectar al Engine en {engine_ip}:{engine_port}...")
+                    engine_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    engine_socket.settimeout(3.0)  # Timeout para el connect
+                    engine_socket.connect((engine_ip, engine_port))
+                    print(f"[{cp_id}] ✓ Conexión con Engine establecida.")
+                    engine_socket.settimeout(HCK_INTERVAL * 0.8)
+                    conexion_perdida_notificada = False
+                except (ConnectionRefusedError, socket.timeout, OSError) as e:
+                    if not conexion_perdida_notificada:
+                        print(f"[{cp_id}] Engine no disponible aún. Reintentando cada {HCK_INTERVAL}s...")
+                        conexion_perdida_notificada = True
+                    if engine_socket:
+                        engine_socket.close()
+                    engine_socket = None
+                    time.sleep(HCK_INTERVAL)
+                    continue
             
             # 2. Antes de enviar HCK, consumir órdenes pendientes y enviarlas por el mismo socket
             #    Consumimos todas las que haya disponibles sin bloquear
@@ -341,15 +355,18 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                 print(f"[{cp_id}] Trama inesperada desde Engine: {cod_op}")
 
         except socket.timeout:
-            print(f"[{cp_id}] ERROR: Timeout HCK. Engine no responde. Notificando avería.")
+            print(f"[{cp_id}] ⚠ Timeout HCK. Engine no responde. Notificando avería.")
             notificar_averia_central(central_socket, cp_id, "Timeout de HCK")
             if engine_socket:
                 engine_socket.close()
             engine_socket = None # Forzar reconexión
+            conexion_perdida_notificada = False
             
-        except (ConnectionRefusedError, ConnectionResetError):
-            print(f"[{cp_id}] ERROR: Conexión con Engine perdida/rechazada. Forzando reconexión.")
-            notificar_averia_central(central_socket, cp_id, "Conexión con Engine perdida")
+        except (ConnectionRefusedError, ConnectionResetError, BrokenPipeError, OSError) as e:
+            if not conexion_perdida_notificada:
+                print(f"[{cp_id}] ⚠ Conexión con Engine perdida. Reintentando reconexión...")
+                notificar_averia_central(central_socket, cp_id, "Conexión con Engine perdida")
+                conexion_perdida_notificada = True
             if engine_socket:
                 engine_socket.close()
             engine_socket = None 
@@ -359,6 +376,7 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
             if engine_socket:
                 engine_socket.close()
             engine_socket = None 
+            conexion_perdida_notificada = False
             
         finally:
             # Esperar el intervalo antes de la siguiente comprobación

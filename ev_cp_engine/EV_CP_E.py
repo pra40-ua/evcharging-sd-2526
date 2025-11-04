@@ -364,13 +364,27 @@ def main():
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_socket.bind(('', args.port))
-        server_socket.listen(1) 
+        server_socket.listen(1)
+        # Configurar timeout para no bloquear indefinidamente
+        server_socket.settimeout(5.0)
         
         print(f"[EV_CP_E] Servidor escuchando en TCP (:{args.port}). Esperando Monitor...")
         
-        # El Engine solo acepta una conexión: la del Monitor
-        conn, addr = server_socket.accept()
-        handle_monitor_connection(conn, addr, args.cp_id)
+        # Bucle para aceptar conexiones (reconexión automática)
+        while True:
+            try:
+                conn, addr = server_socket.accept()
+                # Una vez conectado, quitar timeout para la comunicación
+                conn.settimeout(None)
+                print(f"[EV_CP_E] Monitor conectado desde {addr[0]}:{addr[1]}")
+                handle_monitor_connection(conn, addr, args.cp_id)
+                # Si la conexión se cierra, volver a esperar
+                print(f"[EV_CP_E] Conexión cerrada. Esperando nueva conexión del Monitor...")
+            except socket.timeout:
+                # Timeout de accept(), seguir esperando
+                continue
+            except KeyboardInterrupt:
+                raise
         
     except KeyboardInterrupt:
         print("\n[EV_CP_E] Apagando...")
