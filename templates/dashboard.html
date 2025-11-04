@@ -368,19 +368,22 @@
                 html += `<td>${cp.timestamp_telemetria || '-'}</td>`;
                 html += '<td>';
                 
-                // Botones de control según el estado
+                // Botones de control según el estado y si hay sesión activa
                 if (estado === 'DESCONECTADO' || estado === 'AVERIADO' || estado === 'AVERÍA') {
                     html += '<button class="btn-control" disabled>Sin Conexión</button>';
-                } else if (estado === 'PARADO') {
-                    html += `<button class="btn-control btn-start" onclick="enviarComando('${cp.cp_id}', 'START')">▶ Reanudar</button>`;
                 } else if (estado === 'SUMINISTRANDO' || estado === 'CARGANDO') {
+                    // Cargando: solo permitir detener
                     html += `<button class="btn-control btn-stop" onclick="enviarComando('${cp.cp_id}', 'STOP')">⏸ Detener</button>`;
-                } else if (estado === 'ACTIVADO') {
-                    // Mostrar botón START siempre (iniciará sesión de prueba si no hay driver)
-                    html += `<button class="btn-control btn-start" onclick="enviarComando('${cp.cp_id}', 'START')">▶ Iniciar</button>`;
                 } else if (estado === 'PRE-SUMINISTRO') {
-                    // En PRE-SUMINISTRO también permitir START
+                    // En PRE-SUMINISTRO, permitir iniciar carga
                     html += `<button class="btn-control btn-start" onclick="enviarComando('${cp.cp_id}', 'START')">▶ Iniciar Carga</button>`;
+                } else if (estado === 'ACTIVADO') {
+                    // En ACTIVADO: solo mostrar botón START si hay sesión activa
+                    if (tieneSesion) {
+                        html += `<button class="btn-control btn-start" onclick="enviarComando('${cp.cp_id}', 'START')">▶ Iniciar (${cp.driver_id_sesion || 'Driver'})</button>`;
+                    } else {
+                        html += '<span style="color: #999; font-size: 12px;">En espera de solicitud</span>';
+                    }
                 } else {
                     html += '<span style="color: #999; font-size: 12px;">-</span>';
                 }
