@@ -4,8 +4,8 @@
 Write-Host "=== Verificando estado de CP_001 en la BD ===" -ForegroundColor Cyan
 
 # Conectar al contenedor MySQL y consultar el estado
-docker exec evcharging-sd-2526-mysql-1 mysql -u evuser -pevpassword evcharging_db -e "SELECT cp_id, estado, fecha_ultima_conexion FROM charging_points WHERE cp_id='CP_001';"
+docker exec mysql mysql -u root -proot evcharging -e "SELECT cp_id, estado, fecha_ultima_conexion FROM charging_points WHERE cp_id='CP_001';"
 
 Write-Host "`n=== Todos los CPs en la BD ===" -ForegroundColor Cyan
-docker exec evcharging-sd-2526-mysql-1 mysql -u evuser -pevpassword evcharging_db -e "SELECT cp_id, estado, ubicacion, fecha_ultima_conexion FROM charging_points ORDER BY fecha_ultima_conexion DESC;"
+docker exec mysql mysql -u root -proot evcharging -e "SELECT cp_id, estado, ubicacion, fecha_ultima_conexion FROM charging_points ORDER BY fecha_ultima_conexion DESC;"
 
