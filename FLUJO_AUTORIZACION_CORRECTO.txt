@@ -1,0 +1,329 @@
+================================================================================
+  FLUJO DE AUTORIZACION CORRECTO - Sistema de Carga
+================================================================================
+
+REQUISITO DEL ENUNCIADO:
+"La CENTRAL solicitara autorizacion al punto de recarga para que proceda al
+suministro, y la conexion se considerara exitosa despues de esa notificacion,
+momento en el que empezara el suministro."
+
+"El suministro de energia no puede empezar hasta que el conductor no conecta
+fisicamente el vehiculo."
+
+================================================================================
+
+NUEVO FLUJO IMPLEMENTADO
+-------------------------
+
+CONDICIONES PARA INICIAR SUMINISTRO:
+  1. CENTRAL debe haber AUTORIZADO (enviado CMD START)
+  2. CONDUCTOR debe CONECTAR VEHICULO FISICAMENTE (presionar "1" en Engine)
+  
+AMBAS condiciones deben cumplirse. El orden puede variar.
+
+================================================================================
+
+CASO A: AUTORIZACION PRIMERO, LUEGO CONEXION FISICA
+----------------------------------------------------
+
+PASO 1: Driver solicita carga
+  - Driver envia solicitud via Kafka
+  - Central recibe y valida
+  
+PASO 2: Central AUTORIZA
+  - Central envia AUTH_REQ al Monitor
+  - Monitor envia CMD START al Engine
+  - Engine recibe START:
+    * Marca: AUTHORIZED_TO_CHARGE = TRUE
+    * Verifica: VEHICLE_PLUGGED?
+    * NO esta enchufado -> ESPERA
+  
+  ENGINE MUESTRA:
+    [CP_001] CENTRAL ha AUTORIZADO la carga
+    [CP_001] ESPERANDO que el conductor conecte el vehiculo...
+    [CP_001] (Presiona '1' en el menu para simular conexion fisica)
+  
+  ESTADO: "AUTORIZADO (Esperando conexion fisica del vehiculo)"
+
+PASO 3: Conductor conecta vehiculo (presiona "1")
+  - Engine detecta conexion fisica
+  - VEHICLE_PLUGGED = TRUE
+  - Verifica: AUTHORIZED_TO_CHARGE? -> SI
+  - Envia STATE PLUGGED al Monitor
+  - Monitor envia START al Engine
+  - ENGINE INICIA SUMINISTRO
+  
+  ENGINE MUESTRA:
+    [CP_001] Conductor CONECTA vehiculo fisicamente...
+    [CP_001] Vehiculo conectado + Autorizacion previa detectada
+    [CP_001] INICIANDO SUMINISTRO automaticamente...
+    [CP_001] CARGA INICIADA - Estado: CARGANDO
+
+  ESTADO: "CARGANDO (X.XX kWh, XXs)"
+
+================================================================================
+
+CASO B: CONEXION FISICA PRIMERO, LUEGO AUTORIZACION
+----------------------------------------------------
+
+PASO 1: Conductor conecta vehiculo (presiona "1" sin autorizacion)
+  - VEHICLE_PLUGGED = TRUE
+  - Verifica: AUTHORIZED_TO_CHARGE? -> NO
+  - Envia STATE PLUGGED al Monitor
+  - ESPERA autorizacion
+  
+  ENGINE MUESTRA:
+    [CP_001] Conductor CONECTA vehiculo fisicamente...
+    [CP_001] Vehiculo conectado fisicamente
+    [CP_001] Esperando autorizacion de la CENTRAL...
+  
+  ESTADO: "VEHICULO CONECTADO (Esperando autorizacion de Central)"
+
+PASO 2: Driver solicita carga
+  - Driver envia solicitud via Kafka
+  - Central recibe y autoriza
+
+PASO 3: Central envia START
+  - Monitor envia CMD START al Engine
+  - Engine recibe START:
+    * Marca: AUTHORIZED_TO_CHARGE = TRUE
+    * Verifica: VEHICLE_PLUGGED? -> SI
+    * ENGINE INICIA SUMINISTRO INMEDIATAMENTE
+  
+  ENGINE MUESTRA:
+    [CP_001] MENSAJE RECIBIDO: CMD START
+    [CP_001] Vehiculo ya conectado fisicamente
+    [CP_001] Central ha autorizado
+    [CP_001] INICIANDO SUMINISTRO...
+    [CP_001] CARGA INICIADA - Estado: CARGANDO
+
+  ESTADO: "CARGANDO (X.XX kWh, XXs)"
+
+================================================================================
+
+NUEVO MENU DEL ENGINE (LIMITADO)
+---------------------------------
+
+ANTES (menu completo):
+  [p] Enchufar vehiculo
+  [d] Desenchufar vehiculo
+  [r] Simular RFID
+  [s] Mostrar estado
+  [h] Ayuda
+  [q] Salir
+
+AHORA (menu limitado - solo acciones criticas):
+  [1] Conectar vehiculo fisicamente (PLUG)
+  [2] Reportar AVERIA (Fault)
+  [3] Desconectar vehiculo (UNPLUG)
+  [9] Mostrar estado actual
+  [0] Ayuda
+
+JUSTIFICACION:
+  - Solo acciones fisicas del CP/conductor
+  - RFID se hace desde web/driver (no desde Engine)
+  - Interfaz minima enfocada en lo critico
+  - Acciones numericas (mas simple)
+
+================================================================================
+
+OPCION "2" - REPORTAR AVERIA
+-----------------------------
+
+CUANDO EL PROFESOR PRESIONA "2" EN EL ENGINE:
+
+COMPORTAMIENTO:
+  1. Engine marca estado interno: ENGINE_FAULTED = TRUE
+  2. Detiene cualquier suministro en curso inmediatamente
+  3. Responde KO en el siguiente HCK al Monitor
+  4. Monitor detecta KO
+  5. Monitor notifica AVERIA a la Central (mensaje AVR)
+  6. Central marca CP como AVERIADO en BD
+  7. Dashboard web muestra CP en rojo como AVERIADO
+
+ENGINE MUESTRA:
+  [CP_001] REPORTANDO AVERIA...
+  [CP_001] ===================================
+  [CP_001] AVERIA REPORTADA
+  [CP_001] Estado: FAULTED
+  [CP_001] Suministro: DETENIDO
+  [CP_001] Notificando a Monitor...
+  [CP_001] ===================================
+  [CP_001] Averia reportada. Monitor notificara a la Central.
+
+SIGUIENTE HCK:
+  Monitor: HCK -> Engine
+  Engine: HCK_RESP [KO]  <- En lugar de OK
+  Monitor: Detecta KO
+  Monitor: Envia AVR a Central
+  Central: Marca CP como AVERIADO
+
+VERIFICACION:
+  - Dashboard web: CP_001 aparece en ROJO como "AVERIADO"
+  - Central muestra: "CP_001: AVERIA reportada por Engine"
+  - Nuevos drivers no pueden solicitar ese CP
+
+================================================================================
+
+OPCION "1" - CONECTAR VEHICULO
+-------------------------------
+
+CUANDO EL CONDUCTOR PRESIONA "1":
+
+ESCENARIO A: Sin autorizacion previa
+  [CP_001] Conductor CONECTA vehiculo fisicamente...
+  [CP_001] Vehiculo conectado fisicamente
+  [CP_001] Esperando autorizacion de la CENTRAL...
+  
+  ESTADO: "VEHICULO CONECTADO (Esperando autorizacion de Central)"
+  
+  LUEGO cuando Central autorice:
+    -> Suministro inicia automaticamente
+
+ESCENARIO B: Con autorizacion previa
+  [CP_001] Conductor CONECTA vehiculo fisicamente...
+  [CP_001] Vehiculo conectado + Autorizacion previa detectada
+  [CP_001] INICIANDO SUMINISTRO automaticamente...
+  [CP_001] El Monitor iniciara el suministro...
+  
+  (Monitor detecta PLUGGED y envia START)
+  
+  [CP_001] MENSAJE RECIBIDO: CMD START
+  [CP_001] CARGA INICIADA - Estado: CARGANDO
+  
+  ESTADO: "CARGANDO (X.XX kWh, XXs)"
+
+ESCENARIO C: CP en averia
+  [CP_001] No se puede conectar vehiculo: CP en AVERIA
+  [CP_001] Primero debe resolverse la averia
+  
+  ACCION REQUERIDA: Resolver averia (reiniciar Engine)
+
+================================================================================
+
+OPCION "3" - DESCONECTAR VEHICULO
+----------------------------------
+
+CUANDO EL CONDUCTOR PRESIONA "3":
+
+COMPORTAMIENTO:
+  - Marca VEHICLE_PLUGGED = FALSE
+  - Detiene suministro si estaba activo
+  - Limpia autorizacion
+  - Envia STATE UNPLUGGED al Monitor
+  - Monitor notifica a Central
+
+ENGINE MUESTRA:
+  [CP_001] Conductor DESCONECTA vehiculo fisicamente...
+  [CP_001] Vehiculo desconectado. Carga detenida.
+
+RESULTADO:
+  - Carga se detiene inmediatamente
+  - CP queda disponible para otro driver
+  - Si habia cola, se procesa el siguiente
+
+================================================================================
+
+DEMOSTRACION SUGERIDA AL PROFESOR
+----------------------------------
+
+DEMO 1: FLUJO NORMAL
+  1. Lanzar 1 CP
+  2. Lanzar 1 Driver
+  3. Driver solicita carga desde web
+  4. En Engine: ESPERA conexion fisica
+  5. Presionar "1" en Engine
+  6. SUMINISTRO INICIA
+  7. Verificar en dashboard que carga progresa
+
+DEMO 2: ORDEN INVERSO
+  1. En Engine: Presionar "1" (conectar vehiculo SIN autorizacion)
+  2. Estado: "VEHICULO CONECTADO (Esperando autorizacion)"
+  3. Driver solicita desde web
+  4. Central autoriza
+  5. SUMINISTRO INICIA AUTOMATICAMENTE
+  6. Verificar que funciona
+
+DEMO 3: AVERIA
+  1. CP cargando normalmente
+  2. En Engine: Presionar "2" (reportar averia)
+  3. Suministro se DETIENE inmediatamente
+  4. Monitor notifica a Central
+  5. Verificar dashboard: CP en rojo "AVERIADO"
+  6. Intentar solicitar ese CP
+  7. Solicitud DENEGADA
+
+DEMO 4: MULTIPLES INSTANCIAS
+  1. Lanzar 2 CPs
+  2. Ejecutar DEMO_PROFESOR.bat -> [1] -> 2 CPs mas
+  3. Ahora hay 4 CPs (CP_001, CP_002, CP_003, CP_004)
+  4. Lanzar 6 Drivers
+  5. Mostrar como se distribuyen y forman colas
+
+DEMO 5: CRASH SUBITO
+  1. Sistema con 4 CPs y 6 Drivers
+  2. Ejecutar DEMO_PROFESOR.bat -> [3]
+  3. Seleccionar engine_CP_002
+  4. CP_002 se detiene INMEDIATAMENTE (crash)
+  5. Dashboard muestra desconexion
+  6. Demas CPs siguen funcionando normalmente
+
+================================================================================
+
+COMANDOS RAPIDOS PARA DEMOSTRAR
+--------------------------------
+
+Ver estado actual:
+  docker ps --filter "label=project=evcharging-pc-b"
+
+Añadir 3 CPs dinamicamente:
+  PC_B_RUN.bat -> [1] -> 3
+
+Añadir 5 Drivers dinamicamente:
+  PC_B_RUN.bat -> [2] -> 5
+
+Simular crash de CP_003:
+  docker kill engine_CP_003 monitor_CP_003
+
+Ver logs de Central:
+  docker logs central
+
+Dashboard web:
+  http://localhost:8080
+
+================================================================================
+
+RESUMEN DE CAPACIDADES DEMOSTRADAS
+-----------------------------------
+
+1. DESPLIEGUE DINAMICO:
+   Añadir CPs y Drivers en cualquier momento
+   Sistema detecta existentes y numera secuencialmente
+
+2. CRASH SUBITO:
+   docker kill simula crash
+   Sistema tolera fallos
+   Demas modulos siguen funcionando
+
+3. ESCALABILIDAD:
+   Sin limite de instancias
+   Colas automaticas cuando hay saturacion
+   Sistema distribuido (Kafka)
+
+4. CONTROL DE FLUJO:
+   Central AUTORIZA
+   Conductor CONECTA FISICAMENTE
+   Solo entonces inicia suministro
+
+5. GESTION DE AVERIAS:
+   CP reporta averia (opcion "2")
+   Monitor notifica a Central
+   CP no acepta nuevas solicitudes
+   Sistema marca CP como AVERIADO
+
+================================================================================
+
+TODO LISTO PARA LA DEMOSTRACION AL PROFESOR
+
+================================================================================
+
