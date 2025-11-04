@@ -1,4 +1,5 @@
 @echo off
+setlocal EnableDelayedExpansion
 REM ============================================================
 REM  SCRIPT DE EJECUCION PARA PC_B - MULTIPLES DRIVERS
 REM  
@@ -36,7 +37,7 @@ set /p NUM_DRIVERS="Numero de Drivers: "
 
 REM Validar entrada
 if "%NUM_DRIVERS%"=="" set NUM_DRIVERS=1
-if %NUM_DRIVERS% LSS 1 set NUM_DRIVERS%=1
+if %NUM_DRIVERS% LSS 1 set NUM_DRIVERS=1
 if %NUM_DRIVERS% GTR 5 set NUM_DRIVERS=5
 
 echo.
@@ -58,14 +59,16 @@ REM ============================================================
 REM  PASO 1: CONSTRUIR IMAGEN DOCKER DEL DRIVER
 REM ============================================================
 echo ============================================================
-echo [1/2] CONSTRUYENDO IMAGEN DOCKER
+echo [1/3] CONSTRUYENDO IMAGEN DOCKER
 echo ============================================================
 echo.
 
 echo Construyendo imagen ev_driver:local...
-docker build -t ev_driver:local -f ev_driver/Dockerfile . >nul 2>&1
-if %errorlevel% neq 0 (
+docker build -t ev_driver:local -f ev_driver/Dockerfile .
+if !errorlevel! neq 0 (
+    echo.
     echo [ERROR] Fallo al construir imagen ev_driver
+    echo.
     pause
     exit /b 1
 )
@@ -108,7 +111,7 @@ set KAFKA_SERVER=%CENTRAL_IP%:9092
 REM Lanzar cada Driver en su propia terminal
 for /L %%i in (1,1,%NUM_DRIVERS%) do (
     set /a DRIVER_NUM=%DRIVER_OFFSET%+%%i
-    call :LANZAR_DRIVER !DRIVER_NUM!
+    call :LANZAR_DRIVER !DRIVER_NUM! %%i
     timeout /t 1 /nobreak >nul
 )
 
@@ -118,8 +121,16 @@ echo      %NUM_DRIVERS% DRIVER(S) INICIADO(S) CORRECTAMENTE
 echo ============================================================
 echo.
 echo Ventanas abiertas (PowerShell):
-for /L %%i in (1,1,%NUM_DRIVERS%) do (
-    echo   - DRIVER_00%%i
+set /a FIRST_DRIVER=%DRIVER_OFFSET%+1
+set /a LAST_DRIVER=%DRIVER_OFFSET%+%NUM_DRIVERS%
+for /L %%i in (%FIRST_DRIVER%,1,%LAST_DRIVER%) do (
+    if %%i LSS 10 (
+        echo   - DRIVER_00%%i
+    ) else if %%i LSS 100 (
+        echo   - DRIVER_0%%i
+    ) else (
+        echo   - DRIVER_%%i
+    )
 )
 echo.
 echo Los drivers se detendran automaticamente al recibir su ticket.
@@ -136,8 +147,8 @@ REM ============================================================
 REM  FUNCIÓN PARA LANZAR UN DRIVER
 REM ============================================================
 :LANZAR_DRIVER
-setlocal EnableDelayedExpansion
 set DRIVER_NUM=%1
+set DISPLAY_NUM=%2
 
 REM Formatear ID con padding (DRIVER_001, DRIVER_002, etc.)
 if %DRIVER_NUM% LSS 10 (
@@ -150,7 +161,15 @@ if %DRIVER_NUM% LSS 10 (
 
 REM Asignar CP aleatorio entre 1 y NUM_CPS
 set /a RANDOM_CP=%RANDOM% %% %NUM_CPS% + 1
-set CP_ID=CP_00%RANDOM_CP%
+
+REM Formatear CP_ID con padding
+if %RANDOM_CP% LSS 10 (
+    set CP_ID=CP_00%RANDOM_CP%
+) else if %RANDOM_CP% LSS 100 (
+    set CP_ID=CP_0%RANDOM_CP%
+) else (
+    set CP_ID=CP_%RANDOM_CP%
+)
 
 REM kW aleatorios entre 10 y 50
 set /a RANDOM_KW=%RANDOM% %% 41 + 10
@@ -159,31 +178,13 @@ REM Matrícula aleatoria
 set /a MAT_NUM=%RANDOM% %% 9000 + 1000
 set MAT=%MAT_NUM%-ABC
 
-set /a DISPLAY_NUM=%%i
-echo [!DISPLAY_NUM!/%NUM_DRIVERS%] Lanzando %DRIVER_ID% ^-^> %CP_ID% (%RANDOM_KW% kWh)...
+echo [!DISPLAY_NUM!/%NUM_DRIVERS%] Lanzando !DRIVER_ID! -^> !CP_ID! (!RANDOM_KW! kWh)...
 
-REM Lanzar Driver en terminal separada
-start "Driver_%DRIVER_ID%" powershell -ExecutionPolicy Bypass -NoExit -Command ^
-"Write-Host '================================================================' -ForegroundColor Cyan; ^
-Write-Host '  DRIVER - %DRIVER_ID%' -ForegroundColor Magenta; ^
-Write-Host '  CP Solicitado: %CP_ID%' -ForegroundColor Yellow; ^
-Write-Host '  kWh Deseados: %RANDOM_KW%' -ForegroundColor Yellow; ^
-Write-Host '================================================================' -ForegroundColor Cyan; ^
-Write-Host ''; ^
-docker run --rm --name driver_%DRIVER_ID% ^
---label project=evcharging-pc-b ^
---label component=driver ^
---label driver_id=%DRIVER_ID% ^
--e KAFKA_BROKER='%KAFKA_SERVER%' ^
--e DRIVER_ID=%DRIVER_ID% ^
--e CP_ID=%CP_ID% ^
--e MAT=%MAT% ^
--e KW=%RANDOM_KW% ^
--e LISTEN=true ^
-ev_driver:local"
+REM Lanzar Driver en terminal separada con variables expandidas
+set "CMD_DRIVER=Write-Host '================================================================' -ForegroundColor Cyan; Write-Host '  DRIVER - !DRIVER_ID!' -ForegroundColor Magenta; Write-Host '  CP Solicitado: !CP_ID!' -ForegroundColor Yellow; Write-Host '  kWh Deseados: !RANDOM_KW!' -ForegroundColor Yellow; Write-Host '================================================================' -ForegroundColor Cyan; Write-Host ''; docker run --rm --name driver_!DRIVER_ID! --label project=evcharging-pc-b --label component=driver --label driver_id=!DRIVER_ID! -e KAFKA_BROKER='!KAFKA_SERVER!' -e DRIVER_ID=!DRIVER_ID! -e CP_ID=!CP_ID! -e MAT=!MAT! -e KW=!RANDOM_KW! -e LISTEN=true ev_driver:local"
 
-echo [OK] %DRIVER_ID% lanzado exitosamente
+start "Driver_!DRIVER_ID!" powershell -ExecutionPolicy Bypass -NoExit -Command "!CMD_DRIVER!"
+echo [OK] !DRIVER_ID! lanzado exitosamente
 
-endlocal
 goto :eof
 

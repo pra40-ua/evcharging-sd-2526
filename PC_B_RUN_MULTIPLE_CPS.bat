@@ -1,4 +1,5 @@
 @echo off
+setlocal EnableDelayedExpansion
 REM ============================================================
 REM  SCRIPT DE EJECUCION PARA PC_B - MULTIPLES CPS
 REM  
@@ -51,14 +52,16 @@ REM ============================================================
 REM  PASO 1: CONSTRUIR IMAGENES DOCKER
 REM ============================================================
 echo ============================================================
-echo [1/2] CONSTRUYENDO IMAGENES DOCKER
+echo [1/3] CONSTRUYENDO IMAGENES DOCKER
 echo ============================================================
 echo.
 
 echo Construyendo imagen ev_engine:local...
-docker build -t ev_engine:local -f ev_cp_engine/Dockerfile . >nul 2>&1
-if %errorlevel% neq 0 (
+docker build -t ev_engine:local -f ev_cp_engine/Dockerfile .
+if !errorlevel! neq 0 (
+    echo.
     echo [ERROR] Fallo al construir imagen ev_engine
+    echo.
     pause
     exit /b 1
 )
@@ -66,23 +69,15 @@ echo [OK] Imagen ev_engine construida
 
 echo.
 echo Construyendo imagen ev_monitor:local...
-docker build -t ev_monitor:local -f ev_cp_monitor/Dockerfile . >nul 2>&1
-if %errorlevel% neq 0 (
+docker build -t ev_monitor:local -f ev_cp_monitor/Dockerfile .
+if !errorlevel! neq 0 (
+    echo.
     echo [ERROR] Fallo al construir imagen ev_monitor
+    echo.
     pause
     exit /b 1
 )
 echo [OK] Imagen ev_monitor construida
-
-echo.
-echo Construyendo imagen ev_driver:local...
-docker build -t ev_driver:local -f ev_driver/Dockerfile . >nul 2>&1
-if %errorlevel% neq 0 (
-    echo [ERROR] Fallo al construir imagen ev_driver
-    pause
-    exit /b 1
-)
-echo [OK] Imagen ev_driver construida
 
 echo.
 timeout /t 2 /nobreak >nul
@@ -132,9 +127,17 @@ echo      %NUM_CPS% CHARGING POINT(S) INICIADO(S) CORRECTAMENTE
 echo ============================================================
 echo.
 echo Ventanas abiertas (PowerShell):
-for /L %%i in (1,1,%NUM_CPS%) do (
+set /a FIRST_CP=%CP_OFFSET%+1
+set /a LAST_CP=%CP_OFFSET%+%NUM_CPS%
+for /L %%i in (%FIRST_CP%,1,%LAST_CP%) do (
     set /a PORT=BASE_PORT+%%i
-    echo   - CP_00%%i en puerto !PORT!
+    if %%i LSS 10 (
+        echo   - CP_00%%i en puerto !PORT!
+    ) else if %%i LSS 100 (
+        echo   - CP_0%%i en puerto !PORT!
+    ) else (
+        echo   - CP_%%i en puerto !PORT!
+    )
 )
 echo.
 echo Para DETENER:
@@ -153,7 +156,6 @@ REM ============================================================
 REM  FUNCIÓN PARA LANZAR UN CP
 REM ============================================================
 :LANZAR_CP
-setlocal EnableDelayedExpansion
 set CP_NUM=%1
 
 REM Formatear ID con padding (CP_001, CP_002, etc.)
@@ -165,51 +167,28 @@ if %CP_NUM% LSS 10 (
     set CP_ID=CP_%CP_NUM%
 )
 
-set /a ENGINE_PORT=BASE_PORT+%CP_NUM%
+set /a ENGINE_PORT=5000+%CP_NUM%
 set KAFKA_SERVER=%CENTRAL_IP%:9092
 
 REM Calcular numero para display (relativo a esta ejecucion)
 set /a DISPLAY_NUM=%CP_NUM%-%CP_OFFSET%
-echo [!DISPLAY_NUM!/%NUM_CPS%] Lanzando %CP_ID% (Puerto %ENGINE_PORT%)...
+echo [!DISPLAY_NUM!/%NUM_CPS%] Lanzando !CP_ID! (Puerto !ENGINE_PORT!)...
+
+REM Construir comandos con variables expandidas
+set "CMD_ENGINE=Write-Host '================================================================' -ForegroundColor Cyan; Write-Host '  ENGINE - !CP_ID! (Puerto !ENGINE_PORT!)' -ForegroundColor Yellow; Write-Host '================================================================' -ForegroundColor Cyan; Write-Host ''; docker run --rm --name engine_!CP_ID! --label project=evcharging-pc-b --label component=engine --label cp_id=!CP_ID! -p !ENGINE_PORT!:!ENGINE_PORT! -e ENGINE_PORT=!ENGINE_PORT! -e CP_ID=!CP_ID! -e KAFKA_SERVER='!KAFKA_SERVER!' ev_engine:local"
+
+set "CMD_MONITOR=Write-Host '================================================================' -ForegroundColor Cyan; Write-Host '  MONITOR - !CP_ID!' -ForegroundColor Green; Write-Host '================================================================' -ForegroundColor Cyan; Write-Host ''; docker run --rm --name monitor_!CP_ID! --label project=evcharging-pc-b --label component=monitor --label cp_id=!CP_ID! -e CP_ID=!CP_ID! -e CENTRAL_IP=!CENTRAL_IP! -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=!ENGINE_PORT! ev_monitor:local"
 
 REM Lanzar Engine en terminal separada
-start "CP_%CP_ID%_Engine" powershell -ExecutionPolicy Bypass -NoExit -Command ^
-"Write-Host '================================================================' -ForegroundColor Cyan; ^
-Write-Host '  ENGINE - %CP_ID% (Puerto %ENGINE_PORT%)' -ForegroundColor Yellow; ^
-Write-Host '================================================================' -ForegroundColor Cyan; ^
-Write-Host ''; ^
-docker run --rm --name engine_%CP_ID% ^
---label project=evcharging-pc-b ^
---label component=engine ^
---label cp_id=%CP_ID% ^
--p %ENGINE_PORT%:%ENGINE_PORT% ^
--e ENGINE_PORT=%ENGINE_PORT% ^
--e CP_ID=%CP_ID% ^
--e KAFKA_SERVER='%KAFKA_SERVER%' ^
-ev_engine:local"
+start "CP_!CP_ID!_Engine" powershell -ExecutionPolicy Bypass -NoExit -Command "!CMD_ENGINE!"
 
 REM Esperar un poco para que el Engine esté listo
 timeout /t 3 /nobreak >nul
 
 REM Lanzar Monitor en terminal separada
-start "CP_%CP_ID%_Monitor" powershell -ExecutionPolicy Bypass -NoExit -Command ^
-"Write-Host '================================================================' -ForegroundColor Cyan; ^
-Write-Host '  MONITOR - %CP_ID%' -ForegroundColor Green; ^
-Write-Host '================================================================' -ForegroundColor Cyan; ^
-Write-Host ''; ^
-docker run --rm --name monitor_%CP_ID% ^
---label project=evcharging-pc-b ^
---label component=monitor ^
---label cp_id=%CP_ID% ^
--e CP_ID=%CP_ID% ^
--e CENTRAL_IP=%CENTRAL_IP% ^
--e CENTRAL_PORT=5000 ^
--e ENGINE_IP=host.docker.internal ^
--e ENGINE_PORT=%ENGINE_PORT% ^
-ev_monitor:local"
+start "CP_!CP_ID!_Monitor" powershell -ExecutionPolicy Bypass -NoExit -Command "!CMD_MONITOR!"
 
-echo [OK] %CP_ID% lanzado exitosamente
+echo [OK] !CP_ID! lanzado exitosamente
 
-endlocal
 goto :eof
 
