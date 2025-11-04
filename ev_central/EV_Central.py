@@ -180,22 +180,13 @@ def _enviar_comando_cp(cp_id: str, orden: str) -> bool:
                 kw_objetivo = CP_SESION_OBJETIVO_KWH.get(cp_id)
             
             if driver_id and kw_objetivo:
-                # Hay sesión activa: reanudar carga
+                # Hay sesión activa válida: iniciar carga
                 trama = construir_trama('START', [driver_id, str(kw_objetivo)])
-                registrar_evento(f"Reanudando carga en {cp_id} (Driver: {driver_id}, kW: {kw_objetivo})")
+                registrar_evento(f"Iniciando carga en {cp_id} (Driver: {driver_id}, kW: {kw_objetivo})")
             else:
-                # Sin sesión activa: crear sesión de prueba manual
-                driver_id = 'MANUAL_TEST'
-                kw_objetivo = 10.0  # 10 kWh por defecto para pruebas
-                
-                # Registrar sesión de prueba
-                with CP_SESION_DRIVER_ID_LOCK:
-                    CP_SESION_DRIVER_ID[cp_id] = driver_id
-                with CP_SESION_OBJETIVO_KWH_LOCK:
-                    CP_SESION_OBJETIVO_KWH[cp_id] = kw_objetivo
-                
-                trama = construir_trama('START', [driver_id, str(kw_objetivo)])
-                registrar_evento(f"Iniciando carga de PRUEBA en {cp_id} (10 kWh)", "warn")
+                # Sin sesión activa: NO se puede iniciar
+                registrar_evento(f"ERROR: No hay sesión activa en {cp_id}. Se requiere solicitud de driver primero.", "error")
+                return False
         else:
             # Para STOP y otros comandos
             trama = construir_trama(orden, ['MANUAL'])
@@ -227,47 +218,9 @@ def _enviar_comando_cp(cp_id: str, orden: str) -> bool:
             except Exception as e:
                 print(f"[CENTRAL] No se pudo publicar telemetría actualizada: {e}")
         elif orden.upper() == 'STOP':
-            with CP_ESTADO_MANUAL_LOCK:
-                CP_ESTADO_MANUAL[cp_id] = 'PARADO'
-            try:
-                cambiar_estado_cp(cp_id, 'PARADO')
-            except Exception:
-                pass
-            # Al parar manualmente, limpiar objetivo y sesión
-            try:
-                with CP_SESION_OBJETIVO_KWH_LOCK:
-                    if cp_id in CP_SESION_OBJETIVO_KWH:
-                        del CP_SESION_OBJETIVO_KWH[cp_id]
-            except Exception:
-                pass
-            try:
-                with CP_SESION_DRIVER_ID_LOCK:
-                    if cp_id in CP_SESION_DRIVER_ID:
-                        del CP_SESION_DRIVER_ID[cp_id]
-            except Exception:
-                pass
-            
-            # Publicar telemetría actualizada sin sesión activa
-            try:
-                with TELEMETRIA_ACTUAL_LOCK:
-                    telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
-                telemetria_actualizada = {
-                    **telemetria_actual,
-                    'cp_id': cp_id,
-                    'estado_carga': 'PARADO',
-                    'estado': 'PARADO',
-                    'timestamp': time.time(),
-                    'tiene_sesion_activa': False,
-                    'driver_id_sesion': None
-                }
-                with TELEMETRIA_ACTUAL_LOCK:
-                    TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
-                if KAFKA_PRODUCER:
-                    KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
-                    KAFKA_PRODUCER.flush(timeout=1)
-                    print(f"[CENTRAL] Telemetría actualizada publicada para {cp_id} (sesión limpiada)")
-            except Exception as e:
-                print(f"[CENTRAL] No se pudo publicar telemetría actualizada: {e}")
+            # Al hacer STOP, NO limpiar la sesión aún
+            # El CP enviará FIN con los datos finales, y entonces se limpiará la sesión
+            registrar_evento(f"Enviando STOP a {cp_id}. Esperando FIN con datos finales...")
         
         registrar_evento(f"Comando {orden} enviado a {cp_id}")
         return True
@@ -1349,10 +1302,24 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     if tx_id is not None:
                         detalle_ticket['tx_id'] = tx_id
 
+                    # Enviar ticket al driver ANTES de limpiar sesión
                     notificar_driver(driver_id, 'TICKET_FINAL', detalle_ticket)
+                    
+                    print(f"[CENTRAL] ✅ Ticket enviado a {driver_id}. CP {cp_fin} listo para nuevo servicio.")
+                    registrar_evento(f"✅ Ticket enviado a {driver_id}: {energia} kWh, {importe} €", "ok")
 
+                    # Cambiar estado a ACTIVADO (listo para otro driver)
                     cambiar_estado_cp(cp_fin, 'ACTIVADO', db_connection)
-                    # Limpiar información de sesión
+                    
+                    # Limpiar estado manual si estaba PARADO
+                    try:
+                        with CP_ESTADO_MANUAL_LOCK:
+                            if cp_fin in CP_ESTADO_MANUAL:
+                                del CP_ESTADO_MANUAL[cp_fin]
+                    except Exception:
+                        pass
+                    
+                    # Limpiar información de sesión del driver
                     try:
                         with CP_SESION_OBJETIVO_KWH_LOCK:
                             if cp_fin in CP_SESION_OBJETIVO_KWH:
@@ -1366,7 +1333,7 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     except Exception:
                         pass
                     
-                    # Publicar telemetría actualizada sin sesión activa tras FIN
+                    # Publicar telemetría actualizada: CP en ACTIVADO, sin sesión, contadores en 0
                     try:
                         with TELEMETRIA_ACTUAL_LOCK:
                             telemetria_actual = TELEMETRIA_ACTUAL.get(cp_fin, {})
@@ -1387,9 +1354,9 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                         if KAFKA_PRODUCER:
                             KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
                             KAFKA_PRODUCER.flush(timeout=1)
-                            print(f"[CENTRAL] Telemetría actualizada publicada para {cp_fin} tras FIN (sesión limpiada)")
+                            print(f"[CENTRAL] CP {cp_fin} resetado y listo para nuevo servicio (ACTIVADO)")
                     except Exception as e:
-                        print(f"[CENTRAL] No se pudo publicar telemetría actualizada tras FIN: {e}")
+                        print(f"[CENTRAL] Error publicando estado tras FIN: {e}")
 
                 # [Lógica para manejar AVR, Suministro síncrono, etc.]
                 elif cod_op == 'AVR' and len(campos) >= 2:

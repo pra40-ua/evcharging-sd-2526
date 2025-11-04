@@ -166,8 +166,12 @@ def consumir_telemetria(broker: str):
                             telemetria = message.value
                             cp_id = telemetria.get('cp_id', 'UNKNOWN')
                             
-                            # Log cada mensaje recibido
-                            print(f"[DASHBOARD] ← Mensaje #{mensaje_count} recibido de CP: {cp_id}")
+                            # Log cada mensaje recibido con datos detallados
+                            kw = telemetria.get('kw_entregados', 0) or telemetria.get('energia_total', 0)
+                            potencia = telemetria.get('potencia_actual', 0)
+                            tiempo = telemetria.get('tiempo_carga_s', 0)
+                            estado = telemetria.get('estado_carga', telemetria.get('estado', 'N/D'))
+                            print(f"[DASHBOARD] ← Mensaje #{mensaje_count} | CP={cp_id} | Estado={estado} | kW={kw} | P={potencia} | t={tiempo}s")
                             
                             # Actualizar telemetría
                             with TELEMETRIA_LOCK:
@@ -192,6 +196,11 @@ def consumir_telemetria(broker: str):
                                 estado_carga = telemetria.get('estado_carga', telemetria.get('estado', 'DESCONOCIDO'))
                                 estado_anterior = CPS_STATE[cp_id].get('estado', 'DESCONOCIDO')
                                 
+                                # Extraer datos clave de telemetría para debug
+                                kw_entregados = telemetria.get('kw_entregados', 0)
+                                potencia = telemetria.get('potencia_actual', 0)
+                                tiempo = telemetria.get('tiempo_carga_s', 0)
+                                
                                 CPS_STATE[cp_id].update({
                                     'estado': estado_carga,
                                     'ultima_actualizacion': time.time(),
@@ -202,7 +211,7 @@ def consumir_telemetria(broker: str):
                                 # Registrar evento solo si el estado cambió
                                 if estado_anterior != estado_carga:
                                     registrar_evento(f"{cp_id}: {estado_anterior} → {estado_carga}", 'info')
-                                    print(f"[DASHBOARD] Estado actualizado: {cp_id} → {estado_carga}")
+                                    print(f"[DASHBOARD] Estado actualizado: {cp_id} → {estado_carga} (kW={kw_entregados}, P={potencia}, t={tiempo}s)")
                             
                             # Actualizar estadísticas
                             actualizar_estadisticas()
@@ -263,13 +272,13 @@ def actualizar_estadisticas():
     with STATS_LOCK, CPS_STATE_LOCK, TELEMETRIA_LOCK:
         STATS['total_cps'] = len(CPS_STATE)
         STATS['cps_activos'] = sum(1 for cp in CPS_STATE.values() 
-                                    if cp.get('estado', '').upper() in ['ACTIVADO', 'SUMINISTRANDO'])
+                                    if cp.get('estado', '').upper() in ['ACTIVADO', 'SUMINISTRANDO', 'CARGANDO', 'PRE-SUMINISTRO'])
         STATS['cps_suministrando'] = sum(1 for cp in CPS_STATE.values() 
                                           if cp.get('estado', '').upper() in ['SUMINISTRANDO', 'CARGANDO'])
         STATS['cps_averiados'] = sum(1 for cp in CPS_STATE.values() 
                                       if cp.get('estado', '').upper() in ['AVERIADO', 'AVERÍA'])
         
-        # Energía total entregada
+        # Energía total entregada (acumulada de todas las sesiones ACTIVAS)
         energia_total = 0.0
         for cp_id, tel in TELEMETRIA.items():
             kw = tel.get('kw_entregados', 0) or tel.get('energia_total', 0)
@@ -334,6 +343,9 @@ def api_cps():
                     cp_info['timestamp_telemetria'] = tel.get('timestamp_str', '-')
                     cp_info['tiene_sesion_activa'] = tel.get('tiene_sesion_activa', False)
                     cp_info['driver_id_sesion'] = tel.get('driver_id_sesion', None)
+                    
+                    # Debug: log de telemetría enviada
+                    print(f"[API /api/cps] {cp_id}: kW={cp_info['energia_kwh']}, P={cp_info['potencia_kw']}, t={cp_info['tiempo_carga_s']}s, sesion={cp_info['tiene_sesion_activa']}")
                 else:
                     cp_info['energia_kwh'] = 0
                     cp_info['potencia_kw'] = 0
@@ -341,6 +353,7 @@ def api_cps():
                     cp_info['timestamp_telemetria'] = '-'
                     cp_info['tiene_sesion_activa'] = False
                     cp_info['driver_id_sesion'] = None
+                    print(f"[API /api/cps] {cp_id}: SIN TELEMETRÍA en diccionario")
             
             cps_list.append(cp_info)
     
@@ -616,10 +629,10 @@ def crear_templates():
         
         .status-activado { background: #28a745; color: white; }
         .status-suministrando { background: #17a2b8; color: white; }
+        .status-cargando { background: #007bff; color: white; }
         .status-parado { background: #ffc107; color: #333; }
         .status-averiado { background: #dc3545; color: white; }
         .status-desconectado { background: #6c757d; color: white; }
-        .status-cargando { background: #007bff; color: white; }
         .status-reposo { background: #6c757d; color: white; }
         .status-pre-suministro { background: #fd7e14; color: white; }
         
@@ -868,14 +881,16 @@ def crear_templates():
                 // Botones de control según el estado y si hay sesión activa
                 if (estado === 'DESCONECTADO' || estado === 'AVERIADO' || estado === 'AVERÍA') {
                     html += '<button class="btn-control" disabled>Sin Conexión</button>';
-                } else if (estado === 'PARADO') {
-                    html += `<button class="btn-control btn-start" onclick="enviarComando('${cp.cp_id}', 'START')">▶ Reanudar</button>`;
-                } else if (estado === 'SUMINISTRANDO') {
+                } else if (estado === 'SUMINISTRANDO' || estado === 'CARGANDO') {
+                    // Cargando: solo permitir detener
                     html += `<button class="btn-control btn-stop" onclick="enviarComando('${cp.cp_id}', 'STOP')">⏸ Detener</button>`;
-                } else if (estado === 'ACTIVADO' || estado === 'PRE-SUMINISTRO') {
-                    // Solo mostrar botones si hay sesión de driver activa
+                } else if (estado === 'PRE-SUMINISTRO') {
+                    // En PRE-SUMINISTRO, permitir iniciar carga
+                    html += `<button class="btn-control btn-start" onclick="enviarComando('${cp.cp_id}', 'START')">▶ Iniciar Carga</button>`;
+                } else if (estado === 'ACTIVADO') {
+                    // En ACTIVADO: solo mostrar botón START si hay sesión activa
                     if (tieneSesion) {
-                        html += `<button class="btn-control btn-start" onclick="enviarComando('${cp.cp_id}', 'START')">▶ Iniciar Carga</button>`;
+                        html += `<button class="btn-control btn-start" onclick="enviarComando('${cp.cp_id}', 'START')">▶ Iniciar (${cp.driver_id_sesion || 'Driver'})</button>`;
                     } else {
                         html += '<span style="color: #999; font-size: 12px;">En espera de solicitud</span>';
                     }

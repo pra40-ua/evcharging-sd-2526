@@ -333,11 +333,15 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
             elif cod_op == 'FIN':
                 # FIN con campos completos desde el Engine. Reenviar tal cual a Central.
                 try:
-                    print(f"[{cp_id}] FIN recibido del Engine. Reenviando a Central. Campos: {campos}")
+                    print(f"[{cp_id}] ✅ FIN recibido del Engine. Reenviando a Central.")
+                    print(f"[{cp_id}]   Campos FIN: {campos}")
                     trama_fin = construir_trama('FIN', campos)
                     central_socket.sendall(trama_fin)
+                    print(f"[{cp_id}] ✅ FIN enviado exitosamente a Central")
                 except Exception as e:
-                    print(f"[{cp_id}] Error reenviando FIN a Central: {e}")
+                    print(f"[{cp_id}] ❌ Error reenviando FIN a Central: {e}")
+                    import traceback
+                    traceback.print_exc()
             elif cod_op == 'STATE':
                 try:
                     estado = campos[1] if len(campos) > 1 else 'ACTIVADO'

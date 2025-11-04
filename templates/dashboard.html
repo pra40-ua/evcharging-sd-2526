@@ -119,10 +119,10 @@
         
         .status-activado { background: #28a745; color: white; }
         .status-suministrando { background: #17a2b8; color: white; }
+        .status-cargando { background: #007bff; color: white; }
         .status-parado { background: #ffc107; color: #333; }
         .status-averiado { background: #dc3545; color: white; }
         .status-desconectado { background: #6c757d; color: white; }
-        .status-cargando { background: #007bff; color: white; }
         .status-reposo { background: #6c757d; color: white; }
         .status-pre-suministro { background: #fd7e14; color: white; }
         
@@ -368,20 +368,19 @@
                 html += `<td>${cp.timestamp_telemetria || '-'}</td>`;
                 html += '<td>';
                 
-                // Botones de control según el estado y si hay sesión activa
+                // Botones de control según el estado
                 if (estado === 'DESCONECTADO' || estado === 'AVERIADO' || estado === 'AVERÍA') {
                     html += '<button class="btn-control" disabled>Sin Conexión</button>';
                 } else if (estado === 'PARADO') {
                     html += `<button class="btn-control btn-start" onclick="enviarComando('${cp.cp_id}', 'START')">▶ Reanudar</button>`;
-                } else if (estado === 'SUMINISTRANDO') {
+                } else if (estado === 'SUMINISTRANDO' || estado === 'CARGANDO') {
                     html += `<button class="btn-control btn-stop" onclick="enviarComando('${cp.cp_id}', 'STOP')">⏸ Detener</button>`;
-                } else if (estado === 'ACTIVADO' || estado === 'PRE-SUMINISTRO') {
-                    // Solo mostrar botones si hay sesión de driver activa
-                    if (tieneSesion) {
-                        html += `<button class="btn-control btn-start" onclick="enviarComando('${cp.cp_id}', 'START')">▶ Iniciar Carga</button>`;
-                    } else {
-                        html += '<span style="color: #999; font-size: 12px;">En espera de solicitud</span>';
-                    }
+                } else if (estado === 'ACTIVADO') {
+                    // Mostrar botón START siempre (iniciará sesión de prueba si no hay driver)
+                    html += `<button class="btn-control btn-start" onclick="enviarComando('${cp.cp_id}', 'START')">▶ Iniciar</button>`;
+                } else if (estado === 'PRE-SUMINISTRO') {
+                    // En PRE-SUMINISTRO también permitir START
+                    html += `<button class="btn-control btn-start" onclick="enviarComando('${cp.cp_id}', 'START')">▶ Iniciar Carga</button>`;
                 } else {
                     html += '<span style="color: #999; font-size: 12px;">-</span>';
                 }

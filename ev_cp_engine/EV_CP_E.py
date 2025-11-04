@@ -50,13 +50,25 @@ def generar_y_enviar_telemetria(cp_id: str, estado_carga: str, kw_entregados: fl
     if TELEMETRY_PRODUCER is None:
         return
 
+    # Obtener información de sesión activa
+    try:
+        driver_id_sesion = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
+        tiene_sesion = driver_id_sesion != 'UNKNOWN' and estado_carga in ['CARGANDO', 'PRE-SUMINISTRO']
+    except:
+        driver_id_sesion = None
+        tiene_sesion = False
+
     telemetria_msg = {
         'cp_id': cp_id,
         'timestamp': time.time(),
-        'estado_carga': estado_carga, # Ej: 'CONECTADO', 'CARGANDO', 'FINALIZADO'
+        'estado_carga': estado_carga,
+        'estado': estado_carga,  # Agregar campo 'estado' también para compatibilidad
         'kw_entregados': kw_entregados,
+        'energia_total': kw_entregados,  # Compatibilidad con diferentes lectores
         'potencia_actual': potencia_kw,
-        'tiempo_carga_s': tiempo_carga_s
+        'tiempo_carga_s': tiempo_carga_s,
+        'tiene_sesion_activa': tiene_sesion,
+        'driver_id_sesion': driver_id_sesion if tiene_sesion else None
     }
 
     try:
@@ -114,11 +126,15 @@ def bucle_telemetria(cp_id: str, stop_event: threading.Event):
                 CHARGING_FLAG.clear()
         except Exception:
             pass
-    # Al salir por STOP, publicar un último latido en REPOSO con valores finales
+    # Al salir del bucle por STOP, verificar si fue por objetivo alcanzado
     with STATE_LOCK:
         estado_final = 'REPOSO'
         kw_final = round(kw_acumulados_global, 2)
         secs_final = segundos_global
+        objetivo = globals().get('TARGET_KWH')
+        objetivo_alcanzado = objetivo is not None and kw_final >= float(objetivo)
+    
+    # Publicar telemetría final en REPOSO
     generar_y_enviar_telemetria(
         cp_id=cp_id,
         estado_carga=estado_final,
@@ -126,20 +142,34 @@ def bucle_telemetria(cp_id: str, stop_event: threading.Event):
         tiempo_carga_s=secs_final,
         potencia_kw=0.0
     )
-    # Si el stop fue por objetivo alcanzado, enviar FIN a Monitor
-    try:
-        conn = globals()['ACTIVE_MONITOR_CONN']
-        if conn is not None:
-            precio_kwh = 0.48  # Mantener coherencia con registro del Monitor
-            importe = round(kw_final * precio_kwh, 2)
-            driver_id = globals()['CURRENT_DRIVER_ID']
-            tx_id = globals()['CURRENT_TX_ID'] or f"TX-{cp_id}-{int(time.time())}"
-            motivo = 'Consumo completado'
-            trama_fin = construir_trama('FIN', [cp_id, driver_id, f"{kw_final:.2f}", f"{importe:.2f}", str(secs_final), motivo, tx_id])
-            conn.sendall(trama_fin)
-            print(f"[{cp_id}] FIN enviado a Monitor (auto-stop). kWh={kw_final}, €={importe}, dur_s={secs_final}, tx={tx_id}")
-    except Exception as e:
-        print(f"[{cp_id}] No se pudo enviar FIN a Monitor: {e}")
+    
+    # Solo enviar FIN si fue por objetivo alcanzado (no por STOP manual)
+    if objetivo_alcanzado:
+        try:
+            conn = globals()['ACTIVE_MONITOR_CONN']
+            if conn is not None:
+                precio_kwh = 0.48
+                importe = round(kw_final * precio_kwh, 2)
+                driver_id = globals()['CURRENT_DRIVER_ID']
+                tx_id = globals()['CURRENT_TX_ID'] or f"TX-{cp_id}-{int(time.time())}"
+                motivo = 'Objetivo alcanzado'
+                
+                trama_fin = construir_trama('FIN', [
+                    cp_id, 
+                    driver_id, 
+                    f"{kw_final:.2f}", 
+                    f"{importe:.2f}", 
+                    str(secs_final), 
+                    motivo, 
+                    tx_id
+                ])
+                conn.sendall(trama_fin)
+                print(f"[{cp_id}] FIN enviado a Monitor (objetivo alcanzado). kWh={kw_final}, €={importe}, dur_s={secs_final}, tx={tx_id}")
+                
+                # Resetear contadores para la próxima sesión
+                print(f"[{cp_id}] Contadores reseteados. Listo para nuevo servicio.")
+        except Exception as e:
+            print(f"[{cp_id}] No se pudo enviar FIN a Monitor: {e}")
         
 
 def calcular_lrc(data_bytes: bytes) -> bytes:
@@ -236,16 +266,20 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                     except Exception:
                         pass
                     # Inicializar sesión
+                    global kw_acumulados_global, segundos_global, TARGET_KWH, CURRENT_DRIVER_ID
+                    global SESSION_START_TS, CURRENT_TX_ID, ACTIVE_MONITOR_CONN
+                    global TELEMETRY_STOP_EVENT, TELEMETRY_THREAD
+                    
                     with STATE_LOCK:
                         # Reinicia contadores al iniciar nueva sesión de carga
                         kw_acumulados_global = 0.0
                         segundos_global = 0
                         CHARGING_FLAG.set()
-                        globals()['TARGET_KWH'] = kw_objetivo
-                        globals()['CURRENT_DRIVER_ID'] = driver_id
-                        globals()['SESSION_START_TS'] = time.time()
-                        globals()['CURRENT_TX_ID'] = f"TX-{cp_id}-{int(globals()['SESSION_START_TS'])}"
-                        globals()['ACTIVE_MONITOR_CONN'] = conn
+                        TARGET_KWH = kw_objetivo
+                        CURRENT_DRIVER_ID = driver_id
+                        SESSION_START_TS = time.time()
+                        CURRENT_TX_ID = f"TX-{cp_id}-{int(SESSION_START_TS)}"
+                        ACTIVE_MONITOR_CONN = conn
                         # Lanzar hilo de telemetría solo si no está ya activo
                         if TELEMETRY_THREAD is None or not TELEMETRY_THREAD.is_alive():
                             TELEMETRY_STOP_EVENT = threading.Event()
@@ -264,12 +298,51 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                 elif orden == 'STOP':
                     with STATE_LOCK:
                         CHARGING_FLAG.clear()
+                        # Capturar valores finales antes de detener
+                        kw_final = round(kw_acumulados_global, 2)
+                        secs_final = segundos_global
                         # Señal de parada al hilo de telemetría (si estaba en marcha)
                         try:
                             TELEMETRY_STOP_EVENT.set()
                         except Exception:
                             pass
+                    
                     print("[ENGINE] === STOP recibido: deteniendo carga (telemetría detenida) ===")
+                    
+                    # Enviar telemetría final en REPOSO
+                    generar_y_enviar_telemetria(
+                        cp_id=cp_id,
+                        estado_carga='REPOSO',
+                        kw_entregados=kw_final,
+                        tiempo_carga_s=secs_final,
+                        potencia_kw=0.0
+                    )
+                    
+                    # Enviar FIN al Monitor con los datos de la sesión
+                    try:
+                        precio_kwh = 0.48
+                        importe = round(kw_final * precio_kwh, 2)
+                        driver_id = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
+                        tx_id = globals().get('CURRENT_TX_ID') or f"TX-{cp_id}-{int(time.time())}"
+                        motivo = 'Detenido manualmente'
+                        
+                        trama_fin = construir_trama('FIN', [
+                            cp_id, 
+                            driver_id, 
+                            f"{kw_final:.2f}", 
+                            f"{importe:.2f}", 
+                            str(secs_final), 
+                            motivo, 
+                            tx_id
+                        ])
+                        conn.sendall(trama_fin)
+                        print(f"[{cp_id}] FIN enviado a Monitor (STOP manual). kWh={kw_final}, €={importe}, dur_s={secs_final}, tx={tx_id}")
+                        
+                        # Resetear contadores para la próxima sesión
+                        print(f"[{cp_id}] Contadores reseteados. Listo para nuevo servicio.")
+                    except Exception as e:
+                        print(f"[{cp_id}] Error enviando FIN tras STOP: {e}")
+                    
                     respuesta = construir_trama('ACK', ['STOP_OK'])
                     conn.sendall(respuesta)
                 else:
