@@ -110,7 +110,7 @@ docker compose down >nul 2>&1
 
 echo.
 echo Iniciando Kafka + MySQL + configuracion automatica...
-echo (Esto puede tardar 30-60 segundos la primera vez)
+echo (Esto puede tardar 20-40 segundos la primera vez)
 echo.
 docker compose up -d
 
@@ -126,10 +126,10 @@ echo.
 echo [OK] Servicios Docker iniciados.
 echo.
 echo Esperando a que Kafka y MySQL esten listos...
-echo (30 segundos)
+echo (20 segundos)
 
 REM Esperar con progreso visual
-for /L %%i in (1,1,30) do (
+for /L %%i in (1,1,20) do (
     echo|set /p="."
     timeout /t 1 /nobreak >nul
 )

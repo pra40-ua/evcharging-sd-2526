@@ -56,6 +56,10 @@ CONFIG = {
     'central_port': 5000
 }
 
+# Productor Kafka para enviar comandos
+KAFKA_PRODUCER = None
+KAFKA_PRODUCER_LOCK = threading.Lock()
+
 # =================================================================
 #                    CONSUMIDOR KAFKA (TELEMETRÍA)
 # =================================================================
