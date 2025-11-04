@@ -180,20 +180,53 @@ def _enviar_comando_cp(cp_id: str, orden: str) -> bool:
                 kw_objetivo = CP_SESION_OBJETIVO_KWH.get(cp_id)
             
             if driver_id and kw_objetivo:
-                # Enviar START con parámetros para iniciar la carga manualmente
+                # Hay sesión activa: reanudar carga
                 trama = construir_trama('START', [driver_id, str(kw_objetivo)])
-                registrar_evento(f"Enviando START manual a {cp_id} para iniciar carga (Driver: {driver_id}, kW: {kw_objetivo})")
+                registrar_evento(f"Reanudando carga en {cp_id} (Driver: {driver_id}, kW: {kw_objetivo})")
             else:
-                # Sin sesión activa, no se puede iniciar
-                registrar_evento(f"ERROR: No hay sesión activa en {cp_id}, no se puede enviar START", "error")
-                return False
+                # Sin sesión activa: crear sesión de prueba manual
+                driver_id = 'MANUAL_TEST'
+                kw_objetivo = 10.0  # 10 kWh por defecto para pruebas
+                
+                # Registrar sesión de prueba
+                with CP_SESION_DRIVER_ID_LOCK:
+                    CP_SESION_DRIVER_ID[cp_id] = driver_id
+                with CP_SESION_OBJETIVO_KWH_LOCK:
+                    CP_SESION_OBJETIVO_KWH[cp_id] = kw_objetivo
+                
+                trama = construir_trama('START', [driver_id, str(kw_objetivo)])
+                registrar_evento(f"Iniciando carga de PRUEBA en {cp_id} (10 kWh)", "warn")
         else:
             # Para STOP y otros comandos
             trama = construir_trama(orden, ['MANUAL'])
         
         cp_socket.sendall(trama)
         
-        if orden.upper() == 'STOP':
+        if orden.upper() == 'START':
+            # Publicar telemetría actualizada con sesión activa
+            try:
+                with CP_SESION_DRIVER_ID_LOCK:
+                    driver_id_sesion = CP_SESION_DRIVER_ID.get(cp_id)
+                with TELEMETRIA_ACTUAL_LOCK:
+                    telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                telemetria_actualizada = {
+                    **telemetria_actual,
+                    'cp_id': cp_id,
+                    'estado_carga': 'PRE-SUMINISTRO',
+                    'estado': 'PRE-SUMINISTRO',
+                    'timestamp': time.time(),
+                    'tiene_sesion_activa': True,
+                    'driver_id_sesion': driver_id_sesion
+                }
+                with TELEMETRIA_ACTUAL_LOCK:
+                    TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
+                if KAFKA_PRODUCER:
+                    KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                    KAFKA_PRODUCER.flush(timeout=1)
+                    print(f"[CENTRAL] Telemetría actualizada publicada para {cp_id} (sesión iniciada manualmente)")
+            except Exception as e:
+                print(f"[CENTRAL] No se pudo publicar telemetría actualizada: {e}")
+        elif orden.upper() == 'STOP':
             with CP_ESTADO_MANUAL_LOCK:
                 CP_ESTADO_MANUAL[cp_id] = 'PARADO'
             try:
@@ -235,9 +268,6 @@ def _enviar_comando_cp(cp_id: str, orden: str) -> bool:
                     print(f"[CENTRAL] Telemetría actualizada publicada para {cp_id} (sesión limpiada)")
             except Exception as e:
                 print(f"[CENTRAL] No se pudo publicar telemetría actualizada: {e}")
-        elif orden.upper() == 'START':
-            # No cambiar estado aquí, dejar que la telemetría lo haga
-            registrar_evento(f"Iniciando carga manual en {cp_id}")
         
         registrar_evento(f"Comando {orden} enviado a {cp_id}")
         return True

@@ -117,87 +117,130 @@ def cargar_estado_inicial_bd():
 
 
 def consumir_telemetria(broker: str):
-    """Consume telemetría de Kafka y actualiza el estado global."""
+    """Consume telemetría de Kafka y actualiza el estado global con reconexión automática."""
     print(f"[DASHBOARD] Iniciando consumidor de telemetría en {broker}...")
     print(f"[DASHBOARD] Topic: telemetria_cp")
     print(f"[DASHBOARD] Group ID: dashboard-telemetry-group")
     
-    try:
-        consumer = KafkaConsumer(
-            'telemetria_cp',
-            bootstrap_servers=[broker],
-            auto_offset_reset='latest',
-            enable_auto_commit=True,
-            group_id='dashboard-telemetry-group',
-            value_deserializer=lambda m: json.loads(m.decode('utf-8')),
-            api_version=(2, 5, 0),
-            consumer_timeout_ms=1000  # Poll cada segundo
-        )
-        
-        print("[DASHBOARD] ✓ Consumidor de telemetría conectado y esperando mensajes...")
-        print("[DASHBOARD] Esperando telemetría de CPs...")
-        
-        mensaje_count = 0
-        ultimo_log = time.time()
-        
-        for message in consumer:
-            mensaje_count += 1
-            telemetria = message.value
-            cp_id = telemetria.get('cp_id', 'UNKNOWN')
-            
-            # Log cada mensaje recibido
-            print(f"[DASHBOARD] ← Mensaje #{mensaje_count} recibido de CP: {cp_id}")
-            
-            # Actualizar telemetría
-            with TELEMETRIA_LOCK:
-                TELEMETRIA[cp_id] = {
-                    **telemetria,
-                    'timestamp': telemetria.get('timestamp', time.time()),
-                    'timestamp_str': datetime.now().strftime('%H:%M:%S')
-                }
-            
-            # Actualizar estado del CP
-            with CPS_STATE_LOCK:
-                if cp_id not in CPS_STATE:
-                    CPS_STATE[cp_id] = {
-                        'cp_id': cp_id,
-                        'estado': 'DESCONOCIDO',
-                        'ultima_actualizacion': time.time()
-                    }
-                    # Registrar evento solo si es un CP nuevo
-                    registrar_evento(f"Nuevo CP detectado: {cp_id}", 'info')
-                    print(f"[DASHBOARD] ✓ Nuevo CP añadido al estado: {cp_id}")
-                
-                estado_carga = telemetria.get('estado_carga', telemetria.get('estado', 'DESCONOCIDO'))
-                estado_anterior = CPS_STATE[cp_id].get('estado', 'DESCONOCIDO')
-                
-                CPS_STATE[cp_id].update({
-                    'estado': estado_carga,
-                    'ultima_actualizacion': time.time(),
-                    'ubicacion': telemetria.get('ubicacion', CPS_STATE[cp_id].get('ubicacion', '-')),
-                    'precio_kwh': telemetria.get('precio_kwh', CPS_STATE[cp_id].get('precio_kwh', 0.0))
-                })
-                
-                # Registrar evento solo si el estado cambió
-                if estado_anterior != estado_carga:
-                    registrar_evento(f"{cp_id}: {estado_anterior} → {estado_carga}", 'info')
-                    print(f"[DASHBOARD] Estado actualizado: {cp_id} → {estado_carga}")
-            
-            # Actualizar estadísticas
-            actualizar_estadisticas()
-            
-            # Log periódico de actividad cada 30 segundos
-            ahora = time.time()
-            if ahora - ultimo_log > 30:
-                with CPS_STATE_LOCK:
-                    num_cps = len(CPS_STATE)
-                print(f"[DASHBOARD] Estado actual: {num_cps} CPs registrados, {mensaje_count} mensajes procesados")
-                ultimo_log = ahora
+    mensaje_count = 0
+    ultimo_log = time.time()
+    reintentos = 0
+    max_reintentos = 10
     
-    except Exception as e:
-        print(f"[DASHBOARD] ✗ Error en consumidor de telemetría: {e}")
-        import traceback
-        traceback.print_exc()
+    while True:
+        consumer = None
+        try:
+            print(f"[DASHBOARD] Conectando a Kafka... (intento {reintentos + 1}/{max_reintentos})")
+            consumer = KafkaConsumer(
+                'telemetria_cp',
+                bootstrap_servers=[broker],
+                auto_offset_reset='latest',
+                enable_auto_commit=True,
+                group_id='dashboard-telemetry-group',
+                value_deserializer=lambda m: json.loads(m.decode('utf-8')),
+                api_version=(2, 5, 0),
+                session_timeout_ms=30000,
+                heartbeat_interval_ms=10000,
+                max_poll_interval_ms=300000,
+                request_timeout_ms=40000
+            )
+            
+            print("[DASHBOARD] ✓ Consumidor de telemetría conectado correctamente")
+            print("[DASHBOARD] Esperando telemetría de CPs...")
+            reintentos = 0  # Reset contador de reintentos tras conexión exitosa
+            
+            # Bucle de consumo usando poll() para mejor control
+            while True:
+                try:
+                    # Poll con timeout corto para permitir reconexión si hay error
+                    records = consumer.poll(timeout_ms=1000, max_records=10)
+                    
+                    if not records:
+                        # Sin mensajes, continuar esperando
+                        continue
+                    
+                    # Procesar mensajes recibidos
+                    for topic_partition, messages in records.items():
+                        for message in messages:
+                            mensaje_count += 1
+                            telemetria = message.value
+                            cp_id = telemetria.get('cp_id', 'UNKNOWN')
+                            
+                            # Log cada mensaje recibido
+                            print(f"[DASHBOARD] ← Mensaje #{mensaje_count} recibido de CP: {cp_id}")
+                            
+                            # Actualizar telemetría
+                            with TELEMETRIA_LOCK:
+                                TELEMETRIA[cp_id] = {
+                                    **telemetria,
+                                    'timestamp': telemetria.get('timestamp', time.time()),
+                                    'timestamp_str': datetime.now().strftime('%H:%M:%S')
+                                }
+                            
+                            # Actualizar estado del CP
+                            with CPS_STATE_LOCK:
+                                if cp_id not in CPS_STATE:
+                                    CPS_STATE[cp_id] = {
+                                        'cp_id': cp_id,
+                                        'estado': 'DESCONOCIDO',
+                                        'ultima_actualizacion': time.time()
+                                    }
+                                    # Registrar evento solo si es un CP nuevo
+                                    registrar_evento(f"Nuevo CP detectado: {cp_id}", 'info')
+                                    print(f"[DASHBOARD] ✓ Nuevo CP añadido al estado: {cp_id}")
+                                
+                                estado_carga = telemetria.get('estado_carga', telemetria.get('estado', 'DESCONOCIDO'))
+                                estado_anterior = CPS_STATE[cp_id].get('estado', 'DESCONOCIDO')
+                                
+                                CPS_STATE[cp_id].update({
+                                    'estado': estado_carga,
+                                    'ultima_actualizacion': time.time(),
+                                    'ubicacion': telemetria.get('ubicacion', CPS_STATE[cp_id].get('ubicacion', '-')),
+                                    'precio_kwh': telemetria.get('precio_kwh', CPS_STATE[cp_id].get('precio_kwh', 0.0))
+                                })
+                                
+                                # Registrar evento solo si el estado cambió
+                                if estado_anterior != estado_carga:
+                                    registrar_evento(f"{cp_id}: {estado_anterior} → {estado_carga}", 'info')
+                                    print(f"[DASHBOARD] Estado actualizado: {cp_id} → {estado_carga}")
+                            
+                            # Actualizar estadísticas
+                            actualizar_estadisticas()
+                    
+                    # Log periódico de actividad cada 30 segundos
+                    ahora = time.time()
+                    if ahora - ultimo_log > 30:
+                        with CPS_STATE_LOCK:
+                            num_cps = len(CPS_STATE)
+                        print(f"[DASHBOARD] Estado actual: {num_cps} CPs registrados, {mensaje_count} mensajes procesados")
+                        ultimo_log = ahora
+                
+                except Exception as poll_error:
+                    print(f"[DASHBOARD] ⚠️ Error en poll de Kafka: {poll_error}")
+                    # Romper el bucle interno para intentar reconectar
+                    break
+        
+        except Exception as e:
+            reintentos += 1
+            print(f"[DASHBOARD] ✗ Error en consumidor de telemetría: {e}")
+            
+            if reintentos >= max_reintentos:
+                print(f"[DASHBOARD] ✗ Máximo de reintentos alcanzado ({max_reintentos}). Deteniendo consumidor.")
+                return
+            
+            # Espera progresiva antes de reintentar (backoff exponencial)
+            espera = min(2 ** reintentos, 30)  # Máximo 30 segundos
+            print(f"[DASHBOARD] Reintentando en {espera} segundos...")
+            time.sleep(espera)
+        
+        finally:
+            # Cerrar el consumidor si existe
+            if consumer is not None:
+                try:
+                    consumer.close()
+                    print("[DASHBOARD] Consumidor cerrado correctamente")
+                except:
+                    pass
 
 
 def registrar_evento(mensaje: str, tipo: str = 'info'):
