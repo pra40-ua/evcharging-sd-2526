@@ -170,10 +170,46 @@ echo [OK] Docker daemon esta corriendo.
 echo.
 
 REM ============================================================
-REM  PASO 4: INICIAR KAFKA + MYSQL (DOCKER COMPOSE)
+REM  PASO 4: DETECTAR IP LOCAL AUTOMATICAMENTE
 REM ============================================================
 echo ============================================================
-echo [4/6] INICIANDO KAFKA + MYSQL
+echo [4/6] DETECTANDO IP LOCAL
+echo ============================================================
+echo.
+
+REM Detectar IP local usando ipconfig
+echo Detectando IP local automaticamente...
+for /f "tokens=2 delims=:" %%a in ('ipconfig ^| findstr /C:"IPv4" ^| findstr /V "127.0.0.1" ^| findstr /V "169.254"') do (
+    set TEMP_IP=%%a
+    set TEMP_IP=!TEMP_IP: =!
+    if not "!TEMP_IP!"=="" (
+        set CENTRAL_IP=!TEMP_IP!
+        goto :ip_found
+    )
+)
+
+:ip_found
+if "!CENTRAL_IP!"=="" (
+    echo [ERROR] No se pudo detectar la IP local.
+    echo Usando IP por defecto: 192.168.1.43
+    set CENTRAL_IP=192.168.1.43
+)
+
+echo [OK] IP detectada: !CENTRAL_IP!
+
+REM Guardar IP en central_ip.txt para PC_B
+echo !CENTRAL_IP!> central_ip.txt
+echo      IP guardada en central_ip.txt para PC_B
+echo.
+echo NOTA: Asegurate de actualizar manualmente docker-compose.yml
+echo       con esta IP en KAFKA_ADVERTISED_LISTENERS si es necesario.
+echo.
+
+REM ============================================================
+REM  PASO 5: INICIAR KAFKA + MYSQL (DOCKER COMPOSE)
+REM ============================================================
+echo ============================================================
+echo [5/6] INICIANDO KAFKA + MYSQL
 echo ============================================================
 echo.
 if not exist docker-compose.yml (
@@ -220,37 +256,6 @@ if %errorlevel% equ 0 (
 ) else (
     echo [ADVERTENCIA] Kafka puede no estar listo aun.
     echo El sistema continuara de todas formas.
-)
-echo.
-
-REM ============================================================
-REM  PASO 5: DETECTAR IP LOCAL Y GENERAR ARCHIVOS
-REM ============================================================
-echo ============================================================
-echo [5/6] DETECTANDO IP LOCAL
-echo ============================================================
-echo.
-
-REM Ejecutar script de PowerShell para detectar IP
-echo Ejecutando script de deteccion de IP...
-powershell -ExecutionPolicy Bypass -File ".\scripts\generate_commands_A.ps1"
-
-if %errorlevel% neq 0 (
-    echo.
-    echo [ERROR] No se pudo detectar la IP local.
-    pause
-    exit /b 1
-)
-
-REM Leer IP detectada
-if exist central_ip.txt (
-    set /p CENTRAL_IP=<central_ip.txt
-    echo.
-    echo [OK] IP local detectada: !CENTRAL_IP!
-    echo      (Guardada en central_ip.txt para PC_B)
-) else (
-    echo [ADVERTENCIA] No se creo central_ip.txt
-    set CENTRAL_IP=127.0.0.1
 )
 echo.
 
