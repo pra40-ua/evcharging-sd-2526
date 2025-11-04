@@ -37,8 +37,9 @@ def enviar_solicitud(solicitud, broker):
             )
             producer.send(TOPIC_REQUESTS, value=solicitud)
             producer.flush()
-            print(f"[{solicitud['id_driver']}] Solicitud enviada correctamente (intento {intento+1})")
-            print(f"[DRIVER {solicitud['id_driver']}] Esperando respuesta de la Central...")
+            print(f"[{solicitud['id_driver']}] ✓ Solicitud enviada correctamente (intento {intento+1})")
+            cp_solicitado = solicitud.get('id_charging_point', '?')
+            print(f"[DRIVER {solicitud['id_driver']}] 📡 Esperando respuesta de la Central para {cp_solicitado}...")
             producer.close()
             break
         except Exception as e:
@@ -74,7 +75,11 @@ def consumir_notificaciones_driver(driver_id: str, broker: str, procesar_ticket_
                 print(f"[DRIVER {driver_id}] 🕐 CP {cp_id} ocupado. En cola de espera (posición {posicion})...")
                 print(f"[DRIVER {driver_id}] Esperando turno...")
             elif evento == 'AUTORIZADO':
-                print(f"[DRIVER {driver_id}] ✅ Autorizado por Central. Iniciando sesión de carga...")
+                cp_id = detalle.get('cp_id', '?')
+                print(f"[DRIVER {driver_id}] ✅ Autorizado por Central para {cp_id}!")
+                print(f"[DRIVER {driver_id}] Iniciando sesión de carga...")
+            elif evento == 'AUTORIZACION_EN_PROCESO':
+                print(f"[DRIVER {driver_id}] ⏳ Autorizando... {detalle.get('mensaje', '')}")
             elif evento == 'DENEGADA':
                 print(f"[DRIVER {driver_id}] Solicitud denegada: {detalle}")
                 print(f"[DRIVER {driver_id}] ❌ Terminando proceso (solicitud denegada).")

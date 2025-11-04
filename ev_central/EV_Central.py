@@ -222,9 +222,10 @@ def _enviar_comando_cp(cp_id: str, orden: str) -> bool:
             except Exception as e:
                 print(f"[CENTRAL] No se pudo publicar telemetría actualizada: {e}")
         elif orden.upper() == 'STOP':
-            # Al hacer STOP, NO limpiar la sesión aún
-            # El CP enviará FIN con los datos finales, y entonces se limpiará la sesión
+            # Al hacer STOP, el CP enviará FIN con los datos finales
+            # No limpiamos la sesión aquí, se limpiará al recibir FIN
             registrar_evento(f"Enviando STOP a {cp_id}. Esperando FIN con datos finales...")
+            print(f"[CENTRAL] Comando STOP enviado a {cp_id}. Aguardando respuesta FIN del CP...")
         
         registrar_evento(f"Comando {orden} enviado a {cp_id}")
         return True
@@ -1340,17 +1341,25 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     print(f"[CENTRAL] ✅ Ticket enviado a {driver_id}. CP {cp_fin} listo para nuevo servicio.")
                     registrar_evento(f"✅ Ticket enviado a {driver_id}: {energia} kWh, {importe} €", "ok")
 
-                    # Cambiar estado a ACTIVADO (listo para otro driver)
-                    cambiar_estado_cp(cp_fin, 'ACTIVADO', db_connection)
+                    # Limpiar sesión actual ANTES de procesar la cola
+                    with CP_SESION_DRIVER_ID_LOCK:
+                        if cp_fin in CP_SESION_DRIVER_ID:
+                            del CP_SESION_DRIVER_ID[cp_fin]
+                            print(f"[CENTRAL] Sesión de {driver_id} en {cp_fin} limpiada")
+                    with CP_SESION_OBJETIVO_KWH_LOCK:
+                        if cp_fin in CP_SESION_OBJETIVO_KWH:
+                            del CP_SESION_OBJETIVO_KWH[cp_fin]
                     
                     # Procesar siguiente driver en cola si existe
+                    cola_procesada = False
                     try:
                         with CP_COLA_ESPERA_LOCK:
                             if cp_fin in CP_COLA_ESPERA and not CP_COLA_ESPERA[cp_fin].empty():
                                 from queue import Empty
                                 try:
                                     next_driver, next_kw, timestamp_cola = CP_COLA_ESPERA[cp_fin].get_nowait()
-                                    print(f"[CENTRAL] Procesando siguiente en cola: {next_driver} para {cp_fin}")
+                                    print(f"[CENTRAL] 🔄 Procesando siguiente en cola: {next_driver} para {cp_fin}")
+                                    cola_procesada = True
                                     
                                     # Autorizar al siguiente driver
                                     with CP_SESION_DRIVER_ID_LOCK:
@@ -1364,6 +1373,7 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                                         'cp_id': cp_fin,
                                         'kw_disponibles': next_kw
                                     })
+                                    print(f"[CENTRAL] ✅ Driver {next_driver} notificado: AUTORIZADO")
                                     
                                     # Enviar AUTH_REQ al Monitor
                                     with CONEXIONES_ACTIVAS_LOCK:
@@ -1371,17 +1381,22 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                                             socket_cp = CONEXIONES_ACTIVAS[cp_fin]
                                             trama_auth = construir_trama('AUTH_REQ', [next_driver, str(next_kw)])
                                             socket_cp.sendall(trama_auth)
-                                            print(f"[CENTRAL] AUTH_REQ enviado a {cp_fin} para {next_driver}")
+                                            print(f"[CENTRAL] ✅ AUTH_REQ enviado a {cp_fin} para {next_driver}")
                                             
                                             # Cambiar estado a PRE-SUMINISTRO
                                             cambiar_estado_cp(cp_fin, 'PRE-SUMINISTRO', db_connection, motivo=f'Autorizando {next_driver}')
                                     
-                                    registrar_evento(f"Driver {next_driver} autorizado desde cola para {cp_fin}", "ok")
+                                    registrar_evento(f"✅ Driver {next_driver} autorizado desde cola para {cp_fin}", "ok")
                                     
                                 except Empty:
                                     pass
                     except Exception as e:
-                        print(f"[CENTRAL] Error procesando cola de {cp_fin}: {e}")
+                        print(f"[CENTRAL] ✗ Error procesando cola de {cp_fin}: {e}")
+                    
+                    # Solo cambiar a ACTIVADO si NO se procesó nadie de la cola
+                    if not cola_procesada:
+                        cambiar_estado_cp(cp_fin, 'ACTIVADO', db_connection)
+                        print(f"[CENTRAL] {cp_fin} sin cola pendiente. Estado: ACTIVADO")
                     
                     # Limpiar estado manual si estaba PARADO
                     try:
