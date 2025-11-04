@@ -1,0 +1,109 @@
+================================================================================
+  GUÍA RÁPIDA - SISTEMA DE MÚLTIPLES CHARGING POINTS
+================================================================================
+
+PASO 1: LANZAR MÚLTIPLES CPs
+-----------------------------
+1. Ejecutar: PC_B_RUN.bat
+2. Seleccionar opción [1] (Múltiples CPs)
+3. Ingresar número de CPs (1-5)
+4. Esperar a que se abran las terminales
+
+RESULTADO:
+- Por cada CP se abren 2 terminales:
+  * Terminal ENGINE (Puerto 5001, 5002, ...)
+  * Terminal MONITOR
+
+================================================================================
+
+PASO 2: USAR LA TERMINAL DEL ENGINE
+------------------------------------
+En cada terminal de Engine verás un menú:
+
+  [p] Enchufar vehículo (Plug)      <- Simula conectar el vehículo
+  [d] Desenchufar vehículo (Unplug) <- Simula desconectar el vehículo
+  [r] Simular RFID                   <- Info sobre autenticación
+  [s] Mostrar estado actual          <- Ver estado completo del CP
+  [h] Ayuda                          <- Mostrar menú de nuevo
+  [q] Salir                          <- Salir del menú
+
+FLUJO TÍPICO:
+1. Teclear "p" (enchufar vehículo)
+2. Ir a la web y autorizar la carga desde allí
+3. Ver cómo se inicia la carga automáticamente
+4. Teclear "s" para ver el progreso en tiempo real
+5. Teclear "d" cuando quieras detener (o espera al objetivo)
+
+================================================================================
+
+QUÉ VERÁS EN PANTALLA
+----------------------
+
+ESTADO DEL CP:
+======================================================================
+  CHARGING POINT: CP_001
+======================================================================
+  Estado: CARGANDO (8.5 kWh, 170s)
+======================================================================
+
+MENSAJES RECIBIDOS:
+======================================================================
+  [CP_001] 📩 MENSAJE RECIBIDO: CMD START
+  Driver: DRIVER_123
+  Objetivo: 10.0 kWh
+======================================================================
+
+MENSAJES ENVIADOS:
+======================================================================
+  [CP_001] 📤 MENSAJE ENVIADO: FIN
+  Energía entregada: 8.5 kWh
+  Importe: €4.08
+  Duración: 170s
+  Transacción: TX-CP_001-1730759243
+======================================================================
+
+================================================================================
+
+INFORMACIÓN TÉCNICA
+-------------------
+CP_001 -> Engine Puerto 5001 -> Contenedor: engine_CP_001
+CP_002 -> Engine Puerto 5002 -> Contenedor: engine_CP_002
+CP_003 -> Engine Puerto 5003 -> Contenedor: engine_CP_003
+CP_004 -> Engine Puerto 5004 -> Contenedor: engine_CP_004
+CP_005 -> Engine Puerto 5005 -> Contenedor: engine_CP_005
+
+CADA CP SE REGISTRA AUTOMÁTICAMENTE EN LA CENTRAL (PC_A)
+
+================================================================================
+
+CÓMO DETENER
+------------
+OPCIÓN 1: Presionar Ctrl+C en cada terminal
+OPCIÓN 2: Comando Docker:
+          docker stop engine_CP_001 engine_CP_002 monitor_CP_001 monitor_CP_002
+
+================================================================================
+
+SOLUCIÓN DE PROBLEMAS
+----------------------
+PROBLEMA: Los CPs no se conectan a la Central
+SOLUCIÓN: 
+  - Verifica que central_ip.txt tenga la IP correcta de PC_A
+  - Verifica que EV_Central esté ejecutándose en PC_A
+  - Verifica el firewall en ambos PCs
+
+PROBLEMA: Las terminales se cierran inmediatamente
+SOLUCIÓN:
+  - Revisa: docker logs engine_CP_001
+  - Verifica que las imágenes Docker se construyeron bien
+
+================================================================================
+
+PARA MÁS INFORMACIÓN
+---------------------
+README completo:       INSTRUCCIONES_MULTIPLES_CPS.md
+Cambios detallados:    CAMBIOS_MULTIPLES_CPS.md
+Problemas de red:      DIAGNOSTICO_WEB_NO_MUESTRA_CPS.md
+
+================================================================================
+

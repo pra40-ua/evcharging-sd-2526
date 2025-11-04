@@ -2,11 +2,10 @@
 REM ============================================================
 REM  SCRIPT DE EJECUCION PARA PC_B CON DOCKER
 REM  
-REM  Este script ejecuta los componentes del sistema usando Docker:
-REM  - Construye las imagenes Docker (Engine, Monitor, Driver)
-REM  - Abre terminal para Engine
-REM  - Abre terminal para Driver
-REM  - Abre terminal para Monitor
+REM  NUEVO: Ahora puedes lanzar multiples CPs a la vez!
+REM  Este script te preguntara cuantos CPs quieres lanzar (1-5)
+REM  
+REM  Para usar el modo antiguo (1 CP + 1 Driver), edita este archivo.
 REM  
 REM ============================================================
 
@@ -16,6 +15,26 @@ echo.
 echo ============================================================
 echo    PC_B - EJECUCION CON DOCKER
 echo ============================================================
+echo.
+echo Este script ahora soporta multiples Charging Points!
+echo.
+
+REM Preguntar si quiere lanzar multiples CPs o modo clasico
+echo Que modo deseas usar?
+echo   [1] NUEVO: Multiples CPs (hasta 5 CPs simultaneos)
+echo   [2] CLASICO: 1 CP + 1 Driver
+echo.
+set /p MODO="Selecciona modo (1 o 2): "
+
+if "%MODO%"=="1" (
+    echo.
+    echo Redirigiendo al lanzador de multiples CPs...
+    call PC_B_RUN_MULTIPLE_CPS.bat
+    exit /b 0
+)
+
+echo.
+echo Modo CLASICO seleccionado (1 CP + 1 Driver)
 echo.
 
 REM ============================================================

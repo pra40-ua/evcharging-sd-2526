@@ -228,7 +228,9 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
     """Maneja el chequeo de salud HCK del Monitor."""
     # Declarar variables globales al inicio para evitar errores de ámbito
     global kw_acumulados_global, segundos_global, TELEMETRY_THREAD, TELEMETRY_STOP_EVENT
-    print(f"[ENGINE] Monitor conectado desde {addr[0]}:{addr[1]}")
+    print(f"\n{'='*70}")
+    print(f"  [{cp_id}] 🔗 MONITOR CONECTADO desde {addr[0]}:{addr[1]}")
+    print(f"{'='*70}\n")
     # Guardar conexión activa para permitir al menú enviar señales de 'enchufado'
     try:
         globals()['ACTIVE_MONITOR_CONN'] = conn
@@ -251,7 +253,7 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                 
                 respuesta = construir_trama('HCK_RESP', [status])
                 conn.sendall(respuesta)
-                # print(f"[ENGINE] Recibido HCK, Enviado: {status}") # (Opcional, si quieres ver el tráfico HCK)
+                # HCK es muy frecuente, no mostrar para no saturar la pantalla
             elif cod_op == 'CMD':
                 orden = (campos[0] if campos else '').upper()
                 if orden == 'START':
@@ -269,6 +271,12 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                     global kw_acumulados_global, segundos_global, TARGET_KWH, CURRENT_DRIVER_ID
                     global SESSION_START_TS, CURRENT_TX_ID, ACTIVE_MONITOR_CONN
                     global TELEMETRY_STOP_EVENT, TELEMETRY_THREAD
+                    
+                    print(f"\n{'='*70}")
+                    print(f"  [{cp_id}] 📩 MENSAJE RECIBIDO: CMD START")
+                    print(f"  Driver: {driver_id}")
+                    print(f"  Objetivo: {kw_objetivo} kWh" if kw_objetivo else "  Objetivo: Sin límite")
+                    print(f"{'='*70}\n")
                     
                     with STATE_LOCK:
                         # Reinicia contadores al iniciar nueva sesión de carga
@@ -289,13 +297,21 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                                 daemon=True
                             )
                             TELEMETRY_THREAD.start()
-                    print("[ENGINE] === START recibido: iniciando carga (telemetría activa) ===")
+                    
+                    print(f"[{cp_id}] ⚡ CARGA INICIADA - Estado: CARGANDO")
                     info_ack = 'START_OK'
                     if kw_objetivo is not None:
                         info_ack = f"START_OK {kw_objetivo}kWh"
                     respuesta = construir_trama('ACK', [info_ack])
                     conn.sendall(respuesta)
+                    print(f"\n{'='*70}")
+                    print(f"  [{cp_id}] 📤 MENSAJE ENVIADO: ACK {info_ack}")
+                    print(f"{'='*70}\n")
                 elif orden == 'STOP':
+                    print(f"\n{'='*70}")
+                    print(f"  [{cp_id}] 📩 MENSAJE RECIBIDO: CMD STOP")
+                    print(f"{'='*70}\n")
+                    
                     with STATE_LOCK:
                         CHARGING_FLAG.clear()
                         # Capturar valores finales antes de detener
@@ -307,7 +323,7 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                         except Exception:
                             pass
                     
-                    print("[ENGINE] === STOP recibido: deteniendo carga (telemetría detenida) ===")
+                    print(f"[{cp_id}] 🛑 CARGA DETENIDA - Estado: REPOSO")
                     
                     # Enviar telemetría final en REPOSO
                     generar_y_enviar_telemetria(
@@ -336,15 +352,22 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                             tx_id
                         ])
                         conn.sendall(trama_fin)
-                        print(f"[{cp_id}] FIN enviado a Monitor (STOP manual). kWh={kw_final}, €={importe}, dur_s={secs_final}, tx={tx_id}")
                         
-                        # Resetear contadores para la próxima sesión
-                        print(f"[{cp_id}] Contadores reseteados. Listo para nuevo servicio.")
+                        print(f"\n{'='*70}")
+                        print(f"  [{cp_id}] 📤 MENSAJE ENVIADO: FIN")
+                        print(f"  Energía entregada: {kw_final} kWh")
+                        print(f"  Importe: €{importe}")
+                        print(f"  Duración: {secs_final}s")
+                        print(f"  Transacción: {tx_id}")
+                        print(f"{'='*70}\n")
+                        
+                        print(f"[{cp_id}] ✓ Sesión finalizada. Listo para nuevo servicio.")
                     except Exception as e:
-                        print(f"[{cp_id}] Error enviando FIN tras STOP: {e}")
+                        print(f"[{cp_id}] ✗ Error enviando FIN tras STOP: {e}")
                     
                     respuesta = construir_trama('ACK', ['STOP_OK'])
                     conn.sendall(respuesta)
+                    print(f"[{cp_id}] 📤 ACK enviado: STOP_OK\n")
                 else:
                     print(f"[ENGINE] === ORDEN DESCONOCIDA: {orden} ===")
                     respuesta = construir_trama('ACK', [f'{orden}_IGN'])
@@ -377,35 +400,105 @@ def enviar_estado_al_monitor(estado: str) -> None:
         print(f"[ENGINE] Error enviando STATE al Monitor: {e}")
 
 
+def obtener_estado_actual() -> str:
+    """Retorna el estado actual del CP como string legible."""
+    try:
+        conn = globals().get('ACTIVE_MONITOR_CONN')
+        if conn is None:
+            return "DESCONECTADO (Sin Monitor)"
+        
+        with STATE_LOCK:
+            if CHARGING_FLAG.is_set():
+                return f"CARGANDO ({kw_acumulados_global:.2f} kWh, {segundos_global}s)"
+            elif globals().get('SESION_DRIVER_ID') and globals().get('SESION_DRIVER_ID') != 'UNKNOWN':
+                return "PRE-SUMINISTRO (Autorizado, esperando enchufar)"
+            else:
+                return "DISPONIBLE (Available)"
+    except Exception:
+        return "DISPONIBLE (Available)"
+
+def mostrar_interfaz_cp(cp_id: str):
+    """Muestra el banner y estado del CP."""
+    print("\n" + "="*70)
+    print(f"  CHARGING POINT: {cp_id}")
+    print("="*70)
+    print(f"  Estado: {obtener_estado_actual()}")
+    print("="*70)
+    print("\n  MENÚ DE SIMULACIÓN DEL CONDUCTOR:")
+    print("    [p] Enchufar vehículo (Plug)")
+    print("    [d] Desenchufar vehículo (Unplug)")
+    print("    [r] Simular RFID / Iniciar sesión")
+    print("    [s] Mostrar estado actual")
+    print("    [h] Ayuda")
+    print("    [q] Salir")
+    print("="*70)
+
 def menu_interactivo_engine() -> None:
-    """Menú simple para simular acciones físicas en el CP."""
-    print("\n[ENGINE] Menú CP: 'p' Enchufar (Plug) | 'x' Detener (Stop) | 'h' Ayuda")
+    """Menú interactivo mejorado para simular acciones físicas en el CP."""
+    cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
+    mostrar_interfaz_cp(cp_id)
+    
     while True:
         try:
-            cmd = input("[ENGINE] Acción (p/x/h): ").strip().lower()
+            cmd = input(f"\n[{cp_id}] Acción: ").strip().lower()
+        except (KeyboardInterrupt, EOFError):
+            print(f"\n[{cp_id}] Saliendo del menú...")
+            break
         except Exception:
-            time.sleep(1)
+            time.sleep(0.5)
             continue
+            
         if not cmd:
             continue
+            
         if cmd == 'h':
-            print("[ENGINE] Opciones: p=Enchufar (avisar Monitor), x=Detener carga si activa")
+            mostrar_interfaz_cp(cp_id)
             continue
+            
+        if cmd == 's':
+            print(f"\n{'='*70}")
+            print(f"  ESTADO ACTUAL DE {cp_id}")
+            print(f"{'='*70}")
+            print(f"  Estado: {obtener_estado_actual()}")
+            with STATE_LOCK:
+                print(f"  Energía acumulada: {kw_acumulados_global:.2f} kWh")
+                print(f"  Tiempo de carga: {segundos_global} segundos")
+            driver_id = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
+            print(f"  Driver actual: {driver_id}")
+            print(f"  Monitor conectado: {'Sí' if globals().get('ACTIVE_MONITOR_CONN') else 'No'}")
+            print(f"{'='*70}")
+            continue
+            
         if cmd == 'p':
+            print(f"\n[{cp_id}] 🔌 Simulando ENCHUFAR vehículo...")
             enviar_estado_al_monitor('PLUGGED')
+            print(f"[{cp_id}] ✓ Vehículo enchufado. Estado enviado al Monitor.")
             continue
-        if cmd == 'x':
+            
+        if cmd == 'd':
+            print(f"\n[{cp_id}] 🔓 Simulando DESENCHUFAR vehículo...")
             try:
-                # Señal de stop local; el Monitor también puede ordenar STOP
                 with STATE_LOCK:
                     if 'TELEMETRY_STOP_EVENT' in globals() and TELEMETRY_STOP_EVENT:
                         TELEMETRY_STOP_EVENT.set()
                         CHARGING_FLAG.clear()
                 enviar_estado_al_monitor('UNPLUGGED')
-            except Exception:
-                pass
+                print(f"[{cp_id}] ✓ Vehículo desenchufado. Carga detenida.")
+            except Exception as e:
+                print(f"[{cp_id}] ✗ Error al desenchufar: {e}")
             continue
-        print(f"[ENGINE] Comando desconocido: {cmd}")
+            
+        if cmd == 'r':
+            print(f"\n[{cp_id}] 📱 Simulando lectura de RFID...")
+            print(f"[{cp_id}] (Esta acción normalmente se hace desde la web/driver)")
+            print(f"[{cp_id}] Estado actual: {obtener_estado_actual()}")
+            continue
+            
+        if cmd == 'q':
+            print(f"\n[{cp_id}] Saliendo del menú interactivo...")
+            break
+            
+        print(f"[{cp_id}] ✗ Comando desconocido: '{cmd}'. Usa 'h' para ayuda.")
 
 def main():
     parser = argparse.ArgumentParser(description="Proceso EV_CP_E (Charging Point Engine)")
