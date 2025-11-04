@@ -259,6 +259,9 @@
             <div style="text-align: right;">
                 <div style="font-size: 12px; color: #666;">Sistema de Carga de Vehículos Eléctricos</div>
                 <div style="font-size: 11px; color: #999;" id="last-update">Actualizando...</div>
+                <button class="btn-reload" onclick="recargarDesdeDB()" style="margin-top: 8px; padding: 6px 12px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600;">
+                    🔄 Recargar desde BD
+                </button>
             </div>
         </header>
         
@@ -468,6 +471,30 @@
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 3000);
+        }
+        
+        // Función para forzar recarga desde BD
+        function recargarDesdeDB() {
+            fetch('/api/reload_from_db', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    mostrarNotificacion(`✓ ${data.message}`, 'success');
+                    // Actualizar dashboard inmediatamente
+                    actualizarDashboard();
+                } else {
+                    mostrarNotificacion(`⚠ ${data.message}`, 'error');
+                }
+            })
+            .catch(error => {
+                mostrarNotificacion(`Error: ${error}`, 'error');
+                console.error('Error recargando desde BD:', error);
+            });
         }
         
         // Iniciar actualización automática

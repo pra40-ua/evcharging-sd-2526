@@ -68,14 +68,14 @@ def cargar_estado_inicial_bd():
     """Carga el estado inicial de CPs desde la base de datos."""
     if not CONFIG.get('db_config'):
         print("[DASHBOARD] No hay configuración de BD, omitiendo carga inicial")
-        return
+        return 0
     
     try:
         # Parsear configuración de BD
         parts = CONFIG['db_config'].split(':')
         if len(parts) != 5:
             print("[DASHBOARD] Formato de BD incorrecto")
-            return
+            return 0
         
         host, port, user, password, database = parts
         
@@ -93,27 +93,62 @@ def cargar_estado_inicial_bd():
             cursor.execute("SELECT cp_id, estado, ubicacion, precio_kwh, fecha_ultima_conexion FROM charging_points")
             
             cps = cursor.fetchall()
+            cps_nuevos = 0
             
             with CPS_STATE_LOCK:
                 for cp in cps:
                     cp_id = cp['cp_id']
-                    CPS_STATE[cp_id] = {
-                        'cp_id': cp_id,
-                        'estado': cp['estado'] or 'DESCONOCIDO',
-                        'ultima_actualizacion': time.time(),
-                        'ubicacion': cp['ubicacion'],
-                        'precio_kwh': cp['precio_kwh']
-                    }
-                    print(f"[DASHBOARD] CP cargado desde BD: {cp_id} - {cp['estado']}")
+                    
+                    # Solo añadir si no existe o actualizar datos complementarios
+                    if cp_id not in CPS_STATE:
+                        CPS_STATE[cp_id] = {
+                            'cp_id': cp_id,
+                            'estado': cp['estado'] or 'DESCONOCIDO',
+                            'ultima_actualizacion': time.time(),
+                            'ubicacion': cp['ubicacion'],
+                            'precio_kwh': cp['precio_kwh']
+                        }
+                        print(f"[DASHBOARD] ✓ CP cargado desde BD: {cp_id} - {cp['estado']}")
+                        cps_nuevos += 1
+                    else:
+                        # Actualizar solo ubicacion y precio si no están
+                        if not CPS_STATE[cp_id].get('ubicacion'):
+                            CPS_STATE[cp_id]['ubicacion'] = cp['ubicacion']
+                        if not CPS_STATE[cp_id].get('precio_kwh'):
+                            CPS_STATE[cp_id]['precio_kwh'] = cp['precio_kwh']
             
             cursor.close()
             connection.close()
             
-            print(f"[DASHBOARD] {len(cps)} CPs cargados desde la base de datos")
-            actualizar_estadisticas()
+            if cps_nuevos > 0:
+                print(f"[DASHBOARD] ✓ {cps_nuevos} CP(s) nuevos cargados desde BD (Total: {len(cps)})")
+                actualizar_estadisticas()
+            
+            return len(cps)
             
     except Exception as e:
-        print(f"[DASHBOARD] Error cargando estado inicial desde BD: {e}")
+        print(f"[DASHBOARD] ✗ Error cargando estado desde BD: {e}")
+        return 0
+
+
+def sincronizar_cps_desde_bd():
+    """Sincroniza periódicamente el estado de CPs desde la base de datos."""
+    print("[DASHBOARD] Iniciando hilo de sincronización con BD...")
+    
+    while True:
+        try:
+            time.sleep(10)  # Sincronizar cada 10 segundos
+            
+            num_cps = cargar_estado_inicial_bd()
+            
+            if num_cps > 0:
+                with CPS_STATE_LOCK:
+                    num_total = len(CPS_STATE)
+                print(f"[DASHBOARD] 🔄 Sincronización BD: {num_total} CPs en estado")
+        
+        except Exception as e:
+            print(f"[DASHBOARD] Error en sincronización BD: {e}")
+            time.sleep(30)  # Esperar más si hay error
 
 
 def consumir_telemetria(broker: str):
@@ -431,6 +466,36 @@ def api_debug():
         'num_cps': len(cps_state_debug),
         'num_telemetria': len(telemetria_debug)
     })
+
+
+@app.route('/api/reload_from_db', methods=['POST'])
+def api_reload_from_db():
+    """Fuerza una recarga de CPs desde la base de datos."""
+    try:
+        num_cps = cargar_estado_inicial_bd()
+        
+        if num_cps > 0:
+            registrar_evento(f"Recarga manual desde BD: {num_cps} CPs", 'info')
+            with CPS_STATE_LOCK:
+                total = len(CPS_STATE)
+            
+            return jsonify({
+                'status': 'ok',
+                'message': f'{num_cps} CPs cargados desde BD',
+                'total_cps': total
+            })
+        else:
+            return jsonify({
+                'status': 'warn',
+                'message': 'No se encontraron CPs en BD o no hay configuración de BD',
+                'total_cps': 0
+            })
+    
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
 
 
 @app.route('/api/command', methods=['POST'])
@@ -769,6 +834,9 @@ def crear_templates():
             <div style="text-align: right;">
                 <div style="font-size: 12px; color: #666;">Sistema de Carga de Vehículos Eléctricos</div>
                 <div style="font-size: 11px; color: #999;" id="last-update">Actualizando...</div>
+                <button class="btn-reload" onclick="recargarDesdeDB()" style="margin-top: 8px; padding: 6px 12px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600;">
+                    🔄 Recargar desde BD
+                </button>
             </div>
         </header>
         
@@ -980,6 +1048,30 @@ def crear_templates():
             }, 3000);
         }
         
+        // Función para forzar recarga desde BD
+        function recargarDesdeDB() {
+            fetch('/api/reload_from_db', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    mostrarNotificacion(`✓ ${data.message}`, 'success');
+                    // Actualizar dashboard inmediatamente
+                    actualizarDashboard();
+                } else {
+                    mostrarNotificacion(`⚠ ${data.message}`, 'error');
+                }
+            })
+            .catch(error => {
+                mostrarNotificacion(`Error: ${error}`, 'error');
+                console.error('Error recargando desde BD:', error);
+            });
+        }
+        
         // Iniciar actualización automática
         actualizarDashboard();
         updateInterval = setInterval(actualizarDashboard, 2000);
@@ -1051,6 +1143,14 @@ def main():
     if args.db:
         print("[DASHBOARD] Cargando estado inicial desde la base de datos...")
         cargar_estado_inicial_bd()
+        
+        # Iniciar hilo de sincronización periódica con BD
+        bd_sync_thread = threading.Thread(
+            target=sincronizar_cps_desde_bd,
+            daemon=True
+        )
+        bd_sync_thread.start()
+        print("[DASHBOARD] ✓ Sincronización automática con BD activada")
     
     # Inicializar productor Kafka para enviar comandos
     inicializar_kafka_producer(args.kafka)
