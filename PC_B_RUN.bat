@@ -84,7 +84,7 @@ echo [2/4] LANZANDO ENGINE
 echo ============================================================
 echo.
 
-start "Engine-PC_B" powershell -ExecutionPolicy Bypass -NoExit -Command "docker run --rm -p 5001:5001 --name engine -e ENGINE_PORT=5001 -e CP_ID=CP_001 -e KAFKA_SERVER='192.168.1.43:9092' ev_engine:local"
+start "Engine-PC_B" powershell -ExecutionPolicy Bypass -NoExit -Command "docker run --rm --label project=evcharging-pc-b --label component=engine --label cp_id=CP_001 -p 5001:5001 --name engine -e ENGINE_PORT=5001 -e CP_ID=CP_001 -e KAFKA_SERVER='192.168.1.43:9092' ev_engine:local"
 
 echo [OK] Engine iniciado en ventana separada
 echo.
@@ -98,7 +98,7 @@ echo [3/4] LANZANDO DRIVER
 echo ============================================================
 echo.
 
-start "Driver-PC_B" powershell -ExecutionPolicy Bypass -NoExit -Command "docker run --rm --name driver -e KAFKA_BROKER='192.168.1.43:9092' -e DRIVER_ID=DRIVER_456 -e CP_ID=CP_001 -e MAT=ABC-1234 -e KW=1.0 -e LISTEN=true ev_driver:local"
+start "Driver-PC_B" powershell -ExecutionPolicy Bypass -NoExit -Command "docker run --rm --label project=evcharging-pc-b --label component=driver --label cp_id=CP_001 --name driver -e KAFKA_BROKER='192.168.1.43:9092' -e DRIVER_ID=DRIVER_456 -e CP_ID=CP_001 -e MAT=ABC-1234 -e KW=1.0 -e LISTEN=true ev_driver:local"
 
 echo [OK] Driver iniciado en ventana separada
 echo.
@@ -112,7 +112,7 @@ echo [4/4] LANZANDO MONITOR
 echo ============================================================
 echo.
 
-start "Monitor-PC_B" powershell -ExecutionPolicy Bypass -NoExit -Command "docker run --rm --name monitor -e CP_ID=CP_001 -e CENTRAL_IP=192.168.1.43 -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=5001 ev_monitor:local"
+start "Monitor-PC_B" powershell -ExecutionPolicy Bypass -NoExit -Command "docker run --rm --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 --name monitor -e CP_ID=CP_001 -e CENTRAL_IP=192.168.1.43 -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=5001 ev_monitor:local"
 
 echo [OK] Monitor iniciado en ventana separada
 echo.
@@ -137,6 +137,7 @@ echo   - Monitor
 echo.
 echo Para DETENER:
 echo   - Presiona Ctrl+C en cada ventana de PowerShell
+echo   - O ejecuta: PC_B_STOP_ALL.bat (detiene todos los contenedores)
 echo   - O ejecuta: docker stop engine driver monitor
 echo.
 echo Presiona cualquier tecla para cerrar esta ventana...

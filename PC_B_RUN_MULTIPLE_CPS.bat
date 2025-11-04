@@ -117,7 +117,8 @@ for /L %%i in (1,1,%NUM_CPS%) do (
 echo.
 echo Para DETENER:
 echo   - Presiona Ctrl+C en cada ventana de PowerShell
-echo   - O ejecuta: docker stop engine_001 engine_002 ... monitor_001 monitor_002 ...
+echo   - O ejecuta: PC_B_STOP_ALL.bat (para detener todos a la vez)
+echo   - O ejecuta: docker stop $(docker ps -q --filter "label=project=evcharging-pc-b")
 echo.
 echo Presiona cualquier tecla para cerrar esta ventana...
 echo (Los CPs seguiran ejecutandose en sus ventanas)
@@ -144,7 +145,11 @@ start "CP_%CP_ID%_Engine" powershell -ExecutionPolicy Bypass -NoExit -Command ^
 Write-Host '  ENGINE - %CP_ID% (Puerto %ENGINE_PORT%)' -ForegroundColor Yellow; ^
 Write-Host '================================================================' -ForegroundColor Cyan; ^
 Write-Host ''; ^
-docker run --rm --name engine_%CP_ID% -p %ENGINE_PORT%:%ENGINE_PORT% ^
+docker run --rm --name engine_%CP_ID% ^
+--label project=evcharging-pc-b ^
+--label component=engine ^
+--label cp_id=%CP_ID% ^
+-p %ENGINE_PORT%:%ENGINE_PORT% ^
 -e ENGINE_PORT=%ENGINE_PORT% ^
 -e CP_ID=%CP_ID% ^
 -e KAFKA_SERVER='%KAFKA_SERVER%' ^
@@ -160,6 +165,9 @@ Write-Host '  MONITOR - %CP_ID%' -ForegroundColor Green; ^
 Write-Host '================================================================' -ForegroundColor Cyan; ^
 Write-Host ''; ^
 docker run --rm --name monitor_%CP_ID% ^
+--label project=evcharging-pc-b ^
+--label component=monitor ^
+--label cp_id=%CP_ID% ^
 -e CP_ID=%CP_ID% ^
 -e CENTRAL_IP=%CENTRAL_IP% ^
 -e CENTRAL_PORT=5000 ^
