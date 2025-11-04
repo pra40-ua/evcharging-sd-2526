@@ -1,0 +1,20 @@
+# Dependencias para Windows (incluye alternativas si hay problemas)
+
+# Kafka
+confluent-kafka==2.11.1 ; sys_platform == 'win32'
+kafka-python==2.0.2
+
+# Base de datos
+mysql-connector-python>=8.0.0
+
+# Framework web para dashboard
+flask==3.0.0
+flask-cors==4.0.0
+
+# Interfaz de texto mejorada
+rich>=13.0.0
+
+# Utilidades adicionales
+colorama ; sys_platform == 'win32'  # Colores en consola Windows
+pywin32 ; sys_platform == 'win32'   # APIs de Windows
+

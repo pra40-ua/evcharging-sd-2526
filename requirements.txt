@@ -1,5 +1,6 @@
-confluent-kafka==2.11.1     #para el futuro Streaming de Eventos
-mysql-connector-python      #para interactuar con la BD pip install mysql-connector-python      
-confluent-kafka              #para el futuro Streaming de Eventos pip install confluent-kafka
-kafka-python==2.0.2 
-rich
+confluent-kafka==2.11.1     # Para Streaming de Eventos
+mysql-connector-python      # Para interactuar con la BD
+kafka-python==2.0.2         # Cliente Kafka para Python
+rich                        # Para TUI mejorada en Central
+flask==3.0.0                # Framework web para dashboard
+flask-cors==4.0.0           # CORS para API REST del dashboard

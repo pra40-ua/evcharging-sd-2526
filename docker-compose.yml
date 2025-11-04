@@ -11,7 +11,7 @@ services:
       - KAFKA_NODE_ID=1
       - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://172.21.42.5:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://
       - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
       - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
       - KAFKA_LOG_DIRS=/tmp/kraft-combined-logs
@@ -20,10 +20,58 @@ services:
       - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
       # Cluster ID requerido para formatear almacenamiento en KRaft
       - CLUSTER_ID=4L6g3nShT-eMCtK--X86sw
-    # Si tu red requiere DNS o IP fija, puedes agregar networks/extra_hosts
-    # networks:
-    #   - evnet
+    healthcheck:
+      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
 
-#networks:
-#  evnet:
-#    driver: bridge
+  # MySQL para persistencia (opcional)
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=evcharging
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01_schema.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Creador automático de topics de Kafka
+  kafka-setup:
+    image: confluentinc/cp-kafka:7.7.0
+    container_name: kafka-setup
+    depends_on:
+      kafka:
+        condition: service_healthy
+    command: >
+      bash -c "
+        echo 'Esperando a que Kafka esté listo...';
+        sleep 10;
+        echo 'Creando topics necesarios...';
+        kafka-topics --create --topic telemetria_cp --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1 --if-not-exists;
+        kafka-topics --create --topic driver_requests --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1 --if-not-exists;
+        kafka-topics --create --topic central_commands --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 --if-not-exists;
+        echo 'Topics creados:';
+        kafka-topics --list --bootstrap-server kafka:9092;
+        echo 'Setup completado.';
+      "
+    restart: "no"
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  default:
+    name: evnet
+    driver: bridge
