@@ -40684,3 +40684,133 @@ icPartition(topic='central_commands', partition=0)]
 2025-11-05 00:20:10,226 - [00:20:10] [INFO] CP_001 podrá reconectarse automáticamente al reiniciar su Monitor.
 2025-11-05 00:20:10,227 - Closing the Kafka producer with 0 secs timeout.
 2025-11-05 00:20:10,227 - Proceeding to force close the producer since pending requests could not be completed within timeout 0.
+2025-11-05 00:39:56,847 - [00:39:56] Modo consola simple activado
+2025-11-05 00:39:56,852 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-05 00:39:56,853 - Updating subscribed topics to: ('driver_requests',)
+2025-11-05 00:39:56,853 - Updating subscribed topics to: ('central_commands',)
+2025-11-05 00:39:56,856 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-05 00:39:56,856 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-05 00:39:56,856 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-05 00:39:56,857 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-05 00:39:56,856 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-05 00:39:56,857 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-05 00:39:56,905 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-05 00:39:56,905 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-05 00:39:57,063 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-05 00:39:57,063 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-05 00:39:57,063 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-05 00:39:57,063 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-05 00:39:57,063 - Starting new heartbeat thread
+2025-11-05 00:39:57,063 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-05 00:39:57,064 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-05 00:39:57,063 - Starting new heartbeat thread
+2025-11-05 00:39:57,064 - Starting new heartbeat thread
+2025-11-05 00:39:57,064 - Revoking previously assigned partitions set() for group central_processing_group
+2025-11-05 00:39:57,064 - Revoking previously assigned partitions set() for group central-control-group
+2025-11-05 00:39:57,064 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-11-05 00:39:57,064 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-05 00:39:57,064 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-05 00:39:57,065 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-05 00:39:57,065 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-05 00:39:57,065 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-05 00:39:57,065 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-05 00:39:57,065 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-05 00:39:57,065 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-05 00:39:57,065 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-05 00:39:57,165 - (Re-)joining group central_processing_group
+2025-11-05 00:39:57,166 - (Re-)joining group central-telemetry-group
+2025-11-05 00:39:57,166 - (Re-)joining group central-control-group
+2025-11-05 00:39:57,169 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-05 00:39:57,169 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-05 00:39:57,169 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-05 00:39:57,269 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-05 00:39:57,270 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-05 00:39:57,270 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-05 00:39:57,270 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-05 00:39:57,270 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-05 00:39:57,271 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-05 00:39:57,372 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-05 00:39:57,372 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-05 00:39:57,372 - (Re-)joining group central_processing_group
+2025-11-05 00:39:57,373 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-05 00:39:57,373 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-05 00:39:57,373 - (Re-)joining group central-telemetry-group
+2025-11-05 00:39:57,373 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-05 00:39:57,373 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-05 00:39:57,374 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-05 00:39:57,374 - (Re-)joining group central-control-group
+2025-11-05 00:39:57,374 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-05 00:39:57,375 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-05 00:39:57,476 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-05 00:39:57,476 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-05 00:39:57,476 - (Re-)joining group central_processing_group
+2025-11-05 00:39:57,476 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-05 00:39:57,477 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-05 00:39:57,477 - (Re-)joining group central-control-group
+2025-11-05 00:39:57,477 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-05 00:39:57,477 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-05 00:39:57,477 - (Re-)joining group central-telemetry-group
+2025-11-05 00:40:00,493 - Elected group leader -- performing partition assignments using range
+2025-11-05 00:40:00,494 - Elected group leader -- performing partition assignments using range
+2025-11-05 00:40:00,494 - Elected group leader -- performing partition assignments using range
+2025-11-05 00:40:00,506 - Successfully joined group central-control-group with generation 1
+2025-11-05 00:40:00,506 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-11-05 00:40:00,506 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-05 00:40:00,506 - Successfully joined group central_processing_group with generation 1
+2025-11-05 00:40:00,507 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)]
+2025-11-05 00:40:00,507 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)} for group central_processing_group
+2025-11-05 00:40:00,506 - Successfully joined group central-telemetry-group with generation 1
+2025-11-05 00:40:00,507 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0)]
+2025-11-05 00:40:00,507 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0)} for group central-telemetry-group
+2025-11-05 00:40:41,887 - [00:40:41] [NUEVO CP] Registro inicial de CP_001.
+2025-11-05 00:40:41,888 - [00:40:41] CP registrado y conectado: CP_001 (C/Mayor, 45)
+2025-11-05 00:40:41,889 - [00:40:41] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-05 00:40:41,896 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-05 00:40:41,896 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-05 00:40:41,896 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-05 00:40:41,905 - [00:40:41] Telemetría inicial publicada para CP_001
+2025-11-05 00:40:41,910 - [00:40:41] AUTH OK enviado a CP_001
+2025-11-05 00:40:46,912 - [00:40:46] [NUEVO CP] Registro inicial de CP_002.
+2025-11-05 00:40:46,913 - [00:40:46] CP registrado y conectado: CP_002 (C/Mayor, 45)
+2025-11-05 00:40:46,914 - [00:40:46] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-05 00:40:46,926 - [00:40:46] Telemetría inicial publicada para CP_002
+2025-11-05 00:40:46,931 - [00:40:46] AUTH OK enviado a CP_002
+2025-11-05 00:40:51,867 - [00:40:51] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-05 00:40:51,877 - [00:40:51] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-05 00:40:51,924 - [00:40:51] [NUEVO CP] Registro inicial de CP_003.
+2025-11-05 00:40:51,925 - [00:40:51] CP registrado y conectado: CP_003 (C/Mayor, 45)
+2025-11-05 00:40:51,926 - [00:40:51] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-05 00:40:51,937 - [00:40:51] Telemetría inicial publicada para CP_003
+2025-11-05 00:40:51,943 - [00:40:51] AUTH OK enviado a CP_003
+2025-11-05 00:41:01,875 - [00:41:01] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-05 00:41:01,885 - [00:41:01] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-05 00:41:01,892 - [00:41:01] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-05 00:41:08,088 - [00:41:08] Solicitud de recarga recibida
+2025-11-05 00:41:08,105 - [00:41:08] [CONTROL] AUTH_REQ enviado a CP_001 (kW: 19.0).
+2025-11-05 00:41:08,106 - [00:41:08] [LOGICA] Solicitud DRIVER_001 validada y autorizada.
+2025-11-05 00:41:08,107 - [00:41:08] [ESTADO] CP_001 -> PRE-SUMINISTRO (antes: ACTIVADO).
+2025-11-05 00:41:08,114 - [00:41:08] [CONTROL] Confirmación síncrona de CP_001: AUTH_ACK#OK.
+2025-11-05 00:41:08,120 - [00:41:08] [ESTADO] CP_001 -> PRE-SUMINISTRO.
+2025-11-05 00:41:08,127 - [00:41:08] Telemetría recibida de CP_001: est=PRE-SUMINISTRO, E=0.00, P=0.0 | Solicitado=19.00 kWh
+2025-11-05 00:41:09,080 - [00:41:09] Solicitud de recarga recibida
+2025-11-05 00:41:09,088 - Topic driver_status_DRIVER_002 not found in cluster metadata
+2025-11-05 00:41:09,209 - [00:41:09] Driver DRIVER_002 en cola para CP_001 (posición 1)
+2025-11-05 00:41:10,225 - [00:41:10] Solicitud de recarga recibida
+2025-11-05 00:41:10,232 - Topic driver_status_DRIVER_003 not found in cluster metadata
+2025-11-05 00:41:10,360 - [00:41:10] Driver DRIVER_003 en cola para CP_001 (posición 2)
+2025-11-05 00:41:11,885 - [00:41:11] Telemetría recibida de CP_001: est=PRE-SUMINISTRO, E=0.00, P=0.0 | Solicitado=19.00 kWh
+2025-11-05 00:41:11,899 - [00:41:11] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-05 00:41:11,906 - [00:41:11] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-05 00:41:21,897 - [00:41:21] Telemetría recibida de CP_001: est=PRE-SUMINISTRO, E=0.00, P=0.0 | Solicitado=19.00 kWh
+2025-11-05 00:41:21,910 - [00:41:21] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-05 00:41:21,917 - [00:41:21] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-05 00:41:31,903 - [00:41:31] Telemetría recibida de CP_001: est=PRE-SUMINISTRO, E=0.00, P=0.0 | Solicitado=19.00 kWh
+2025-11-05 00:41:31,916 - [00:41:31] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-05 00:41:31,923 - [00:41:31] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-05 00:41:41,668 - [00:41:41] [CONTROL WEB] Comando START para CP_001 desde web_dashboard
+2025-11-05 00:41:41,671 - [00:41:41] Iniciando carga en CP_001 (Driver: DRIVER_001, kW: 19.0)
+2025-11-05 00:41:41,676 - [00:41:41] Comando START enviado a CP_001
+2025-11-05 00:41:41,681 - [00:41:41] [CONTROL] Estado reportado por CP_001: ACTIVADO
+2025-11-05 00:41:41,682 - [00:41:41] [ESTADO] CP_001 -> ACTIVADO (antes: PRE-SUMINISTRO).
+2025-11-05 00:41:41,684 - [00:41:41] [WARN] No se pudo registrar telemetría: Lost connection to MySQL server during query
+2025-11-05 00:41:41,686 - [00:41:41] Telemetría recibida de CP_001: est=PRE-SUMINISTRO, E=0.00, P=0.0 | Solicitado=19.00 kWh

@@ -487,6 +487,7 @@ def mostrar_interfaz_cp(cp_id: str):
     print("    [9] Mostrar estado actual")
     print("    [0] Ayuda")
     print("="*70)
+    sys.stdout.flush()
 
 def reportar_averia_al_monitor() -> None:
     """Reporta avería al Monitor mediante mensaje HCK_RESP con KO."""
@@ -529,23 +530,91 @@ def menu_interactivo_engine() -> None:
     cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
     mostrar_interfaz_cp(cp_id)
     
+    # Asegurar que sys.stdout no está bufferizado
+    sys.stdout.flush()
+    
     while True:
         try:
-            cmd = input(f"\n[{cp_id}] Acción: ").strip()
+            # Usar sys.stdout.write para el prompt y sys.stdin.readline para leer
+            sys.stdout.write(f"\n[{cp_id}] Acción: ")
+            sys.stdout.flush()
+            
+            cmd = sys.stdin.readline().strip()
+            
+            if not cmd:
+                continue
+                
         except (KeyboardInterrupt, EOFError):
             print(f"\n[{cp_id}] Saliendo del menú...")
             break
-        except Exception:
+        except Exception as e:
+            print(f"[{cp_id}] Error leyendo entrada: {e}")
             time.sleep(0.5)
-            continue
-            
-        if not cmd:
             continue
             
         if cmd == '0':
             mostrar_interfaz_cp(cp_id)
             continue
             
+        if cmd == '1':
+            if ENGINE_FAULTED.is_set():
+                print(f"\n[{cp_id}] ✗ No se puede conectar vehículo: CP en AVERÍA")
+                print(f"[{cp_id}] Primero debe resolverse la avería")
+                sys.stdout.flush()
+                continue
+                
+            print(f"\n[{cp_id}] 🔌 Conductor CONECTA vehículo físicamente...")
+            sys.stdout.flush()
+            VEHICLE_PLUGGED.set()
+            
+            # Verificar si ya hay autorización de Central
+            if AUTHORIZED_TO_CHARGE.is_set():
+                print(f"[{cp_id}] ✓ Vehículo conectado + Autorización previa detectada")
+                print(f"[{cp_id}] ⚡ INICIANDO SUMINISTRO automáticamente...")
+                sys.stdout.flush()
+                # El suministro real se inicia cuando el Monitor envíe START
+                enviar_estado_al_monitor('PLUGGED')
+            else:
+                print(f"[{cp_id}] ✓ Vehículo conectado físicamente")
+                print(f"[{cp_id}] ⏳ Esperando autorización de la CENTRAL...")
+                sys.stdout.flush()
+                enviar_estado_al_monitor('PLUGGED')
+            continue
+            
+        if cmd == '2':
+            print(f"\n[{cp_id}] ⚠️  REPORTANDO AVERÍA...")
+            sys.stdout.flush()
+            reportar_averia_al_monitor()
+            print(f"[{cp_id}] ✓ Avería reportada. Monitor notificará a la Central.")
+            sys.stdout.flush()
+            continue
+            
+        if cmd == '3':
+            if ENGINE_FAULTED.is_set():
+                print(f"\n[{cp_id}] ℹ️  CP en AVERÍA. Desconexión de vehículo registrada.")
+                sys.stdout.flush()
+                VEHICLE_PLUGGED.clear()
+                continue
+                
+            print(f"\n[{cp_id}] 🔓 Conductor DESCONECTA vehículo físicamente...")
+            sys.stdout.flush()
+            VEHICLE_PLUGGED.clear()
+            
+            # Detener carga si estaba activa
+            try:
+                with STATE_LOCK:
+                    if TELEMETRY_STOP_EVENT:
+                        TELEMETRY_STOP_EVENT.set()
+                    CHARGING_FLAG.clear()
+                AUTHORIZED_TO_CHARGE.clear()
+                enviar_estado_al_monitor('UNPLUGGED')
+                print(f"[{cp_id}] ✓ Vehículo desconectado. Carga detenida.")
+                sys.stdout.flush()
+            except Exception as e:
+                print(f"[{cp_id}] ✗ Error al desconectar: {e}")
+                sys.stdout.flush()
+            continue
+        
         if cmd == '9':
             print(f"\n{'='*70}")
             print(f"  ESTADO ACTUAL DE {cp_id}")
@@ -561,58 +630,11 @@ def menu_interactivo_engine() -> None:
             print(f"  Autorizado por Central: {'Sí' if AUTHORIZED_TO_CHARGE.is_set() else 'No'}")
             print(f"  En avería: {'Sí' if ENGINE_FAULTED.is_set() else 'No'}")
             print(f"{'='*70}")
-            continue
-            
-        if cmd == '1':
-            if ENGINE_FAULTED.is_set():
-                print(f"\n[{cp_id}] ✗ No se puede conectar vehículo: CP en AVERÍA")
-                print(f"[{cp_id}] Primero debe resolverse la avería")
-                continue
-                
-            print(f"\n[{cp_id}] 🔌 Conductor CONECTA vehículo físicamente...")
-            VEHICLE_PLUGGED.set()
-            
-            # Verificar si ya hay autorización de Central
-            if AUTHORIZED_TO_CHARGE.is_set():
-                print(f"[{cp_id}] ✓ Vehículo conectado + Autorización previa detectada")
-                print(f"[{cp_id}] ⚡ INICIANDO SUMINISTRO automáticamente...")
-                # El suministro real se inicia cuando el Monitor envíe START
-                enviar_estado_al_monitor('PLUGGED')
-            else:
-                print(f"[{cp_id}] ✓ Vehículo conectado físicamente")
-                print(f"[{cp_id}] ⏳ Esperando autorización de la CENTRAL...")
-                enviar_estado_al_monitor('PLUGGED')
-            continue
-            
-        if cmd == '2':
-            print(f"\n[{cp_id}] ⚠️  REPORTANDO AVERÍA...")
-            reportar_averia_al_monitor()
-            print(f"[{cp_id}] ✓ Avería reportada. Monitor notificará a la Central.")
-            continue
-            
-        if cmd == '3':
-            if ENGINE_FAULTED.is_set():
-                print(f"\n[{cp_id}] ℹ️  CP en AVERÍA. Desconexión de vehículo registrada.")
-                VEHICLE_PLUGGED.clear()
-                continue
-                
-            print(f"\n[{cp_id}] 🔓 Conductor DESCONECTA vehículo físicamente...")
-            VEHICLE_PLUGGED.clear()
-            
-            # Detener carga si estaba activa
-            try:
-                with STATE_LOCK:
-                    if TELEMETRY_STOP_EVENT:
-                        TELEMETRY_STOP_EVENT.set()
-                    CHARGING_FLAG.clear()
-                AUTHORIZED_TO_CHARGE.clear()
-                enviar_estado_al_monitor('UNPLUGGED')
-                print(f"[{cp_id}] ✓ Vehículo desconectado. Carga detenida.")
-            except Exception as e:
-                print(f"[{cp_id}] ✗ Error al desconectar: {e}")
+            sys.stdout.flush()
             continue
             
         print(f"[{cp_id}] ✗ Opción no válida: '{cmd}'. Usa '0' para ver el menú.")
+        sys.stdout.flush()
 
 def main():
     parser = argparse.ArgumentParser(description="Proceso EV_CP_E (Charging Point Engine)")
@@ -626,25 +648,31 @@ def main():
     KAFKA_SERVER = args.kafka
     initialize_producer(KAFKA_SERVER)
     
+    # Desactivar buffering en stdout/stderr para que los mensajes aparezcan inmediatamente
+    sys.stdout.reconfigure(line_buffering=True)
+    sys.stderr.reconfigure(line_buffering=True)
+    
     print("="*40)
     print("[EV_CP_E] INICIADO")
     print(f"Puerto de escucha: {args.port}")
     print(f"CP ID: {args.cp_id}")
     print(f"Kafka: {KAFKA_SERVER}")
     print("="*40)
+    sys.stdout.flush()
 
     # El hilo de telemetría NO se inicia en arranque; solo tras recibir START
     print(f"[EV_CP_E] Telemetría en reposo. A la espera de START para {args.cp_id}")
+    sys.stdout.flush()
 
     try:
         # Guardar CP_ID global para el menú/estado
         globals()['ENGINE_CP_ID'] = args.cp_id
-        # Lanzar menú interactivo solo si hay TTY; si no, evitar bucle de prompts
-        if sys.stdin and sys.stdin.isatty():
-            menu_thread = threading.Thread(target=menu_interactivo_engine, daemon=True)
-            menu_thread.start()
-        else:
-            print("[ENGINE] Menú deshabilitado (STDIN no interactivo). Use el Monitor para PLUG/STOP.")
+        
+        # Lanzar menú interactivo siempre (forzar modo interactivo)
+        menu_thread = threading.Thread(target=menu_interactivo_engine, daemon=True)
+        menu_thread.start()
+        print("[ENGINE] Menú interactivo activado. Usa las opciones numericas [1], [2], [3]...")
+        sys.stdout.flush()
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_socket.bind(('', args.port))
