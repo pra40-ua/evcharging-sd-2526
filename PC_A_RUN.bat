@@ -191,8 +191,8 @@ echo.
 echo Iniciando dashboard web en puerto 8080...
 echo.
 
-REM Lanzar Dashboard Web en nueva ventana
-start "Dashboard-Web-PC_A" cmd /k "py web_dashboard.py --kafka !CENTRAL_IP!:9092 --central-ip !CENTRAL_IP! --central-port 5000"
+REM Lanzar Dashboard Web en nueva ventana (con acceso a BD para sincronización)
+start "Dashboard-Web-PC_A" cmd /k "py web_dashboard.py --kafka !CENTRAL_IP!:9092 --central-ip !CENTRAL_IP! --central-port 5000 --db 127.0.0.1:3306:root:root:evcharging"
 
 REM Esperar 5 segundos a que el dashboard inicie
 echo Esperando a que el dashboard inicie...

@@ -64,9 +64,63 @@ KAFKA_PRODUCER_LOCK = threading.Lock()
 #                    CONSUMIDOR KAFKA (TELEMETRÍA)
 # =================================================================
 
+def cargar_estado_inicial_bd():
+    """Carga el estado inicial de CPs desde la base de datos."""
+    if not CONFIG.get('db_config'):
+        print("[DASHBOARD] No hay configuración de BD, omitiendo carga inicial")
+        return
+    
+    try:
+        # Parsear configuración de BD
+        parts = CONFIG['db_config'].split(':')
+        if len(parts) != 5:
+            print("[DASHBOARD] Formato de BD incorrecto")
+            return
+        
+        host, port, user, password, database = parts
+        
+        # Conectar a BD
+        connection = mysql.connector.connect(
+            host=host,
+            port=int(port),
+            user=user,
+            password=password,
+            database=database
+        )
+        
+        if connection.is_connected():
+            cursor = connection.cursor(dictionary=True)
+            cursor.execute("SELECT cp_id, estado, ubicacion, precio_kwh, fecha_ultima_conexion FROM charging_points")
+            
+            cps = cursor.fetchall()
+            
+            with CPS_STATE_LOCK:
+                for cp in cps:
+                    cp_id = cp['cp_id']
+                    CPS_STATE[cp_id] = {
+                        'cp_id': cp_id,
+                        'estado': cp['estado'] or 'DESCONOCIDO',
+                        'ultima_actualizacion': time.time(),
+                        'ubicacion': cp['ubicacion'],
+                        'precio_kwh': cp['precio_kwh']
+                    }
+                    print(f"[DASHBOARD] CP cargado desde BD: {cp_id} - {cp['estado']}")
+            
+            cursor.close()
+            connection.close()
+            
+            print(f"[DASHBOARD] {len(cps)} CPs cargados desde la base de datos")
+            actualizar_estadisticas()
+            
+    except Exception as e:
+        print(f"[DASHBOARD] Error cargando estado inicial desde BD: {e}")
+
+
 def consumir_telemetria(broker: str):
     """Consume telemetría de Kafka y actualiza el estado global."""
     print(f"[DASHBOARD] Iniciando consumidor de telemetría en {broker}...")
+    print(f"[DASHBOARD] Topic: telemetria_cp")
+    print(f"[DASHBOARD] Group ID: dashboard-telemetry-group")
     
     try:
         consumer = KafkaConsumer(
@@ -76,14 +130,23 @@ def consumir_telemetria(broker: str):
             enable_auto_commit=True,
             group_id='dashboard-telemetry-group',
             value_deserializer=lambda m: json.loads(m.decode('utf-8')),
-            api_version=(2, 5, 0)
+            api_version=(2, 5, 0),
+            consumer_timeout_ms=1000  # Poll cada segundo
         )
         
-        print("[DASHBOARD] Consumidor de telemetría conectado.")
+        print("[DASHBOARD] ✓ Consumidor de telemetría conectado y esperando mensajes...")
+        print("[DASHBOARD] Esperando telemetría de CPs...")
+        
+        mensaje_count = 0
+        ultimo_log = time.time()
         
         for message in consumer:
+            mensaje_count += 1
             telemetria = message.value
             cp_id = telemetria.get('cp_id', 'UNKNOWN')
+            
+            # Log cada mensaje recibido
+            print(f"[DASHBOARD] ← Mensaje #{mensaje_count} recibido de CP: {cp_id}")
             
             # Actualizar telemetría
             with TELEMETRIA_LOCK:
@@ -101,21 +164,40 @@ def consumir_telemetria(broker: str):
                         'estado': 'DESCONOCIDO',
                         'ultima_actualizacion': time.time()
                     }
+                    # Registrar evento solo si es un CP nuevo
+                    registrar_evento(f"Nuevo CP detectado: {cp_id}", 'info')
+                    print(f"[DASHBOARD] ✓ Nuevo CP añadido al estado: {cp_id}")
                 
                 estado_carga = telemetria.get('estado_carga', telemetria.get('estado', 'DESCONOCIDO'))
+                estado_anterior = CPS_STATE[cp_id].get('estado', 'DESCONOCIDO')
+                
                 CPS_STATE[cp_id].update({
                     'estado': estado_carga,
-                    'ultima_actualizacion': time.time()
+                    'ultima_actualizacion': time.time(),
+                    'ubicacion': telemetria.get('ubicacion', CPS_STATE[cp_id].get('ubicacion', '-')),
+                    'precio_kwh': telemetria.get('precio_kwh', CPS_STATE[cp_id].get('precio_kwh', 0.0))
                 })
-            
-            # Registrar evento
-            registrar_evento(f"Telemetría {cp_id}: {estado_carga}")
+                
+                # Registrar evento solo si el estado cambió
+                if estado_anterior != estado_carga:
+                    registrar_evento(f"{cp_id}: {estado_anterior} → {estado_carga}", 'info')
+                    print(f"[DASHBOARD] Estado actualizado: {cp_id} → {estado_carga}")
             
             # Actualizar estadísticas
             actualizar_estadisticas()
+            
+            # Log periódico de actividad cada 30 segundos
+            ahora = time.time()
+            if ahora - ultimo_log > 30:
+                with CPS_STATE_LOCK:
+                    num_cps = len(CPS_STATE)
+                print(f"[DASHBOARD] Estado actual: {num_cps} CPs registrados, {mensaje_count} mensajes procesados")
+                ultimo_log = ahora
     
     except Exception as e:
-        print(f"[DASHBOARD] Error en consumidor de telemetría: {e}")
+        print(f"[DASHBOARD] ✗ Error en consumidor de telemetría: {e}")
+        import traceback
+        traceback.print_exc()
 
 
 def registrar_evento(mensaje: str, tipo: str = 'info'):
@@ -263,6 +345,35 @@ def api_stats():
     return jsonify({
         'status': 'ok',
         'stats': stats_copy
+    })
+
+
+@app.route('/api/debug')
+def api_debug():
+    """Endpoint de diagnóstico para verificar el estado interno del dashboard."""
+    with CPS_STATE_LOCK:
+        cps_state_debug = {cp_id: dict(cp_data) for cp_id, cp_data in CPS_STATE.items()}
+    
+    with TELEMETRIA_LOCK:
+        telemetria_debug = {cp_id: dict(tel_data) for cp_id, tel_data in TELEMETRIA.items()}
+    
+    with EVENTOS_LOCK:
+        eventos_recientes = EVENTOS[-10:] if EVENTOS else []
+    
+    return jsonify({
+        'status': 'ok',
+        'timestamp': datetime.now().isoformat(),
+        'config': {
+            'kafka_broker': CONFIG.get('kafka_broker'),
+            'central_ip': CONFIG.get('central_ip'),
+            'central_port': CONFIG.get('central_port'),
+            'db_configured': CONFIG.get('db_config') is not None
+        },
+        'cps_state': cps_state_debug,
+        'telemetria': telemetria_debug,
+        'eventos_recientes': eventos_recientes,
+        'num_cps': len(cps_state_debug),
+        'num_telemetria': len(telemetria_debug)
     })
 
 
@@ -854,6 +965,8 @@ def main():
                         help="IP de EV_Central")
     parser.add_argument("--central-port", type=int, default=5000,
                         help="Puerto de EV_Central")
+    parser.add_argument("--db", type=str,
+                        help="Configuración de BD (formato: host:port:user:password:database)")
     
     args = parser.parse_args()
     
@@ -861,6 +974,7 @@ def main():
     CONFIG['kafka_broker'] = args.kafka
     CONFIG['central_ip'] = args.central_ip
     CONFIG['central_port'] = args.central_port
+    CONFIG['db_config'] = args.db
     
     print("="*70)
     print("  EV CENTRAL - DASHBOARD WEB")
@@ -868,11 +982,17 @@ def main():
     print(f"  Puerto web:    {args.port}")
     print(f"  Kafka:         {args.kafka}")
     print(f"  Central:       {args.central_ip}:{args.central_port}")
+    print(f"  Base de datos: {args.db if args.db else 'No configurada'}")
     print("="*70)
     print()
     
     # Crear templates
     crear_templates()
+    
+    # Cargar estado inicial desde BD si está disponible
+    if args.db:
+        print("[DASHBOARD] Cargando estado inicial desde la base de datos...")
+        cargar_estado_inicial_bd()
     
     # Inicializar productor Kafka para enviar comandos
     inicializar_kafka_producer(args.kafka)

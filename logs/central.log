@@ -704,3 +704,1128 @@
 2025-11-04 19:51:10,910 - [19:51:10] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
 2025-11-04 19:51:10,911 - [19:51:10] [ESTADO] CP_001 -> DESCONECTADO (antes: ACTIVADO).
 2025-11-04 19:53:02,032 - [19:53:02] Solicitud de recarga recibida
+2025-11-04 20:02:07,055 - [20:02:07] ERROR: No hay sesión activa en CP_001, no se puede enviar START
+2025-11-04 20:02:07,975 - [20:02:07] ERROR: No hay sesión activa en CP_001, no se puede enviar START
+2025-11-04 20:02:46,106 - [20:02:46] ERROR: No hay sesión activa en CP_001, no se puede enviar START
+2025-11-04 20:02:46,616 - [20:02:46] ERROR: No hay sesión activa en CP_001, no se puede enviar START
+2025-11-04 20:02:47,024 - [20:02:47] ERROR: No hay sesión activa en CP_001, no se puede enviar START
+2025-11-04 20:02:58,228 - [20:02:58] Monitor desconectado: CP_001
+2025-11-04 20:02:58,231 - [20:02:58] Central cerrando...
+2025-11-04 20:02:58,236 - [20:02:58] [ESTADO] CP_001 -> DESCONECTADO.
+2025-11-04 20:02:58,240 - [20:02:58] [INFO] CP_001 podrá reconectarse automáticamente al reiniciar su Monitor.
+2025-11-04 20:02:58,246 - Closing the Kafka producer with 0 secs timeout.
+2025-11-04 20:02:58,246 - Proceeding to force close the producer since pending requests could not be completed within timeout 0.
+2025-11-04 20:05:17,458 - [20:05:17] [RESTORE] CP001 restaurado con estado Desconectado
+2025-11-04 20:05:17,458 - [20:05:17] [RESTORE] CP_001 restaurado con estado Desconectado
+2025-11-04 20:05:17,463 - [20:05:17] Modo consola simple activado
+2025-11-04 20:05:17,470 - Updating subscribed topics to: ('driver_requests',)
+2025-11-04 20:05:17,471 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-04 20:05:17,473 - Updating subscribed topics to: ('central_commands',)
+2025-11-04 20:05:17,475 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:05:17,475 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:05:17,475 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:05:17,475 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:05:17,476 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:05:17,475 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:05:17,518 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:05:17,518 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:05:17,577 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:05:17,577 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-04 20:05:17,577 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:05:17,577 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-04 20:05:17,577 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:05:17,578 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-04 20:05:17,578 - Starting new heartbeat thread
+2025-11-04 20:05:17,578 - Starting new heartbeat thread
+2025-11-04 20:05:17,578 - Starting new heartbeat thread
+2025-11-04 20:05:17,578 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-11-04 20:05:17,578 - Revoking previously assigned partitions set() for group central-control-group
+2025-11-04 20:05:17,578 - Revoking previously assigned partitions set() for group central_processing_group
+2025-11-04 20:05:17,579 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:05:17,579 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:05:17,579 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:05:17,579 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:05:17,579 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:05:17,579 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:05:17,580 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:05:17,579 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:05:17,580 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:05:17,680 - (Re-)joining group central_processing_group
+2025-11-04 20:05:17,680 - (Re-)joining group central-control-group
+2025-11-04 20:05:17,680 - (Re-)joining group central-telemetry-group
+2025-11-04 20:05:20,684 - Elected group leader -- performing partition assignments using range
+2025-11-04 20:05:20,684 - Elected group leader -- performing partition assignments using range
+2025-11-04 20:05:20,684 - Elected group leader -- performing partition assignments using range
+2025-11-04 20:05:20,685 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:05:20,685 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:05:20,685 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:05:20,685 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:05:20,685 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:05:20,686 - Successfully joined group central-control-group with generation 1
+2025-11-04 20:05:20,686 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-11-04 20:05:20,686 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-04 20:05:20,686 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:05:20,687 - Successfully joined group central_processing_group with generation 1
+2025-11-04 20:05:20,687 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)]
+2025-11-04 20:05:20,687 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=2), TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1)} for group central_processing_group
+2025-11-04 20:05:20,687 - Successfully joined group central-telemetry-group with generation 1
+2025-11-04 20:05:20,687 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0)]
+2025-11-04 20:05:20,688 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0)} for group central-telemetry-group
+2025-11-04 20:05:32,469 - [20:05:32] [\u26a0\ufe0f] CP CP001 sin actividad \u2192 DESCONECTADO
+2025-11-04 20:05:32,471 - [20:05:32] [ESTADO] CP001 -> DESCONECTADO (antes: Desconectado).
+2025-11-04 20:05:32,480 - [20:05:32] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-04 20:05:32,481 - [20:05:32] [ESTADO] CP_001 -> DESCONECTADO (antes: Desconectado).
+2025-11-04 20:06:01,671 - [20:06:01] Solicitud de recarga recibida
+2025-11-04 20:06:01,677 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:06:01,677 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:06:01,677 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:06:04,591 - [20:06:04] [NUEVO CP] Registro inicial de CP_001.
+2025-11-04 20:06:04,592 - [20:06:04] CP registrado y conectado: CP_001 (C/Mayor, 45)
+2025-11-04 20:06:04,594 - [20:06:04] [ESTADO] CP_001 -> ACTIVADO (antes: DESCONECTADO).
+2025-11-04 20:06:04,610 - [20:06:04] AUTH OK enviado a CP_001
+2025-11-04 20:06:22,491 - [20:06:22] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-04 20:06:22,493 - [20:06:22] [ESTADO] CP_001 -> DESCONECTADO (antes: ACTIVADO).
+2025-11-04 20:06:36,685 - [20:06:36] ERROR: No hay sesión activa en CP_001, no se puede enviar START
+2025-11-04 20:06:37,487 - [20:06:37] ERROR: No hay sesión activa en CP_001, no se puede enviar START
+2025-11-04 20:06:37,880 - [20:06:37] ERROR: No hay sesión activa en CP_001, no se puede enviar START
+2025-11-04 20:06:38,801 - [20:06:38] ERROR: No hay sesión activa en CP_001, no se puede enviar START
+2025-11-04 20:06:47,425 - [20:06:47] ERROR: No hay sesión activa en CP_001, no se puede enviar START
+2025-11-04 20:06:48,498 - [20:06:48] ERROR: No hay sesión activa en CP_001, no se puede enviar START
+2025-11-04 20:11:12,296 - [20:11:12] Modo consola simple activado
+2025-11-04 20:11:12,300 - Updating subscribed topics to: ('driver_requests',)
+2025-11-04 20:11:12,300 - Updating subscribed topics to: ('central_commands',)
+2025-11-04 20:11:12,301 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-04 20:11:12,304 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:11:12,304 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:11:12,304 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:11:12,305 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:11:12,304 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:11:12,305 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:11:12,348 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:11:12,349 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:11:12,407 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:11:12,407 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-04 20:11:12,407 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:11:12,407 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-04 20:11:12,407 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:11:12,408 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-04 20:11:12,408 - Starting new heartbeat thread
+2025-11-04 20:11:12,408 - Starting new heartbeat thread
+2025-11-04 20:11:12,408 - Starting new heartbeat thread
+2025-11-04 20:11:12,408 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-11-04 20:11:12,408 - Revoking previously assigned partitions set() for group central_processing_group
+2025-11-04 20:11:12,408 - Revoking previously assigned partitions set() for group central-control-group
+2025-11-04 20:11:12,409 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:11:12,409 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:11:12,409 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:11:12,409 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:11:12,409 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:11:12,410 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:11:12,410 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:11:12,409 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:11:12,411 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:11:12,411 - Stopping heartbeat thread
+2025-11-04 20:11:12,412 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:11:12,510 - (Re-)joining group central-telemetry-group
+2025-11-04 20:11:12,512 - (Re-)joining group central-control-group
+2025-11-04 20:11:15,512 - Elected group leader -- performing partition assignments using range
+2025-11-04 20:11:15,512 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:11:15,513 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:11:15,514 - Elected group leader -- performing partition assignments using range
+2025-11-04 20:11:15,514 - Successfully joined group central-telemetry-group with generation 1
+2025-11-04 20:11:15,514 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)]
+2025-11-04 20:11:15,514 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)} for group central-telemetry-group
+2025-11-04 20:11:15,514 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:11:15,515 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:11:15,515 - Successfully joined group central-control-group with generation 1
+2025-11-04 20:11:15,515 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-11-04 20:11:15,515 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-04 20:11:55,580 - [20:11:55] [NUEVO CP] Registro inicial de CP_001.
+2025-11-04 20:11:55,581 - [20:11:55] CP registrado y conectado: CP_001 (C/Mayor, 45)
+2025-11-04 20:11:55,582 - [20:11:55] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-04 20:11:55,586 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:11:55,586 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:11:55,586 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:11:55,596 - [20:11:55] AUTH OK enviado a CP_001
+2025-11-04 20:12:12,304 - [20:12:12] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-04 20:12:12,305 - [20:12:12] [ESTADO] CP_001 -> DESCONECTADO (antes: ACTIVADO).
+2025-11-04 20:12:21,375 - [20:12:21] Comando no reconocido: 11
+2025-11-04 20:14:05,126 - [20:14:05] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Conexión con Engine perdida)
+2025-11-04 20:14:05,127 - [20:14:05] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Conexión con Engine perdida)
+2025-11-04 20:14:07,320 - [20:14:07] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-04 20:14:07,321 - [20:14:07] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-04 20:14:07,962 - [20:14:07] Monitor desconectado: CP_001
+2025-11-04 20:14:07,969 - [20:14:07] [ESTADO] CP_001 -> DESCONECTADO.
+2025-11-04 20:14:07,974 - [20:14:07] [INFO] CP_001 podrá reconectarse automáticamente al reiniciar su Monitor.
+2025-11-04 20:14:17,615 - [20:14:17] Apagado solicitado por operador
+2025-11-04 20:14:17,799 - Stopping heartbeat thread
+2025-11-04 20:14:17,799 - Leaving consumer group (central-control-group).
+2025-11-04 20:14:17,803 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:14:17,803 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:14:17,803 - Fetch to node 1 failed: Cancelled: <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>
+2025-11-04 20:14:18,096 - Stopping heartbeat thread
+2025-11-04 20:14:18,096 - Leaving consumer group (central-telemetry-group).
+2025-11-04 20:14:18,098 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:14:18,098 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:14:18,114 - [20:14:18] Central cerrando...
+2025-11-04 20:14:18,117 - Closing the Kafka producer with 0 secs timeout.
+2025-11-04 20:14:18,117 - Proceeding to force close the producer since pending requests could not be completed within timeout 0.
+2025-11-04 20:16:08,214 - [20:16:08] Modo consola simple activado
+2025-11-04 20:16:08,220 - Updating subscribed topics to: ('driver_requests',)
+2025-11-04 20:16:08,221 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-04 20:16:08,222 - Updating subscribed topics to: ('central_commands',)
+2025-11-04 20:16:08,224 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:08,224 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:08,224 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:08,224 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:08,224 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:08,224 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:08,276 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:08,276 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:08,434 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:16:08,434 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-04 20:16:08,434 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:16:08,434 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-04 20:16:08,434 - Starting new heartbeat thread
+2025-11-04 20:16:08,434 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:16:08,435 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-04 20:16:08,435 - Starting new heartbeat thread
+2025-11-04 20:16:08,435 - Starting new heartbeat thread
+2025-11-04 20:16:08,435 - Revoking previously assigned partitions set() for group central-control-group
+2025-11-04 20:16:08,435 - Revoking previously assigned partitions set() for group central_processing_group
+2025-11-04 20:16:08,435 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-11-04 20:16:08,435 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:08,435 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:08,436 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:08,436 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:08,436 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:16:08,436 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:08,436 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:16:08,436 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:08,437 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:16:08,537 - (Re-)joining group central-telemetry-group
+2025-11-04 20:16:08,537 - (Re-)joining group central-control-group
+2025-11-04 20:16:08,537 - (Re-)joining group central_processing_group
+2025-11-04 20:16:08,541 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 20:16:08,541 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 20:16:08,541 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 20:16:08,642 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:08,643 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:08,643 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:08,643 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:08,643 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:08,643 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:08,746 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:16:08,746 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-04 20:16:08,746 - (Re-)joining group central-telemetry-group
+2025-11-04 20:16:08,746 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:16:08,746 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-04 20:16:08,746 - (Re-)joining group central-control-group
+2025-11-04 20:16:08,746 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:16:08,747 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-04 20:16:08,747 - (Re-)joining group central_processing_group
+2025-11-04 20:16:08,748 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 20:16:08,748 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 20:16:08,748 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 20:16:08,850 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:16:08,850 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-04 20:16:08,850 - (Re-)joining group central-telemetry-group
+2025-11-04 20:16:08,850 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:16:08,851 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-04 20:16:08,851 - (Re-)joining group central_processing_group
+2025-11-04 20:16:08,850 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:16:08,851 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-04 20:16:08,851 - (Re-)joining group central-control-group
+2025-11-04 20:16:11,865 - Elected group leader -- performing partition assignments using range
+2025-11-04 20:16:11,866 - Elected group leader -- performing partition assignments using range
+2025-11-04 20:16:11,866 - Elected group leader -- performing partition assignments using range
+2025-11-04 20:16:11,880 - Successfully joined group central-telemetry-group with generation 1
+2025-11-04 20:16:11,880 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)]
+2025-11-04 20:16:11,881 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)} for group central-telemetry-group
+2025-11-04 20:16:11,880 - Successfully joined group central-control-group with generation 1
+2025-11-04 20:16:11,881 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-11-04 20:16:11,881 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-04 20:16:11,880 - Successfully joined group central_processing_group with generation 1
+2025-11-04 20:16:11,881 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)]
+2025-11-04 20:16:11,881 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2), TopicPartition(topic='driver_requests', partition=0)} for group central_processing_group
+2025-11-04 20:16:29,748 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-04 20:16:29,748 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-04 20:16:29,748 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-04 20:16:29,748 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-04 20:16:29,748 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:29,748 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: Node Disconnected.
+2025-11-04 20:16:29,748 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-04 20:16:29,749 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-04 20:16:29,749 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-04 20:16:29,749 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-04 20:16:29,749 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:29,749 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:29,749 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:29,749 - Marking the coordinator dead (node coordinator-1) for group central-control-group: Node Disconnected.
+2025-11-04 20:16:29,749 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-04 20:16:29,749 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: Node Disconnected.
+2025-11-04 20:16:29,750 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:29,750 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:29,750 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:29,750 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:29,750 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-04 20:16:29,750 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:29,848 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:29,849 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:29,849 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:29,849 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:29,850 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:29,850 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:29,850 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:29,850 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:29,850 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:29,850 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:29,851 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:29,851 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:29,851 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:29,851 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-04 20:16:30,024 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:30,024 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:30,024 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:30,025 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:30,025 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:30,025 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:30,025 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:30,025 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:30,025 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:30,025 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:30,025 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:30,026 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:30,025 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:30,026 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:30,026 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:30,201 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:30,202 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:30,201 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:30,202 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:30,202 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:30,202 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:30,203 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:30,203 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:30,203 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:30,203 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:30,203 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:30,203 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:30,203 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:30,203 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:30,203 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:30,372 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:30,372 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:30,372 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:30,372 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:30,372 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:30,372 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:30,373 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:30,373 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:30,373 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:30,373 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:30,373 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:30,373 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:30,373 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:30,374 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:30,374 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:30,533 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:30,533 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:30,533 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:30,534 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:30,534 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:30,534 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:30,534 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:30,535 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:30,535 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:30,534 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:30,535 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:30,535 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:30,535 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:30,535 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:30,535 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:30,701 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:30,701 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:30,701 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:30,701 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:30,701 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:30,701 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:30,744 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:30,744 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:30,744 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:30,744 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:30,744 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:30,744 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:30,744 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:30,744 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:30,745 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:30,745 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:30,902 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:30,902 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:55,218 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:55,219 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:55,219 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:55,219 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:55,234 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:55,235 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:55,235 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:55,235 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:55,391 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:55,392 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:55,393 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:55,393 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:55,393 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:55,407 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:55,408 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:55,408 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:55,408 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:55,408 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:55,545 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:55,545 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:55,545 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:55,545 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:55,566 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:55,566 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:55,567 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:55,567 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:55,567 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:55,582 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:55,582 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:55,583 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:55,583 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:55,583 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:55,646 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:55,646 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:55,740 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:55,740 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:55,741 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:55,741 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:55,741 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:55,747 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:55,747 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:55,747 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:55,747 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-04 20:16:55,756 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:55,756 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:55,757 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:55,757 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:55,757 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:55,914 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:55,914 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:55,914 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:55,914 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:55,915 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:55,915 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:55,915 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:55,915 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:55,916 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:55,916 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:55,929 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:55,930 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:55,931 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:55,931 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:55,931 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:56,088 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:56,088 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:56,088 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:56,088 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:56,089 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:56,089 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:56,089 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:56,089 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:56,089 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:56,089 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:56,103 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:56,104 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:56,104 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:56,104 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:56,104 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:56,262 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:56,262 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:56,262 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:56,262 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:56,263 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:56,263 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:56,263 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:56,263 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:56,263 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:56,263 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:56,277 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:56,277 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:56,278 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:56,278 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:56,278 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:56,435 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:56,435 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:56,436 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:56,436 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:56,436 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:56,437 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:56,437 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:56,436 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:56,437 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:56,437 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:56,451 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:56,451 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:56,452 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:56,452 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:56,452 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:56,609 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:56,609 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:56,610 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:56,610 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:56,610 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:56,611 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:56,611 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:56,610 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:56,611 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:56,611 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:56,625 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:56,625 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:56,626 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:56,626 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:56,626 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:56,783 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:56,783 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:56,783 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:56,783 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:56,784 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:56,784 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:56,784 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:56,784 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:56,784 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:56,784 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:56,798 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:56,799 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:56,799 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:56,799 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:56,799 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:56,957 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:56,957 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:56,958 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:56,958 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:56,958 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:56,958 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:56,959 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:56,958 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:56,959 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:56,959 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:56,973 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:56,973 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:56,974 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:56,974 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:56,974 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:57,131 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:57,131 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:57,131 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:57,131 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:57,132 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:57,132 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:57,132 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:57,132 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:57,132 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:57,132 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:57,146 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:57,146 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:57,147 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:57,147 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:57,147 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:57,304 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:57,304 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:57,305 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:57,305 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:57,305 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:57,305 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:57,305 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:57,305 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:57,306 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:57,306 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:57,320 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:57,320 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:57,321 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:57,321 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:57,321 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:57,479 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:57,479 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:57,479 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:57,479 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:57,480 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:57,480 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:57,480 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:57,480 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:57,480 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:57,480 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:57,495 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:57,495 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:57,496 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:57,496 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:57,496 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:57,653 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:57,654 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:57,654 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:57,654 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:57,654 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:57,655 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:57,655 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:57,655 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:57,655 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:57,655 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:57,669 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:57,669 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:57,670 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:57,670 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:57,670 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:57,827 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:57,827 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:57,828 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:57,828 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:57,828 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:57,828 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:57,828 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:57,828 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:57,828 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:57,829 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:57,842 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:57,843 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:57,843 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:57,843 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:57,843 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:58,001 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,001 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,001 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,001 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,002 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:58,002 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:58,002 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:58,002 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:58,002 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:58,002 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:58,017 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,017 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,018 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:58,018 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:58,018 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:58,174 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,175 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,175 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,175 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,176 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:58,176 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:58,176 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:58,176 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:58,176 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:58,176 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:58,190 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,190 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,191 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:58,191 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:58,191 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:58,349 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,349 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,349 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,349 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,350 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:58,350 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:58,350 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:58,350 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:58,350 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:58,350 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:58,364 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,365 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,365 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:58,365 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:58,365 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:58,522 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,522 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,523 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,523 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,523 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:58,523 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:58,524 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:58,523 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:58,524 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:58,524 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:58,539 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,539 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,540 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:58,540 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:58,540 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:58,694 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,694 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,694 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,694 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,695 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:58,695 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:58,695 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:58,695 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:58,695 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:58,695 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:58,709 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,709 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,710 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:16:58,710 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:16:58,710 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:16:58,868 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,868 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,868 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,868 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,883 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,883 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,987 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:16:58,987 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-04 20:16:58,987 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:16:58,987 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-04 20:16:58,987 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: Node Disconnected.
+2025-11-04 20:16:58,988 - Marking the coordinator dead (node coordinator-1) for group central-control-group: Node Disconnected.
+2025-11-04 20:16:58,988 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,988 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,988 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,988 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,989 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:16:58,989 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-04 20:16:58,989 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: Node Disconnected.
+2025-11-04 20:16:58,989 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:16:58,989 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:16:58,989 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:16:58,990 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-04 20:16:58,990 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:16:58,990 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-04 20:16:58,991 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:16:58,991 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-04 20:16:58,994 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=0) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:16:58,994 - Auto offset commit failed for group central_processing_group: [Error 3] UnknownTopicOrPartitionError
+2025-11-04 20:16:58,994 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 20:16:58,994 - Auto offset commit failed for group central-control-group: [Error 16] NotCoordinatorForGroupError: central-control-group
+2025-11-04 20:16:58,994 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:16:59,097 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:16:59,106 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=0) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:16:59,106 - Auto offset commit failed for group central_processing_group: [Error 3] UnknownTopicOrPartitionError
+2025-11-04 20:16:59,199 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:16:59,216 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=0) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:16:59,216 - Auto offset commit failed for group central_processing_group: [Error 3] UnknownTopicOrPartitionError
+2025-11-04 20:16:59,301 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:16:59,325 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=0) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:16:59,325 - Auto offset commit failed for group central_processing_group: [Error 3] UnknownTopicOrPartitionError
+2025-11-04 20:16:59,404 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:16:59,436 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:16:59,436 - Auto offset commit failed for group central_processing_group: [Error 3] UnknownTopicOrPartitionError
+2025-11-04 20:16:59,437 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:16:59,507 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:16:59,509 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:16:59,509 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-04 20:16:59,510 - Auto offset commit failed for group central-control-group: CommitFailedError: Commit cannot be completed since the group has already
+            rebalanced and assigned the partitions to another member.
+            This means that the time between subsequent calls to poll()
+            was longer than the configured max_poll_interval_ms, which
+            typically implies that the poll loop is spending too much
+            time message processing. You can address this either by
+            increasing the rebalance timeout with max_poll_interval_ms,
+            or by reducing the maximum size of batches returned in poll()
+            with max_poll_records.
+            
+2025-11-04 20:16:59,510 - Offset commit failed: This is likely to cause duplicate message delivery
+Traceback (most recent call last):
+  File "C:\Users\luisi\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\kafka\coordinator\consumer.py", line 537, in _maybe_auto_commit_offsets_sync
+    self.commit_offsets_sync(self._subscription.all_consumed_offsets())
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\luisi\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\kafka\coordinator\consumer.py", line 530, in commit_offsets_sync
+    raise future.exception # pylint: disable-msg=raising-bad-type
+    ^^^^^^^^^^^^^^^^^^^^^^
+kafka.errors.CommitFailedError: CommitFailedError: Commit cannot be completed since the group has already
+            rebalanced and assigned the partitions to another member.
+            This means that the time between subsequent calls to poll()
+            was longer than the configured max_poll_interval_ms, which
+            typically implies that the poll loop is spending too much
+            time message processing. You can address this either by
+            increasing the rebalance timeout with max_poll_interval_ms,
+            or by reducing the maximum size of batches returned in poll()
+            with max_poll_records.
+            
+2025-11-04 20:16:59,520 - Revoking previously assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-04 20:16:59,521 - (Re-)joining group central-control-group
+2025-11-04 20:16:59,539 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:16:59,609 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:16:59,641 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:16:59,711 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:16:59,743 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:16:59,814 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:16:59,846 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:16:59,917 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:16:59,948 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:00,020 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:00,051 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:00,122 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:00,153 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:00,224 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:00,255 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:00,326 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:00,356 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:00,428 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:00,459 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:00,531 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:00,561 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:00,633 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:00,663 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:00,736 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:00,765 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:00,838 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:00,867 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:00,941 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:00,970 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:01,043 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:01,072 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:01,146 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:01,173 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:01,248 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:01,275 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:01,349 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:01,376 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:01,451 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:01,478 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:01,554 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:01,580 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:01,656 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:01,682 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:01,758 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:01,784 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:01,860 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:01,885 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:01,962 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:01,987 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:02,064 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:02,089 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:02,166 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:02,191 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:02,268 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:02,293 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:02,370 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:02,394 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:02,472 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:02,496 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:02,535 - Elected group leader -- performing partition assignments using range
+2025-11-04 20:17:02,548 - Successfully joined group central-control-group with generation 1
+2025-11-04 20:17:02,548 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-11-04 20:17:02,548 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-04 20:17:02,574 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:02,598 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:02,676 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:02,701 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:02,778 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:02,803 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:02,880 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:02,904 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:02,983 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:03,006 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:03,085 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:03,108 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:03,187 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:03,210 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:03,289 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:03,312 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:03,391 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:03,414 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:03,493 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:03,516 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:03,595 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:03,617 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:03,697 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:03,719 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:03,799 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:03,821 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:03,901 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:03,923 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:04,003 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:04,024 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:04,105 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:04,126 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:04,207 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:04,228 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:04,309 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:04,329 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:04,411 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:04,431 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:04,513 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:04,533 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:04,614 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:04,635 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:04,716 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:04,736 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:04,818 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:04,838 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:04,920 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:04,940 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:05,021 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:05,041 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:05,123 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:05,143 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:05,225 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:05,245 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:05,328 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:05,347 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:05,430 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:05,449 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:05,532 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:05,551 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:05,634 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:05,654 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:05,737 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:05,756 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:05,839 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:05,857 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:05,940 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:05,959 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:06,042 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:06,060 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:06,144 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:06,162 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:06,246 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:06,264 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:06,349 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:06,365 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:06,451 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:06,467 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:06,553 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:06,569 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:06,655 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:06,671 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:06,757 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:06,773 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:06,859 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:06,875 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:06,961 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:06,977 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:07,063 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:07,078 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:07,164 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:07,180 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:07,267 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:07,281 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:07,368 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:07,383 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:07,470 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:07,484 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:07,571 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:07,586 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:07,674 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:07,687 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:07,776 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:07,789 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:07,878 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:07,891 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:07,980 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:07,992 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:08,082 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:08,094 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:08,183 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:08,196 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:08,285 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:08,297 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:08,387 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:08,400 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:08,489 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:08,501 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:08,591 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:08,603 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:08,692 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:08,705 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:08,794 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:08,806 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:08,896 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:08,908 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:08,998 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:09,010 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:09,100 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:09,112 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:09,202 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:09,214 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:09,304 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:09,315 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:09,406 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:09,417 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:09,508 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:09,518 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:09,609 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:09,619 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:09,711 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:09,721 - Group central_processing_group failed to commit partition TopicPartition(topic='driver_requests', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:09,813 - Group central-telemetry-group failed to commit partition TopicPartition(topic='telemetria_cp', partition=1) at offset OffsetAndMetadata(offset=0, metadata=''): UnknownTopicOrPartitionError
+2025-11-04 20:17:50,688 - [20:17:50] Modo consola simple activado
+2025-11-04 20:17:50,693 - Updating subscribed topics to: ('central_commands',)
+2025-11-04 20:17:50,694 - Updating subscribed topics to: ('driver_requests',)
+2025-11-04 20:17:50,693 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-04 20:17:50,697 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:17:50,697 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:17:50,697 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:17:50,698 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:17:50,698 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:17:50,698 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:17:50,748 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:17:50,748 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:17:50,800 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:17:50,800 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-04 20:17:50,800 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:17:50,800 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-04 20:17:50,801 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 20:17:50,801 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-04 20:17:50,801 - Starting new heartbeat thread
+2025-11-04 20:17:50,801 - Starting new heartbeat thread
+2025-11-04 20:17:50,801 - Starting new heartbeat thread
+2025-11-04 20:17:50,801 - Revoking previously assigned partitions set() for group central-control-group
+2025-11-04 20:17:50,801 - Revoking previously assigned partitions set() for group central_processing_group
+2025-11-04 20:17:50,802 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:17:50,802 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-11-04 20:17:50,802 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:17:50,802 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:17:50,802 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:17:50,802 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:17:50,803 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:17:50,803 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:17:50,802 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:17:50,803 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:17:50,804 - Stopping heartbeat thread
+2025-11-04 20:17:50,805 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:17:50,903 - (Re-)joining group central-telemetry-group
+2025-11-04 20:17:50,903 - (Re-)joining group central-control-group
+2025-11-04 20:17:53,907 - Elected group leader -- performing partition assignments using range
+2025-11-04 20:17:53,907 - Elected group leader -- performing partition assignments using range
+2025-11-04 20:17:53,908 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:17:53,908 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:17:53,908 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:17:53,908 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:17:53,909 - Successfully joined group central-control-group with generation 3
+2025-11-04 20:17:53,909 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-11-04 20:17:53,909 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-04 20:17:53,909 - Successfully joined group central-telemetry-group with generation 1
+2025-11-04 20:17:53,909 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0)]
+2025-11-04 20:17:53,910 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0)} for group central-telemetry-group
+2025-11-04 20:18:25,536 - [20:18:25] [NUEVO CP] Registro inicial de CP_001.
+2025-11-04 20:18:25,537 - [20:18:25] CP registrado y conectado: CP_001 (C/Mayor, 45)
+2025-11-04 20:18:25,538 - [20:18:25] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-04 20:18:25,542 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:18:25,542 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:18:25,542 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 20:18:25,553 - [20:18:25] AUTH OK enviado a CP_001
+2025-11-04 20:18:25,702 - [20:18:25] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:18:35,705 - [20:18:35] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:18:45,707 - [20:18:45] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:18:55,711 - [20:18:55] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:19:05,712 - [20:19:05] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:19:15,715 - [20:19:15] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:19:25,718 - [20:19:25] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:19:35,721 - [20:19:35] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:19:45,723 - [20:19:45] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:19:55,726 - [20:19:55] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:20:05,731 - [20:20:05] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:20:15,732 - [20:20:15] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:20:25,734 - [20:20:25] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:20:35,737 - [20:20:35] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:20:45,741 - [20:20:45] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:20:55,743 - [20:20:55] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:21:05,746 - [20:21:05] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:21:15,748 - [20:21:15] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:21:25,751 - [20:21:25] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:21:35,754 - [20:21:35] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:21:45,757 - [20:21:45] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-04 20:21:47,351 - [20:21:47] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Conexión con Engine perdida)
+2025-11-04 20:21:47,352 - [20:21:47] [ESTADO] CP_001 -> AVERÍA (antes: ACTIVADO). Motivo: CP_001 (Conexión con Engine perdida)
+2025-11-04 20:21:50,063 - [20:21:50] Monitor desconectado: CP_001
+2025-11-04 20:21:50,070 - [20:21:50] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-04 20:21:50,074 - [20:21:50] [INFO] CP_001 podrá reconectarse automáticamente al reiniciar su Monitor.
+2025-11-04 20:22:05,632 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-04 20:22:05,632 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-04 20:22:05,632 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-04 20:22:05,632 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:22:05,632 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-04 20:22:05,633 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:22:05,632 - Marking the coordinator dead (node coordinator-1) for group central-control-group: Node Disconnected.
+2025-11-04 20:22:05,633 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-04 20:22:05,633 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-04 20:22:05,633 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:22:05,633 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:22:05,633 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:22:05,633 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: Node Disconnected.
+2025-11-04 20:22:05,633 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-04 20:22:05,634 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:22:05,634 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:22:05,693 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:22:05,693 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:22:05,694 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:22:05,694 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:22:05,694 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:22:05,725 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:22:05,725 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:22:05,726 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:22:05,726 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:22:05,726 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:22:05,735 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:22:05,735 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:22:05,735 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:22:05,735 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-04 20:22:05,859 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:22:05,860 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:22:05,860 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:22:05,861 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:22:05,861 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:22:05,890 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:22:05,890 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:22:05,891 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:22:05,891 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:22:05,891 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:22:05,906 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:22:05,906 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:22:05,907 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:22:05,907 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:22:05,907 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:22:06,030 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:22:06,031 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:22:06,032 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:22:06,032 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:22:06,032 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:22:06,062 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:22:06,063 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:22:06,063 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:22:06,063 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:22:06,063 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:22:06,077 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:22:06,078 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:22:06,078 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:22:06,078 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:22:06,079 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:22:06,201 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:22:06,201 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:22:06,202 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:22:06,202 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:22:06,202 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:22:06,231 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:22:06,232 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:22:06,233 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:22:06,233 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:22:06,233 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:22:06,247 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:22:06,247 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:22:06,248 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:22:06,248 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:22:06,248 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:22:06,371 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:22:06,372 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:22:06,373 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:22:06,373 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:22:06,373 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:22:06,395 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:22:06,395 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:22:06,396 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:22:06,396 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:22:06,396 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:22:06,410 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:22:06,410 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:22:06,541 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:22:06,542 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 20:22:06,556 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:22:06,556 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:22:06,556 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:22:06,556 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:22:06,572 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-04 20:22:06,572 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-04 20:22:06,572 - Node 1 connection failed -- refreshing metadata
+2025-11-04 20:22:06,572 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 20:22:06,730 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]

@@ -954,9 +954,12 @@ def notificar_driver(id_driver: str, evento: str, detalle=None):
 # =================================================================
 
 def monitorizar_actividad_cps(db_connection):
+    """Monitoriza la actividad de los CPs y publica heartbeats periódicos."""
+    contador_heartbeat = 0
     while not SHUTDOWN_REQUESTED:
         ahora = time.time()
         try:
+            # Verificar CPs sin actividad
             with TELEMETRIA_ACTUAL_LOCK:
                 for cp_id, data in list(TELEMETRIA_ACTUAL.items()):
                     ultima = data.get("timestamp", 0)
@@ -964,9 +967,81 @@ def monitorizar_actividad_cps(db_connection):
                         if CP_ESTADO.get(cp_id) != "DESCONECTADO":
                             registrar_evento(f"[⚠️] CP {cp_id} sin actividad → DESCONECTADO", "warn")
                             cambiar_estado_cp(cp_id, "DESCONECTADO", db_connection)
+            
+            # Publicar heartbeat cada 10 segundos (cada 2 ciclos de 5s)
+            contador_heartbeat += 1
+            if contador_heartbeat >= 2:
+                contador_heartbeat = 0
+                publicar_heartbeat_cps()
+                
         except Exception as e:
-            registrar_evento(f"[WARN] Heartbeat error: {e}", "warn")
+            registrar_evento(f"[WARN] Monitor error: {e}", "warn")
         time.sleep(5)
+
+
+def publicar_heartbeat_cps():
+    """Publica el estado actual de todos los CPs conectados para que el dashboard lo detecte."""
+    try:
+        with CONEXIONES_ACTIVAS_LOCK:
+            cps_conectados = list(CONEXIONES_ACTIVAS.keys())
+        
+        if not cps_conectados:
+            return
+        
+        print(f"[CENTRAL] 💓 Publicando heartbeat para {len(cps_conectados)} CP(s) conectados...")
+        
+        for cp_id in cps_conectados:
+            try:
+                # Obtener telemetría actual o crear una básica
+                with TELEMETRIA_ACTUAL_LOCK:
+                    telemetria = TELEMETRIA_ACTUAL.get(cp_id, {})
+                
+                # Asegurar que tenga los campos mínimos
+                if not telemetria or 'timestamp' not in telemetria:
+                    with CP_ESTADO_LOCK:
+                        estado = CP_ESTADO.get(cp_id, 'ACTIVADO')
+                    with CP_PRECIO_KWH_LOCK:
+                        precio = CP_PRECIO_KWH.get(cp_id, 0.0)
+                    
+                    telemetria = {
+                        'cp_id': cp_id,
+                        'estado_carga': estado,
+                        'estado': estado,
+                        'potencia_actual': 0.0,
+                        'energia_total': 0.0,
+                        'kw_entregados': 0.0,
+                        'tiempo_carga_s': 0,
+                        'timestamp': time.time(),
+                        'precio_kwh': precio,
+                        'tiene_sesion_activa': False,
+                        'driver_id_sesion': None
+                    }
+                else:
+                    # Actualizar timestamp del heartbeat
+                    telemetria = {**telemetria, 'timestamp': time.time()}
+                
+                # Enriquecer con información de sesión
+                with CP_SESION_DRIVER_ID_LOCK:
+                    telemetria['tiene_sesion_activa'] = cp_id in CP_SESION_DRIVER_ID
+                    telemetria['driver_id_sesion'] = CP_SESION_DRIVER_ID.get(cp_id, None)
+                
+                # Publicar en Kafka
+                if KAFKA_PRODUCER:
+                    KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria)
+                    print(f"[CENTRAL]   → {cp_id}: {telemetria.get('estado', 'N/D')}")
+                
+            except Exception as e:
+                print(f"[CENTRAL] ✗ Error publicando heartbeat de {cp_id}: {e}")
+        
+        # Flush para asegurar envío
+        if KAFKA_PRODUCER:
+            KAFKA_PRODUCER.flush(timeout=1)
+            print(f"[CENTRAL] ✓ Heartbeat enviado correctamente a Kafka")
+            
+    except Exception as e:
+        print(f"[CENTRAL] ✗ Error en publicar_heartbeat_cps: {e}")
+        import traceback
+        traceback.print_exc()
 def mostrar_estado_red():
     """Compat: imprime estado (modo no-TUI); preservado por si se usa sin Rich."""
     print("\n" + "="*60)
@@ -1120,12 +1195,19 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                 }
                 with TELEMETRIA_ACTUAL_LOCK:
                     TELEMETRIA_ACTUAL[cp_id] = telemetria_inicial
-                if KAFKA_PRODUCER:
-                    KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_inicial)
-                    KAFKA_PRODUCER.flush(timeout=1)
-                    print(f"[CENTRAL] Telemetría inicial de {cp_id} publicada en Kafka para dashboard")
+                
+                if KAFKA_PRODUCER is None:
+                    print(f"[CENTRAL] ✗ ADVERTENCIA: Productor Kafka no disponible, no se puede publicar telemetría de {cp_id}")
+                else:
+                    print(f"[CENTRAL] → Publicando telemetría inicial de {cp_id} en topic '{TELEMETRIA_TOPIC}'...")
+                    future = KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_inicial)
+                    KAFKA_PRODUCER.flush(timeout=2)
+                    print(f"[CENTRAL] ✓ Telemetría inicial de {cp_id} publicada correctamente en Kafka")
+                    registrar_evento(f"Telemetría inicial publicada para {cp_id}", "ok")
             except Exception as e:
-                print(f"[CENTRAL] No se pudo publicar telemetría inicial de {cp_id}: {e}")
+                print(f"[CENTRAL] ✗ ERROR publicando telemetría inicial de {cp_id}: {e}")
+                import traceback
+                traceback.print_exc()
             
             # --- LÓGICA BD: Insertar/Actualizar CP y marcar como ACTIVADO ---
             if db_connection and db_connection.is_connected():
@@ -1400,20 +1482,20 @@ def main():
     # Hacer accesible la conexión BD para el consumidor de telemetría (histórico)
     globals()['_DB_CONN_FOR_CONSUMER'] = db_connection
 
-    # Restaurar estado de CPs desde BD al inicio
+    # Al iniciar, marcar todos los CPs en BD como Desconectado
+    # Solo se marcarán como activos cuando se reconecten
     try:
         if db_connection and db_connection.is_connected():
             cursor = db_connection.cursor()
-            cursor.execute("SELECT cp_id, estado FROM charging_points")
-            for cp_id, estado in cursor.fetchall():
-                with CP_ESTADO_LOCK:
-                    CP_ESTADO[cp_id] = estado
-                with TELEMETRIA_ACTUAL_LOCK:
-                    TELEMETRIA_ACTUAL[cp_id] = {'timestamp': time.time(), 'estado': estado}
-                registrar_evento(f"[RESTORE] {cp_id} restaurado con estado {estado}", "ok")
+            # Marcar todos los CPs como desconectados (inicio limpio)
+            cursor.execute("UPDATE charging_points SET estado = 'Desconectado'")
+            db_connection.commit()
+            num_cps = cursor.rowcount
+            if num_cps > 0:
+                registrar_evento(f"[INICIO] {num_cps} CP(s) marcados como Desconectado. Esperando conexiones...", "info")
             cursor.close()
     except Exception as e:
-        registrar_evento(f"[ERROR] No se pudo restaurar el estado inicial: {e}", "error")
+        registrar_evento(f"[ERROR] No se pudo inicializar estado de CPs: {e}", "error")
 
     # Inicialización del productor Kafka para notificaciones
     inicializar_kafka_producer(args.kafka)
