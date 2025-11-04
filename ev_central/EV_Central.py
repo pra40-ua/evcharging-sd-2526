@@ -213,6 +213,28 @@ def _enviar_comando_cp(cp_id: str, orden: str) -> bool:
                         del CP_SESION_DRIVER_ID[cp_id]
             except Exception:
                 pass
+            
+            # Publicar telemetría actualizada sin sesión activa
+            try:
+                with TELEMETRIA_ACTUAL_LOCK:
+                    telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                telemetria_actualizada = {
+                    **telemetria_actual,
+                    'cp_id': cp_id,
+                    'estado_carga': 'PARADO',
+                    'estado': 'PARADO',
+                    'timestamp': time.time(),
+                    'tiene_sesion_activa': False,
+                    'driver_id_sesion': None
+                }
+                with TELEMETRIA_ACTUAL_LOCK:
+                    TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
+                if KAFKA_PRODUCER:
+                    KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                    KAFKA_PRODUCER.flush(timeout=1)
+                    print(f"[CENTRAL] Telemetría actualizada publicada para {cp_id} (sesión limpiada)")
+            except Exception as e:
+                print(f"[CENTRAL] No se pudo publicar telemetría actualizada: {e}")
         elif orden.upper() == 'START':
             # No cambiar estado aquí, dejar que la telemetría lo haga
             registrar_evento(f"Iniciando carga manual en {cp_id}")
@@ -656,6 +678,29 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                                 cambiar_estado_cp(cp_id, 'PRE-SUMINISTRO', db_connection)
                             except Exception:
                                 pass
+                            
+                            # Publicar telemetría actualizada con la sesión activa para el dashboard
+                            try:
+                                with TELEMETRIA_ACTUAL_LOCK:
+                                    telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                                telemetria_actualizada = {
+                                    **telemetria_actual,
+                                    'cp_id': cp_id,
+                                    'estado_carga': 'PRE-SUMINISTRO',
+                                    'estado': 'PRE-SUMINISTRO',
+                                    'timestamp': time.time(),
+                                    'tiene_sesion_activa': True,
+                                    'driver_id_sesion': id_driver
+                                }
+                                with TELEMETRIA_ACTUAL_LOCK:
+                                    TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
+                                if KAFKA_PRODUCER:
+                                    KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                                    KAFKA_PRODUCER.flush(timeout=1)
+                                    print(f"[CENTRAL] Telemetría actualizada publicada para {cp_id} (sesión activa: {id_driver})")
+                            except Exception as e:
+                                print(f"[CENTRAL] No se pudo publicar telemetría actualizada: {e}")
+                            
                             notificar_driver(id_driver, 'PENDIENTE_RESPUESTA_CP', {
                                 'mensaje': 'Solicitud enviada al CP. Esperando confirmación.'
                             })
@@ -1208,6 +1253,31 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                                 del CP_SESION_DRIVER_ID[cp_fin]
                     except Exception:
                         pass
+                    
+                    # Publicar telemetría actualizada sin sesión activa tras FIN
+                    try:
+                        with TELEMETRIA_ACTUAL_LOCK:
+                            telemetria_actual = TELEMETRIA_ACTUAL.get(cp_fin, {})
+                        telemetria_actualizada = {
+                            **telemetria_actual,
+                            'cp_id': cp_fin,
+                            'estado_carga': 'ACTIVADO',
+                            'estado': 'ACTIVADO',
+                            'timestamp': time.time(),
+                            'tiene_sesion_activa': False,
+                            'driver_id_sesion': None,
+                            'kw_entregados': 0.0,
+                            'potencia_actual': 0.0,
+                            'tiempo_carga_s': 0
+                        }
+                        with TELEMETRIA_ACTUAL_LOCK:
+                            TELEMETRIA_ACTUAL[cp_fin] = telemetria_actualizada
+                        if KAFKA_PRODUCER:
+                            KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                            KAFKA_PRODUCER.flush(timeout=1)
+                            print(f"[CENTRAL] Telemetría actualizada publicada para {cp_fin} tras FIN (sesión limpiada)")
+                    except Exception as e:
+                        print(f"[CENTRAL] No se pudo publicar telemetría actualizada tras FIN: {e}")
 
                 # [Lógica para manejar AVR, Suministro síncrono, etc.]
                 elif cod_op == 'AVR' and len(campos) >= 2:
