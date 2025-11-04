@@ -205,9 +205,20 @@ def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, 
                 print(f"[{cp_id}] <--- COMANDO CENTRAL RECIBIDO: {cod_op}")
                 # Encolamos la orden para que la ejecute el hilo HCK sobre su socket
                 try:
-                    # STOP no requiere argumentos
-                    COMMAND_QUEUE.put_nowait((cod_op, time.time(), None, None))
-                    print(f"[{cp_id}] Orden '{cod_op}' encolada para Engine.")
+                    if cod_op == 'START' and len(campos) >= 2:
+                        # START con parámetros (driver_id, kw_deseados) desde comando manual de web
+                        driver_id = campos[0] if len(campos) > 0 else None
+                        kw_deseados = campos[1] if len(campos) > 1 else None
+                        try:
+                            kw_float = float(kw_deseados) if kw_deseados else None
+                        except:
+                            kw_float = None
+                        COMMAND_QUEUE.put_nowait((cod_op, time.time(), kw_float, driver_id))
+                        print(f"[{cp_id}] Orden '{cod_op}' encolada para Engine con parámetros: driver={driver_id}, kW={kw_float}")
+                    else:
+                        # STOP o START sin parámetros
+                        COMMAND_QUEUE.put_nowait((cod_op, time.time(), None, None))
+                        print(f"[{cp_id}] Orden '{cod_op}' encolada para Engine.")
                 except Exception as e:
                     print(f"[{cp_id}] No se pudo encolar la orden {cod_op}: {e}")
                 # Notificar inmediatamente a la Central el estado administrativo

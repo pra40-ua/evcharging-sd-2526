@@ -171,8 +171,28 @@ def _enviar_comando_cp(cp_id: str, orden: str) -> bool:
         registrar_evento(f"ERROR: CP {cp_id} no conectado")
         return False
     try:
-        trama = construir_trama(orden, ['MANUAL'])
+        # Para START, necesitamos enviar los parámetros de sesión si existen
+        if orden.upper() == 'START':
+            # Obtener los parámetros de la sesión activa
+            with CP_SESION_DRIVER_ID_LOCK:
+                driver_id = CP_SESION_DRIVER_ID.get(cp_id)
+            with CP_SESION_OBJETIVO_KWH_LOCK:
+                kw_objetivo = CP_SESION_OBJETIVO_KWH.get(cp_id)
+            
+            if driver_id and kw_objetivo:
+                # Enviar START con parámetros para iniciar la carga manualmente
+                trama = construir_trama('START', [driver_id, str(kw_objetivo)])
+                registrar_evento(f"Enviando START manual a {cp_id} para iniciar carga (Driver: {driver_id}, kW: {kw_objetivo})")
+            else:
+                # Sin sesión activa, no se puede iniciar
+                registrar_evento(f"ERROR: No hay sesión activa en {cp_id}, no se puede enviar START", "error")
+                return False
+        else:
+            # Para STOP y otros comandos
+            trama = construir_trama(orden, ['MANUAL'])
+        
         cp_socket.sendall(trama)
+        
         if orden.upper() == 'STOP':
             with CP_ESTADO_MANUAL_LOCK:
                 CP_ESTADO_MANUAL[cp_id] = 'PARADO'
@@ -194,12 +214,9 @@ def _enviar_comando_cp(cp_id: str, orden: str) -> bool:
             except Exception:
                 pass
         elif orden.upper() == 'START':
-            with CP_ESTADO_MANUAL_LOCK:
-                CP_ESTADO_MANUAL[cp_id] = 'ACTIVADO'
-            try:
-                cambiar_estado_cp(cp_id, 'ACTIVADO')
-            except Exception:
-                pass
+            # No cambiar estado aquí, dejar que la telemetría lo haga
+            registrar_evento(f"Iniciando carga manual en {cp_id}")
+        
         registrar_evento(f"Comando {orden} enviado a {cp_id}")
         return True
     except Exception as e:
@@ -328,6 +345,12 @@ def consumir_telemetria_kafka(broker_list: str):
                     # Asegurar timestamp presente para heartbeat/TUI
                     if 'timestamp' not in telemetria or not telemetria.get('timestamp'):
                         telemetria['timestamp'] = time.time()
+                    
+                    # Enriquecer telemetría con información de sesión activa
+                    with CP_SESION_DRIVER_ID_LOCK:
+                        telemetria['tiene_sesion_activa'] = cp_id in CP_SESION_DRIVER_ID
+                        telemetria['driver_id_sesion'] = CP_SESION_DRIVER_ID.get(cp_id, None)
+                    
                     with TELEMETRIA_ACTUAL_LOCK:
                         TELEMETRIA_ACTUAL[cp_id] = telemetria
 
@@ -1021,12 +1044,6 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     pass
             else:
                 registrar_evento(f"[NUEVO CP] Registro inicial de {cp_id}.")
-
-            
-            # --- NUEVA LÓGICA: Almacenar la conexión ---
-            with CONEXIONES_ACTIVAS_LOCK:
-                CONEXIONES_ACTIVAS[cp_id] = conn
-                print(f"[CENTRAL] Socket de {cp_id} guardado. Total: {len(CONEXIONES_ACTIVAS)}")
             registrar_evento(f"CP registrado y conectado: {cp_id} ({ubicacion})")
             # Estado: ACTIVADO tras registro exitoso
             try:
@@ -1052,7 +1069,9 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     'tiempo_carga_s': 0,
                     'timestamp': time.time(),
                     'ubicacion': ubicacion,
-                    'precio_kwh': precio_kwh
+                    'precio_kwh': precio_kwh,
+                    'tiene_sesion_activa': False,
+                    'driver_id_sesion': None
                 }
                 with TELEMETRIA_ACTUAL_LOCK:
                     TELEMETRIA_ACTUAL[cp_id] = telemetria_inicial
@@ -1083,6 +1102,11 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                 conn.sendall(respuesta_trama)
                 print(f"[CENTRAL] <- Enviada respuesta AUTH: OK a {cp_id} (sin BD)")
                 registrar_evento(f"AUTH OK enviado a {cp_id} (sin BD)")
+            
+            # --- ALMACENAR CONEXIÓN SOLO DESPUÉS DE COMPLETAR AUTENTICACIÓN ---
+            with CONEXIONES_ACTIVAS_LOCK:
+                CONEXIONES_ACTIVAS[cp_id] = conn
+                print(f"[CENTRAL] Socket de {cp_id} guardado. Total: {len(CONEXIONES_ACTIVAS)}")
 
         else:
             print(f"[CENTRAL] Error: Mensaje inicial no válido ({cod_op}). Cerrando conexión.")

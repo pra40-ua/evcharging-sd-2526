@@ -207,11 +207,15 @@ def api_cps():
                     cp_info['potencia_kw'] = tel.get('potencia_actual', 0)
                     cp_info['tiempo_carga_s'] = tel.get('tiempo_carga_s', 0)
                     cp_info['timestamp_telemetria'] = tel.get('timestamp_str', '-')
+                    cp_info['tiene_sesion_activa'] = tel.get('tiene_sesion_activa', False)
+                    cp_info['driver_id_sesion'] = tel.get('driver_id_sesion', None)
                 else:
                     cp_info['energia_kwh'] = 0
                     cp_info['potencia_kw'] = 0
                     cp_info['tiempo_carga_s'] = 0
                     cp_info['timestamp_telemetria'] = '-'
+                    cp_info['tiene_sesion_activa'] = False
+                    cp_info['driver_id_sesion'] = None
             
             cps_list.append(cp_info)
     
@@ -696,6 +700,7 @@ def crear_templates():
             cps.forEach(cp => {
                 const estado = (cp.estado || 'DESCONOCIDO').toUpperCase();
                 const estadoClass = 'status-' + estado.toLowerCase().replace('í', 'i').replace('-', '-');
+                const tieneSesion = cp.tiene_sesion_activa || false;
                 
                 html += '<tr>';
                 html += `<td><strong>${cp.cp_id}</strong></td>`;
@@ -706,18 +711,22 @@ def crear_templates():
                 html += `<td>${cp.timestamp_telemetria || '-'}</td>`;
                 html += '<td>';
                 
-                // Botones de control según el estado
+                // Botones de control según el estado y si hay sesión activa
                 if (estado === 'DESCONECTADO' || estado === 'AVERIADO' || estado === 'AVERÍA') {
                     html += '<button class="btn-control" disabled>Sin Conexión</button>';
                 } else if (estado === 'PARADO') {
                     html += `<button class="btn-control btn-start" onclick="enviarComando('${cp.cp_id}', 'START')">▶ Reanudar</button>`;
-                } else if (estado === 'SUMINISTRANDO' || estado === 'PRE-SUMINISTRO') {
+                } else if (estado === 'SUMINISTRANDO') {
                     html += `<button class="btn-control btn-stop" onclick="enviarComando('${cp.cp_id}', 'STOP')">⏸ Detener</button>`;
-                } else if (estado === 'ACTIVADO') {
-                    html += `<button class="btn-control btn-stop" onclick="enviarComando('${cp.cp_id}', 'STOP')">⏸ Detener</button>`;
+                } else if (estado === 'ACTIVADO' || estado === 'PRE-SUMINISTRO') {
+                    // Solo mostrar botones si hay sesión de driver activa
+                    if (tieneSesion) {
+                        html += `<button class="btn-control btn-start" onclick="enviarComando('${cp.cp_id}', 'START')">▶ Iniciar Carga</button>`;
+                    } else {
+                        html += '<span style="color: #999; font-size: 12px;">En espera de solicitud</span>';
+                    }
                 } else {
-                    html += `<button class="btn-control btn-start" onclick="enviarComando('${cp.cp_id}', 'START')">▶ Activar</button>`;
-                    html += `<button class="btn-control btn-stop" onclick="enviarComando('${cp.cp_id}', 'STOP')">⏸ Detener</button>`;
+                    html += '<span style="color: #999; font-size: 12px;">-</span>';
                 }
                 
                 html += '</td>';
