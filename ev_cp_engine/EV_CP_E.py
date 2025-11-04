@@ -43,7 +43,7 @@ def initialize_producer(broker: str):
     return TELEMETRY_PRODUCER
 
 # --- FUNCIÓN DE TELEMETRÍA ---
-def generar_y_enviar_telemetria(cp_id: str, estado_carga: str, kw_entregados: float, tiempo_carga_s: int):
+def generar_y_enviar_telemetria(cp_id: str, estado_carga: str, kw_entregados: float, tiempo_carga_s: int, potencia_kw: float = 0.0):
     """
     Crea el mensaje de telemetría y lo envía al topic 'cp_telemetry'.
     """
@@ -55,6 +55,7 @@ def generar_y_enviar_telemetria(cp_id: str, estado_carga: str, kw_entregados: fl
         'timestamp': time.time(),
         'estado_carga': estado_carga, # Ej: 'CONECTADO', 'CARGANDO', 'FINALIZADO'
         'kw_entregados': kw_entregados,
+        'potencia_actual': potencia_kw,
         'tiempo_carga_s': tiempo_carga_s
     }
 
@@ -96,11 +97,13 @@ def bucle_telemetria(cp_id: str, stop_event: threading.Event):
             estado = 'CARGANDO'
             kw = round(kw_acumulados_global, 2)
             secs = segundos_global
+            potencia = 3.0  # Potencia constante simulada en kW
         generar_y_enviar_telemetria(
             cp_id=cp_id,
             estado_carga=estado,
             kw_entregados=kw,
-            tiempo_carga_s=secs
+            tiempo_carga_s=secs,
+            potencia_kw=potencia
         )
         # Auto-stop cuando se alcance el objetivo
         try:
@@ -120,7 +123,8 @@ def bucle_telemetria(cp_id: str, stop_event: threading.Event):
         cp_id=cp_id,
         estado_carga=estado_final,
         kw_entregados=kw_final,
-        tiempo_carga_s=secs_final
+        tiempo_carga_s=secs_final,
+        potencia_kw=0.0
     )
     # Si el stop fue por objetivo alcanzado, enviar FIN a Monitor
     try:

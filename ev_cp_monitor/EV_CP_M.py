@@ -351,6 +351,10 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                     central_socket.sendall(trama_state)
                 except Exception as e:
                     print(f"[{cp_id}] Error reenviando STATE a Central: {e}")
+            elif cod_op == 'ACK':
+                # ACK puede llegar fuera de secuencia si hubo un comando previo
+                detalle = campos[0] if campos else 'Sin detalle'
+                print(f"[{cp_id}] ACK tardío del Engine recibido: {detalle}")
             else:
                 print(f"[{cp_id}] Trama inesperada desde Engine: {cod_op}")
 

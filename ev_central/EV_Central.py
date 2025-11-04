@@ -77,7 +77,11 @@ EVENT_LOG_LOCK = threading.Lock()
 # =================================================================
 
 console = Console()
-logging.basicConfig(filename='/app/central.log', level=logging.INFO, format='%(asctime)s - %(message)s')
+# Usar una ruta compatible con Windows y Linux
+log_dir = os.path.join(os.path.dirname(__file__), '..', 'logs')
+os.makedirs(log_dir, exist_ok=True)
+log_file = os.path.join(log_dir, 'central.log')
+logging.basicConfig(filename=log_file, level=logging.INFO, format='%(asctime)s - %(message)s')
 
 def registrar_evento(mensaje: str, tipo="info") -> None:
     """Registro de eventos con Rich + logging a archivo."""
@@ -1035,6 +1039,29 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     CP_PRECIO_KWH[cp_id] = precio_kwh
             except Exception:
                 pass
+            
+            # --- PUBLICAR ESTADO INICIAL EN KAFKA PARA QUE EL DASHBOARD LO DETECTE ---
+            try:
+                telemetria_inicial = {
+                    'cp_id': cp_id,
+                    'estado_carga': 'ACTIVADO',
+                    'estado': 'ACTIVADO',
+                    'potencia_actual': 0.0,
+                    'energia_total': 0.0,
+                    'kw_entregados': 0.0,
+                    'tiempo_carga_s': 0,
+                    'timestamp': time.time(),
+                    'ubicacion': ubicacion,
+                    'precio_kwh': precio_kwh
+                }
+                with TELEMETRIA_ACTUAL_LOCK:
+                    TELEMETRIA_ACTUAL[cp_id] = telemetria_inicial
+                if KAFKA_PRODUCER:
+                    KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_inicial)
+                    KAFKA_PRODUCER.flush(timeout=1)
+                    print(f"[CENTRAL] Telemetría inicial de {cp_id} publicada en Kafka para dashboard")
+            except Exception as e:
+                print(f"[CENTRAL] No se pudo publicar telemetría inicial de {cp_id}: {e}")
             
             # --- LÓGICA BD: Insertar/Actualizar CP y marcar como ACTIVADO ---
             if db_connection and db_connection.is_connected():

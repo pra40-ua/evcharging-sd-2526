@@ -1,0 +1,427 @@
+2025-11-04 19:22:59,791 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-04 19:22:59,791 - Updating subscribed topics to: ('driver_requests',)
+2025-11-04 19:22:59,792 - [19:22:59] Modo consola simple activado
+2025-11-04 19:22:59,792 - Updating subscribed topics to: ('central_commands',)
+2025-11-04 19:22:59,794 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 19:22:59,794 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 19:22:59,794 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 19:23:53,397 - [19:23:53] [RESTORE] CP001 restaurado con estado Desconectado
+2025-11-04 19:23:53,398 - [19:23:53] [RESTORE] CP_001 restaurado con estado Desconectado
+2025-11-04 19:23:53,402 - [19:23:53] Modo consola simple activado
+2025-11-04 19:23:53,409 - Updating subscribed topics to: ('driver_requests',)
+2025-11-04 19:23:53,411 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-04 19:23:53,412 - Updating subscribed topics to: ('central_commands',)
+2025-11-04 19:23:53,414 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 19:23:53,414 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 19:23:53,415 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 19:23:53,415 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 19:23:53,415 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 19:23:53,415 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 19:23:53,454 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 19:23:53,454 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 19:23:53,622 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:53,622 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-04 19:23:53,622 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:53,622 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-04 19:23:53,622 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:53,622 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-04 19:23:53,622 - Starting new heartbeat thread
+2025-11-04 19:23:53,622 - Starting new heartbeat thread
+2025-11-04 19:23:53,622 - Starting new heartbeat thread
+2025-11-04 19:23:53,623 - Revoking previously assigned partitions set() for group central_processing_group
+2025-11-04 19:23:53,623 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-11-04 19:23:53,623 - Revoking previously assigned partitions set() for group central-control-group
+2025-11-04 19:23:53,623 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 19:23:53,623 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 19:23:53,623 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 19:23:53,623 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 19:23:53,624 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 19:23:53,624 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 19:23:53,624 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 19:23:53,624 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 19:23:53,624 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 19:23:53,724 - (Re-)joining group central-telemetry-group
+2025-11-04 19:23:53,725 - (Re-)joining group central_processing_group
+2025-11-04 19:23:53,725 - (Re-)joining group central-control-group
+2025-11-04 19:23:53,728 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 19:23:53,728 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 19:23:53,729 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 19:23:53,829 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 19:23:53,829 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 19:23:53,830 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 19:23:53,829 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 19:23:53,830 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 19:23:53,830 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 19:23:53,932 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:53,932 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-04 19:23:53,932 - (Re-)joining group central_processing_group
+2025-11-04 19:23:53,932 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:53,933 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-04 19:23:53,933 - (Re-)joining group central-control-group
+2025-11-04 19:23:53,932 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:53,933 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-04 19:23:53,933 - (Re-)joining group central-telemetry-group
+2025-11-04 19:23:53,934 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 19:23:53,934 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 19:23:53,934 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 19:23:54,036 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:54,036 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-04 19:23:54,036 - (Re-)joining group central-telemetry-group
+2025-11-04 19:23:54,036 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:54,037 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-04 19:23:54,037 - (Re-)joining group central_processing_group
+2025-11-04 19:23:54,037 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:54,037 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-04 19:23:54,037 - (Re-)joining group central-control-group
+2025-11-04 19:23:54,037 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 19:23:54,038 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 19:23:54,038 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 19:23:54,140 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:54,140 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-04 19:23:54,140 - (Re-)joining group central-telemetry-group
+2025-11-04 19:23:54,140 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:54,140 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-04 19:23:54,140 - (Re-)joining group central-control-group
+2025-11-04 19:23:54,140 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:54,140 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-04 19:23:54,140 - (Re-)joining group central_processing_group
+2025-11-04 19:23:54,141 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 19:23:54,141 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 19:23:54,142 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 19:23:54,243 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:54,244 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-04 19:23:54,244 - (Re-)joining group central-control-group
+2025-11-04 19:23:54,244 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:54,244 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-04 19:23:54,244 - (Re-)joining group central-telemetry-group
+2025-11-04 19:23:54,244 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:54,244 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-04 19:23:54,244 - (Re-)joining group central_processing_group
+2025-11-04 19:23:54,245 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 19:23:54,245 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 19:23:54,245 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 19:23:54,347 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:54,347 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-04 19:23:54,347 - (Re-)joining group central-control-group
+2025-11-04 19:23:54,347 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:54,347 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-04 19:23:54,347 - (Re-)joining group central_processing_group
+2025-11-04 19:23:54,347 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:54,348 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-04 19:23:54,348 - (Re-)joining group central-telemetry-group
+2025-11-04 19:23:54,348 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 19:23:54,348 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 19:23:54,349 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-04 19:23:54,450 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:54,450 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-04 19:23:54,450 - (Re-)joining group central-control-group
+2025-11-04 19:23:54,450 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:54,451 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-04 19:23:54,451 - (Re-)joining group central-telemetry-group
+2025-11-04 19:23:54,450 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-04 19:23:54,451 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-04 19:23:54,451 - (Re-)joining group central_processing_group
+2025-11-04 19:23:57,466 - Elected group leader -- performing partition assignments using range
+2025-11-04 19:23:57,467 - Elected group leader -- performing partition assignments using range
+2025-11-04 19:23:57,468 - Elected group leader -- performing partition assignments using range
+2025-11-04 19:23:57,480 - Successfully joined group central-control-group with generation 1
+2025-11-04 19:23:57,481 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-11-04 19:23:57,481 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-04 19:23:57,481 - Successfully joined group central-telemetry-group with generation 1
+2025-11-04 19:23:57,481 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)]
+2025-11-04 19:23:57,481 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=2), TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1)} for group central-telemetry-group
+2025-11-04 19:23:57,481 - Successfully joined group central_processing_group with generation 1
+2025-11-04 19:23:57,481 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)]
+2025-11-04 19:23:57,481 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2), TopicPartition(topic='driver_requests', partition=0)} for group central_processing_group
+2025-11-04 19:24:08,409 - [19:24:08] [\u26a0\ufe0f] CP CP001 sin actividad \u2192 DESCONECTADO
+2025-11-04 19:24:08,411 - [19:24:08] [ESTADO] CP001 -> DESCONECTADO (antes: Desconectado).
+2025-11-04 19:24:08,418 - [19:24:08] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-04 19:24:08,419 - [19:24:08] [ESTADO] CP_001 -> DESCONECTADO (antes: Desconectado).
+2025-11-04 19:24:21,627 - [19:24:21] Solicitud de recarga recibida
+2025-11-04 19:24:21,691 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-04 19:24:21,691 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-04 19:24:21,691 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-04 19:24:24,555 - [19:24:24] [NUEVO CP] Registro inicial de CP_001.
+2025-11-04 19:24:24,557 - [19:24:24] CP registrado y conectado: CP_001 (C/Mayor, 45)
+2025-11-04 19:24:24,558 - [19:24:24] [ESTADO] CP_001 -> ACTIVADO (antes: DESCONECTADO).
+2025-11-04 19:24:24,569 - [19:24:24] AUTH OK enviado a CP_001
+2025-11-04 19:24:28,427 - [19:24:28] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-04 19:24:28,429 - [19:24:28] [ESTADO] CP_001 -> DESCONECTADO (antes: ACTIVADO).
+2025-11-04 19:24:52,401 - [19:24:52] [ESTADO] CP_001 -> ACTIVADO (antes: DESCONECTADO).
+2025-11-04 19:24:52,402 - [19:24:52] Comando START enviado a CP_001
+2025-11-04 19:24:52,418 - [19:24:52] [CONTROL] Estado reportado por CP_001: ACTIVADO
+2025-11-04 19:24:52,419 - [19:24:52] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-04 19:24:53,437 - [19:24:53] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-04 19:24:53,439 - [19:24:53] [ESTADO] CP_001 -> DESCONECTADO (antes: ACTIVADO).
+2025-11-04 19:24:53,726 - [19:24:53] Telemetría recibida de CP_001: est=CARGANDO, E=0.05, P=N/D
+2025-11-04 19:24:53,728 - [19:24:53] [ESTADO] CP_001 -> SUMINISTRANDO (antes: DESCONECTADO).
+2025-11-04 19:24:54,710 - [19:24:54] Telemetría recibida de CP_001: est=CARGANDO, E=0.10, P=N/D
+2025-11-04 19:24:54,712 - [19:24:54] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:24:55,710 - [19:24:55] Telemetría recibida de CP_001: est=CARGANDO, E=0.15, P=N/D
+2025-11-04 19:24:55,712 - [19:24:55] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:24:56,711 - [19:24:56] Telemetría recibida de CP_001: est=CARGANDO, E=0.20, P=N/D
+2025-11-04 19:24:56,714 - [19:24:56] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:24:57,713 - [19:24:57] Telemetría recibida de CP_001: est=CARGANDO, E=0.25, P=N/D
+2025-11-04 19:24:57,716 - [19:24:57] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:24:58,715 - [19:24:58] Telemetría recibida de CP_001: est=CARGANDO, E=0.30, P=N/D
+2025-11-04 19:24:58,717 - [19:24:58] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:24:59,714 - [19:24:59] Telemetría recibida de CP_001: est=CARGANDO, E=0.35, P=N/D
+2025-11-04 19:24:59,717 - [19:24:59] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:00,718 - [19:25:00] Telemetría recibida de CP_001: est=CARGANDO, E=0.40, P=N/D
+2025-11-04 19:25:00,721 - [19:25:00] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:01,718 - [19:25:01] Telemetría recibida de CP_001: est=CARGANDO, E=0.45, P=N/D
+2025-11-04 19:25:01,721 - [19:25:01] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:02,718 - [19:25:02] Telemetría recibida de CP_001: est=CARGANDO, E=0.50, P=N/D
+2025-11-04 19:25:02,721 - [19:25:02] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:03,721 - [19:25:03] Telemetría recibida de CP_001: est=CARGANDO, E=0.55, P=N/D
+2025-11-04 19:25:03,724 - [19:25:03] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:04,722 - [19:25:04] Telemetría recibida de CP_001: est=CARGANDO, E=0.60, P=N/D
+2025-11-04 19:25:04,724 - [19:25:04] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:05,723 - [19:25:05] Telemetría recibida de CP_001: est=CARGANDO, E=0.65, P=N/D
+2025-11-04 19:25:05,726 - [19:25:05] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:06,725 - [19:25:06] Telemetría recibida de CP_001: est=CARGANDO, E=0.70, P=N/D
+2025-11-04 19:25:06,728 - [19:25:06] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:07,728 - [19:25:07] Telemetría recibida de CP_001: est=CARGANDO, E=0.75, P=N/D
+2025-11-04 19:25:07,731 - [19:25:07] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:08,127 - [19:25:08] [CONTROL WEB] Comando STOP para CP_001 desde web_dashboard
+2025-11-04 19:25:08,130 - [19:25:08] [ESTADO] CP_001 -> PARADO (antes: SUMINISTRANDO).
+2025-11-04 19:25:08,132 - [19:25:08] Comando STOP enviado a CP_001
+2025-11-04 19:25:08,152 - [19:25:08] [CONTROL] Estado reportado por CP_001: PARADO
+2025-11-04 19:25:08,154 - [19:25:08] [ESTADO] CP_001 -> PARADO.
+2025-11-04 19:25:08,730 - [19:25:08] Telemetría recibida de CP_001: est=CARGANDO, E=0.80, P=N/D
+2025-11-04 19:25:09,730 - [19:25:09] Telemetría recibida de CP_001: est=REPOSO, E=0.85, P=N/D
+2025-11-04 19:25:09,737 - [19:25:09] Telemetría recibida de CP_001: est=CARGANDO, E=0.85, P=N/D
+2025-11-04 19:25:09,771 - [19:25:09] [CONTROL] Fin de carga recibido de CP_001: 0.85 kWh, 0.41 €
+2025-11-04 19:25:09,773 - Topic driver_status_UNKNOWN not found in cluster metadata
+2025-11-04 19:25:09,880 - [19:25:09] [ESTADO] CP_001 -> ACTIVADO (antes: PARADO).
+2025-11-04 19:25:12,550 - [19:25:12] [CONTROL WEB] Comando START para CP_001 desde web_dashboard
+2025-11-04 19:25:12,552 - [19:25:12] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-04 19:25:12,553 - [19:25:12] Comando START enviado a CP_001
+2025-11-04 19:25:12,581 - [19:25:12] [CONTROL] Estado reportado por CP_001: ACTIVADO
+2025-11-04 19:25:12,582 - [19:25:12] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-04 19:25:13,785 - [19:25:13] Telemetría recibida de CP_001: est=CARGANDO, E=0.05, P=N/D
+2025-11-04 19:25:13,788 - [19:25:13] [ESTADO] CP_001 -> SUMINISTRANDO (antes: ACTIVADO).
+2025-11-04 19:25:14,787 - [19:25:14] Telemetría recibida de CP_001: est=CARGANDO, E=0.10, P=N/D
+2025-11-04 19:25:14,790 - [19:25:14] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:15,788 - [19:25:15] Telemetría recibida de CP_001: est=CARGANDO, E=0.15, P=N/D
+2025-11-04 19:25:15,790 - [19:25:15] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:16,793 - [19:25:16] Telemetría recibida de CP_001: est=CARGANDO, E=0.20, P=N/D
+2025-11-04 19:25:16,795 - [19:25:16] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:17,793 - [19:25:17] Telemetría recibida de CP_001: est=CARGANDO, E=0.25, P=N/D
+2025-11-04 19:25:17,797 - [19:25:17] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:18,795 - [19:25:18] Telemetría recibida de CP_001: est=CARGANDO, E=0.30, P=N/D
+2025-11-04 19:25:18,797 - [19:25:18] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:19,793 - [19:25:19] Telemetría recibida de CP_001: est=CARGANDO, E=0.35, P=N/D
+2025-11-04 19:25:19,795 - [19:25:19] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:20,795 - [19:25:20] Telemetría recibida de CP_001: est=CARGANDO, E=0.40, P=N/D
+2025-11-04 19:25:20,798 - [19:25:20] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:21,801 - [19:25:21] Telemetría recibida de CP_001: est=CARGANDO, E=0.45, P=N/D
+2025-11-04 19:25:21,803 - [19:25:21] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:22,799 - [19:25:22] Telemetría recibida de CP_001: est=CARGANDO, E=0.50, P=N/D
+2025-11-04 19:25:22,802 - [19:25:22] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:23,801 - [19:25:23] Telemetría recibida de CP_001: est=CARGANDO, E=0.55, P=N/D
+2025-11-04 19:25:23,803 - [19:25:23] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:24,802 - [19:25:24] Telemetría recibida de CP_001: est=CARGANDO, E=0.60, P=N/D
+2025-11-04 19:25:24,804 - [19:25:24] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:24,988 - [19:25:24] [CONTROL WEB] Comando START para CP_001 desde web_dashboard
+2025-11-04 19:25:24,990 - [19:25:24] [ESTADO] CP_001 -> ACTIVADO (antes: SUMINISTRANDO).
+2025-11-04 19:25:24,991 - [19:25:24] Comando START enviado a CP_001
+2025-11-04 19:25:24,998 - [19:25:24] [CONTROL] Estado reportado por CP_001: ACTIVADO
+2025-11-04 19:25:24,999 - [19:25:24] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-04 19:25:25,803 - [19:25:25] Telemetría recibida de CP_001: est=CARGANDO, E=0.65, P=N/D
+2025-11-04 19:25:25,805 - [19:25:25] [ESTADO] CP_001 -> SUMINISTRANDO (antes: ACTIVADO).
+2025-11-04 19:25:26,803 - [19:25:26] Telemetría recibida de CP_001: est=CARGANDO, E=0.05, P=N/D
+2025-11-04 19:25:26,805 - [19:25:26] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:27,804 - [19:25:27] Telemetría recibida de CP_001: est=CARGANDO, E=0.10, P=N/D
+2025-11-04 19:25:27,807 - [19:25:27] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:28,807 - [19:25:28] Telemetría recibida de CP_001: est=CARGANDO, E=0.15, P=N/D
+2025-11-04 19:25:28,810 - [19:25:28] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:29,809 - [19:25:29] Telemetría recibida de CP_001: est=CARGANDO, E=0.20, P=N/D
+2025-11-04 19:25:29,811 - [19:25:29] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:30,810 - [19:25:30] Telemetría recibida de CP_001: est=CARGANDO, E=0.25, P=N/D
+2025-11-04 19:25:30,812 - [19:25:30] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:31,813 - [19:25:31] Telemetría recibida de CP_001: est=CARGANDO, E=0.30, P=N/D
+2025-11-04 19:25:31,815 - [19:25:31] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:32,812 - [19:25:32] Telemetría recibida de CP_001: est=CARGANDO, E=0.35, P=N/D
+2025-11-04 19:25:32,814 - [19:25:32] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:33,814 - [19:25:33] Telemetría recibida de CP_001: est=CARGANDO, E=0.40, P=N/D
+2025-11-04 19:25:33,817 - [19:25:33] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:34,814 - [19:25:34] Telemetría recibida de CP_001: est=CARGANDO, E=0.45, P=N/D
+2025-11-04 19:25:34,817 - [19:25:34] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:35,819 - [19:25:35] Telemetría recibida de CP_001: est=CARGANDO, E=0.50, P=N/D
+2025-11-04 19:25:35,823 - [19:25:35] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:36,823 - [19:25:36] Telemetría recibida de CP_001: est=CARGANDO, E=0.55, P=N/D
+2025-11-04 19:25:36,826 - [19:25:36] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:37,819 - [19:25:37] Telemetría recibida de CP_001: est=CARGANDO, E=0.60, P=N/D
+2025-11-04 19:25:37,821 - [19:25:37] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:38,825 - [19:25:38] Telemetría recibida de CP_001: est=CARGANDO, E=0.65, P=N/D
+2025-11-04 19:25:38,827 - [19:25:38] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:39,822 - [19:25:39] Telemetría recibida de CP_001: est=CARGANDO, E=0.70, P=N/D
+2025-11-04 19:25:39,825 - [19:25:39] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:40,826 - [19:25:40] Telemetría recibida de CP_001: est=CARGANDO, E=0.75, P=N/D
+2025-11-04 19:25:40,829 - [19:25:40] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:41,831 - [19:25:41] Telemetría recibida de CP_001: est=CARGANDO, E=0.80, P=N/D
+2025-11-04 19:25:41,834 - [19:25:41] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:42,828 - [19:25:42] Telemetría recibida de CP_001: est=CARGANDO, E=0.85, P=N/D
+2025-11-04 19:25:42,831 - [19:25:42] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:43,829 - [19:25:43] Telemetría recibida de CP_001: est=CARGANDO, E=0.90, P=N/D
+2025-11-04 19:25:43,832 - [19:25:43] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:44,830 - [19:25:44] Telemetría recibida de CP_001: est=CARGANDO, E=0.95, P=N/D
+2025-11-04 19:25:44,833 - [19:25:44] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:45,832 - [19:25:45] Telemetría recibida de CP_001: est=CARGANDO, E=1.00, P=N/D
+2025-11-04 19:25:45,834 - [19:25:45] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:46,833 - [19:25:46] Telemetría recibida de CP_001: est=CARGANDO, E=1.05, P=N/D
+2025-11-04 19:25:46,836 - [19:25:46] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:47,835 - [19:25:47] Telemetría recibida de CP_001: est=CARGANDO, E=1.10, P=N/D
+2025-11-04 19:25:47,838 - [19:25:47] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:48,839 - [19:25:48] Telemetría recibida de CP_001: est=CARGANDO, E=1.15, P=N/D
+2025-11-04 19:25:48,842 - [19:25:48] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:49,837 - [19:25:49] Telemetría recibida de CP_001: est=CARGANDO, E=1.20, P=N/D
+2025-11-04 19:25:49,840 - [19:25:49] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:50,843 - [19:25:50] Telemetría recibida de CP_001: est=CARGANDO, E=1.25, P=N/D
+2025-11-04 19:25:50,845 - [19:25:50] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:51,844 - [19:25:51] Telemetría recibida de CP_001: est=CARGANDO, E=1.30, P=N/D
+2025-11-04 19:25:51,846 - [19:25:51] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:52,840 - [19:25:52] Telemetría recibida de CP_001: est=CARGANDO, E=1.35, P=N/D
+2025-11-04 19:25:52,842 - [19:25:52] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:53,841 - [19:25:53] Telemetría recibida de CP_001: est=CARGANDO, E=1.40, P=N/D
+2025-11-04 19:25:53,844 - [19:25:53] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:54,844 - [19:25:54] Telemetría recibida de CP_001: est=CARGANDO, E=1.45, P=N/D
+2025-11-04 19:25:54,846 - [19:25:54] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:55,845 - [19:25:55] Telemetría recibida de CP_001: est=CARGANDO, E=1.50, P=N/D
+2025-11-04 19:25:55,848 - [19:25:55] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:56,848 - [19:25:56] Telemetría recibida de CP_001: est=CARGANDO, E=1.55, P=N/D
+2025-11-04 19:25:56,850 - [19:25:56] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:57,846 - [19:25:57] Telemetría recibida de CP_001: est=CARGANDO, E=1.60, P=N/D
+2025-11-04 19:25:57,849 - [19:25:57] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:58,851 - [19:25:58] Telemetría recibida de CP_001: est=CARGANDO, E=1.65, P=N/D
+2025-11-04 19:25:58,854 - [19:25:58] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:25:59,851 - [19:25:59] Telemetría recibida de CP_001: est=CARGANDO, E=1.70, P=N/D
+2025-11-04 19:25:59,854 - [19:25:59] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:00,852 - [19:26:00] Telemetría recibida de CP_001: est=CARGANDO, E=1.75, P=N/D
+2025-11-04 19:26:00,855 - [19:26:00] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:01,856 - [19:26:01] Telemetría recibida de CP_001: est=CARGANDO, E=1.80, P=N/D
+2025-11-04 19:26:01,859 - [19:26:01] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:02,856 - [19:26:02] Telemetría recibida de CP_001: est=CARGANDO, E=1.85, P=N/D
+2025-11-04 19:26:02,858 - [19:26:02] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:03,855 - [19:26:03] Telemetría recibida de CP_001: est=CARGANDO, E=1.90, P=N/D
+2025-11-04 19:26:03,857 - [19:26:03] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:04,857 - [19:26:04] Telemetría recibida de CP_001: est=CARGANDO, E=1.95, P=N/D
+2025-11-04 19:26:04,859 - [19:26:04] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:05,858 - [19:26:05] Telemetría recibida de CP_001: est=CARGANDO, E=2.00, P=N/D
+2025-11-04 19:26:05,860 - [19:26:05] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:06,861 - [19:26:06] Telemetría recibida de CP_001: est=CARGANDO, E=2.05, P=N/D
+2025-11-04 19:26:06,863 - [19:26:06] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:07,862 - [19:26:07] Telemetría recibida de CP_001: est=CARGANDO, E=2.10, P=N/D
+2025-11-04 19:26:07,865 - [19:26:07] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:08,864 - [19:26:08] Telemetría recibida de CP_001: est=CARGANDO, E=2.15, P=N/D
+2025-11-04 19:26:08,866 - [19:26:08] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:09,896 - [19:26:09] Telemetría recibida de CP_001: est=CARGANDO, E=2.20, P=N/D
+2025-11-04 19:26:09,898 - [19:26:09] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:10,865 - [19:26:10] Telemetría recibida de CP_001: est=CARGANDO, E=2.25, P=N/D
+2025-11-04 19:26:10,868 - [19:26:10] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:11,867 - [19:26:11] Telemetría recibida de CP_001: est=CARGANDO, E=2.30, P=N/D
+2025-11-04 19:26:11,869 - [19:26:11] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:12,868 - [19:26:12] Telemetría recibida de CP_001: est=CARGANDO, E=2.35, P=N/D
+2025-11-04 19:26:12,871 - [19:26:12] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:13,872 - [19:26:13] Telemetría recibida de CP_001: est=CARGANDO, E=2.40, P=N/D
+2025-11-04 19:26:13,875 - [19:26:13] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:14,882 - [19:26:14] Telemetría recibida de CP_001: est=CARGANDO, E=2.45, P=N/D
+2025-11-04 19:26:14,884 - [19:26:14] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:15,873 - [19:26:15] Telemetría recibida de CP_001: est=CARGANDO, E=2.50, P=N/D
+2025-11-04 19:26:15,876 - [19:26:15] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:16,874 - [19:26:16] Telemetría recibida de CP_001: est=CARGANDO, E=2.55, P=N/D
+2025-11-04 19:26:16,877 - [19:26:16] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:17,875 - [19:26:17] Telemetría recibida de CP_001: est=CARGANDO, E=2.60, P=N/D
+2025-11-04 19:26:17,878 - [19:26:17] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:18,877 - [19:26:18] Telemetría recibida de CP_001: est=CARGANDO, E=2.65, P=N/D
+2025-11-04 19:26:18,879 - [19:26:18] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:19,902 - [19:26:19] Telemetría recibida de CP_001: est=CARGANDO, E=2.70, P=N/D
+2025-11-04 19:26:19,905 - [19:26:19] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:20,878 - [19:26:20] Telemetría recibida de CP_001: est=CARGANDO, E=2.75, P=N/D
+2025-11-04 19:26:20,881 - [19:26:20] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:21,881 - [19:26:21] Telemetría recibida de CP_001: est=CARGANDO, E=2.80, P=N/D
+2025-11-04 19:26:21,883 - [19:26:21] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:22,881 - [19:26:22] Telemetría recibida de CP_001: est=CARGANDO, E=2.85, P=N/D
+2025-11-04 19:26:22,883 - [19:26:22] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:23,882 - [19:26:23] Telemetría recibida de CP_001: est=CARGANDO, E=2.90, P=N/D
+2025-11-04 19:26:23,885 - [19:26:23] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:24,886 - [19:26:24] Telemetría recibida de CP_001: est=CARGANDO, E=2.95, P=N/D
+2025-11-04 19:26:24,888 - [19:26:24] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:25,885 - [19:26:25] Telemetría recibida de CP_001: est=CARGANDO, E=3.00, P=N/D
+2025-11-04 19:26:25,887 - [19:26:25] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:26,902 - [19:26:26] Telemetría recibida de CP_001: est=CARGANDO, E=3.05, P=N/D
+2025-11-04 19:26:26,905 - [19:26:26] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:27,889 - [19:26:27] Telemetría recibida de CP_001: est=CARGANDO, E=3.10, P=N/D
+2025-11-04 19:26:27,891 - [19:26:27] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:28,890 - [19:26:28] Telemetría recibida de CP_001: est=CARGANDO, E=3.15, P=N/D
+2025-11-04 19:26:28,893 - [19:26:28] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:29,890 - [19:26:29] Telemetría recibida de CP_001: est=CARGANDO, E=3.20, P=N/D
+2025-11-04 19:26:29,893 - [19:26:29] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:30,891 - [19:26:30] Telemetría recibida de CP_001: est=CARGANDO, E=3.25, P=N/D
+2025-11-04 19:26:30,894 - [19:26:30] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:31,920 - [19:26:31] Telemetría recibida de CP_001: est=CARGANDO, E=3.30, P=N/D
+2025-11-04 19:26:31,923 - [19:26:31] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:32,893 - [19:26:32] Telemetría recibida de CP_001: est=CARGANDO, E=3.35, P=N/D
+2025-11-04 19:26:32,895 - [19:26:32] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:33,896 - [19:26:33] Telemetría recibida de CP_001: est=CARGANDO, E=3.40, P=N/D
+2025-11-04 19:26:33,898 - [19:26:33] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:34,895 - [19:26:34] Telemetría recibida de CP_001: est=CARGANDO, E=3.45, P=N/D
+2025-11-04 19:26:34,898 - [19:26:34] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:35,897 - [19:26:35] Telemetría recibida de CP_001: est=CARGANDO, E=3.50, P=N/D
+2025-11-04 19:26:35,900 - [19:26:35] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:36,903 - [19:26:36] Telemetría recibida de CP_001: est=CARGANDO, E=3.55, P=N/D
+2025-11-04 19:26:36,906 - [19:26:36] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:37,899 - [19:26:37] Telemetría recibida de CP_001: est=CARGANDO, E=3.60, P=N/D
+2025-11-04 19:26:37,901 - [19:26:37] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:38,903 - [19:26:38] Telemetría recibida de CP_001: est=CARGANDO, E=3.65, P=N/D
+2025-11-04 19:26:38,905 - [19:26:38] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:39,903 - [19:26:39] Telemetría recibida de CP_001: est=CARGANDO, E=3.70, P=N/D
+2025-11-04 19:26:39,906 - [19:26:39] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:40,904 - [19:26:40] Telemetría recibida de CP_001: est=CARGANDO, E=3.75, P=N/D
+2025-11-04 19:26:40,906 - [19:26:40] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:41,905 - [19:26:41] Telemetría recibida de CP_001: est=CARGANDO, E=3.80, P=N/D
+2025-11-04 19:26:41,907 - [19:26:41] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:42,905 - [19:26:42] Telemetría recibida de CP_001: est=CARGANDO, E=3.85, P=N/D
+2025-11-04 19:26:42,908 - [19:26:42] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:43,908 - [19:26:43] Telemetría recibida de CP_001: est=CARGANDO, E=3.90, P=N/D
+2025-11-04 19:26:43,911 - [19:26:43] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:44,910 - [19:26:44] Telemetría recibida de CP_001: est=CARGANDO, E=3.95, P=N/D
+2025-11-04 19:26:44,913 - [19:26:44] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:45,909 - [19:26:45] Telemetría recibida de CP_001: est=CARGANDO, E=4.00, P=N/D
+2025-11-04 19:26:45,912 - [19:26:45] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:46,912 - [19:26:46] Telemetría recibida de CP_001: est=CARGANDO, E=4.05, P=N/D
+2025-11-04 19:26:46,914 - [19:26:46] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:47,912 - [19:26:47] Telemetría recibida de CP_001: est=CARGANDO, E=4.10, P=N/D
+2025-11-04 19:26:47,914 - [19:26:47] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:48,914 - [19:26:48] Telemetría recibida de CP_001: est=CARGANDO, E=4.15, P=N/D
+2025-11-04 19:26:48,917 - [19:26:48] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:49,916 - [19:26:49] Telemetría recibida de CP_001: est=CARGANDO, E=4.20, P=N/D
+2025-11-04 19:26:49,919 - [19:26:49] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:50,915 - [19:26:50] Telemetría recibida de CP_001: est=CARGANDO, E=4.25, P=N/D
+2025-11-04 19:26:50,918 - [19:26:50] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:51,919 - [19:26:51] Telemetría recibida de CP_001: est=CARGANDO, E=4.30, P=N/D
+2025-11-04 19:26:51,922 - [19:26:51] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:52,918 - [19:26:52] Telemetría recibida de CP_001: est=CARGANDO, E=4.35, P=N/D
+2025-11-04 19:26:52,921 - [19:26:52] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:53,922 - [19:26:53] Telemetría recibida de CP_001: est=CARGANDO, E=4.40, P=N/D
+2025-11-04 19:26:53,924 - [19:26:53] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:54,920 - [19:26:54] Telemetría recibida de CP_001: est=CARGANDO, E=4.45, P=N/D
+2025-11-04 19:26:54,923 - [19:26:54] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:55,923 - [19:26:55] Telemetría recibida de CP_001: est=CARGANDO, E=4.50, P=N/D
+2025-11-04 19:26:55,926 - [19:26:55] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:56,924 - [19:26:56] Telemetría recibida de CP_001: est=CARGANDO, E=4.55, P=N/D
+2025-11-04 19:26:56,927 - [19:26:56] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:57,926 - [19:26:57] Telemetría recibida de CP_001: est=CARGANDO, E=4.60, P=N/D
+2025-11-04 19:26:57,929 - [19:26:57] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:58,927 - [19:26:58] Telemetría recibida de CP_001: est=CARGANDO, E=4.65, P=N/D
+2025-11-04 19:26:58,930 - [19:26:58] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-04 19:26:59,483 - [19:26:59] [CONTROL WEB] Comando STOP para CP_001 desde web_dashboard
+2025-11-04 19:26:59,485 - [19:26:59] [ESTADO] CP_001 -> PARADO (antes: SUMINISTRANDO).
+2025-11-04 19:26:59,487 - [19:26:59] Comando STOP enviado a CP_001
+2025-11-04 19:26:59,511 - [19:26:59] [CONTROL] Estado reportado por CP_001: PARADO
+2025-11-04 19:26:59,513 - [19:26:59] [ESTADO] CP_001 -> PARADO.
+2025-11-04 19:26:59,930 - [19:26:59] Telemetría recibida de CP_001: est=CARGANDO, E=4.70, P=N/D
+2025-11-04 19:26:59,937 - [19:26:59] Telemetría recibida de CP_001: est=REPOSO, E=4.70, P=N/D
+2025-11-04 19:27:18,456 - [19:27:18] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-04 19:27:18,458 - [19:27:18] [ESTADO] CP_001 -> DESCONECTADO (antes: PARADO).

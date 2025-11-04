@@ -694,17 +694,16 @@ def crear_templates():
             html += '</tr></thead><tbody>';
             
             cps.forEach(cp => {
-                const tel = cp.telemetria || {};
                 const estado = (cp.estado || 'DESCONOCIDO').toUpperCase();
                 const estadoClass = 'status-' + estado.toLowerCase().replace('í', 'i').replace('-', '-');
                 
                 html += '<tr>';
                 html += `<td><strong>${cp.cp_id}</strong></td>`;
                 html += `<td><span class="status-badge ${estadoClass}">${estado}</span></td>`;
-                html += `<td>${(tel.kw_entregados || tel.energia_total || 0).toFixed(2)}</td>`;
-                html += `<td>${(tel.potencia_actual || 0).toFixed(2)}</td>`;
-                html += `<td>${tel.tiempo_carga_s || 0}</td>`;
-                html += `<td>${tel.timestamp_str || '-'}</td>`;
+                html += `<td>${(cp.energia_kwh || 0).toFixed(2)}</td>`;
+                html += `<td>${(cp.potencia_kw || 0).toFixed(2)}</td>`;
+                html += `<td>${cp.tiempo_carga_s || 0}</td>`;
+                html += `<td>${cp.timestamp_telemetria || '-'}</td>`;
                 html += '<td>';
                 
                 // Botones de control según el estado
