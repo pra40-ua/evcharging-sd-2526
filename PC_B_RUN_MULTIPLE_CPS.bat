@@ -88,10 +88,31 @@ echo.
 timeout /t 2 /nobreak >nul
 
 REM ============================================================
-REM  PASO 2: LANZAR CPS EN TERMINALES SEPARADAS
+REM  PASO 2: DETECTAR CPS EXISTENTES
 REM ============================================================
 echo ============================================================
-echo [2/2] LANZANDO CHARGING POINTS
+echo [2/3] DETECTANDO CPS EXISTENTES
+echo ============================================================
+echo.
+
+REM Contar cuantos CPs (engines) ya existen
+set CP_OFFSET=0
+for /f %%i in ('docker ps -q --filter "label=component=engine" 2^>nul ^| find /c /v ""') do set CP_OFFSET=%%i
+
+if %CP_OFFSET% GTR 0 (
+    echo Se detectaron %CP_OFFSET% CP(s) ya en ejecucion.
+    echo Los nuevos CPs comenzaran desde CP_%CP_OFFSET:~-3%
+) else (
+    echo No hay CPs en ejecucion. Comenzando desde CP_001
+)
+echo.
+timeout /t 2 /nobreak >nul
+
+REM ============================================================
+REM  PASO 3: LANZAR CPS EN TERMINALES SEPARADAS
+REM ============================================================
+echo ============================================================
+echo [3/3] LANZANDO CHARGING POINTS
 echo ============================================================
 echo.
 
@@ -100,7 +121,8 @@ set BASE_PORT=5000
 
 REM Lanzar cada CP en su propia terminal
 for /L %%i in (1,1,%NUM_CPS%) do (
-    call :LANZAR_CP %%i
+    set /a CP_NUM=%CP_OFFSET%+%%i
+    call :LANZAR_CP !CP_NUM!
     timeout /t 2 /nobreak >nul
 )
 
@@ -133,11 +155,22 @@ REM ============================================================
 :LANZAR_CP
 setlocal EnableDelayedExpansion
 set CP_NUM=%1
-set CP_ID=CP_00%CP_NUM%
+
+REM Formatear ID con padding (CP_001, CP_002, etc.)
+if %CP_NUM% LSS 10 (
+    set CP_ID=CP_00%CP_NUM%
+) else if %CP_NUM% LSS 100 (
+    set CP_ID=CP_0%CP_NUM%
+) else (
+    set CP_ID=CP_%CP_NUM%
+)
+
 set /a ENGINE_PORT=BASE_PORT+%CP_NUM%
 set KAFKA_SERVER=%CENTRAL_IP%:9092
 
-echo [%CP_NUM%/%NUM_CPS%] Lanzando %CP_ID% (Puerto %ENGINE_PORT%)...
+REM Calcular numero para display (relativo a esta ejecucion)
+set /a DISPLAY_NUM=%CP_NUM%-%CP_OFFSET%
+echo [!DISPLAY_NUM!/%NUM_CPS%] Lanzando %CP_ID% (Puerto %ENGINE_PORT%)...
 
 REM Lanzar Engine en terminal separada
 start "CP_%CP_ID%_Engine" powershell -ExecutionPolicy Bypass -NoExit -Command ^

@@ -75,10 +75,31 @@ echo.
 timeout /t 2 /nobreak >nul
 
 REM ============================================================
-REM  PASO 2: LANZAR DRIVERS EN TERMINALES SEPARADAS
+REM  PASO 2: DETECTAR DRIVERS EXISTENTES
 REM ============================================================
 echo ============================================================
-echo [2/2] LANZANDO DRIVERS
+echo [2/3] DETECTANDO DRIVERS EXISTENTES
+echo ============================================================
+echo.
+
+REM Contar cuantos drivers ya existen
+set DRIVER_OFFSET=0
+for /f %%i in ('docker ps -q --filter "label=component=driver" 2^>nul ^| find /c /v ""') do set DRIVER_OFFSET=%%i
+
+if %DRIVER_OFFSET% GTR 0 (
+    echo Se detectaron %DRIVER_OFFSET% driver(s) ya en ejecucion.
+    echo Los nuevos drivers comenzaran desde DRIVER_%DRIVER_OFFSET:~-3%
+) else (
+    echo No hay drivers en ejecucion. Comenzando desde DRIVER_001
+)
+echo.
+timeout /t 2 /nobreak >nul
+
+REM ============================================================
+REM  PASO 3: LANZAR DRIVERS EN TERMINALES SEPARADAS
+REM ============================================================
+echo ============================================================
+echo [3/3] LANZANDO DRIVERS
 echo ============================================================
 echo.
 
@@ -86,7 +107,8 @@ set KAFKA_SERVER=%CENTRAL_IP%:9092
 
 REM Lanzar cada Driver en su propia terminal
 for /L %%i in (1,1,%NUM_DRIVERS%) do (
-    call :LANZAR_DRIVER %%i
+    set /a DRIVER_NUM=%DRIVER_OFFSET%+%%i
+    call :LANZAR_DRIVER !DRIVER_NUM!
     timeout /t 1 /nobreak >nul
 )
 
@@ -116,7 +138,15 @@ REM ============================================================
 :LANZAR_DRIVER
 setlocal EnableDelayedExpansion
 set DRIVER_NUM=%1
-set DRIVER_ID=DRIVER_00%DRIVER_NUM%
+
+REM Formatear ID con padding (DRIVER_001, DRIVER_002, etc.)
+if %DRIVER_NUM% LSS 10 (
+    set DRIVER_ID=DRIVER_00%DRIVER_NUM%
+) else if %DRIVER_NUM% LSS 100 (
+    set DRIVER_ID=DRIVER_0%DRIVER_NUM%
+) else (
+    set DRIVER_ID=DRIVER_%DRIVER_NUM%
+)
 
 REM Asignar CP aleatorio entre 1 y NUM_CPS
 set /a RANDOM_CP=%RANDOM% %% %NUM_CPS% + 1
@@ -129,7 +159,8 @@ REM Matrícula aleatoria
 set /a MAT_NUM=%RANDOM% %% 9000 + 1000
 set MAT=%MAT_NUM%-ABC
 
-echo [%DRIVER_NUM%/%NUM_DRIVERS%] Lanzando %DRIVER_ID% ^-^> %CP_ID% (%RANDOM_KW% kWh)...
+set /a DISPLAY_NUM=%%i
+echo [!DISPLAY_NUM!/%NUM_DRIVERS%] Lanzando %DRIVER_ID% ^-^> %CP_ID% (%RANDOM_KW% kWh)...
 
 REM Lanzar Driver en terminal separada
 start "Driver_%DRIVER_ID%" powershell -ExecutionPolicy Bypass -NoExit -Command ^
