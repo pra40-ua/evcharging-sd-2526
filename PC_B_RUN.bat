@@ -19,17 +19,25 @@ echo.
 echo Este script ahora soporta multiples Charging Points!
 echo.
 
-REM Preguntar si quiere lanzar multiples CPs o modo clasico
-echo Que modo deseas usar?
-echo   [1] NUEVO: Multiples CPs (hasta 5 CPs simultaneos)
-echo   [2] CLASICO: 1 CP + 1 Driver
+REM Preguntar que componentes lanzar
+echo Que deseas lanzar?
+echo   [1] Multiples CPs (hasta 5 CPs simultaneos)
+echo   [2] Multiples Drivers (hasta 5 Drivers simultaneos)
+echo   [3] CLASICO: 1 CP + 1 Driver
 echo.
-set /p MODO="Selecciona modo (1 o 2): "
+set /p MODO="Selecciona opcion (1, 2 o 3): "
 
 if "%MODO%"=="1" (
     echo.
     echo Redirigiendo al lanzador de multiples CPs...
     call PC_B_RUN_MULTIPLE_CPS.bat
+    exit /b 0
+)
+
+if "%MODO%"=="2" (
+    echo.
+    echo Redirigiendo al lanzador de multiples Drivers...
+    call PC_B_RUN_MULTIPLE_DRIVERS.bat
     exit /b 0
 )
 

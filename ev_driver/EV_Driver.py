@@ -68,8 +68,13 @@ def consumir_notificaciones_driver(driver_id: str, broker: str, procesar_ticket_
             print(f"[DRIVER {driver_id}] Evento={evento} @ {ts} -> {detalle}")
             if evento == 'RECIBIDA':
                 print(f"[DRIVER {driver_id}] Solicitud recibida por Central. Validando CP...")
+            elif evento == 'EN_COLA':
+                posicion = detalle.get('posicion', '?')
+                cp_id = detalle.get('cp_id', '?')
+                print(f"[DRIVER {driver_id}] 🕐 CP {cp_id} ocupado. En cola de espera (posición {posicion})...")
+                print(f"[DRIVER {driver_id}] Esperando turno...")
             elif evento == 'AUTORIZADO':
-                print(f"[DRIVER {driver_id}] Autorizado por Central. Iniciando sesión de carga...")
+                print(f"[DRIVER {driver_id}] ✅ Autorizado por Central. Iniciando sesión de carga...")
             elif evento == 'DENEGADA':
                 print(f"[DRIVER {driver_id}] Solicitud denegada: {detalle}")
                 print(f"[DRIVER {driver_id}] ❌ Terminando proceso (solicitud denegada).")

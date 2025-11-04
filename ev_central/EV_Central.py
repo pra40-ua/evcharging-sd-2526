@@ -57,6 +57,10 @@ CP_SESION_OBJETIVO_KWH_LOCK = threading.Lock()
 CP_SESION_DRIVER_ID = {}
 CP_SESION_DRIVER_ID_LOCK = threading.Lock()
 
+# Cola de espera por CP (cuando múltiples drivers solicitan el mismo CP)
+CP_COLA_ESPERA = {}  # cp_id -> Queue de (driver_id, kw_deseados, timestamp)
+CP_COLA_ESPERA_LOCK = threading.Lock()
+
 # Lista de hilos de clientes para cierre ordenado
 CLIENT_THREADS = []
 CLIENT_THREADS_LOCK = threading.Lock()
@@ -604,6 +608,34 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                             continue
 
                         estado_inferior = estado_cp.strip().lower()
+                        
+                        # Verificar si el CP ya tiene una sesión activa
+                        with CP_SESION_DRIVER_ID_LOCK:
+                            tiene_sesion = cp_id in CP_SESION_DRIVER_ID and CP_SESION_DRIVER_ID[cp_id] is not None
+                        
+                        if tiene_sesion:
+                            # CP ocupado - añadir a cola de espera
+                            print(f"[CENTRAL] CP {cp_id} ocupado. Añadiendo {id_driver} a cola de espera...")
+                            
+                            with CP_COLA_ESPERA_LOCK:
+                                if cp_id not in CP_COLA_ESPERA:
+                                    from queue import Queue
+                                    CP_COLA_ESPERA[cp_id] = Queue()
+                                CP_COLA_ESPERA[cp_id].put((id_driver, kw_deseados, time.time()))
+                            
+                            # Obtener posición en la cola
+                            with CP_COLA_ESPERA_LOCK:
+                                posicion = CP_COLA_ESPERA[cp_id].qsize()
+                            
+                            notificar_driver(id_driver, 'EN_COLA', {
+                                'mensaje': f'CP {cp_id} ocupado. Posición en cola: {posicion}',
+                                'posicion': posicion,
+                                'cp_id': cp_id
+                            })
+                            
+                            registrar_evento(f"Driver {id_driver} en cola para {cp_id} (posición {posicion})", "info")
+                            continue
+                        
                         if estado_inferior in ('activado',):
                             pass
                         elif estado_inferior in ('suministrando',):
@@ -1310,6 +1342,46 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
 
                     # Cambiar estado a ACTIVADO (listo para otro driver)
                     cambiar_estado_cp(cp_fin, 'ACTIVADO', db_connection)
+                    
+                    # Procesar siguiente driver en cola si existe
+                    try:
+                        with CP_COLA_ESPERA_LOCK:
+                            if cp_fin in CP_COLA_ESPERA and not CP_COLA_ESPERA[cp_fin].empty():
+                                from queue import Empty
+                                try:
+                                    next_driver, next_kw, timestamp_cola = CP_COLA_ESPERA[cp_fin].get_nowait()
+                                    print(f"[CENTRAL] Procesando siguiente en cola: {next_driver} para {cp_fin}")
+                                    
+                                    # Autorizar al siguiente driver
+                                    with CP_SESION_DRIVER_ID_LOCK:
+                                        CP_SESION_DRIVER_ID[cp_fin] = next_driver
+                                    with CP_SESION_OBJETIVO_KWH_LOCK:
+                                        CP_SESION_OBJETIVO_KWH[cp_fin] = next_kw
+                                    
+                                    # Notificar autorización
+                                    notificar_driver(next_driver, 'AUTORIZADO', {
+                                        'mensaje': f'Autorizado para cargar en {cp_fin}',
+                                        'cp_id': cp_fin,
+                                        'kw_disponibles': next_kw
+                                    })
+                                    
+                                    # Enviar AUTH_REQ al Monitor
+                                    with CONEXIONES_ACTIVAS_LOCK:
+                                        if cp_fin in CONEXIONES_ACTIVAS:
+                                            socket_cp = CONEXIONES_ACTIVAS[cp_fin]
+                                            trama_auth = construir_trama('AUTH_REQ', [next_driver, str(next_kw)])
+                                            socket_cp.sendall(trama_auth)
+                                            print(f"[CENTRAL] AUTH_REQ enviado a {cp_fin} para {next_driver}")
+                                            
+                                            # Cambiar estado a PRE-SUMINISTRO
+                                            cambiar_estado_cp(cp_fin, 'PRE-SUMINISTRO', db_connection, motivo=f'Autorizando {next_driver}')
+                                    
+                                    registrar_evento(f"Driver {next_driver} autorizado desde cola para {cp_fin}", "ok")
+                                    
+                                except Empty:
+                                    pass
+                    except Exception as e:
+                        print(f"[CENTRAL] Error procesando cola de {cp_fin}: {e}")
                     
                     # Limpiar estado manual si estaba PARADO
                     try:
