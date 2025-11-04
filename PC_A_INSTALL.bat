@@ -1,11 +1,11 @@
 @echo off
 REM ============================================================
-REM  SCRIPT DE INSTALACION PARA PC_B (ORDENADOR PUNTOS DE RECARGA)
+REM  SCRIPT DE INSTALACION PARA PC_A (ORDENADOR SERVIDOR CENTRAL)
 REM  
 REM  Este script instala las dependencias necesarias:
 REM  - Verifica e instala Python
 REM  - Instala dependencias (pip packages)
-REM  - Configura IP de Central desde central_ip.txt
+REM  - Verifica Docker
 REM ============================================================
 
 setlocal EnableDelayedExpansion
@@ -13,13 +13,13 @@ cd /d "%~dp0"
 
 echo.
 echo ============================================================
-echo    PC_B - INSTALACION DE DEPENDENCIAS
+echo      PC_A - INSTALACION DE DEPENDENCIAS
 echo ============================================================
 echo.
 echo Este script realizara:
 echo   [1] Verificacion de Python
 echo   [2] Instalacion de dependencias Python
-echo   [3] Configuracion de IP de Central
+echo   [3] Verificacion de Docker
 echo.
 echo ============================================================
 echo.
@@ -61,7 +61,6 @@ echo.
 if not exist requirements.txt (
     echo [ERROR] No se encuentra requirements.txt
     echo Asegurate de ejecutar desde la raiz del proyecto.
-    echo.
     pause
     exit /b 1
 )
@@ -75,7 +74,17 @@ echo Instalando/verificando dependencias desde requirements.txt...
 echo (Esto puede tardar 1-2 minutos si necesita instalar paquetes)
 echo.
 
+REM Desinstalar kafka-python antiguo si existe (incompatible con Python 3.14+)
+echo Verificando version de kafka-python...
+py -m pip show kafka-python >nul 2>&1
+if %errorlevel% equ 0 (
+    echo Desinstalando kafka-python antiguo (incompatible)...
+    py -m pip uninstall kafka-python -y --quiet >nul 2>&1
+    echo [OK] kafka-python antiguo eliminado
+)
+
 REM Instalar directamente desde requirements.txt (pip salta los que ya estan instalados)
+echo Instalando dependencias...
 py -m pip install -r requirements.txt --quiet --disable-pip-version-check
 
 if %errorlevel% equ 0 (
@@ -91,57 +100,49 @@ if %errorlevel% equ 0 (
 
 echo Presiona una tecla para continuar al siguiente paso...
 pause
-cls
 echo.
 
 REM ============================================================
-REM  PASO 3: CONFIGURAR IP DE CENTRAL
+REM  PASO 3: VERIFICAR DOCKER
 REM ============================================================
 echo ============================================================
-echo [3/3] CONFIGURACION DE CENTRAL
+echo [3/3] VERIFICANDO DOCKER
 echo ============================================================
 echo.
-
-set CENTRAL_IP=
-
-if exist central_ip.txt (
-    for /f "delims=" %%i in (central_ip.txt) do set CENTRAL_IP=%%i
-    
-    if "!CENTRAL_IP!"=="" (
-        echo [ERROR] El archivo central_ip.txt existe pero esta vacio.
-        echo.
-        set /p CENTRAL_IP="Introduce la IP de PC_A (ej: 192.168.1.43): "
-        if "!CENTRAL_IP!"=="" (
-            echo [ERROR] No se introdujo ninguna IP.
-            echo.
-            pause
-            exit /b 1
-        )
-        echo !CENTRAL_IP!> central_ip.txt
-    )
-    
-    echo [OK] IP de Central leida desde central_ip.txt
-    echo      IP Central: !CENTRAL_IP!
-) else (
-    echo [ADVERTENCIA] No se encuentra central_ip.txt
+docker --version >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [ERROR] Docker NO esta instalado.
     echo.
-    echo Puedes:
-    echo   A) Copiar central_ip.txt desde PC_A
-    echo   B) Introducir la IP manualmente ahora
+    echo ACCION REQUERIDA:
+    echo   1. Descarga Docker Desktop: https://www.docker.com/products/docker-desktop/
+    echo   2. Instala Docker Desktop
+    echo   3. Reinicia el ordenador
+    echo   4. Inicia Docker Desktop
+    echo   5. Ejecuta este script nuevamente
     echo.
-    set /p CENTRAL_IP="Introduce la IP de PC_A (ej: 192.168.1.43): "
-    
-    if "!CENTRAL_IP!"=="" (
-        echo [ERROR] No se introdujo ninguna IP.
-        echo.
-        pause
-        exit /b 1
-    )
-    
-    REM Guardar para proximas ejecuciones
-    echo !CENTRAL_IP!> central_ip.txt
-    echo [OK] IP guardada en central_ip.txt
+    pause
+    exit /b 1
 )
+
+echo [OK] Docker encontrado:
+docker --version
+echo.
+
+REM Verificar que Docker esta corriendo
+docker ps >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [ERROR] Docker esta instalado pero NO esta corriendo.
+    echo.
+    echo ACCION REQUERIDA:
+    echo   1. Inicia Docker Desktop
+    echo   2. Espera a ver "Docker Desktop is running"
+    echo   3. Ejecuta este script nuevamente
+    echo.
+    pause
+    exit /b 1
+)
+
+echo [OK] Docker daemon esta corriendo.
 echo.
 
 REM ============================================================
@@ -152,12 +153,11 @@ echo ============================================================
 echo      INSTALACION COMPLETADA
 echo ============================================================
 echo.
-echo Dependencias instaladas correctamente.
-echo IP de Central configurada: !CENTRAL_IP!
+echo Todas las dependencias estan instaladas correctamente.
 echo.
 echo SIGUIENTE PASO:
-echo   Para ejecutar los Puntos de Recarga y Drivers, ejecuta:
-echo     PC_B_RUN.bat
+echo   Para iniciar el servidor central y el dashboard, ejecuta:
+echo     PC_A_RUN.bat
 echo.
 echo ============================================================
 echo.

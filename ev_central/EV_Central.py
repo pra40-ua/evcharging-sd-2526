@@ -267,6 +267,7 @@ ETX = b'\x03'
 DELIMITER = '#'
 TELEMETRIA_TOPIC = 'telemetria_cp'
 DRIVER_REQUESTS_TOPIC = 'driver_requests'
+CENTRAL_COMMANDS_TOPIC = 'central_commands'
 
 # Productor Kafka global para notificar a Drivers
 KAFKA_PRODUCER = None
@@ -438,6 +439,65 @@ def consumir_telemetria_kafka(broker_list: str):
 #                    CONSUMIDOR DE DRIVER_REQUESTS
 # =================================================================
             
+def consumir_comandos_control_kafka(broker_list: str):
+    """
+    Se conecta a Kafka y consume mensajes del tópico de comandos de control (desde web dashboard).
+    """
+    print(f"[KAFKA CONSUMER] Iniciando consumidor para comandos de control: {CENTRAL_COMMANDS_TOPIC}")
+    consumer = None
+    try:
+        consumer = KafkaConsumer(
+            CENTRAL_COMMANDS_TOPIC,
+            bootstrap_servers=[broker_list],
+            security_protocol='PLAINTEXT',
+            api_version=(2, 5, 0),
+            auto_offset_reset='latest',
+            group_id='central-control-group',
+            value_deserializer=lambda x: json.loads(x.decode('utf-8'))
+        )
+        
+        print(f"[KAFKA CONSUMER] Suscrito a '{CENTRAL_COMMANDS_TOPIC}'. Esperando comandos de control...")
+        
+        while True:
+            with SHUTDOWN_LOCK:
+                if SHUTDOWN_REQUESTED:
+                    print("[KAFKA CONSUMER] Apagado solicitado, cerrando consumidor de comandos de control...")
+                    break
+            
+            records = consumer.poll(timeout_ms=1000)
+            if not records:
+                continue
+            
+            for _tp, batch in records.items():
+                for message in batch:
+                    comando = message.value
+                    cp_id = comando.get('cp_id')
+                    command = comando.get('command', '').upper()
+                    source = comando.get('source', 'unknown')
+                    
+                    if not cp_id or command not in ['START', 'STOP']:
+                        registrar_evento(f"[WARN] Comando inválido recibido: {comando}", "warn")
+                        continue
+                    
+                    registrar_evento(f"[CONTROL WEB] Comando {command} para {cp_id} desde {source}")
+                    print(f"[KAFKA CONSUMER] Comando recibido: {command} para {cp_id}")
+                    
+                    # Ejecutar el comando
+                    _enviar_comando_cp(cp_id, command)
+            
+            try:
+                consumer.commit()
+            except Exception:
+                pass
+                
+    except Exception as e:
+        print(f"[KAFKA CONSUMER] Error en consumidor de comandos de control: {e}")
+    finally:
+        if consumer:
+            consumer.close()
+            print("[KAFKA CONSUMER] Consumidor de comandos de control cerrado.")
+
+
 def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.connector.connection.MySQLConnection):
     """
     Se conecta a Kafka y consume mensajes del tópico de solicitudes de drivers.
@@ -1271,6 +1331,13 @@ def main():
             daemon=True
         )
         driver_requests_thread.start()
+        # Hilo consumidor de Kafka para comandos de control desde web
+        control_commands_thread = threading.Thread(
+            target=consumir_comandos_control_kafka,
+            args=(args.kafka,),
+            daemon=True
+        )
+        control_commands_thread.start()
         # Lanzar monitor de actividad (heartbeat)
         threading.Thread(target=monitorizar_actividad_cps, args=(db_connection,), daemon=True).start()
         print(f"[EV_Central] Servidor escuchando en TCP (:{args.port})...")

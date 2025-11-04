@@ -22,7 +22,7 @@ echo.
 REM ============================================================
 REM  VERIFICAR INSTALACION PREVIA
 REM ============================================================
-python --version >nul 2>&1
+py --version >nul 2>&1
 if %errorlevel% neq 0 (
     echo [ERROR] Python NO esta instalado o no esta en PATH.
     echo.
@@ -126,7 +126,7 @@ if %errorlevel% equ 0 (
 
 echo.
 echo Lanzando CPs (esto abrira una ventana nueva)...
-start "CPs-PC_B" cmd /k "python launch_multiple_cps.py --num !NUM_CPS! --central-ip !CENTRAL_IP! --central-port 5000 --kafka !CENTRAL_IP!:9092 --base-port 6000 --delay 1.0"
+start "CPs-PC_B" cmd /k "py launch_multiple_cps.py --num !NUM_CPS! --central-ip !CENTRAL_IP! --central-port 5000 --kafka !CENTRAL_IP!:9092 --base-port 6000 --delay 1.0"
 
 echo.
 echo Esperando 10 segundos a que los CPs se registren...
@@ -163,7 +163,7 @@ echo.
 echo Modo seleccionado: !MODE_STR!
 echo.
 echo Lanzando Drivers (esto abrira una ventana nueva)...
-start "Drivers-PC_B" cmd /k "python launch_multiple_drivers.py --num !NUM_DRIVERS! --kafka !CENTRAL_IP!:9092 --cps !NUM_CPS! --mode !MODE_STR! --delay 1.0"
+start "Drivers-PC_B" cmd /k "py launch_multiple_drivers.py --num !NUM_DRIVERS! --kafka !CENTRAL_IP!:9092 --cps !NUM_CPS! --mode !MODE_STR! --delay 1.0"
 
 echo.
 echo Esperando 5 segundos...
@@ -198,7 +198,7 @@ echo   - Deberias ver las solicitudes de los !NUM_DRIVERS! Drivers
 echo.
 echo DASHBOARD (opcional):
 echo   Si quieres ver el dashboard web, ejecuta en cualquier PC:
-echo     python web_dashboard.py --kafka !CENTRAL_IP!:9092
+echo     py web_dashboard.py --kafka !CENTRAL_IP!:9092
 echo   Accede: http://localhost:8080
 echo.
 echo Para DETENER:

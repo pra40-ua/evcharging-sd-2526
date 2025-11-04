@@ -191,3 +191,4 @@ docker exec mysql mysql -uroot -proot -e "SHOW DATABASES;"
 **Elige el script según tu necesidad. Todos instalan dependencias automáticamente. 🚀**
 
 
+

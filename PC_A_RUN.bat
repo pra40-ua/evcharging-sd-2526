@@ -1,13 +1,14 @@
 @echo off
 REM ============================================================
-REM  SCRIPT COMPLETO PARA PC_A (ORDENADOR SERVIDOR CENTRAL)
+REM  SCRIPT DE EJECUCION PARA PC_A (ORDENADOR SERVIDOR CENTRAL)
 REM  
-REM  Este script hace TODO lo necesario:
-REM  - Verifica e instala Python
-REM  - Instala dependencias (pip packages)
-REM  - Verifica Docker
-REM  - Arranca Kafka + MySQL + Central
-REM  - Genera archivo central_ip.txt para PC_B
+REM  Este script ejecuta los componentes del sistema:
+REM  - Detecta IP local automaticamente
+REM  - Inicia Kafka + MySQL (Docker)
+REM  - Inicia EV_Central
+REM  - Inicia Dashboard Web
+REM  
+REM  REQUISITO: Ejecutar PC_A_INSTALL.bat primero
 REM ============================================================
 
 setlocal EnableDelayedExpansion
@@ -15,125 +16,33 @@ cd /d "%~dp0"
 
 echo.
 echo ============================================================
-echo      PC_A - SERVIDOR CENTRAL (SCRIPT COMPLETO)
+echo      PC_A - EJECUCION DE SERVIDOR CENTRAL
 echo ============================================================
 echo.
-echo Este script realizara:
-echo   [1] Verificacion de Python
-echo   [2] Instalacion de dependencias Python
-echo   [3] Verificacion de Docker
-echo   [4] Inicio de Kafka + MySQL (Docker)
-echo   [5] Deteccion de IP local
-echo   [6] Inicio de EV_Central
-echo.
-echo ============================================================
-echo.
-echo Presiona ENTER para continuar con la instalacion...
-pause
 
 REM ============================================================
-REM  PASO 1: VERIFICAR PYTHON
+REM  VERIFICAR INSTALACION PREVIA
 REM ============================================================
-echo.
-echo ============================================================
-echo [1/6] VERIFICANDO PYTHON
-echo ============================================================
 py --version >nul 2>&1
 if %errorlevel% neq 0 (
+    echo [ERROR] Python NO esta instalado o no esta en PATH.
     echo.
-    echo [ERROR] Python NO esta instalado.
-    echo.
-    echo ACCION REQUERIDA:
-    echo   1. Descarga Python desde: https://www.python.org/downloads/
-    echo   2. Durante instalacion, marca "Add Python to PATH"
-    echo   3. Reinicia este script
+    echo Por favor, ejecuta primero: PC_A_INSTALL.bat
     echo.
     pause
     exit /b 1
 )
 
-echo [OK] Python encontrado:
-py --version
-echo.
-
-REM ============================================================
-REM  PASO 2: INSTALAR DEPENDENCIAS PYTHON
-REM ============================================================
-echo ============================================================
-echo [2/6] VERIFICANDO/INSTALANDO DEPENDENCIAS PYTHON
-echo ============================================================
-echo.
-if not exist requirements.txt (
-    echo [ERROR] No se encuentra requirements.txt
-    echo Asegurate de ejecutar desde la raiz del proyecto.
-    pause
-    exit /b 1
-)
-
-REM Actualizar pip si es necesario
-echo Actualizando pip...
-py -m pip install --upgrade pip --quiet --disable-pip-version-check 2>nul
-
-echo.
-echo Instalando/verificando dependencias desde requirements.txt...
-echo (Esto puede tardar 1-2 minutos si necesita instalar paquetes)
-echo.
-
-REM Desinstalar kafka-python antiguo si existe (incompatible con Python 3.14+)
-echo Verificando version de kafka-python...
-py -m pip show kafka-python >nul 2>&1
-if %errorlevel% equ 0 (
-    echo Desinstalando kafka-python antiguo (incompatible)...
-    py -m pip uninstall kafka-python -y --quiet >nul 2>&1
-    echo [OK] kafka-python antiguo eliminado
-)
-
-REM Instalar directamente desde requirements.txt (pip salta los que ya estan instalados)
-echo Instalando dependencias...
-py -m pip install -r requirements.txt --quiet --disable-pip-version-check
-
-if %errorlevel% equ 0 (
-    echo.
-    echo [OK] Todas las dependencias estan instaladas y actualizadas.
-    echo.
-) else (
-    echo.
-    echo [ADVERTENCIA] Hubo algun problema instalando dependencias.
-    echo El script continuara de todas formas...
-    echo.
-)
-
-echo Presiona una tecla para continuar al siguiente paso...
-pause
-echo.
-
-REM ============================================================
-REM  PASO 3: VERIFICAR DOCKER
-REM ============================================================
-echo ============================================================
-echo [3/6] VERIFICANDO DOCKER
-echo ============================================================
-echo.
 docker --version >nul 2>&1
 if %errorlevel% neq 0 (
     echo [ERROR] Docker NO esta instalado.
     echo.
-    echo ACCION REQUERIDA:
-    echo   1. Descarga Docker Desktop: https://www.docker.com/products/docker-desktop/
-    echo   2. Instala Docker Desktop
-    echo   3. Reinicia el ordenador
-    echo   4. Inicia Docker Desktop
-    echo   5. Ejecuta este script nuevamente
+    echo Por favor, ejecuta primero: PC_A_INSTALL.bat
     echo.
     pause
     exit /b 1
 )
 
-echo [OK] Docker encontrado:
-docker --version
-echo.
-
-REM Verificar que Docker esta corriendo
 docker ps >nul 2>&1
 if %errorlevel% neq 0 (
     echo [ERROR] Docker esta instalado pero NO esta corriendo.
@@ -147,14 +56,11 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-echo [OK] Docker daemon esta corriendo.
-echo.
-
 REM ============================================================
-REM  PASO 4: DETECTAR IP LOCAL AUTOMATICAMENTE
+REM  PASO 1: DETECTAR IP LOCAL AUTOMATICAMENTE
 REM ============================================================
 echo ============================================================
-echo [4/6] DETECTANDO IP LOCAL
+echo [1/4] DETECTANDO IP LOCAL
 echo ============================================================
 echo.
 
@@ -187,10 +93,10 @@ echo       con esta IP en KAFKA_ADVERTISED_LISTENERS si es necesario.
 echo.
 
 REM ============================================================
-REM  PASO 5: INICIAR KAFKA + MYSQL (DOCKER COMPOSE)
+REM  PASO 2: INICIAR KAFKA + MYSQL (DOCKER COMPOSE)
 REM ============================================================
 echo ============================================================
-echo [5/6] INICIANDO KAFKA + MYSQL
+echo [2/4] INICIANDO KAFKA + MYSQL
 echo ============================================================
 echo.
 if not exist docker-compose.yml (
@@ -241,10 +147,10 @@ if %errorlevel% equ 0 (
 echo.
 
 REM ============================================================
-REM  PASO 6: INICIAR EV_CENTRAL
+REM  PASO 3: INICIAR EV_CENTRAL
 REM ============================================================
 echo ============================================================
-echo [6/6] INICIANDO EV_CENTRAL
+echo [3/4] INICIANDO EV_CENTRAL
 echo ============================================================
 echo.
 echo CONFIGURACION DETECTADA:
@@ -274,9 +180,12 @@ start "EV_Central-PC_A" powershell -NoLogo -NoExit -ExecutionPolicy Bypass -File
 REM Esperar un poco para que la Central arranque
 timeout /t 3 /nobreak >nul
 
+REM ============================================================
+REM  PASO 4: LANZAR DASHBOARD WEB
+REM ============================================================
 echo.
 echo ============================================================
-echo [OPCIONAL] LANZANDO DASHBOARD WEB
+echo [4/4] LANZANDO DASHBOARD WEB
 echo ============================================================
 echo.
 echo Iniciando dashboard web en puerto 8080...

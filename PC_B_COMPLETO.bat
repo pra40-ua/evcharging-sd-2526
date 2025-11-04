@@ -38,7 +38,7 @@ echo.
 echo ============================================================
 echo [1/6] VERIFICANDO PYTHON
 echo ============================================================
-python --version >nul 2>&1
+py --version >nul 2>&1
 if %errorlevel% neq 0 (
     echo.
     echo [ERROR] Python NO esta instalado.
@@ -53,7 +53,7 @@ if %errorlevel% neq 0 (
 )
 
 echo [OK] Python encontrado:
-python --version
+py --version
 echo.
 
 REM ============================================================
@@ -73,15 +73,25 @@ if not exist requirements.txt (
 
 REM Actualizar pip si es necesario
 echo Actualizando pip...
-python -m pip install --upgrade pip --quiet --disable-pip-version-check 2>nul
+py -m pip install --upgrade pip --quiet --disable-pip-version-check 2>nul
 
 echo.
 echo Instalando/verificando dependencias desde requirements.txt...
 echo (Esto puede tardar 1-2 minutos si necesita instalar paquetes)
 echo.
 
+REM Desinstalar kafka-python antiguo si existe (incompatible con Python 3.14+)
+echo Verificando version de kafka-python...
+py -m pip show kafka-python >nul 2>&1
+if %errorlevel% equ 0 (
+    echo Desinstalando kafka-python antiguo (incompatible)...
+    py -m pip uninstall kafka-python -y --quiet >nul 2>&1
+    echo [OK] kafka-python antiguo eliminado
+)
+
 REM Instalar directamente desde requirements.txt (pip salta los que ya estan instalados)
-python -m pip install -r requirements.txt --quiet --disable-pip-version-check
+echo Instalando dependencias...
+py -m pip install -r requirements.txt --quiet --disable-pip-version-check
 
 if %errorlevel% equ 0 (
     echo.
@@ -211,7 +221,7 @@ if %errorlevel% equ 0 (
 
 echo.
 echo Lanzando CPs (esto abrira una ventana nueva)...
-start "CPs-PC_B" cmd /k "python launch_multiple_cps.py --num !NUM_CPS! --central-ip !CENTRAL_IP! --central-port 5000 --kafka !CENTRAL_IP!:9092 --base-port 6000 --delay 1.0"
+start "CPs-PC_B" cmd /k "py launch_multiple_cps.py --num !NUM_CPS! --central-ip !CENTRAL_IP! --central-port 5000 --kafka !CENTRAL_IP!:9092 --base-port 6000 --delay 1.0"
 
 echo.
 echo Esperando 10 segundos a que los CPs se registren...
@@ -248,7 +258,7 @@ echo.
 echo Modo seleccionado: !MODE_STR!
 echo.
 echo Lanzando Drivers (esto abrira una ventana nueva)...
-start "Drivers-PC_B" cmd /k "python launch_multiple_drivers.py --num !NUM_DRIVERS! --kafka !CENTRAL_IP!:9092 --cps !NUM_CPS! --mode !MODE_STR! --delay 1.0"
+start "Drivers-PC_B" cmd /k "py launch_multiple_drivers.py --num !NUM_DRIVERS! --kafka !CENTRAL_IP!:9092 --cps !NUM_CPS! --mode !MODE_STR! --delay 1.0"
 
 echo.
 echo Esperando 5 segundos...
@@ -283,7 +293,7 @@ echo   - Deberias ver las solicitudes de los !NUM_DRIVERS! Drivers
 echo.
 echo DASHBOARD (opcional):
 echo   Si quieres ver el dashboard web, ejecuta en cualquier PC:
-echo     python web_dashboard.py --kafka !CENTRAL_IP!:9092
+echo     py web_dashboard.py --kafka !CENTRAL_IP!:9092
 echo   Accede: http://localhost:8080
 echo.
 echo Para DETENER:

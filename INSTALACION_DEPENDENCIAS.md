@@ -395,3 +395,4 @@ Para más información:
 - **RESUMEN_IMPLEMENTACION.md**: Resumen técnico
 
 
+

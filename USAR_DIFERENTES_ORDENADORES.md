@@ -349,3 +349,4 @@ python web_dashboard.py --kafka <IP_PC_A>:9092
 **¡Dos scripts, dos ordenadores, todo funcionando! 🚀**
 
 
+
