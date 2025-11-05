@@ -19,6 +19,10 @@ import time
 from kafka import KafkaProducer
 import threading # Necesario si el Engine está corriendo en un bucle principal
 import os
+import subprocess
+import platform
+import urllib.request
+import urllib.error
 
 # Importaciones para la interfaz web
 from flask import Flask, render_template, jsonify, request, make_response
@@ -307,6 +311,12 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                     with SESSION_LOCK:
                         TARGET_KWH = kw_float
                         CURRENT_DRIVER_ID = driver_id
+
+                    # Actualizar caché de AUTH para UI robusta
+                    with AUTH_CACHE_LOCK:
+                        globals()['LAST_AUTH_DRIVER_ID'] = driver_id
+                        globals()['LAST_AUTH_OBJ_KWH'] = kw_float
+                        globals()['LAST_AUTH_TS'] = time.time()
                     
                     # Cambiar estado del flujo
                     with ESTADO_FLUJO_LOCK:
@@ -319,6 +329,12 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                     # Debug: verificar valores
                     with SESSION_LOCK:
                         print(f"[{cp_id}] DEBUG: TARGET_KWH={TARGET_KWH}, CURRENT_DRIVER_ID={CURRENT_DRIVER_ID}")
+
+                    # Lanzar prompt de operador por consola (si es posible)
+                    try:
+                        lanzar_prompt_operador(cp_id)
+                    except Exception as e:
+                        print(f"[{cp_id}] Aviso: no se pudo lanzar el prompt de operador: {e}")
                     
                     # Responder OK
                     respuesta = construir_trama('ACK', ['AUTH_OK'])
@@ -596,6 +612,12 @@ def menu_interactivo_engine() -> None:
 # =================================================================
 #                    INTERFAZ WEB DEL ENGINE
 # =================================================================
+
+# Caché de última AUTH_REQ para robustez en la UI
+LAST_AUTH_DRIVER_ID = None
+LAST_AUTH_OBJ_KWH = None
+LAST_AUTH_TS = 0.0
+AUTH_CACHE_LOCK = threading.Lock()
 
 # HTML embebido para evitar problemas con rutas de templates
 HTML_TEMPLATE = """<!DOCTYPE html>
@@ -943,6 +965,21 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     '</button>' +
                     '</div>';
             }
+            // Si hay sesión activa (driver/objetivo) pero el estado no es ESPERANDO_DRIVER, mostrar opciones de sincronización
+            else if ((data.driver_actual && data.driver_actual !== 'UNKNOWN') && (data.objetivo_kwh !== null && data.objetivo_kwh !== undefined)) {
+                console.log('[WEB] 🧭 Sesión detectada pero estado no sincronizado, mostrando controles');
+                var objetivo2 = data.objetivo_kwh || '?';
+                html = '<div class="button-group" style="background: #e8f5e9;">' +
+                    '<h3>✅ Driver Autorizado (pendiente de sincronización)</h3>' +
+                    '<p><strong>Driver:</strong> ' + data.driver_actual + '<br>' +
+                    '<strong>Objetivo:</strong> ' + objetivo2 + ' kWh</p>' +
+                    '<p>El estado local no está sincronizado. Puedes iniciar o forzar la sincronización.</p>' +
+                    '<div>' +
+                    '<button class="btn btn-success" onclick="iniciarSuministro()"><span>🔌</span> Iniciar Suministro</button>' +
+                    '<button class="btn btn-warning" onclick="forzarEsperando()"><span>🛠️</span> Sincronizar Estado</button>' +
+                    '</div>' +
+                    '</div>';
+            }
             else if (estadoFlujo === 'LISTO_PARA_INICIAR') {
                 console.log('[WEB] 🟡 Generando HTML para LISTO_PARA_INICIAR');
                 html = '<div class="button-group" style="background: #fff3cd;">' +
@@ -1039,6 +1076,21 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             .catch(function(error) { mostrarAlerta('Error: ' + error, 'danger'); });
         }
         
+        function forzarEsperando() {
+            fetch('/api/forzar_esperando', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                var tipo = data.status === 'ok' ? 'success' : 'danger';
+                var mensaje = data.mensaje || (data.status === 'ok' ? 'Estado sincronizado' : 'No se pudo sincronizar');
+                mostrarAlerta(mensaje, tipo);
+                actualizarEstado();
+            })
+            .catch(function(error) { mostrarAlerta('Error: ' + error, 'danger'); });
+        }
+        
         function simularAveria(activar) {
             var motivo = activar ? prompt('Motivo de la avería:', 'Fallo simulado') : '';
             if (activar && !motivo) return;
@@ -1126,25 +1178,105 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 </body>
 </html>"""
 
+# =================================================================
+#             CONFIRMACIÓN POR CONSOLA DEL OPERADOR
+# =================================================================
+
+def _enviar_ready_to_start_interno() -> tuple[bool, str]:
+    """Replica la lógica de /api/iniciar_suministro para confirmar inicio por consola."""
+    global ESTADO_FLUJO, ENGINE_CP_ID, ACTIVE_MONITOR_CONN, CURRENT_DRIVER_ID
+    cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
+    # Validación/Transición de estado
+    with ESTADO_FLUJO_LOCK:
+        if ESTADO_FLUJO != 'ESPERANDO_DRIVER':
+            with SESSION_LOCK:
+                driver_tmp = CURRENT_DRIVER_ID
+                objetivo_tmp = TARGET_KWH
+            if not (driver_tmp and driver_tmp != 'UNKNOWN' and objetivo_tmp is not None):
+                return False, f'No se puede iniciar. Estado actual: {ESTADO_FLUJO}'
+        ESTADO_FLUJO = 'LISTO_PARA_INICIAR'
+    # Conexión con monitor
+    if globals().get('ACTIVE_MONITOR_CONN') is None:
+        with ESTADO_FLUJO_LOCK:
+            ESTADO_FLUJO = 'ESPERANDO_DRIVER'
+        return False, 'No hay conexión con el Monitor'
+    # Enviar READY_TO_START
+    with SESSION_LOCK:
+        driver_id = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
+    try:
+        trama = construir_trama('READY_TO_START', [cp_id, driver_id])
+        globals()['ACTIVE_MONITOR_CONN'].sendall(trama)
+        print(f"[{cp_id}] 📤 READY_TO_START enviado a Monitor (Driver: {driver_id}) [CLI]")
+        return True, 'Señal enviada a Central. Esperando confirmación...'
+    except Exception as e:
+        with ESTADO_FLUJO_LOCK:
+            ESTADO_FLUJO = 'ESPERANDO_DRIVER'
+        return False, f'Error enviando señal: {str(e)}'
+
+
+def _thread_prompt_operador(cp_id: str, web_port: int | None) -> None:
+    """Hilo simple que pide por stdin pulsar 1 para confirmar inicio."""
+    print("\n" + "="*70)
+    print(f"  [{cp_id}] OPERADOR: Solicitud de inicio recibida")
+    print("  Pulse '1' y Enter para confirmar el inicio del suministro")
+    print("  (o 'q' y Enter para cancelar)")
+    print("="*70 + "\n")
+    try:
+        if sys.stdin and sys.stdin.isatty():
+            while True:
+                try:
+                    elec = input("[OPERADOR] Confirmar inicio (1=Sí, q=Cancelar): ").strip().lower()
+                except (EOFError, KeyboardInterrupt):
+                    return
+                if elec == '1':
+                    ok, msg = _enviar_ready_to_start_interno()
+                    print(f"[OPERADOR] {'OK' if ok else 'ERROR'}: {msg}")
+                    return
+                if elec == 'q':
+                    print("[OPERADOR] Cancelado por el operador")
+                    return
+        else:
+            # Sin TTY: indicar alternativa
+            if web_port:
+                print(f"[OPERADOR] No hay TTY. Puede confirmar ejecutando: curl -s -X POST http://127.0.0.1:{web_port}/api/iniciar_suministro")
+            else:
+                print("[OPERADOR] No hay TTY. No se puede capturar tecla; use la Central para confirmar.")
+    except Exception as e:
+        print(f"[OPERADOR] Error en prompt: {e}")
+
+
+def lanzar_prompt_operador(cp_id: str) -> None:
+    """Intenta abrir una nueva consola en Windows; si no, usa hilo en el mismo proceso."""
+    web_port = globals().get('WEB_PORT')
+    try:
+        if platform.system().lower().startswith('win'):
+            # Intentar abrir una nueva consola que, al pulsar 1, haga POST al endpoint
+            if web_port:
+                cmd_code = (
+                    "import sys,urllib.request;\n"
+                    "input('Pulse 1 y Enter para confirmar (cierra con Ctrl+C para cancelar): ');\n"
+                    f"urllib.request.urlopen(urllib.request.Request('http://127.0.0.1:{web_port}/api/iniciar_suministro', method='POST'))\n"
+                    "print('Confirmado. Puede cerrar esta ventana.')\n"
+                )
+                try:
+                    creation = getattr(subprocess, 'CREATE_NEW_CONSOLE', 0)
+                    subprocess.Popen([
+                        sys.executable, '-c', cmd_code
+                    ], creationflags=creation)
+                    print(f"[{cp_id}] Ventana de confirmación abierta (Windows).")
+                    return
+                except Exception as e:
+                    print(f"[{cp_id}] No se pudo abrir consola separada: {e}")
+        # Fallback: hilo en el mismo proceso
+        t = threading.Thread(target=_thread_prompt_operador, args=(cp_id, web_port), daemon=True)
+        t.start()
+    except Exception as e:
+        print(f"[{cp_id}] Error lanzando prompt de operador: {e}")
+
 @app.route('/')
 def index():
-    """Página principal de control del engine."""
-    cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
-    print(f"[WEB] Acceso a interfaz web desde navegador para {cp_id}")
-    try:
-        # Usar replace en lugar de format para evitar problemas con las llaves de CSS/JS
-        html = HTML_TEMPLATE.replace('__CP_ID__', cp_id)
-        resp = make_response(html)
-        # Evitar cacheo agresivo del HTML
-        resp.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
-        resp.headers['Pragma'] = 'no-cache'
-        resp.headers['Expires'] = '0'
-        return resp
-    except Exception as e:
-        print(f"[WEB] Error generando HTML: {e}")
-        import traceback
-        traceback.print_exc()
-        return f"<html><body><h1>Error</h1><pre>{traceback.format_exc()}</pre></body></html>", 500
+    """Página principal deshabilitada: este modo usa consola para confirmación."""
+    return "<html><body><h3>Interfaz web deshabilitada. Use la consola para confirmar inicio.</h3></body></html>", 200
 
 @app.route('/api/status')
 def api_status():
@@ -1193,6 +1325,26 @@ def api_status():
     except Exception:
         pass
 
+    # Salvaguarda 2: si aún no hay driver/objetivo visibles pero existe AUTH reciente, exponerlos
+    try:
+        ahora = time.time()
+        with AUTH_CACHE_LOCK:
+            last_ts = globals().get('LAST_AUTH_TS', 0.0)
+            last_driver = globals().get('LAST_AUTH_DRIVER_ID')
+            last_obj = globals().get('LAST_AUTH_OBJ_KWH')
+        if (driver_actual == 'UNKNOWN' or driver_actual is None or objetivo_kwh is None) and (ahora - last_ts <= 20.0):
+            if last_driver:
+                driver_actual = last_driver
+            if last_obj is not None:
+                objetivo_kwh = last_obj
+            estado_flujo_actual = 'ESPERANDO_DRIVER'
+            print(f"[WEB API] 🧭 Usando caché AUTH reciente para UI: driver={driver_actual}, objetivo={objetivo_kwh}")
+    except Exception:
+        pass
+
+    # Actualizar campos con posibles derivaciones
+    estado['driver_actual'] = driver_actual
+    estado['objetivo_kwh'] = objetivo_kwh
     estado['estado_flujo'] = estado_flujo_actual
     
     # Debug: imprimir valores finales que se van a enviar
@@ -1246,13 +1398,20 @@ def api_iniciar_suministro():
     
     with ESTADO_FLUJO_LOCK:
         if ESTADO_FLUJO != 'ESPERANDO_DRIVER':
-            return jsonify({
-                'status': 'error',
-                'mensaje': f'No se puede iniciar. Estado actual: {ESTADO_FLUJO}'
-            }), 400
-        
-        # Cambiar estado
-        ESTADO_FLUJO = 'LISTO_PARA_INICIAR'
+            # Permitir inicio si existe sesión activa aunque el estado no esté sincronizado
+            with SESSION_LOCK:
+                driver_tmp = CURRENT_DRIVER_ID
+                objetivo_tmp = TARGET_KWH
+            if not (driver_tmp and driver_tmp != 'UNKNOWN' and objetivo_tmp is not None):
+                return jsonify({
+                    'status': 'error',
+                    'mensaje': f'No se puede iniciar. Estado actual: {ESTADO_FLUJO}'
+                }), 400
+            # Forzar transición para continuar
+            ESTADO_FLUJO = 'LISTO_PARA_INICIAR'
+        else:
+            # Cambiar estado normal
+            ESTADO_FLUJO = 'LISTO_PARA_INICIAR'
     
     print(f"\n{'='*70}")
     print(f"  [{cp_id}] 🔌 OPERADOR: Iniciando suministro")
@@ -1350,6 +1509,31 @@ def api_solicitar_fin():
             'mensaje': f'Error enviando solicitud: {str(e)}'
         }), 500
 
+@app.route('/api/forzar_esperando', methods=['POST'])
+def api_forzar_esperando():
+    """Sincroniza el estado a ESPERANDO_DRIVER si hay sesión activa (uso operador)."""
+    global ESTADO_FLUJO
+    try:
+        with SESSION_LOCK:
+            driver_tmp = CURRENT_DRIVER_ID
+            objetivo_tmp = TARGET_KWH
+        if not (driver_tmp and driver_tmp != 'UNKNOWN' and objetivo_tmp is not None):
+            return jsonify({
+                'status': 'error',
+                'mensaje': 'No hay sesión activa para sincronizar'
+            }), 400
+        with ESTADO_FLUJO_LOCK:
+            ESTADO_FLUJO = 'ESPERANDO_DRIVER'
+        return jsonify({
+            'status': 'ok',
+            'mensaje': 'Estado forzado a ESPERANDO_DRIVER'
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'mensaje': str(e)
+        }), 500
+
 @app.route('/api/conectar_driver', methods=['POST'])
 def api_conectar_driver():
     """Simula la conexión física de un driver (enchufar) - DEPRECADO en nuevo flujo."""
@@ -1408,7 +1592,7 @@ def api_solicitar_cierre_suministro():
 
 def iniciar_servidor_web(puerto: int):
     """Inicia el servidor Flask en un hilo separado."""
-    print(f"[WEB] Iniciando servidor web del engine en puerto {puerto}...")
+    print(f"[WEB] Iniciando servidor (solo endpoints) en puerto {puerto}...")
     app.run(host='0.0.0.0', port=puerto, debug=False, threaded=True, use_reloader=False)
 
 def main():
