@@ -126,18 +126,10 @@
         .status-reposo { background: #6c757d; color: white; }
         .status-pre-suministro { background: #fd7e14; color: white; }
         .status-esperando-operador-engine { background: #ffc107; color: #333; }
-        .status-listo-para-iniciar { background: #28a745; color: white; animation: pulseStatus 2s infinite; }
-        .status-esperando-confirmacion-fin { background: #dc3545; color: white; animation: pulseStatus 2s infinite; }
-        
-        @keyframes pulseStatus {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        
-        @keyframes pulseBtn {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
-            50% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
-        }
+        .status-listo-para-iniciar { background: #28a745; color: white; }
+        .status-esperando-confirmacion-fin { background: #dc3545; color: white; }
+        .status-esperando-driver { background: #17a2b8; color: white; }
+        .status-pendiente-confirmacion-central { background: #007bff; color: white; animation: pulse 2s infinite; }
         
         .btn-control {
             padding: 6px 12px;
@@ -384,29 +376,35 @@
                 html += `<td>${cp.timestamp_telemetria || '-'}</td>`;
                 html += '<td>';
                 
-                // NUEVO FLUJO: Botones de control según el estado
+                // Botones de control según el NUEVO FLUJO INTERACTIVO (3 PASOS)
                 if (estado === 'DESCONECTADO' || estado === 'AVERIADO' || estado === 'AVERÍA') {
                     html += '<button class="btn-control" disabled>Sin Conexión</button>';
-                } else if (estado === 'LISTO_PARA_INICIAR' || estado === 'LISTO PARA INICIAR') {
-                    // Engine listo: mostrar botón de CONFIRMACIÓN
-                    html += `<button class="btn-control btn-start" onclick="confirmarInicio('${cp.cp_id}')" style="background: #28a745; animation: pulseBtn 1.5s infinite;">
-                        ✓ Confirmar Inicio
-                    </button>`;
-                } else if (estado === 'ESPERANDO_CONFIRMACION_FIN' || estado === 'ESPERANDO CONFIRMACION FIN') {
-                    // Engine solicitó fin: mostrar botón de CONFIRMACIÓN
-                    html += `<button class="btn-control btn-stop" onclick="confirmarFin('${cp.cp_id}')" style="background: #dc3545; animation: pulseBtn 1.5s infinite;">
-                        ✓ Confirmar Fin
-                    </button>`;
-                } else if (estado === 'SUMINISTRANDO' || estado === 'CARGANDO') {
-                    // Cargando: en proceso, sin acciones
-                    html += '<span style="color: #17a2b8; font-size: 12px;">⚡ Suministrando...</span>';
+                } else if (estado === 'PENDIENTE_CONFIRMACION_CENTRAL' || estado === 'PENDIENTE CONFIRMACION CENTRAL') {
+                    // PASO 1: Driver solicitó, operador de Central debe preparar
+                    const driver = cp.driver_id_sesion || 'Driver';
+                    const objetivo = cp.telemetria?.objetivo_kwh || '?';
+                    html += `<button class="btn-control btn-start" onclick="prepararSuministro('${cp.cp_id}')" style="background: #007bff; animation: pulse 2s infinite;">🚀 PREPARAR SUMINISTRO (${driver})</button>`;
                 } else if (estado === 'ESPERANDO_OPERADOR_ENGINE' || estado === 'ESPERANDO OPERADOR ENGINE') {
-                    // Esperando que el operador del Engine pulse el botón
-                    html += '<span style="color: #ffc107; font-size: 12px;">⏳ Esperando Engine...</span>';
+                    // PASO 2: Central preparó, esperando que Engine confirme
+                    html += '<span style="color: #ffc107; font-size: 12px;">⏳ Esperando confirmación de Engine...</span>';
+                } else if (estado === 'LISTO_PARA_INICIAR' || estado === 'LISTO PARA INICIAR') {
+                    // PASO 3: Engine confirmó - Mostrar botón de confirmación FINAL
+                    html += `<button class="btn-control btn-start" onclick="confirmarInicio('${cp.cp_id}')" style="background: #28a745; animation: pulse 2s infinite;">✓ CONFIRMAR INICIO</button>`;
+                } else if (estado === 'ESPERANDO_CONFIRMACION_FIN' || estado === 'ESPERANDO CONFIRMACION FIN') {
+                    // Engine envió REQUEST_STOP - Mostrar botón de confirmación
+                    html += `<button class="btn-control btn-stop" onclick="confirmarFin('${cp.cp_id}')" style="background: #dc3545; animation: pulse 2s infinite;">✓ CONFIRMAR FIN</button>`;
+                } else if (estado === 'SUMINISTRANDO' || estado === 'CARGANDO') {
+                    // Durante carga: NO permitir detener (debe ser desde Engine)
+                    html += '<span style="color: #17a2b8; font-size: 12px;">⚡ Suministrando...</span>';
                 } else if (estado === 'ACTIVADO') {
-                    html += '<span style="color: #28a745; font-size: 12px;">✓ Disponible</span>';
+                    // CP disponible
+                    if (tieneSesion) {
+                        html += `<span style="color: #666; font-size: 12px;">👤 ${cp.driver_id_sesion || 'Driver'} esperando...</span>`;
+                    } else {
+                        html += '<span style="color: #999; font-size: 12px;">💤 Disponible</span>';
+                    }
                 } else {
-                    html += `<span style="color: #999; font-size: 12px;">${estado}</span>`;
+                    html += '<span style="color: #999; font-size: 12px;">-</span>';
                 }
                 
                 html += '</td>';
@@ -435,20 +433,51 @@
             document.getElementById('events-container').innerHTML = html;
         }
         
-        // Función para confirmar inicio de suministro
-        function confirmarInicio(cpId) {
-            if (!confirm(`¿Confirmar INICIO de suministro en ${cpId}?`)) return;
+        // Función para preparar suministro (PASO 1: Central → Engine)
+        function prepararSuministro(cpId) {
+            if (!confirm(`¿Preparar suministro para ${cpId}?
+
+Se enviará señal al Engine para que muestre el botón de inicio.`)) return;
             
-            fetch(`/api/confirmar_inicio/${cpId}`, {
+            fetch(`/api/preparar_suministro/${cpId}`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             })
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'ok') {
                     mostrarNotificacion(`✓ ${data.message}`, 'success');
                 } else {
-                    mostrarNotificacion(`✗ ${data.message}`, 'error');
+                    mostrarNotificacion(`Error: ${data.message}`, 'error');
+                }
+                actualizarDashboard();
+            })
+            .catch(error => {
+                mostrarNotificacion(`Error: ${error}`, 'error');
+                console.error('Error preparando suministro:', error);
+            });
+        }
+        
+        // Función para confirmar inicio de suministro (PASO 3: Central confirma tras Engine)
+        function confirmarInicio(cpId) {
+            if (!confirm(`¿Confirmar INICIO FINAL de suministro para ${cpId}?
+
+El suministro comenzará inmediatamente.`)) return;
+            
+            fetch(`/api/confirmar_inicio/${cpId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    mostrarNotificacion(`✓ Inicio confirmado para ${cpId}`, 'success');
+                } else {
+                    mostrarNotificacion(`Error: ${data.message}`, 'error');
                 }
                 actualizarDashboard();
             })
@@ -458,20 +487,22 @@
             });
         }
         
-        // Función para confirmar fin de suministro
+        // Función para confirmar fin de suministro (NUEVO FLUJO)
         function confirmarFin(cpId) {
-            if (!confirm(`¿Confirmar FIN de suministro en ${cpId}? Se generará el ticket para el driver.`)) return;
+            if (!confirm(`¿Confirmar FIN de suministro para ${cpId}?`)) return;
             
             fetch(`/api/confirmar_fin/${cpId}`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             })
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'ok') {
-                    mostrarNotificacion(`✓ ${data.message}`, 'success');
+                    mostrarNotificacion(`✓ Fin confirmado para ${cpId}`, 'success');
                 } else {
-                    mostrarNotificacion(`✗ ${data.message}`, 'error');
+                    mostrarNotificacion(`Error: ${data.message}`, 'error');
                 }
                 actualizarDashboard();
             })
@@ -481,7 +512,7 @@
             });
         }
         
-        // Función para enviar comandos a los CPs (DEPRECADO - usar confirmarInicio/confirmarFin)
+        // Función para enviar comandos a los CPs (DEPRECADA - usar confirmarInicio/confirmarFin)
         function enviarComando(cpId, comando) {
             // Deshabilitar el botón temporalmente
             event.target.disabled = true;
