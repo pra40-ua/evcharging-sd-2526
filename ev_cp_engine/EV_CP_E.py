@@ -854,18 +854,26 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     console.log('[WEB] Driver actual:', data.driver_actual);
                     console.log('[WEB] Objetivo kWh:', data.objetivo_kwh);
                     
-                    // Actualizar estado del flujo
-                    document.getElementById('status-estado').textContent = data.estado_flujo || data.estado || '-';
-                    document.getElementById('status-monitor').innerHTML = data.monitor_conectado 
-                        ? '<span class="badge badge-ok">Conectado</span>' 
-                        : '<span class="badge badge-ko">Desconectado</span>';
-                    document.getElementById('status-kwh').textContent = data.kw_acumulados.toFixed(2);
-                    document.getElementById('status-tiempo').textContent = data.segundos;
-                    document.getElementById('status-driver').textContent = data.driver_actual || '-';
-                    document.getElementById('status-objetivo').textContent = data.objetivo_kwh ? data.objetivo_kwh + ' kWh' : '-';
-                    
-                    // Actualizar botones según estado del flujo
-                    actualizarBotonesFlujo(data.estado_flujo, data);
+                    try {
+                        // Actualizar estado del flujo
+                        console.log('[WEB] Actualizando elementos DOM...');
+                        document.getElementById('status-estado').textContent = data.estado_flujo || data.estado || '-';
+                        document.getElementById('status-monitor').innerHTML = data.monitor_conectado 
+                            ? '<span class="badge badge-ok">Conectado</span>' 
+                            : '<span class="badge badge-ko">Desconectado</span>';
+                        document.getElementById('status-kwh').textContent = data.kw_acumulados.toFixed(2);
+                        document.getElementById('status-tiempo').textContent = data.segundos;
+                        document.getElementById('status-driver').textContent = data.driver_actual || '-';
+                        document.getElementById('status-objetivo').textContent = data.objetivo_kwh ? data.objetivo_kwh + ' kWh' : '-';
+                        
+                        // Actualizar botones según estado del flujo
+                        console.log('[WEB] Llamando a actualizarBotonesFlujo con estado:', data.estado_flujo);
+                        actualizarBotonesFlujo(data.estado_flujo, data);
+                        console.log('[WEB] ✓ Botones actualizados');
+                    } catch (e) {
+                        console.error('[WEB] ❌ Error actualizando DOM:', e);
+                        throw e;
+                    }
                     
                     // Estado de avería
                     estadoAveria = data.averia_simulada;
@@ -903,10 +911,16 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         }
         
         function actualizarBotonesFlujo(estadoFlujo, data) {
+            console.log('[WEB] 🎨 actualizarBotonesFlujo llamada con:', estadoFlujo);
             var contenedor = document.getElementById('flujo-container');
+            if (!contenedor) {
+                console.error('[WEB] ❌ No se encontró elemento flujo-container');
+                return;
+            }
             var html = '';
             
             if (estadoFlujo === 'ESPERANDO_DRIVER') {
+                console.log('[WEB] 🔵 Generando HTML para ESPERANDO_DRIVER');
                 var objetivo = data.objetivo_kwh || '?';
                 html = '<div class="button-group" style="background: #e8f5e9;">' +
                     '<h3>✅ Driver Autorizado</h3>' +
@@ -919,6 +933,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     '</div>';
             }
             else if (estadoFlujo === 'LISTO_PARA_INICIAR') {
+                console.log('[WEB] 🟡 Generando HTML para LISTO_PARA_INICIAR');
                 html = '<div class="button-group" style="background: #fff3cd;">' +
                     '<h3>⏳ Esperando Confirmación de Central</h3>' +
                     '<p>Señal enviada a la Central. El operador de Central debe confirmar el inicio del suministro.</p>' +
@@ -929,6 +944,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     '</div>';
             }
             else if (estadoFlujo === 'CARGANDO') {
+                console.log('[WEB] 🟢 Generando HTML para CARGANDO');
                 var progreso = data.objetivo_kwh ? ((data.kw_acumulados / data.objetivo_kwh) * 100).toFixed(1) : 0;
                 var objetivo_texto = data.objetivo_kwh || '∞';
                 html = '<div class="button-group" style="background: #d1ecf1;">' +
@@ -942,6 +958,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     '</div>';
             }
             else if (estadoFlujo === 'ESPERANDO_CONFIRMACION_FIN') {
+                console.log('[WEB] 🔴 Generando HTML para ESPERANDO_CONFIRMACION_FIN');
                 html = '<div class="button-group" style="background: #f8d7da;">' +
                     '<h3>⏳ Esperando Confirmación de Fin</h3>' +
                     '<p>Solicitud de fin enviada a la Central. El operador de Central debe confirmar el cierre del suministro.</p>' +
@@ -954,6 +971,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     '</div>';
             }
             else {
+                console.log('[WEB] ⚪ Generando HTML para estado desconocido o REPOSO:', estadoFlujo);
                 html = '<div class="button-group">' +
                     '<h3>💤 En Reposo</h3>' +
                     '<p>El punto de carga está disponible. Esperando solicitud de un driver desde la Central.</p>' +
@@ -963,7 +981,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     '</div>';
             }
             
+            console.log('[WEB] 📝 Estableciendo innerHTML (longitud:', html.length, ')');
             contenedor.innerHTML = html;
+            console.log('[WEB] ✅ innerHTML establecido correctamente');
         }
         
         function iniciarSuministro() {
@@ -1108,7 +1128,7 @@ def index():
 @app.route('/api/status')
 def api_status():
     """Devuelve el estado actual del engine."""
-    global TARGET_KWH, CURRENT_DRIVER_ID, ENGINE_CP_ID, ACTIVE_MONITOR_CONN
+    global TARGET_KWH, CURRENT_DRIVER_ID, ENGINE_CP_ID, ACTIVE_MONITOR_CONN, SESSION_LOCK
     
     print(f"[WEB API] ⭐ /api/status llamado")
     
@@ -1116,10 +1136,11 @@ def api_status():
     with SESSION_LOCK:
         driver_actual = CURRENT_DRIVER_ID
         objetivo_kwh = TARGET_KWH
+        print(f"[WEB API] 🔒 Dentro de SESSION_LOCK: driver={driver_actual}, objetivo={objetivo_kwh}")
     
     cp_id = ENGINE_CP_ID or 'CP_UNKNOWN'
     
-    print(f"[WEB API] 📊 Valores globales: driver={driver_actual}, objetivo={objetivo_kwh}")
+    print(f"[WEB API] 📊 Valores leídos: driver={driver_actual}, objetivo={objetivo_kwh}")
     
     with STATE_LOCK:
         estado = {
@@ -1140,9 +1161,10 @@ def api_status():
     with ESTADO_FLUJO_LOCK:
         estado_flujo_actual = ESTADO_FLUJO
         estado['estado_flujo'] = estado_flujo_actual
+        print(f"[WEB API] 🔒 Dentro de ESTADO_FLUJO_LOCK: estado_flujo={estado_flujo_actual}")
     
-    # Debug: imprimir valores leídos
-    print(f"[WEB API] ✅ Respuesta: estado_flujo={estado_flujo_actual}, driver={driver_actual}, objetivo={objetivo_kwh}")
+    # Debug: imprimir valores finales que se van a enviar
+    print(f"[WEB API] ✅ Enviando respuesta JSON: estado_flujo={estado_flujo_actual}, driver={driver_actual}, objetivo={objetivo_kwh}")
     
     return jsonify(estado)
 
