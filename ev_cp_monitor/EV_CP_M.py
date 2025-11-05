@@ -307,7 +307,17 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                         trama_auth = construir_trama('AUTH_REQ', campos_auth)
                         engine_socket.sendall(trama_auth)
                         print(f"[{cp_id}] 📤 AUTH_REQ enviado al Engine (Driver: {driver_id}, kW: {kw_deseados})")
-                        # No esperamos ACK para AUTH_REQ, el Engine lo procesará internamente
+                        # El Engine procesará el AUTH_REQ internamente y responderá con ACK
+                        # Leer la respuesta para limpiar el buffer
+                        try:
+                            resp_auth = engine_socket.recv(1024)
+                            cod_resp, campos_resp = descomponer_trama(resp_auth)
+                            if cod_resp == 'ACK':
+                                print(f"[{cp_id}] ✓ Engine confirmó recepción de AUTH_REQ: {campos_resp[0] if campos_resp else 'OK'}")
+                            else:
+                                print(f"[{cp_id}] ⚠️ Respuesta inesperada a AUTH_REQ: {cod_resp}")
+                        except Exception as e:
+                            print(f"[{cp_id}] ⚠️ Error leyendo respuesta AUTH_REQ: {e}")
                         continue
                     
                     # Para START/STOP y otros comandos CMD

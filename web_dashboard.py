@@ -307,7 +307,9 @@ def actualizar_estadisticas():
     with STATS_LOCK, CPS_STATE_LOCK, TELEMETRIA_LOCK:
         STATS['total_cps'] = len(CPS_STATE)
         STATS['cps_activos'] = sum(1 for cp in CPS_STATE.values() 
-                                    if cp.get('estado', '').upper() in ['ACTIVADO', 'SUMINISTRANDO', 'CARGANDO', 'PRE-SUMINISTRO'])
+                                    if cp.get('estado', '').upper() in ['ACTIVADO', 'SUMINISTRANDO', 'CARGANDO', 'PRE-SUMINISTRO', 
+                                                                         'PENDIENTE_CONFIRMACION_CENTRAL', 'ESPERANDO_OPERADOR_ENGINE', 
+                                                                         'LISTO_PARA_INICIAR'])
         STATS['cps_suministrando'] = sum(1 for cp in CPS_STATE.values() 
                                           if cp.get('estado', '').upper() in ['SUMINISTRANDO', 'CARGANDO'])
         STATS['cps_averiados'] = sum(1 for cp in CPS_STATE.values() 
@@ -562,13 +564,57 @@ def api_command():
         }), 500
 
 
+@app.route('/api/preparar_suministro/<cp_id>', methods=['POST'])
+def api_preparar_suministro(cp_id):
+    """
+    PASO 1: Operador de Central prepara el suministro enviando AUTH_REQ al Engine.
+    Esto hace que aparezca el botón en la web del Engine.
+    """
+    try:
+        print(f"[DASHBOARD] Preparación de suministro solicitada para {cp_id}")
+        
+        # Enviar comando PREPARE_SUPPLY a través de Kafka
+        with KAFKA_PRODUCER_LOCK:
+            if KAFKA_PRODUCER is None:
+                return jsonify({
+                    'status': 'error',
+                    'message': 'Productor Kafka no disponible'
+                }), 503
+            
+            comando_msg = {
+                'cp_id': cp_id,
+                'command': 'PREPARE_SUPPLY',
+                'timestamp': datetime.now().isoformat(),
+                'source': 'web_dashboard_paso1'
+            }
+            
+            KAFKA_PRODUCER.send('central_commands', value=comando_msg)
+            KAFKA_PRODUCER.flush(timeout=2)
+            
+            registrar_evento(f"✅ Preparación de suministro para {cp_id} (enviando a Engine)", 'command')
+            
+            return jsonify({
+                'status': 'ok',
+                'message': f'Solicitud enviada a Engine. Esperando confirmación del operador del Engine...',
+                'cp_id': cp_id
+            })
+    
+    except Exception as e:
+        registrar_evento(f"Error preparando suministro para {cp_id}: {e}", 'error')
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
 @app.route('/api/confirmar_inicio/<cp_id>', methods=['POST'])
 def api_confirmar_inicio(cp_id):
     """
-    Confirma el inicio de suministro para un CP que está LISTO_PARA_INICIAR.
+    PASO 2: Confirma el inicio de suministro para un CP que está LISTO_PARA_INICIAR.
+    (El Engine ya confirmó que está listo)
     """
     try:
-        print(f"[DASHBOARD] Confirmación de inicio solicitada para {cp_id}")
+        print(f"[DASHBOARD] Confirmación FINAL de inicio solicitada para {cp_id}")
         
         # Enviar comando START a través de Kafka
         with KAFKA_PRODUCER_LOCK:
@@ -582,7 +628,7 @@ def api_confirmar_inicio(cp_id):
                 'cp_id': cp_id,
                 'command': 'START',
                 'timestamp': datetime.now().isoformat(),
-                'source': 'web_dashboard_confirmacion'
+                'source': 'web_dashboard_confirmacion_final'
             }
             
             KAFKA_PRODUCER.send('central_commands', value=comando_msg)
@@ -784,6 +830,11 @@ def crear_templates():
         .status-desconectado { background: #6c757d; color: white; }
         .status-reposo { background: #6c757d; color: white; }
         .status-pre-suministro { background: #fd7e14; color: white; }
+        .status-esperando-operador-engine { background: #ffc107; color: #333; }
+        .status-listo-para-iniciar { background: #28a745; color: white; }
+        .status-esperando-confirmacion-fin { background: #dc3545; color: white; }
+        .status-esperando-driver { background: #17a2b8; color: white; }
+        .status-pendiente-confirmacion-central { background: #007bff; color: white; animation: pulse 2s infinite; }
         
         .btn-control {
             padding: 6px 12px;
@@ -1030,21 +1081,32 @@ def crear_templates():
                 html += `<td>${cp.timestamp_telemetria || '-'}</td>`;
                 html += '<td>';
                 
-                // Botones de control según el estado y si hay sesión activa
+                // Botones de control según el NUEVO FLUJO INTERACTIVO (3 PASOS)
                 if (estado === 'DESCONECTADO' || estado === 'AVERIADO' || estado === 'AVERÍA') {
                     html += '<button class="btn-control" disabled>Sin Conexión</button>';
+                } else if (estado === 'PENDIENTE_CONFIRMACION_CENTRAL' || estado === 'PENDIENTE CONFIRMACION CENTRAL') {
+                    // PASO 1: Driver solicitó, operador de Central debe preparar
+                    const driver = cp.driver_id_sesion || 'Driver';
+                    const objetivo = cp.telemetria?.objetivo_kwh || '?';
+                    html += `<button class="btn-control btn-start" onclick="prepararSuministro('${cp.cp_id}')" style="background: #007bff; animation: pulse 2s infinite;">🚀 PREPARAR SUMINISTRO (${driver})</button>`;
+                } else if (estado === 'ESPERANDO_OPERADOR_ENGINE' || estado === 'ESPERANDO OPERADOR ENGINE') {
+                    // PASO 2: Central preparó, esperando que Engine confirme
+                    html += '<span style="color: #ffc107; font-size: 12px;">⏳ Esperando confirmación de Engine...</span>';
+                } else if (estado === 'LISTO_PARA_INICIAR' || estado === 'LISTO PARA INICIAR') {
+                    // PASO 3: Engine confirmó - Mostrar botón de confirmación FINAL
+                    html += `<button class="btn-control btn-start" onclick="confirmarInicio('${cp.cp_id}')" style="background: #28a745; animation: pulse 2s infinite;">✓ CONFIRMAR INICIO</button>`;
+                } else if (estado === 'ESPERANDO_CONFIRMACION_FIN' || estado === 'ESPERANDO CONFIRMACION FIN') {
+                    // Engine envió REQUEST_STOP - Mostrar botón de confirmación
+                    html += `<button class="btn-control btn-stop" onclick="confirmarFin('${cp.cp_id}')" style="background: #dc3545; animation: pulse 2s infinite;">✓ CONFIRMAR FIN</button>`;
                 } else if (estado === 'SUMINISTRANDO' || estado === 'CARGANDO') {
-                    // Cargando: solo permitir detener
-                    html += `<button class="btn-control btn-stop" onclick="enviarComando('${cp.cp_id}', 'STOP')">⏸ Detener</button>`;
-                } else if (estado === 'PRE-SUMINISTRO') {
-                    // En PRE-SUMINISTRO, permitir iniciar carga
-                    html += `<button class="btn-control btn-start" onclick="enviarComando('${cp.cp_id}', 'START')">▶ Iniciar Carga</button>`;
+                    // Durante carga: NO permitir detener (debe ser desde Engine)
+                    html += '<span style="color: #17a2b8; font-size: 12px;">⚡ Suministrando...</span>';
                 } else if (estado === 'ACTIVADO') {
-                    // En ACTIVADO: solo mostrar botón START si hay sesión activa
+                    // CP disponible
                     if (tieneSesion) {
-                        html += `<button class="btn-control btn-start" onclick="enviarComando('${cp.cp_id}', 'START')">▶ Iniciar (${cp.driver_id_sesion || 'Driver'})</button>`;
+                        html += `<span style="color: #666; font-size: 12px;">👤 ${cp.driver_id_sesion || 'Driver'} esperando...</span>`;
                     } else {
-                        html += '<span style="color: #999; font-size: 12px;">En espera de solicitud</span>';
+                        html += '<span style="color: #999; font-size: 12px;">💤 Disponible</span>';
                     }
                 } else {
                     html += '<span style="color: #999; font-size: 12px;">-</span>';
@@ -1076,7 +1138,82 @@ def crear_templates():
             document.getElementById('events-container').innerHTML = html;
         }
         
-        // Función para enviar comandos a los CPs
+        // Función para preparar suministro (PASO 1: Central → Engine)
+        function prepararSuministro(cpId) {
+            if (!confirm(`¿Preparar suministro para ${cpId}?\n\nSe enviará señal al Engine para que muestre el botón de inicio.`)) return;
+            
+            fetch(`/api/preparar_suministro/${cpId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    mostrarNotificacion(`✓ ${data.message}`, 'success');
+                } else {
+                    mostrarNotificacion(`Error: ${data.message}`, 'error');
+                }
+                actualizarDashboard();
+            })
+            .catch(error => {
+                mostrarNotificacion(`Error: ${error}`, 'error');
+                console.error('Error preparando suministro:', error);
+            });
+        }
+        
+        // Función para confirmar inicio de suministro (PASO 3: Central confirma tras Engine)
+        function confirmarInicio(cpId) {
+            if (!confirm(`¿Confirmar INICIO FINAL de suministro para ${cpId}?\n\nEl suministro comenzará inmediatamente.`)) return;
+            
+            fetch(`/api/confirmar_inicio/${cpId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    mostrarNotificacion(`✓ Inicio confirmado para ${cpId}`, 'success');
+                } else {
+                    mostrarNotificacion(`Error: ${data.message}`, 'error');
+                }
+                actualizarDashboard();
+            })
+            .catch(error => {
+                mostrarNotificacion(`Error: ${error}`, 'error');
+                console.error('Error confirmando inicio:', error);
+            });
+        }
+        
+        // Función para confirmar fin de suministro (NUEVO FLUJO)
+        function confirmarFin(cpId) {
+            if (!confirm(`¿Confirmar FIN de suministro para ${cpId}?`)) return;
+            
+            fetch(`/api/confirmar_fin/${cpId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    mostrarNotificacion(`✓ Fin confirmado para ${cpId}`, 'success');
+                } else {
+                    mostrarNotificacion(`Error: ${data.message}`, 'error');
+                }
+                actualizarDashboard();
+            })
+            .catch(error => {
+                mostrarNotificacion(`Error: ${error}`, 'error');
+                console.error('Error confirmando fin:', error);
+            });
+        }
+        
+        // Función para enviar comandos a los CPs (DEPRECADA - usar confirmarInicio/confirmarFin)
         function enviarComando(cpId, comando) {
             // Deshabilitar el botón temporalmente
             event.target.disabled = true;

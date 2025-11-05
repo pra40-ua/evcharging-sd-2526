@@ -517,15 +517,70 @@ def consumir_comandos_control_kafka(broker_list: str):
                     command = comando.get('command', '').upper()
                     source = comando.get('source', 'unknown')
                     
-                    if not cp_id or command not in ['START', 'STOP']:
-                        registrar_evento(f"[WARN] Comando inválido recibido: {comando}", "warn")
+                    if not cp_id:
+                        registrar_evento(f"[WARN] Comando sin cp_id: {comando}", "warn")
                         continue
                     
                     registrar_evento(f"[CONTROL WEB] Comando {command} para {cp_id} desde {source}")
                     print(f"[KAFKA CONSUMER] Comando recibido: {command} para {cp_id}")
                     
-                    # Ejecutar el comando
-                    _enviar_comando_cp(cp_id, command)
+                    # Manejar comando especial PREPARE_SUPPLY
+                    if command == 'PREPARE_SUPPLY':
+                        # Obtener datos de sesión y enviar AUTH_REQ
+                        with CP_SESION_DRIVER_ID_LOCK:
+                            driver_id = CP_SESION_DRIVER_ID.get(cp_id)
+                        with CP_SESION_OBJETIVO_KWH_LOCK:
+                            kw_objetivo = CP_SESION_OBJETIVO_KWH.get(cp_id)
+                        
+                        if not driver_id or not kw_objetivo:
+                            print(f"[CENTRAL] No hay sesión activa para {cp_id}")
+                            registrar_evento(f"[ERROR] No hay sesión activa para {cp_id}", "error")
+                            continue
+                        
+                        # Enviar AUTH_REQ al CP
+                        with CONEXIONES_ACTIVAS_LOCK:
+                            cp_socket = CONEXIONES_ACTIVAS.get(cp_id)
+                        
+                        if not cp_socket:
+                            print(f"[CENTRAL] CP {cp_id} no está conectado")
+                            registrar_evento(f"[ERROR] CP {cp_id} no está conectado", "error")
+                            continue
+                        
+                        try:
+                            trama_auth = construir_trama('AUTH_REQ', [driver_id, str(kw_objetivo)])
+                            cp_socket.sendall(trama_auth)
+                            print(f"[CENTRAL] ✓ AUTH_REQ enviado a {cp_id} (Driver: {driver_id}, kW: {kw_objetivo})")
+                            registrar_evento(f"[FLUJO] AUTH_REQ enviado a {cp_id}. Esperando acción del operador del Engine.", "info")
+                            
+                            # Cambiar estado
+                            cambiar_estado_cp(cp_id, 'ESPERANDO_OPERADOR_ENGINE')
+                            
+                            # Publicar telemetría actualizada
+                            with TELEMETRIA_ACTUAL_LOCK:
+                                telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                            telemetria_actualizada = {
+                                **telemetria_actual,
+                                'cp_id': cp_id,
+                                'estado_carga': 'ESPERANDO_OPERADOR_ENGINE',
+                                'estado': 'ESPERANDO_OPERADOR_ENGINE',
+                                'timestamp': time.time(),
+                                'tiene_sesion_activa': True,
+                                'driver_id_sesion': driver_id
+                            }
+                            with TELEMETRIA_ACTUAL_LOCK:
+                                TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
+                            if KAFKA_PRODUCER:
+                                KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                                KAFKA_PRODUCER.flush(timeout=1)
+                        except Exception as e:
+                            print(f"[CENTRAL] Error enviando AUTH_REQ a {cp_id}: {e}")
+                            registrar_evento(f"[ERROR] Error enviando AUTH_REQ a {cp_id}: {e}", "error")
+                    
+                    elif command in ['START', 'STOP']:
+                        # Comandos normales START/STOP
+                        _enviar_comando_cp(cp_id, command)
+                    else:
+                        registrar_evento(f"[WARN] Comando desconocido: {command}", "warn")
             
             try:
                 consumer.commit()
@@ -671,7 +726,8 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                             })
                             continue
 
-                        # Paso 4: Registrar objetivo de sesión y enviar solicitud de autorización al Monitor
+                        # Paso 4: Registrar objetivo de sesión PERO NO ENVIAR AUTH_REQ TODAVÍA
+                        # Esperar a que el operador de Central de click en "Iniciar Suministro"
                         try:
                             with CP_SESION_OBJETIVO_KWH_LOCK:
                                 CP_SESION_OBJETIVO_KWH[cp_id] = float(kw_deseados)
@@ -684,54 +740,45 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                         except Exception:
                             pass
 
-                        notificar_driver(id_driver, 'AUTORIZACION_EN_PROCESO', {
-                            'mensaje': f'Contactando Monitor de {cp_id}...'
-                        })
-
+                        # NUEVO: Cambiar a estado PENDIENTE_CONFIRMACION_CENTRAL
+                        # El operador de Central debe confirmar desde la web
                         try:
-                            # NUEVO: Enviar AUTH_REQ al Engine pero NO iniciar automáticamente
-                            # El Engine mostrará el botón "Iniciar Suministro" en su web
-                            trama_auth = construir_trama('AUTH_REQ', [id_driver, kw_deseados])
-                            cp_socket.sendall(trama_auth)
-                            print(f"[CENTRAL] -> AUTH_REQ enviado a {cp_id} para driver {id_driver}")
-                            registrar_evento(f"[CONTROL] AUTH_REQ enviado a {cp_id} (kW: {kw_deseados}).")
-                            registrar_evento(f"[LOGICA] Solicitud {id_driver} validada. Esperando acción del operador del Engine.")
-                            # Estado: ESPERANDO_OPERADOR_ENGINE (ya no PRE-SUMINISTRO automático)
-                            try:
-                                cambiar_estado_cp(cp_id, 'ESPERANDO_OPERADOR_ENGINE', db_connection)
-                            except Exception:
-                                pass
-                            
-                            # Publicar telemetría actualizada con la sesión activa para el dashboard
-                            try:
-                                with TELEMETRIA_ACTUAL_LOCK:
-                                    telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
-                                telemetria_actualizada = {
-                                    **telemetria_actual,
-                                    'cp_id': cp_id,
-                                    'estado_carga': 'PRE-SUMINISTRO',
-                                    'estado': 'PRE-SUMINISTRO',
-                                    'timestamp': time.time(),
-                                    'tiene_sesion_activa': True,
-                                    'driver_id_sesion': id_driver
-                                }
-                                with TELEMETRIA_ACTUAL_LOCK:
-                                    TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
-                                if KAFKA_PRODUCER:
-                                    KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
-                                    KAFKA_PRODUCER.flush(timeout=1)
-                                    print(f"[CENTRAL] Telemetría actualizada publicada para {cp_id} (sesión activa: {id_driver})")
-                            except Exception as e:
-                                print(f"[CENTRAL] No se pudo publicar telemetría actualizada: {e}")
-                            
-                            notificar_driver(id_driver, 'PENDIENTE_RESPUESTA_CP', {
-                                'mensaje': 'Solicitud enviada al CP. Esperando confirmación.'
-                            })
+                            cambiar_estado_cp(cp_id, 'PENDIENTE_CONFIRMACION_CENTRAL', db_connection)
+                        except Exception:
+                            pass
+                        
+                        # Publicar telemetría para que aparezca botón en dashboard de Central
+                        try:
+                            with TELEMETRIA_ACTUAL_LOCK:
+                                telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                            telemetria_actualizada = {
+                                **telemetria_actual,
+                                'cp_id': cp_id,
+                                'estado_carga': 'PENDIENTE_CONFIRMACION_CENTRAL',
+                                'estado': 'PENDIENTE_CONFIRMACION_CENTRAL',
+                                'timestamp': time.time(),
+                                'tiene_sesion_activa': True,
+                                'driver_id_sesion': id_driver,
+                                'objetivo_kwh': kw_deseados
+                            }
+                            with TELEMETRIA_ACTUAL_LOCK:
+                                TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
+                            if KAFKA_PRODUCER:
+                                KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                                KAFKA_PRODUCER.flush(timeout=1)
+                                print(f"[CENTRAL] Telemetría publicada para {cp_id}: PENDIENTE_CONFIRMACION_CENTRAL")
                         except Exception as e:
-                            print(f"[CENTRAL] Error enviando AUTH_REQ a {cp_id}: {e}")
-                            notificar_driver(id_driver, 'DENEGADA', {
-                                'motivo': f'Error contactando con Monitor de {cp_id}'
-                            })
+                            print(f"[CENTRAL] No se pudo publicar telemetría: {e}")
+                        
+                        # Notificar al driver que su solicitud está en espera de confirmación
+                        notificar_driver(id_driver, 'EN_ESPERA_CONFIRMACION', {
+                            'mensaje': f'Solicitud validada. Esperando confirmación del operador de Central.',
+                            'cp_id': cp_id
+                        })
+                        
+                        print(f"[CENTRAL] ✓ Solicitud de {id_driver} para {cp_id} registrada.")
+                        print(f"[CENTRAL] ⏳ Esperando que operador de Central confirme en web dashboard...")
+                        registrar_evento(f"[FLUJO] Solicitud {id_driver} → {cp_id} ({kw_deseados} kWh). Esperando confirmación de operador Central.", "info")
 
                     except Exception as e:
                         print(f"[CENTRAL] Error procesando solicitud del driver: {e}")
@@ -1294,15 +1341,10 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                         mensaje = campos[2] if len(campos) >= 3 else ''
                         if resultado == 'OK':
                             registrar_evento(f"[CONTROL] Confirmación síncrona de {cp_id}: AUTH_ACK#OK.")
-                            notificar_driver(driver_id, 'AUTORIZADO', {
-                                'cp_id': cp_id,
-                                'mensaje': mensaje or 'Autorización concedida por CP'
-                            })
-                            # Estado se mantiene en PRE-SUMINISTRO hasta ver telemetría de CARGANDO
-                            try:
-                                cambiar_estado_cp(cp_id, 'PRE-SUMINISTRO')
-                            except Exception:
-                                pass
+                            # DEPRECADO: NO notificar "AUTORIZADO" aquí - se notificará tras confirmar inicio
+                            # El driver debe esperar a que el operador del Engine inicie el suministro
+                            print(f"[CENTRAL] {cp_id} confirmó AUTH_REQ. Esperando acción del operador del Engine...")
+                            # NO cambiar estado aquí - mantener ESPERANDO_OPERADOR_ENGINE que se puso al enviar AUTH_REQ
                         else:
                             registrar_evento(f"[CONTROL] Confirmación síncrona de {cp_id}: AUTH_ACK#KO ({mensaje}).")
                             notificar_driver(driver_id, 'DENEGADO', {
@@ -1460,6 +1502,12 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                         print(f"[CENTRAL] 📩 READY_TO_START recibido de {engine_cp_id} (Driver: {driver_id})")
                         registrar_evento(f"[FLUJO] {engine_cp_id} listo para iniciar. Driver: {driver_id}. Esperando confirmación del operador de Central.", "info")
                         
+                        # AHORA SÍ notificar al driver como AUTORIZADO (el Engine está listo)
+                        notificar_driver(driver_id, 'AUTORIZADO', {
+                            'cp_id': engine_cp_id,
+                            'mensaje': 'CP listo para iniciar. Esperando confirmación final de Central.'
+                        })
+                        
                         # Marcar CP como pendiente de confirmación
                         with CP_PENDIENTE_CONFIRMACION_LOCK:
                             CP_PENDIENTE_CONFIRMACION[engine_cp_id] = 'LISTO_PARA_INICIAR'
@@ -1614,6 +1662,7 @@ def cambiar_estado_cp(cp_id: str, nuevo_estado: str, db_connection: mysql.connec
                 'DESCONECTADO': 'Desconectado',
                 'ACTIVADO': 'Activado',
                 'PRE-SUMINISTRO': 'Pre-Suministro',
+                'PENDIENTE_CONFIRMACION_CENTRAL': 'Pendiente Confirmacion Central',
                 'ESPERANDO_OPERADOR_ENGINE': 'Esperando Operador Engine',
                 'LISTO_PARA_INICIAR': 'Listo Para Iniciar',
                 'SUMINISTRANDO': 'Suministrando',
