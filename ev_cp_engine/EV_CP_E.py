@@ -860,7 +860,15 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     try {
                         // Actualizar estado del flujo
                         console.log('[WEB] Actualizando elementos DOM...');
-                        document.getElementById('status-estado').textContent = data.estado_flujo || data.estado || '-';
+                        // Derivar estado en el cliente: si hay driver y objetivo pero flujo=REPOSO, mostrar ESPERANDO_DRIVER
+                        var estadoDerivado = data.estado_flujo;
+                        if (!estadoDerivado || estadoDerivado === 'REPOSO') {
+                            if ((data.driver_actual && data.driver_actual !== 'UNKNOWN') && (data.objetivo_kwh !== null && data.objetivo_kwh !== undefined)) {
+                                console.log('[WEB] 🛡️ Derivando estado a ESPERANDO_DRIVER por sesión activa');
+                                estadoDerivado = 'ESPERANDO_DRIVER';
+                            }
+                        }
+                        document.getElementById('status-estado').textContent = estadoDerivado || data.estado || '-';
                         document.getElementById('status-monitor').innerHTML = data.monitor_conectado 
                             ? '<span class="badge badge-ok">Conectado</span>' 
                             : '<span class="badge badge-ko">Desconectado</span>';
@@ -870,8 +878,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                         document.getElementById('status-objetivo').textContent = data.objetivo_kwh ? data.objetivo_kwh + ' kWh' : '-';
                         
                         // Actualizar botones según estado del flujo
-                        console.log('[WEB] Llamando a actualizarBotonesFlujo con estado:', data.estado_flujo);
-                        actualizarBotonesFlujo(data.estado_flujo, data);
+                        console.log('[WEB] Llamando a actualizarBotonesFlujo con estado:', estadoDerivado);
+                        actualizarBotonesFlujo(estadoDerivado, data);
                         console.log('[WEB] ✓ Botones actualizados');
                     } catch (e) {
                         console.error('[WEB] ❌ Error actualizando DOM:', e);
@@ -1168,8 +1176,19 @@ def api_status():
     # Agregar estado del flujo interactivo
     with ESTADO_FLUJO_LOCK:
         estado_flujo_actual = ESTADO_FLUJO
-        estado['estado_flujo'] = estado_flujo_actual
         print(f"[WEB API] 🔒 Dentro de ESTADO_FLUJO_LOCK: estado_flujo={estado_flujo_actual}")
+
+    # Salvaguarda: si hay driver y objetivo pero el flujo figura en REPOSO, forzar ESPERANDO_DRIVER
+    try:
+        if (not estado_flujo_actual or estado_flujo_actual == 'REPOSO') \
+           and (driver_actual is not None and driver_actual != 'UNKNOWN') \
+           and (objetivo_kwh is not None):
+            print("[WEB API] 🛡️ Salvaguarda activada: derivando estado_flujo=ESPERANDO_DRIVER por sesión activa")
+            estado_flujo_actual = 'ESPERANDO_DRIVER'
+    except Exception:
+        pass
+
+    estado['estado_flujo'] = estado_flujo_actual
     
     # Debug: imprimir valores finales que se van a enviar
     print(f"[WEB API] ✅ Enviando respuesta JSON: estado_flujo={estado_flujo_actual}, driver={driver_actual}, objetivo={objetivo_kwh}")
