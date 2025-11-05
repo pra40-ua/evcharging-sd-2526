@@ -286,3 +286,4 @@ Si la telemetría sigue sin actualizarse después de reiniciar, **proporciona:**
 - Output del consumer de Kafka de telemetria_cp
 - Respuesta del endpoint `/api/debug`
 
+

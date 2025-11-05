@@ -97,11 +97,6 @@ CURRENT_TX_ID = None
 ACTIVE_MONITOR_CONN: socket.socket | None = None
 ENGINE_CP_ID = None
 
-# Estados del Engine
-ENGINE_FAULTED = threading.Event()  # Indica si hay avería
-VEHICLE_PLUGGED = threading.Event()  # Indica si vehículo está conectado físicamente
-AUTHORIZED_TO_CHARGE = threading.Event()  # Indica si Central ha autorizado
-
 def bucle_telemetria(cp_id: str, stop_event: threading.Event):
     """Emite telemetría de CARGANDO únicamente mientras dure la sesión (START..STOP)."""
     global kw_acumulados_global, segundos_global
@@ -251,29 +246,17 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
             cod_op, campos = descomponer_trama(trama_bytes)
 
             if cod_op == 'HCK':
-                # Verificar si hay avería
-                if ENGINE_FAULTED.is_set():
-                    status = "KO"
-                else:
-                    status = "OK"
+                # --- Lógica de Simulación de Estado ---
+                # **Aquí puedes añadir lógica para simular un fallo (KO).**
+                # Ejemplo: status = "KO" si una bandera interna lo indica.
+                status = "OK" 
                 
                 respuesta = construir_trama('HCK_RESP', [status])
                 conn.sendall(respuesta)
-                
-                # Mostrar solo si hay cambio de estado o avería
-                if status == "KO":
-                    print(f"[{cp_id}] ⚠️  HCK_RESP enviado: KO (AVERÍA ACTIVA)")
-                # HCK con OK es muy frecuente, no mostrar para no saturar la pantalla
+                # HCK es muy frecuente, no mostrar para no saturar la pantalla
             elif cod_op == 'CMD':
                 orden = (campos[0] if campos else '').upper()
                 if orden == 'START':
-                    # Verificar que no hay avería
-                    if ENGINE_FAULTED.is_set():
-                        print(f"\n[{cp_id}] ✗ No se puede iniciar suministro: CP en AVERÍA")
-                        respuesta = construir_trama('ACK', ['START_FAILED_FAULT'])
-                        conn.sendall(respuesta)
-                        continue
-                    
                     # Campos opcionales: kw_objetivo, driver_id
                     kw_objetivo = None
                     driver_id = 'UNKNOWN'
@@ -284,41 +267,16 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                             driver_id = str(campos[2])
                     except Exception:
                         pass
+                    # Inicializar sesión
+                    global kw_acumulados_global, segundos_global, TARGET_KWH, CURRENT_DRIVER_ID
+                    global SESSION_START_TS, CURRENT_TX_ID, ACTIVE_MONITOR_CONN
+                    global TELEMETRY_STOP_EVENT, TELEMETRY_THREAD
                     
                     print(f"\n{'='*70}")
                     print(f"  [{cp_id}] 📩 MENSAJE RECIBIDO: CMD START")
                     print(f"  Driver: {driver_id}")
                     print(f"  Objetivo: {kw_objetivo} kWh" if kw_objetivo else "  Objetivo: Sin límite")
                     print(f"{'='*70}\n")
-                    
-                    # Marcar que Central ha autorizado
-                    AUTHORIZED_TO_CHARGE.set()
-                    
-                    # Verificar si el vehículo ya está conectado físicamente
-                    if not VEHICLE_PLUGGED.is_set():
-                        print(f"[{cp_id}] ⏳ CENTRAL ha AUTORIZADO la carga")
-                        print(f"[{cp_id}] ⏳ ESPERANDO que el conductor conecte el vehículo...")
-                        print(f"[{cp_id}] ℹ️  (Presiona '1' en el menú para simular conexión física)")
-                        
-                        # Guardar la sesión pero NO iniciar suministro aún
-                        global CURRENT_DRIVER_ID, TARGET_KWH
-                        CURRENT_DRIVER_ID = driver_id
-                        TARGET_KWH = kw_objetivo
-                        
-                        respuesta = construir_trama('ACK', ['START_WAITING_PLUG'])
-                        conn.sendall(respuesta)
-                        print(f"[{cp_id}] 📤 ACK enviado: Esperando conexión física\n")
-                        continue
-                    
-                    # Si el vehículo YA está conectado, iniciar suministro
-                    print(f"[{cp_id}] ✓ Vehículo ya conectado físicamente")
-                    print(f"[{cp_id}] ✓ Central ha autorizado")
-                    print(f"[{cp_id}] ⚡ INICIANDO SUMINISTRO...")
-                    
-                    # Inicializar sesión
-                    global kw_acumulados_global, segundos_global, TARGET_KWH, CURRENT_DRIVER_ID
-                    global SESSION_START_TS, CURRENT_TX_ID, ACTIVE_MONITOR_CONN
-                    global TELEMETRY_STOP_EVENT, TELEMETRY_THREAD
                     
                     with STATE_LOCK:
                         # Reinicia contadores al iniciar nueva sesión de carga
@@ -433,28 +391,18 @@ def enviar_estado_al_monitor(estado: str) -> None:
         conn = globals().get('ACTIVE_MONITOR_CONN')
         cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
         if conn is None:
-            print(f"[{cp_id}] No hay conexión con Monitor para enviar STATE.")
+            print("[ENGINE] No hay conexión con Monitor para enviar STATE.")
             return
         trama_state = construir_trama('STATE', [cp_id, estado])
         conn.sendall(trama_state)
-        print(f"[{cp_id}] 📤 STATE enviado al Monitor: {estado}")
-        
-        # Si es PLUGGED y ya hay autorización, verificar inicio automático
-        if estado == 'PLUGGED' and AUTHORIZED_TO_CHARGE.is_set():
-            print(f"[{cp_id}] ✓ Condiciones cumplidas: Vehículo conectado + Autorización")
-            print(f"[{cp_id}] ⚡ El Monitor iniciará el suministro...")
-            
+        print(f"[ENGINE] STATE enviado al Monitor: {estado}")
     except Exception as e:
-        print(f"[{cp_id}] Error enviando STATE al Monitor: {e}")
+        print(f"[ENGINE] Error enviando STATE al Monitor: {e}")
 
 
 def obtener_estado_actual() -> str:
     """Retorna el estado actual del CP como string legible."""
     try:
-        # Verificar avería primero
-        if ENGINE_FAULTED.is_set():
-            return "AVERÍA (Faulted)"
-        
         conn = globals().get('ACTIVE_MONITOR_CONN')
         if conn is None:
             return "DESCONECTADO (Sin Monitor)"
@@ -462,12 +410,8 @@ def obtener_estado_actual() -> str:
         with STATE_LOCK:
             if CHARGING_FLAG.is_set():
                 return f"CARGANDO ({kw_acumulados_global:.2f} kWh, {segundos_global}s)"
-            elif AUTHORIZED_TO_CHARGE.is_set() and not VEHICLE_PLUGGED.is_set():
-                return "AUTORIZADO (Esperando conexión física del vehículo)"
-            elif VEHICLE_PLUGGED.is_set() and not AUTHORIZED_TO_CHARGE.is_set():
-                return "VEHÍCULO CONECTADO (Esperando autorización de Central)"
-            elif CURRENT_DRIVER_ID and CURRENT_DRIVER_ID != 'UNKNOWN':
-                return "PRE-SUMINISTRO (Sesión activa)"
+            elif globals().get('SESION_DRIVER_ID') and globals().get('SESION_DRIVER_ID') != 'UNKNOWN':
+                return "PRE-SUMINISTRO (Autorizado, esperando enchufar)"
             else:
                 return "DISPONIBLE (Available)"
     except Exception:
@@ -480,142 +424,38 @@ def mostrar_interfaz_cp(cp_id: str):
     print("="*70)
     print(f"  Estado: {obtener_estado_actual()}")
     print("="*70)
-    print("\n  ACCIONES DISPONIBLES:")
-    print("    [1] Conectar vehículo físicamente (PLUG)")
-    print("    [2] Reportar AVERÍA (Fault)")
-    print("    [3] Desconectar vehículo (UNPLUG)")
-    print("    [9] Mostrar estado actual")
-    print("    [0] Ayuda")
+    print("\n  MENÚ DE SIMULACIÓN DEL CONDUCTOR:")
+    print("    [p] Enchufar vehículo (Plug)")
+    print("    [d] Desenchufar vehículo (Unplug)")
+    print("    [r] Simular RFID / Iniciar sesión")
+    print("    [s] Mostrar estado actual")
+    print("    [h] Ayuda")
+    print("    [q] Salir")
     print("="*70)
-    sys.stdout.flush()
-
-def reportar_averia_al_monitor() -> None:
-    """Reporta avería al Monitor mediante mensaje HCK_RESP con KO."""
-    try:
-        conn = globals().get('ACTIVE_MONITOR_CONN')
-        cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
-        
-        if conn is None:
-            print(f"[{cp_id}] ✗ No hay conexión con Monitor para reportar avería.")
-            return
-        
-        # Detener cualquier carga en curso
-        with STATE_LOCK:
-            if TELEMETRY_STOP_EVENT:
-                TELEMETRY_STOP_EVENT.set()
-            CHARGING_FLAG.clear()
-        
-        # Marcar estado de avería
-        ENGINE_FAULTED.set()
-        AUTHORIZED_TO_CHARGE.clear()
-        VEHICLE_PLUGGED.clear()
-        
-        print(f"\n{'='*70}")
-        print(f"  [{cp_id}] ⚠️  AVERÍA REPORTADA")
-        print(f"{'='*70}")
-        print(f"  Estado: FAULTED")
-        print(f"  Suministro: DETENIDO")
-        print(f"  Notificando a Monitor...")
-        print(f"{'='*70}\n")
-        
-        # El Monitor detectará KO en el siguiente HCK y notificará a Central
-        # No necesitamos enviar mensaje especial, el HCK_RESP con KO lo hará
-        
-    except Exception as e:
-        print(f"[ENGINE] ✗ Error reportando avería: {e}")
-
 
 def menu_interactivo_engine() -> None:
-    """Menú interactivo limitado para simular acciones físicas del CP."""
+    """Menú interactivo mejorado para simular acciones físicas en el CP."""
     cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
     mostrar_interfaz_cp(cp_id)
     
-    # Asegurar que sys.stdout no está bufferizado
-    sys.stdout.flush()
-    
     while True:
         try:
-            # Usar sys.stdout.write para el prompt y sys.stdin.readline para leer
-            sys.stdout.write(f"\n[{cp_id}] Acción: ")
-            sys.stdout.flush()
-            
-            cmd = sys.stdin.readline().strip()
-            
-            if not cmd:
-                continue
-                
+            cmd = input(f"\n[{cp_id}] Acción: ").strip().lower()
         except (KeyboardInterrupt, EOFError):
             print(f"\n[{cp_id}] Saliendo del menú...")
             break
-        except Exception as e:
-            print(f"[{cp_id}] Error leyendo entrada: {e}")
+        except Exception:
             time.sleep(0.5)
             continue
             
-        if cmd == '0':
+        if not cmd:
+            continue
+            
+        if cmd == 'h':
             mostrar_interfaz_cp(cp_id)
             continue
             
-        if cmd == '1':
-            if ENGINE_FAULTED.is_set():
-                print(f"\n[{cp_id}] ✗ No se puede conectar vehículo: CP en AVERÍA")
-                print(f"[{cp_id}] Primero debe resolverse la avería")
-                sys.stdout.flush()
-                continue
-                
-            print(f"\n[{cp_id}] 🔌 Conductor CONECTA vehículo físicamente...")
-            sys.stdout.flush()
-            VEHICLE_PLUGGED.set()
-            
-            # Verificar si ya hay autorización de Central
-            if AUTHORIZED_TO_CHARGE.is_set():
-                print(f"[{cp_id}] ✓ Vehículo conectado + Autorización previa detectada")
-                print(f"[{cp_id}] ⚡ INICIANDO SUMINISTRO automáticamente...")
-                sys.stdout.flush()
-                # El suministro real se inicia cuando el Monitor envíe START
-                enviar_estado_al_monitor('PLUGGED')
-            else:
-                print(f"[{cp_id}] ✓ Vehículo conectado físicamente")
-                print(f"[{cp_id}] ⏳ Esperando autorización de la CENTRAL...")
-                sys.stdout.flush()
-                enviar_estado_al_monitor('PLUGGED')
-            continue
-            
-        if cmd == '2':
-            print(f"\n[{cp_id}] ⚠️  REPORTANDO AVERÍA...")
-            sys.stdout.flush()
-            reportar_averia_al_monitor()
-            print(f"[{cp_id}] ✓ Avería reportada. Monitor notificará a la Central.")
-            sys.stdout.flush()
-            continue
-            
-        if cmd == '3':
-            if ENGINE_FAULTED.is_set():
-                print(f"\n[{cp_id}] ℹ️  CP en AVERÍA. Desconexión de vehículo registrada.")
-                sys.stdout.flush()
-                VEHICLE_PLUGGED.clear()
-                continue
-                
-            print(f"\n[{cp_id}] 🔓 Conductor DESCONECTA vehículo físicamente...")
-            sys.stdout.flush()
-            VEHICLE_PLUGGED.clear()
-            
-            # Detener carga si estaba activa
-            try:
-                with STATE_LOCK:
-                    if TELEMETRY_STOP_EVENT:
-                        TELEMETRY_STOP_EVENT.set()
-                    CHARGING_FLAG.clear()
-                AUTHORIZED_TO_CHARGE.clear()
-                enviar_estado_al_monitor('UNPLUGGED')
-                print(f"[{cp_id}] ✓ Vehículo desconectado. Carga detenida.")
-                sys.stdout.flush()
-            except Exception as e:
-                print(f"[{cp_id}] ✗ Error al desconectar: {e}")
-                sys.stdout.flush()
-            continue
-        
-        if cmd == '9':
+        if cmd == 's':
             print(f"\n{'='*70}")
             print(f"  ESTADO ACTUAL DE {cp_id}")
             print(f"{'='*70}")
@@ -626,15 +466,39 @@ def menu_interactivo_engine() -> None:
             driver_id = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
             print(f"  Driver actual: {driver_id}")
             print(f"  Monitor conectado: {'Sí' if globals().get('ACTIVE_MONITOR_CONN') else 'No'}")
-            print(f"  Vehículo enchufado: {'Sí' if VEHICLE_PLUGGED.is_set() else 'No'}")
-            print(f"  Autorizado por Central: {'Sí' if AUTHORIZED_TO_CHARGE.is_set() else 'No'}")
-            print(f"  En avería: {'Sí' if ENGINE_FAULTED.is_set() else 'No'}")
             print(f"{'='*70}")
-            sys.stdout.flush()
             continue
             
-        print(f"[{cp_id}] ✗ Opción no válida: '{cmd}'. Usa '0' para ver el menú.")
-        sys.stdout.flush()
+        if cmd == 'p':
+            print(f"\n[{cp_id}] 🔌 Simulando ENCHUFAR vehículo...")
+            enviar_estado_al_monitor('PLUGGED')
+            print(f"[{cp_id}] ✓ Vehículo enchufado. Estado enviado al Monitor.")
+            continue
+            
+        if cmd == 'd':
+            print(f"\n[{cp_id}] 🔓 Simulando DESENCHUFAR vehículo...")
+            try:
+                with STATE_LOCK:
+                    if 'TELEMETRY_STOP_EVENT' in globals() and TELEMETRY_STOP_EVENT:
+                        TELEMETRY_STOP_EVENT.set()
+                        CHARGING_FLAG.clear()
+                enviar_estado_al_monitor('UNPLUGGED')
+                print(f"[{cp_id}] ✓ Vehículo desenchufado. Carga detenida.")
+            except Exception as e:
+                print(f"[{cp_id}] ✗ Error al desenchufar: {e}")
+            continue
+            
+        if cmd == 'r':
+            print(f"\n[{cp_id}] 📱 Simulando lectura de RFID...")
+            print(f"[{cp_id}] (Esta acción normalmente se hace desde la web/driver)")
+            print(f"[{cp_id}] Estado actual: {obtener_estado_actual()}")
+            continue
+            
+        if cmd == 'q':
+            print(f"\n[{cp_id}] Saliendo del menú interactivo...")
+            break
+            
+        print(f"[{cp_id}] ✗ Comando desconocido: '{cmd}'. Usa 'h' para ayuda.")
 
 def main():
     parser = argparse.ArgumentParser(description="Proceso EV_CP_E (Charging Point Engine)")
@@ -648,31 +512,25 @@ def main():
     KAFKA_SERVER = args.kafka
     initialize_producer(KAFKA_SERVER)
     
-    # Desactivar buffering en stdout/stderr para que los mensajes aparezcan inmediatamente
-    sys.stdout.reconfigure(line_buffering=True)
-    sys.stderr.reconfigure(line_buffering=True)
-    
     print("="*40)
     print("[EV_CP_E] INICIADO")
     print(f"Puerto de escucha: {args.port}")
     print(f"CP ID: {args.cp_id}")
     print(f"Kafka: {KAFKA_SERVER}")
     print("="*40)
-    sys.stdout.flush()
 
     # El hilo de telemetría NO se inicia en arranque; solo tras recibir START
     print(f"[EV_CP_E] Telemetría en reposo. A la espera de START para {args.cp_id}")
-    sys.stdout.flush()
 
     try:
         # Guardar CP_ID global para el menú/estado
         globals()['ENGINE_CP_ID'] = args.cp_id
-        
-        # Lanzar menú interactivo siempre (forzar modo interactivo)
-        menu_thread = threading.Thread(target=menu_interactivo_engine, daemon=True)
-        menu_thread.start()
-        print("[ENGINE] Menú interactivo activado. Usa las opciones numericas [1], [2], [3]...")
-        sys.stdout.flush()
+        # Lanzar menú interactivo solo si hay TTY; si no, evitar bucle de prompts
+        if sys.stdin and sys.stdin.isatty():
+            menu_thread = threading.Thread(target=menu_interactivo_engine, daemon=True)
+            menu_thread.start()
+        else:
+            print("[ENGINE] Menú deshabilitado (STDIN no interactivo). Use el Monitor para PLUG/STOP.")
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_socket.bind(('', args.port))
