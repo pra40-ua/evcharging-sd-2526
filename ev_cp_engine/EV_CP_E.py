@@ -105,8 +105,13 @@ ENGINE_CP_ID = None
 SIMULAR_AVERIA = False
 SIMULAR_AVERIA_LOCK = threading.Lock()
 
-# Flask app para interfaz web
-app = Flask(__name__)
+# Flask app para interfaz web (configurar rutas absolutas para templates)
+import os as os_flask
+_current_dir = os_flask.path.dirname(os_flask.path.abspath(__file__))
+_template_dir = os_flask.path.join(_current_dir, 'templates')
+_static_dir = os_flask.path.join(_current_dir, 'static')
+
+app = Flask(__name__, template_folder=_template_dir, static_folder=_static_dir)
 CORS(app)
 WEB_PORT = 9000  # Puerto por defecto, se configurará según el CP
 
@@ -524,7 +529,41 @@ def menu_interactivo_engine() -> None:
 def index():
     """Página principal de control del engine."""
     cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
-    return render_template('engine_control.html', cp_id=cp_id)
+    try:
+        return render_template('engine_control.html', cp_id=cp_id)
+    except Exception as e:
+        # Si no se encuentra el template, devolver HTML inline
+        print(f"[WEB] Error cargando template: {e}")
+        print(f"[WEB] Directorio de templates: {app.template_folder}")
+        print(f"[WEB] Buscando: engine_control.html")
+        
+        # Verificar si existe el archivo
+        template_path = os_flask.path.join(app.template_folder, 'engine_control.html')
+        if os_flask.path.exists(template_path):
+            print(f"[WEB] ✓ Template encontrado en: {template_path}")
+        else:
+            print(f"[WEB] ✗ Template NO encontrado en: {template_path}")
+            # Crear el directorio si no existe
+            os_flask.makedirs(app.template_folder, exist_ok=True)
+            print(f"[WEB] Directorio de templates creado: {app.template_folder}")
+        
+        # Devolver error HTML básico
+        return f"""
+        <html>
+        <head><title>Error - Engine {cp_id}</title></head>
+        <body>
+            <h1>Error al cargar la interfaz</h1>
+            <p>No se encontró el template HTML.</p>
+            <p>Template esperado en: {template_path}</p>
+            <p>Directorio actual: {os_flask.getcwd()}</p>
+            <p>Directorio del script: {_current_dir}</p>
+            <h2>API disponible:</h2>
+            <ul>
+                <li><a href="/api/status">/api/status</a></li>
+            </ul>
+        </body>
+        </html>
+        """, 500
 
 @app.route('/api/status')
 def api_status():
