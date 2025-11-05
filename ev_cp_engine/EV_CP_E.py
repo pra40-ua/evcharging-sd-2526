@@ -26,7 +26,7 @@ import urllib.error
 import webbrowser
 
 # Importaciones para la interfaz web
-from flask import Flask, render_template, jsonify, request, make_response
+from flask import Flask, render_template, jsonify, request, make_response, redirect
 from flask_cors import CORS
 
 # --- CONFIGURACIÓN ---
@@ -1276,14 +1276,15 @@ def lanzar_prompt_operador(cp_id: str) -> None:
 
 @app.route('/')
 def index():
-    """Página principal deshabilitada: este modo usa consola para confirmación."""
-    return "<html><body><h3>Interfaz web deshabilitada. Use la consola para confirmar inicio.</h3></body></html>", 200
+    """Redirige al panel local del Engine."""
+    return redirect('/panel_local', code=302)
 
 
 @app.route('/panel_local')
 def panel_local():
     """Panel mínimo con botones para operar contra la API local."""
     cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
+    web_port = globals().get('WEB_PORT') or 9000
     html = f"""
 <!DOCTYPE html>
 <html lang=\"es\">
@@ -1321,9 +1322,22 @@ def panel_local():
       const btnStart = document.getElementById('btn-start');
       const btnStop = document.getElementById('btn-stop');
       const btnSync = document.getElementById('btn-sync');
+      const info = document.getElementById('info-flujo');
       if (btnStart) btnStart.style.display = (flujo === 'ESPERANDO_DRIVER') ? 'inline-block' : 'none';
-      if (btnStop) btnStop.style.display = (flujo === 'CARGANDO') ? 'inline-block' : 'none';
+      if (btnStop) btnStop.style.display = ((flujo === 'CARGANDO') || (j.cargando === true)) ? 'inline-block' : 'none';
       if (btnSync) btnSync.style.display = (haySesion && flujo !== 'ESPERANDO_DRIVER') ? 'inline-block' : 'none';
+      if (info) {{
+        if (flujo === 'ESPERANDO_CONFIRMACION_FIN') {{
+          info.style.display = 'block';
+          info.innerHTML = '⏳ Esperando confirmación de Central para finalizar...';
+        }} else if (flujo === 'LISTO_PARA_INICIAR') {{
+          info.style.display = 'block';
+          info.innerHTML = '⏳ Señal enviada. Esperando confirmación de Central...';
+        }} else {{
+          info.style.display = 'none';
+          info.textContent = '';
+        }}
+      }}
     }}
     function log(m) {{
       const el = document.getElementById('log');
@@ -1331,6 +1345,8 @@ def panel_local():
       el.scrollTop = el.scrollHeight;
     }}
     window.addEventListener('load', estado);
+    // Refresco automático cada 2 segundos
+    setInterval(estado, 2000);
     // Atajos de teclado: '1' para confirmar inicio, 'q' para cancelar
     window.addEventListener('keydown', function(e) {{
       // Evitar interferir con inputs (no hay en este panel, pero por si acaso)
@@ -1341,7 +1357,7 @@ def panel_local():
           log("No se puede confirmar: estado actual = " + (estadoActual ? estadoActual.estado_flujo : 'desconocido'));
           return;
         }}
-        log("Tecla '1' pulsada → confirmando inicio...");
+        log("Tecla '1' pulsada -> confirmando inicio...");
         post('/api/iniciar_suministro');
       }} else if (key === 'q') {{
         log("Tecla 'q' pulsada → cancelado por operador");
@@ -1365,10 +1381,15 @@ def panel_local():
     Atajo: pulsa <strong>1</strong> para confirmar el inicio (si está disponible). Pulsa <strong>Q</strong> para cancelar.
   </div>
   <div class=\"row\">
-    <button id=\"btn-start\" class=\"ok\" style=\"display:none\" onclick=\"post('/api/iniciar_suministro')\">🔌 Confirmar Inicio</button>
+    <button id=\"btn-start\" class=\"ok\" style=\"display:none\" onclick=\"post('/api/iniciar_suministro')\">🔌 Confirmar Inicio (Invoke-WebRequest)</button>
     <button id=\"btn-stop\" class=\"danger\" style=\"display:none\" onclick=\"post('/api/solicitar_fin')\">🛑 Solicitar Fin</button>
     <button id=\"btn-sync\" class=\"warn\" style=\"display:none\" onclick=\"post('/api/forzar_esperando')\">🛠️ Sincronizar ESPERANDO_DRIVER</button>
     <button id=\"btn-refresh\" class=\"muted\" onclick=\"estado()\">🔄 Actualizar Estado</button>
+  </div>
+  <div id=\"info-flujo\" style=\"margin:8px 0 16px; color:#2d3436; font-weight:600; display:none;\"></div>
+  <div style=\"margin: 0 0 16px; color:#636e72; font-size:13px;\">
+    Este botón simula ejecutar en PowerShell:
+    <pre style=\"white-space: pre-wrap; background:#fff; padding:10px; border-radius:6px;\">Invoke-WebRequest -Method POST -Uri http://127.0.0.1:{web_port}/api/iniciar_suministro | Select-Object -ExpandProperty Content</pre>
   </div>
   <h3>Estado</h3>
   <pre id=\"estado\">Cargando...</pre>
