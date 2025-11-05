@@ -14,9 +14,11 @@ COPY ev_common/ ev_common/
 
 ENV ENGINE_PORT=5001 \
     CP_ID=CP001 \
-    KAFKA_SERVER=127.0.0.1:9092
+    KAFKA_SERVER=127.0.0.1:9092 \
+    WEB_PORT=9001
 
 EXPOSE 5001
+EXPOSE ${WEB_PORT}
 
-CMD ["sh", "-c", "python ev_cp_engine/EV_CP_E.py --port ${ENGINE_PORT} --cp-id ${CP_ID} --kafka ${KAFKA_SERVER}"]
+CMD ["sh", "-c", "python ev_cp_engine/EV_CP_E.py --port ${ENGINE_PORT} --cp-id ${CP_ID} --kafka ${KAFKA_SERVER} --web-port ${WEB_PORT}"]
 

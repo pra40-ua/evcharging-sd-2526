@@ -525,45 +525,372 @@ def menu_interactivo_engine() -> None:
 #                    INTERFAZ WEB DEL ENGINE
 # =================================================================
 
+# HTML embebido para evitar problemas con rutas de templates
+HTML_TEMPLATE = """<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Engine - __CP_ID__</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1 { color: #1e3c72; display: flex; align-items: center; gap: 10px; }
+        .status-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .status-item {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #1e3c72;
+        }
+        .status-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        .status-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+        .control-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #1e3c72;
+            padding-bottom: 10px;
+        }
+        .button-group {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .button-group h3 {
+            margin-bottom: 15px;
+            color: #555;
+            font-size: 16px;
+        }
+        .button-group p {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 5px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .btn:active { transform: translateY(0); }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-danger:hover { background: #c82333; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-success:hover { background: #218838; }
+        .btn-warning { background: #ffc107; color: #333; }
+        .btn-warning:hover { background: #e0a800; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-secondary:hover { background: #5a6268; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+        .alert {
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        .alert.show { display: block; animation: slideIn 0.3s ease; }
+        .alert-success { background: #d4edda; border-left: 4px solid #28a745; color: #155724; }
+        .alert-danger { background: #f8d7da; border-left: 4px solid #dc3545; color: #721c24; }
+        .alert-warning { background: #fff3cd; border-left: 4px solid #ffc107; color: #856404; }
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .refresh-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #28a745;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-ok { background: #28a745; color: white; }
+        .badge-ko { background: #dc3545; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>
+                <span>⚙️</span>
+                Panel de Control - <span id="cp-id-header">__CP_ID__</span>
+                <span class="refresh-indicator"></span>
+            </h1>
+            <div style="font-size: 12px; color: #666; margin-top: 5px;">Engine Control Interface</div>
+        </header>
+        
+        <div id="alert-container"></div>
+        
+        <div class="status-panel">
+            <h2>📊 Estado Actual</h2>
+            <div class="status-grid">
+                <div class="status-item">
+                    <div class="status-label">Estado</div>
+                    <div class="status-value" id="status-estado">Cargando...</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Monitor</div>
+                    <div class="status-value" id="status-monitor">-</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Energía (kWh)</div>
+                    <div class="status-value" id="status-kwh">0.00</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Tiempo (s)</div>
+                    <div class="status-value" id="status-tiempo">0</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Driver Actual</div>
+                    <div class="status-value" id="status-driver" style="font-size: 14px;">-</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Objetivo (kWh)</div>
+                    <div class="status-value" id="status-objetivo">-</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="control-panel">
+            <h2>🎮 Controles de Simulación</h2>
+            
+            <div class="button-group">
+                <h3>1️⃣ Simular Avería</h3>
+                <p>Simula una avería en el punto de carga. El engine responderá KO al monitor.</p>
+                <button class="btn btn-danger" id="btn-activar-averia" onclick="simularAveria(true)">
+                    <span>⚠️</span> Activar Avería
+                </button>
+                <button class="btn btn-success" id="btn-desactivar-averia" onclick="simularAveria(false)" style="display: none;">
+                    <span>✓</span> Desactivar Avería
+                </button>
+                <div id="averia-status" style="margin-top: 10px;"></div>
+            </div>
+            
+            <div class="button-group">
+                <h3>2️⃣ Gestión de Conexión y Suministro</h3>
+                <p><strong>Conectar Driver:</strong> Simula que un vehículo se ha enchufado.<br>
+                <strong>Cerrar Suministro:</strong> Solicita el cierre y genera el ticket.</p>
+                <button class="btn btn-warning" onclick="conectarDriver()">
+                    <span>🔌</span> Simular Conexión de Driver
+                </button>
+                <button class="btn btn-secondary" onclick="desconectarDriver()">
+                    <span>🔓</span> Simular Desconexión
+                </button>
+                <button class="btn btn-danger" onclick="cerrarSuministro()">
+                    <span>🛑</span> Solicitar Cierre de Suministro
+                </button>
+            </div>
+        </div>
+        
+        <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; color: #666; font-size: 12px;">
+            <strong>Última actualización:</strong> <span id="last-update">-</span>
+        </div>
+    </div>
+    
+    <script>
+        let updateInterval;
+        let estadoAveria = false;
+        
+        function actualizarEstado() {{
+            fetch('/api/status')
+                .then(response => response.json())
+                .then(data => {{
+                    document.getElementById('status-estado').textContent = data.estado || '-';
+                    document.getElementById('status-monitor').innerHTML = data.monitor_conectado 
+                        ? '<span class="badge badge-ok">Conectado</span>' 
+                        : '<span class="badge badge-ko">Desconectado</span>';
+                    document.getElementById('status-kwh').textContent = data.kw_acumulados.toFixed(2);
+                    document.getElementById('status-tiempo').textContent = data.segundos;
+                    document.getElementById('status-driver').textContent = data.driver_actual || '-';
+                    document.getElementById('status-objetivo').textContent = data.objetivo_kwh ? data.objetivo_kwh + ' kWh' : '-';
+                    
+                    estadoAveria = data.averia_simulada;
+                    if (estadoAveria) {{
+                        document.getElementById('btn-activar-averia').style.display = 'none';
+                        document.getElementById('btn-desactivar-averia').style.display = 'inline-flex';
+                        document.getElementById('averia-status').innerHTML = 
+                            '<span class="badge badge-ko">AVERÍA ACTIVA</span> - Respondiendo KO al monitor';
+                    }} else {{
+                        document.getElementById('btn-activar-averia').style.display = 'inline-flex';
+                        document.getElementById('btn-desactivar-averia').style.display = 'none';
+                        document.getElementById('averia-status').innerHTML = 
+                            '<span class="badge badge-ok">NORMAL</span> - Respondiendo OK al monitor';
+                    }}
+                    
+                    const now = new Date();
+                    document.getElementById('last-update').textContent = now.toLocaleTimeString('es-ES');
+                }})
+                .catch(error => console.error('Error:', error));
+        }}
+        
+        function mostrarAlerta(mensaje, tipo) {{
+            const container = document.getElementById('alert-container');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${{tipo}} show`;
+            alert.textContent = mensaje;
+            container.appendChild(alert);
+            setTimeout(() => {{
+                alert.classList.remove('show');
+                setTimeout(() => alert.remove(), 300);
+            }}, 5000);
+        }}
+        
+        function simularAveria(activar) {{
+            const motivo = activar ? prompt('Motivo de la avería:', 'Fallo simulado') : '';
+            if (activar && !motivo) return;
+            
+            fetch('/api/simular_averia', {{
+                method: 'POST',
+                headers: {{ 'Content-Type': 'application/json' }},
+                body: JSON.stringify({{ activar: activar, motivo: motivo || 'Avería simulada' }})
+            }})
+            .then(response => response.json())
+            .then(data => {{
+                if (data.status === 'ok') {{
+                    mostrarAlerta(data.mensaje, activar ? 'danger' : 'success');
+                    actualizarEstado();
+                }} else {{
+                    mostrarAlerta('Error: ' + data.mensaje, 'danger');
+                }}
+            }})
+            .catch(error => mostrarAlerta('Error: ' + error, 'danger'));
+        }}
+        
+        function conectarDriver() {{
+            const driverId = prompt('ID del Driver (opcional):', 'DRIVER_WEB') || 'DRIVER_WEB';
+            fetch('/api/conectar_driver', {{
+                method: 'POST',
+                headers: {{ 'Content-Type': 'application/json' }},
+                body: JSON.stringify({{ driver_id: driverId }})
+            }})
+            .then(response => response.json())
+            .then(data => {{
+                mostrarAlerta(data.status === 'ok' ? data.mensaje : 'Error: ' + data.mensaje, 
+                             data.status === 'ok' ? 'success' : 'danger');
+                actualizarEstado();
+            }})
+            .catch(error => mostrarAlerta('Error: ' + error, 'danger'));
+        }}
+        
+        function desconectarDriver() {{
+            if (!confirm('¿Desconectar el driver actual?')) return;
+            fetch('/api/desconectar_driver', {{
+                method: 'POST',
+                headers: {{ 'Content-Type': 'application/json' }}
+            }})
+            .then(response => response.json())
+            .then(data => {{
+                mostrarAlerta(data.status === 'ok' ? data.mensaje : 'Error: ' + data.mensaje,
+                             data.status === 'ok' ? 'warning' : 'danger');
+                actualizarEstado();
+            }})
+            .catch(error => mostrarAlerta('Error: ' + error, 'danger'));
+        }}
+        
+        function cerrarSuministro() {{
+            if (!confirm('¿Cerrar el suministro actual?')) return;
+            fetch('/api/solicitar_cierre_suministro', {{
+                method: 'POST',
+                headers: {{ 'Content-Type': 'application/json' }}
+            }})
+            .then(response => response.json())
+            .then(data => {{
+                if (data.status === 'ok') {{
+                    const mensaje = `Suministro cerrado: ${{data.kw_final}} kWh, €${{data.importe}}, ${{data.duracion_s}}s`;
+                    mostrarAlerta(mensaje, 'success');
+                    actualizarEstado();
+                }} else {{
+                    mostrarAlerta('Error: ' + data.mensaje, 'danger');
+                }}
+            }})
+            .catch(error => mostrarAlerta('Error: ' + error, 'danger'));
+        }}
+        
+        actualizarEstado();
+        updateInterval = setInterval(actualizarEstado, 2000);
+    </script>
+</body>
+</html>"""
+
 @app.route('/')
 def index():
     """Página principal de control del engine."""
     cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
+    print(f"[WEB] Acceso a interfaz web desde navegador para {cp_id}")
     try:
-        return render_template('engine_control.html', cp_id=cp_id)
+        # Usar replace en lugar de format para evitar problemas con las llaves de CSS/JS
+        html = HTML_TEMPLATE.replace('__CP_ID__', cp_id)
+        return html
     except Exception as e:
-        # Si no se encuentra el template, devolver HTML inline
-        print(f"[WEB] Error cargando template: {e}")
-        print(f"[WEB] Directorio de templates: {app.template_folder}")
-        print(f"[WEB] Buscando: engine_control.html")
-        
-        # Verificar si existe el archivo
-        template_path = os_flask.path.join(app.template_folder, 'engine_control.html')
-        if os_flask.path.exists(template_path):
-            print(f"[WEB] ✓ Template encontrado en: {template_path}")
-        else:
-            print(f"[WEB] ✗ Template NO encontrado en: {template_path}")
-            # Crear el directorio si no existe
-            os_flask.makedirs(app.template_folder, exist_ok=True)
-            print(f"[WEB] Directorio de templates creado: {app.template_folder}")
-        
-        # Devolver error HTML básico
-        return f"""
-        <html>
-        <head><title>Error - Engine {cp_id}</title></head>
-        <body>
-            <h1>Error al cargar la interfaz</h1>
-            <p>No se encontró el template HTML.</p>
-            <p>Template esperado en: {template_path}</p>
-            <p>Directorio actual: {os_flask.getcwd()}</p>
-            <p>Directorio del script: {_current_dir}</p>
-            <h2>API disponible:</h2>
-            <ul>
-                <li><a href="/api/status">/api/status</a></li>
-            </ul>
-        </body>
-        </html>
-        """, 500
+        print(f"[WEB] Error generando HTML: {e}")
+        import traceback
+        traceback.print_exc()
+        return f"<html><body><h1>Error</h1><pre>{traceback.format_exc()}</pre></body></html>", 500
 
 @app.route('/api/status')
 def api_status():

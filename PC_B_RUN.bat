@@ -254,7 +254,23 @@ echo ============================================================
 echo      !NUM_CPS! CHARGING POINT(S) INICIADO(S) CORRECTAMENTE
 echo ============================================================
 echo.
-echo Ventanas abiertas (PowerShell): !NUM_CPS! CPs
+echo Ventanas abiertas:
+echo   - PowerShell: !NUM_CPS! CPs
+echo   - Navegador: !NUM_CPS! interfaces web
+echo.
+echo Interfaces web disponibles:
+for /L %%i in (1,1,!NUM_CPS!) do (
+    set /a CP_NUM_DISPLAY=!CP_OFFSET!+%%i
+    set /a WEB_PORT_DISPLAY=9000+!CP_NUM_DISPLAY!
+    if !CP_NUM_DISPLAY! LSS 10 (
+        set CP_ID_DISPLAY=CP_00!CP_NUM_DISPLAY!
+    ) else if !CP_NUM_DISPLAY! LSS 100 (
+        set CP_ID_DISPLAY=CP_0!CP_NUM_DISPLAY!
+    ) else (
+        set CP_ID_DISPLAY=CP_!CP_NUM_DISPLAY!
+    )
+    echo   - !CP_ID_DISPLAY!: http://localhost:!WEB_PORT_DISPLAY!
+)
 echo.
 echo Para DETENER:
 echo   - Presiona Ctrl+C en cada ventana de PowerShell
@@ -468,11 +484,16 @@ echo [2/4] LANZANDO ENGINE
 echo ============================================================
 echo.
 
-start "Engine-PC_B" powershell -NoExit -Command "Write-Host 'Iniciando Engine (CP_001) en puerto 5001...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --network host --label project=evcharging-pc-b --label component=engine --label cp_id=CP_001 --name engine -e ENGINE_PORT=5001 -e CP_ID=CP_001 -e KAFKA_SERVER=!CENTRAL_IP!:9092 ev_engine:local"
+start "Engine-PC_B" powershell -NoExit -Command "Write-Host 'Iniciando Engine (CP_001) en puerto 5001...' -ForegroundColor Cyan; Write-Host ''; docker run --rm -p 5001:5001 -p 9001:9001 --label project=evcharging-pc-b --label component=engine --label cp_id=CP_001 --name engine -e ENGINE_PORT=5001 -e CP_ID=CP_001 -e KAFKA_SERVER=!CENTRAL_IP!:9092 -e WEB_PORT=9001 ev_engine:local"
 
 echo [OK] Engine iniciado en ventana separada
 echo.
 timeout /t 3 /nobreak >nul
+
+REM Abrir interfaz web del engine (puerto 9001 para CP_001)
+echo Abriendo interfaz web en http://localhost:9001...
+start "" "http://localhost:9001"
+timeout /t 1 /nobreak >nul
 
 REM LANZAR DRIVER
 echo ============================================================
@@ -508,10 +529,12 @@ echo   - Engine:  CP_001 en puerto 5001
 echo   - Driver:  DRIVER_456 (MAT: ABC-1234)
 echo   - Monitor: CP_001
 echo.
-echo Ventanas abiertas (PowerShell):
-echo   - Engine
-echo   - Driver
-echo   - Monitor
+echo Ventanas abiertas:
+echo   - PowerShell: Engine, Driver, Monitor
+echo   - Navegador: Interfaz web del Engine
+echo.
+echo Interfaz web disponible:
+echo   - CP_001: http://localhost:9001
 echo.
 echo Para DETENER:
 echo   - Presiona Ctrl+C en cada ventana de PowerShell
@@ -554,8 +577,11 @@ set /a ENGINE_PORT=%BASE_PORT%+%CP_NUM%
 echo [DEBUG] CP_ID calculado: !CP_ID! >> "%LOG_FILE%"
 echo [DEBUG] ENGINE_PORT calculado: !ENGINE_PORT! >> "%LOG_FILE%"
 
-REM Construir comandos con --network host como requiere el usuario
-set "ENGINE_CMD=docker run --rm --network host --name engine_!CP_ID! --label project=evcharging-pc-b --label component=engine --label cp_id=!CP_ID! -e ENGINE_PORT=!ENGINE_PORT! -e CP_ID=!CP_ID! -e KAFKA_SERVER=%KAFKA_SERVER% ev_engine:local"
+REM Calcular puerto web (9000 + CP_NUM)
+set /a WEB_PORT_ENGINE=9000+%CP_NUM%
+
+REM Construir comando ENGINE: Sin --network host, con mapeo de puertos TCP y Web
+set "ENGINE_CMD=docker run --rm -p !ENGINE_PORT!:!ENGINE_PORT! -p !WEB_PORT_ENGINE!:!WEB_PORT_ENGINE! --name engine_!CP_ID! --label project=evcharging-pc-b --label component=engine --label cp_id=!CP_ID! -e ENGINE_PORT=!ENGINE_PORT! -e CP_ID=!CP_ID! -e KAFKA_SERVER=%KAFKA_SERVER% -e WEB_PORT=!WEB_PORT_ENGINE! ev_engine:local"
 set "MONITOR_CMD=docker run --rm --network host --name monitor_!CP_ID! --label project=evcharging-pc-b --label component=monitor --label cp_id=!CP_ID! -e CP_ID=!CP_ID! -e CENTRAL_IP=%CENTRAL_IP% -e CENTRAL_PORT=5000 -e ENGINE_IP=localhost -e ENGINE_PORT=!ENGINE_PORT! ev_monitor:local"
 
 echo. >> "%LOG_FILE%"
@@ -587,6 +613,18 @@ echo [DEBUG] START ejecutado para Engine (errorlevel: !errorlevel!) >> "%LOG_FIL
 REM Esperar para que el Engine este listo
 echo [DEBUG] Esperando 3 segundos... >> "%LOG_FILE%"
 timeout /t 3 /nobreak >nul
+
+REM Calcular puerto web del engine (9000 + CP_NUM)
+set /a WEB_PORT=9000+%CP_NUM%
+set WEB_URL=http://localhost:!WEB_PORT!
+
+echo [DEBUG] Abriendo navegador en !WEB_URL! >> "%LOG_FILE%"
+echo Abriendo interfaz web para !CP_ID! en !WEB_URL!...
+start "" "!WEB_URL!"
+echo [DEBUG] Navegador abierto (errorlevel: !errorlevel!) >> "%LOG_FILE%"
+
+REM Pequeña pausa para que el navegador se abra
+timeout /t 1 /nobreak >nul
 
 REM Lanzar Monitor en terminal PowerShell separada
 echo [DEBUG] Ejecutando START PowerShell para Monitor... >> "%LOG_FILE%"
