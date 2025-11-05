@@ -191,12 +191,23 @@ def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, 
                     except Exception:
                         globals()['SESION_DRIVER_ID'] = driver_id
                         globals()['SESION_KW_SOLICITADOS'] = None
-                    # Marcar que estamos autorizados y a la espera del 'enchufado' físico
+                    # Marcar que estamos autorizados
                     globals()['WAITING_FOR_PLUG'] = True
+                    
+                    # NUEVO: Reenviar AUTH_REQ al Engine para que muestre el botón "Iniciar Suministro"
+                    try:
+                        print(f"[{cp_id}] 📤 Reenviando AUTH_REQ al Engine...")
+                        trama_auth_engine = construir_trama('AUTH_REQ', [driver_id, kw_deseados])
+                        # Encolar para envío en el siguiente ciclo HCK
+                        COMMAND_QUEUE.put_nowait(('AUTH_REQ', time.time(), driver_id, kw_deseados))
+                        print(f"[{cp_id}] ✓ AUTH_REQ encolado para Engine")
+                    except Exception as e:
+                        print(f"[{cp_id}] Error encolando AUTH_REQ para Engine: {e}")
+                    
                     # Responder a la Central con autorización OK
                     resp = construir_trama('AUTH_RESP', [driver_id, 'OK', 'Autorizacion concedida'])
                     central_socket.sendall(resp)
-                    print(f"[{cp_id}] Autorización concedida. Esperando acción de 'enchufar' en el Engine...")
+                    print(f"[{cp_id}] ✓ AUTH_RESP enviado a Central. Esperando acción del operador del Engine...")
                 except Exception as e:
                     print(f"[{cp_id}] Error procesando AUTH_REQ: {e}")
                 continue
@@ -276,23 +287,36 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                 except Empty:
                     break
                 try:
-                    # item puede ser (orden, ts) o (orden, ts, kw, driver)
+                    # item puede ser (orden, ts) o (orden, ts, param1, param2)
                     if isinstance(item, tuple) and len(item) >= 2:
                         orden = item[0]
                         ts = item[1]
-                        kw = item[2] if len(item) > 2 else None
-                        driver = item[3] if len(item) > 3 else None
+                        param1 = item[2] if len(item) > 2 else None
+                        param2 = item[3] if len(item) > 3 else None
                     else:
                         orden = str(item)
                         ts = time.time()
-                        kw = None
-                        driver = None
+                        param1 = None
+                        param2 = None
 
+                    # Manejar AUTH_REQ especialmente (no es un CMD)
+                    if orden == 'AUTH_REQ':
+                        driver_id = param1
+                        kw_deseados = param2
+                        campos_auth = [driver_id, str(kw_deseados) if kw_deseados else '0']
+                        trama_auth = construir_trama('AUTH_REQ', campos_auth)
+                        engine_socket.sendall(trama_auth)
+                        print(f"[{cp_id}] 📤 AUTH_REQ enviado al Engine (Driver: {driver_id}, kW: {kw_deseados})")
+                        # No esperamos ACK para AUTH_REQ, el Engine lo procesará internamente
+                        continue
+                    
+                    # Para START/STOP y otros comandos CMD
                     campos_cmd = [orden]
-                    if orden == 'START' and kw is not None:
-                        campos_cmd.append(str(kw))
-                        if driver:
-                            campos_cmd.append(str(driver))
+                    if orden == 'START' and param1 is not None:
+                        # param1 es kw, param2 es driver
+                        campos_cmd.append(str(param1))
+                        if param2:
+                            campos_cmd.append(str(param2))
                     trama_cmd = construir_trama('CMD', campos_cmd)
                     engine_socket.sendall(trama_cmd)
                     resp_cmd = engine_socket.recv(1024)
@@ -303,7 +327,7 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                     else:
                         print(f"[{cp_id}] Respuesta inesperada a CMD '{orden}': {cod_cmd}")
                 except Exception as e:
-                    print(f"[{cp_id}] Error enviando CMD '{orden}' por HCK socket: {e}")
+                    print(f"[{cp_id}] Error enviando comando '{orden}' por HCK socket: {e}")
                     # Reencolar para reintentar cuando se restablezca la conexión
                     try:
                         COMMAND_QUEUE.put_nowait(item)

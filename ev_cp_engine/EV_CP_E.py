@@ -249,8 +249,10 @@ TELEMETRY_STOP_EVENT = threading.Event()
 
 def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
     """Maneja el chequeo de salud HCK del Monitor."""
-    # Declarar variables globales al inicio para evitar errores de ámbito
+    # Declarar TODAS las variables globales al inicio para evitar errores de ámbito
     global kw_acumulados_global, segundos_global, TELEMETRY_THREAD, TELEMETRY_STOP_EVENT
+    global TARGET_KWH, CURRENT_DRIVER_ID, ESTADO_FLUJO
+    global SESSION_START_TS, CURRENT_TX_ID, ACTIVE_MONITOR_CONN
     print(f"\n{'='*70}")
     print(f"  [{cp_id}] 🔗 MONITOR CONECTADO desde {addr[0]}:{addr[1]}")
     print(f"{'='*70}\n")
@@ -283,6 +285,7 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
             elif cod_op == 'AUTH_REQ':
                 # Nuevo mensaje: Central autorizó un driver, pero NO inicia automáticamente
                 # AUTH_REQ#<driver_id>#<kw_objetivo>
+                global TARGET_KWH, CURRENT_DRIVER_ID, ESTADO_FLUJO
                 try:
                     driver_id = campos[0] if len(campos) > 0 else 'UNKNOWN'
                     kw_objetivo = campos[1] if len(campos) > 1 else '0'
@@ -293,9 +296,13 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                     print(f"  Objetivo: {kw_objetivo} kWh")
                     print(f"{'='*70}\n")
                     
-                    # Guardar datos de sesión
-                    global TARGET_KWH, CURRENT_DRIVER_ID, ESTADO_FLUJO
-                    TARGET_KWH = float(kw_objetivo) if kw_objetivo else None
+                    # Guardar datos de sesión usando asignación explícita global
+                    try:
+                        kw_float = float(kw_objetivo) if kw_objetivo else None
+                    except:
+                        kw_float = None
+                    
+                    TARGET_KWH = kw_float
                     CURRENT_DRIVER_ID = driver_id
                     
                     # Cambiar estado del flujo
@@ -303,8 +310,10 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                         ESTADO_FLUJO = 'ESPERANDO_DRIVER'
                     
                     print(f"[{cp_id}] ⏳ Estado: REPOSO → ESPERANDO_DRIVER")
-                    print(f"[{cp_id}] 👤 Driver autorizado: {driver_id}")
+                    print(f"[{cp_id}] 👤 Driver autorizado: {driver_id} (kWh objetivo: {kw_float})")
                     print(f"[{cp_id}] 🌐 Web: Botón 'Iniciar Suministro' ahora disponible")
+                    print(f"[{cp_id}] DEBUG: TARGET_KWH={TARGET_KWH}, CURRENT_DRIVER_ID={CURRENT_DRIVER_ID}")
+                    print(f"[{cp_id}] DEBUG: globals()['TARGET_KWH']={globals().get('TARGET_KWH')}, globals()['CURRENT_DRIVER_ID']={globals().get('CURRENT_DRIVER_ID')}")
                     
                     # Responder OK
                     respuesta = construir_trama('ACK', ['AUTH_OK'])
@@ -312,6 +321,8 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                     
                 except Exception as e:
                     print(f"[{cp_id}] Error procesando AUTH_REQ: {e}")
+                    import traceback
+                    traceback.print_exc()
                 continue
                 
             elif cod_op == 'CMD':
@@ -331,14 +342,9 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                     
                     # Si no vienen parámetros, usar los guardados de AUTH_REQ
                     if kw_objetivo is None:
-                        kw_objetivo = globals().get('TARGET_KWH')
+                        kw_objetivo = TARGET_KWH
                     if driver_id == 'UNKNOWN':
-                        driver_id = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
-                    
-                    # Inicializar sesión
-                    global kw_acumulados_global, segundos_global, TARGET_KWH, CURRENT_DRIVER_ID
-                    global SESSION_START_TS, CURRENT_TX_ID, ACTIVE_MONITOR_CONN
-                    global TELEMETRY_STOP_EVENT, TELEMETRY_THREAD, ESTADO_FLUJO
+                        driver_id = CURRENT_DRIVER_ID
                     
                     print(f"\n{'='*70}")
                     print(f"  [{cp_id}] 📩 MENSAJE RECIBIDO: CMD START (Confirmado por Central)")
@@ -384,8 +390,6 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                     print(f"\n{'='*70}")
                     print(f"  [{cp_id}] 📩 MENSAJE RECIBIDO: CMD STOP (Confirmado por Central)")
                     print(f"{'='*70}\n")
-                    
-                    global ESTADO_FLUJO
                     
                     with STATE_LOCK:
                         CHARGING_FLAG.clear()
@@ -1078,14 +1082,17 @@ def api_status():
     cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
     
     with STATE_LOCK:
+        driver_actual = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
+        objetivo_kwh = globals().get('TARGET_KWH')
+        
         estado = {
             'cp_id': cp_id,
             'estado': obtener_estado_actual(),
             'cargando': CHARGING_FLAG.is_set(),
             'kw_acumulados': round(kw_acumulados_global, 2),
             'segundos': segundos_global,
-            'driver_actual': globals().get('CURRENT_DRIVER_ID', 'UNKNOWN'),
-            'objetivo_kwh': globals().get('TARGET_KWH'),
+            'driver_actual': driver_actual,
+            'objetivo_kwh': objetivo_kwh,
             'monitor_conectado': globals().get('ACTIVE_MONITOR_CONN') is not None
         }
     
@@ -1095,6 +1102,9 @@ def api_status():
     # Agregar estado del flujo interactivo
     with ESTADO_FLUJO_LOCK:
         estado['estado_flujo'] = ESTADO_FLUJO
+    
+    # Debug: imprimir valores leídos
+    print(f"[WEB API] /api/status - driver_actual={driver_actual}, objetivo_kwh={objetivo_kwh}, estado_flujo={ESTADO_FLUJO}")
     
     return jsonify(estado)
 
