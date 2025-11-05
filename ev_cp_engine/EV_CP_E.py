@@ -675,26 +675,29 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         .button-group h3 {
             margin-bottom: 15px;
             color: #555;
-            font-size: 16px;
+            font-size: 22px;
+            font-weight: 700;
         }
         .button-group p {
             color: #666;
-            font-size: 13px;
+            font-size: 16px;
             margin-bottom: 15px;
-            line-height: 1.5;
+            line-height: 1.6;
         }
         .btn {
-            padding: 12px 24px;
+            padding: 20px 40px;
             border: none;
-            border-radius: 6px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            margin: 5px;
+            font-size: 18px;
+            font-weight: 700;
+            margin: 10px;
             transition: all 0.3s;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+            min-width: 250px;
+            justify-content: center;
         }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
         .btn:active { transform: translateY(0); }
@@ -972,12 +975,17 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             }
             else {
                 console.log('[WEB] ⚪ Generando HTML para estado desconocido o REPOSO:', estadoFlujo);
-                html = '<div class="button-group">' +
-                    '<h3>💤 En Reposo</h3>' +
-                    '<p>El punto de carga está disponible. Esperando solicitud de un driver desde la Central.</p>' +
-                    '<p style="color: #999; font-size: 12px; margin-top: 10px;">' +
-                    'Los drivers deben solicitar carga a través de su aplicación móvil.' +
+                html = '<div class="button-group" style="text-align: center; padding: 40px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">' +
+                    '<h3 style="color: white; font-size: 32px; margin-bottom: 20px;">💤 Punto de Carga en Reposo</h3>' +
+                    '<p style="font-size: 20px; color: rgba(255,255,255,0.95); margin-bottom: 30px;">' +
+                    'El punto de carga está <strong>DISPONIBLE</strong> y funcionando correctamente.' +
                     '</p>' +
+                    '<div style="background: rgba(255,255,255,0.2); padding: 25px; border-radius: 10px; margin-top: 20px;">' +
+                    '<p style="font-size: 18px; color: rgba(255,255,255,0.9);">⏳ Esperando solicitud de un driver desde la Central</p>' +
+                    '<p style="color: rgba(255,255,255,0.7); font-size: 15px; margin-top: 15px;">' +
+                    'Los drivers solicitan carga a través de su aplicación móvil' +
+                    '</p>' +
+                    '</div>' +
                     '</div>';
             }
             
