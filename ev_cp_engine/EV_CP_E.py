@@ -23,6 +23,7 @@ import subprocess
 import platform
 import urllib.request
 import urllib.error
+import webbrowser
 
 # Importaciones para la interfaz web
 from flask import Flask, render_template, jsonify, request, make_response
@@ -1278,6 +1279,110 @@ def index():
     """Página principal deshabilitada: este modo usa consola para confirmación."""
     return "<html><body><h3>Interfaz web deshabilitada. Use la consola para confirmar inicio.</h3></body></html>", 200
 
+
+@app.route('/panel_local')
+def panel_local():
+    """Panel mínimo con botones para operar contra la API local."""
+    cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
+    html = f"""
+<!DOCTYPE html>
+<html lang=\"es\">
+<head>
+  <meta charset=\"UTF-8\" />
+  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />
+  <title>Panel Local Engine - {cp_id}</title>
+  <style>
+    body {{ font-family: Segoe UI, Roboto, Arial, sans-serif; padding: 20px; background: #f5f6fa; }}
+    h1 {{ margin: 0 0 10px; color: #2d3436; }}
+    .row {{ display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0 20px; }}
+    button {{ padding: 12px 18px; border: 0; border-radius: 6px; cursor: pointer; font-weight: 700; }}
+    .ok {{ background: #2ecc71; color: #fff; }}
+    .warn {{ background: #f1c40f; color: #2d3436; }}
+    .danger {{ background: #e74c3c; color: #fff; }}
+    .muted {{ background: #95a5a6; color: #fff; }}
+    pre {{ background: #fff; padding: 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,.08); max-height: 320px; overflow: auto; }}
+  </style>
+  <script>
+    let estadoActual = null;
+    async function post(url) {{
+      const r = await fetch(url, {{ method: 'POST' }});
+      const j = await r.json().catch(() => ({{ status: 'error', mensaje: 'Respuesta no JSON' }}));
+      log('POST ' + url + ' -> ' + JSON.stringify(j));
+      await estado();
+    }}
+    async function estado() {{
+      const r = await fetch('/api/status?t=' + Date.now(), {{ cache: 'no-store' }});
+      const j = await r.json();
+      document.getElementById('estado').textContent = JSON.stringify(j, null, 2);
+      estadoActual = j;
+      // Mostrar/ocultar botones según estado_flujo
+      const flujo = j.estado_flujo;
+      const haySesion = (j.driver_actual && j.driver_actual !== 'UNKNOWN') && (j.objetivo_kwh !== null && j.objetivo_kwh !== undefined);
+      const btnStart = document.getElementById('btn-start');
+      const btnStop = document.getElementById('btn-stop');
+      const btnSync = document.getElementById('btn-sync');
+      if (btnStart) btnStart.style.display = (flujo === 'ESPERANDO_DRIVER') ? 'inline-block' : 'none';
+      if (btnStop) btnStop.style.display = (flujo === 'CARGANDO') ? 'inline-block' : 'none';
+      if (btnSync) btnSync.style.display = (haySesion && flujo !== 'ESPERANDO_DRIVER') ? 'inline-block' : 'none';
+    }}
+    function log(m) {{
+      const el = document.getElementById('log');
+      el.textContent += (new Date()).toLocaleTimeString('es-ES') + ' - ' + m + "\n";
+      el.scrollTop = el.scrollHeight;
+    }}
+    window.addEventListener('load', estado);
+    // Atajos de teclado: '1' para confirmar inicio, 'q' para cancelar
+    window.addEventListener('keydown', function(e) {{
+      // Evitar interferir con inputs (no hay en este panel, pero por si acaso)
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+      const key = (e.key || '').toLowerCase();
+      if (key === '1') {{
+        if (!estadoActual || estadoActual.estado_flujo !== 'ESPERANDO_DRIVER') {{
+          log("No se puede confirmar: estado actual = " + (estadoActual ? estadoActual.estado_flujo : 'desconocido'));
+          return;
+        }}
+        log("Tecla '1' pulsada → confirmando inicio...");
+        post('/api/iniciar_suministro');
+      }} else if (key === 'q') {{
+        log("Tecla 'q' pulsada → cancelado por operador");
+      }}
+    }});
+  </script>
+  <meta http-equiv=\"Cache-Control\" content=\"no-store, no-cache, must-revalidate, max-age=0\" />
+  <meta http-equiv=\"Pragma\" content=\"no-cache\" />
+  <meta http-equiv=\"Expires\" content=\"0\" />
+  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" />
+  <meta http-equiv=\"Referrer-Policy\" content=\"no-referrer\" />
+  <meta http-equiv=\"Permissions-Policy\" content=\"interest-cohort=()\" />
+  <meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'self'; connect-src 'self'; style-src 'unsafe-inline' 'self'; script-src 'self' 'unsafe-inline'\" />
+  <meta http-equiv=\"Cross-Origin-Opener-Policy\" content=\"same-origin\" />
+  <meta http-equiv=\"Cross-Origin-Resource-Policy\" content=\"same-origin\" />
+  <meta http-equiv=\"Cross-Origin-Embedder-Policy\" content=\"require-corp\" />
+</head>
+<body>
+  <h1>Panel Local Engine - {cp_id}</h1>
+  <div style="margin:6px 0 14px; color:#636e72; font-size:14px;">
+    Atajo: pulsa <strong>1</strong> para confirmar el inicio (si está disponible). Pulsa <strong>Q</strong> para cancelar.
+  </div>
+  <div class=\"row\">
+    <button id=\"btn-start\" class=\"ok\" style=\"display:none\" onclick=\"post('/api/iniciar_suministro')\">🔌 Confirmar Inicio</button>
+    <button id=\"btn-stop\" class=\"danger\" style=\"display:none\" onclick=\"post('/api/solicitar_fin')\">🛑 Solicitar Fin</button>
+    <button id=\"btn-sync\" class=\"warn\" style=\"display:none\" onclick=\"post('/api/forzar_esperando')\">🛠️ Sincronizar ESPERANDO_DRIVER</button>
+    <button id=\"btn-refresh\" class=\"muted\" onclick=\"estado()\">🔄 Actualizar Estado</button>
+  </div>
+  <h3>Estado</h3>
+  <pre id=\"estado\">Cargando...</pre>
+  <h3>Log</h3>
+  <pre id=\"log\"></pre>
+</body>
+</html>
+    """
+    resp = make_response(html)
+    resp.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    resp.headers['Pragma'] = 'no-cache'
+    resp.headers['Expires'] = '0'
+    return resp
+
 @app.route('/api/status')
 def api_status():
     """Devuelve el estado actual del engine."""
@@ -1638,6 +1743,11 @@ def main():
         web_thread = threading.Thread(target=iniciar_servidor_web, args=(WEB_PORT,), daemon=True)
         web_thread.start()
         print(f"[ENGINE] Interfaz web disponible en http://localhost:{WEB_PORT}")
+        # Abrir automáticamente el panel local de este Engine
+        try:
+            webbrowser.open_new_tab(f"http://localhost:{WEB_PORT}/panel_local")
+        except Exception:
+            pass
         
         # Lanzar menú interactivo solo si hay TTY; si no, evitar bucle de prompts
         if sys.stdin and sys.stdin.isatty():
