@@ -829,13 +829,26 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     </div>
     
     <script>
-        let updateInterval;
-        let estadoAveria = false;
+        console.log('[WEB] ✅ Script cargado correctamente');
+        var updateInterval;
+        var estadoAveria = false;
         
-        function actualizarEstado() {{
+        function actualizarEstado() {
+            console.log('[WEB] Llamando a /api/status...');
             fetch('/api/status')
-                .then(response => response.json())
-                .then(data => {{
+                .then(function(response) {
+                    console.log('[WEB] Respuesta recibida:', response.status);
+                    if (!response.ok) {
+                        throw new Error('HTTP error! status: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(function(data) {
+                    console.log('[WEB] Datos recibidos:', data);
+                    console.log('[WEB] Estado flujo:', data.estado_flujo);
+                    console.log('[WEB] Driver actual:', data.driver_actual);
+                    console.log('[WEB] Objetivo kWh:', data.objetivo_kwh);
+                    
                     // Actualizar estado del flujo
                     document.getElementById('status-estado').textContent = data.estado_flujo || data.estado || '-';
                     document.getElementById('status-monitor').innerHTML = data.monitor_conectado 
@@ -851,212 +864,223 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     
                     // Estado de avería
                     estadoAveria = data.averia_simulada;
-                    if (estadoAveria) {{
+                    if (estadoAveria) {
                         document.getElementById('btn-activar-averia').style.display = 'none';
                         document.getElementById('btn-desactivar-averia').style.display = 'inline-flex';
                         document.getElementById('averia-status').innerHTML = 
                             '<span class="badge badge-ko">AVERÍA ACTIVA</span> - Respondiendo KO al monitor';
-                    }} else {{
+                    } else {
                         document.getElementById('btn-activar-averia').style.display = 'inline-flex';
                         document.getElementById('btn-desactivar-averia').style.display = 'none';
                         document.getElementById('averia-status').innerHTML = 
                             '<span class="badge badge-ok">NORMAL</span> - Respondiendo OK al monitor';
-                    }}
+                    }
                     
-                    const now = new Date();
+                    var now = new Date();
                     document.getElementById('last-update').textContent = now.toLocaleTimeString('es-ES');
-                }})
-                .catch(error => console.error('Error:', error));
-        }}
+                })
+                .catch(function(error) {
+                    console.error('[WEB] ❌ Error actualizando estado:', error);
+                    console.error('[WEB] Error details:', error.message, error.stack);
+                });
+        }
         
-        function mostrarAlerta(mensaje, tipo) {{
-            const container = document.getElementById('alert-container');
-            const alert = document.createElement('div');
-            alert.className = `alert alert-${{tipo}} show`;
+        function mostrarAlerta(mensaje, tipo) {
+            var container = document.getElementById('alert-container');
+            var alert = document.createElement('div');
+            alert.className = 'alert alert-' + tipo + ' show';
             alert.textContent = mensaje;
             container.appendChild(alert);
-            setTimeout(() => {{
+            setTimeout(function() {
                 alert.classList.remove('show');
-                setTimeout(() => alert.remove(), 300);
-            }}, 5000);
-        }}
+                setTimeout(function() { alert.remove(); }, 300);
+            }, 5000);
+        }
         
-        function actualizarBotonesFlujo(estadoFlujo, data) {{
-            const contenedor = document.getElementById('flujo-container');
-            let html = '';
+        function actualizarBotonesFlujo(estadoFlujo, data) {
+            var contenedor = document.getElementById('flujo-container');
+            var html = '';
             
-            if (estadoFlujo === 'ESPERANDO_DRIVER') {{
-                html = `
-                    <div class="button-group" style="background: #e8f5e9;">
-                        <h3>✅ Driver Autorizado</h3>
-                        <p><strong>Driver:</strong> ${{data.driver_actual}}<br>
-                           <strong>Objetivo:</strong> ${{data.objetivo_kwh || '?'}} kWh</p>
-                        <p>La Central ha autorizado este driver. Pulsa el botón cuando el vehículo esté listo para iniciar la carga.</p>
-                        <button class="btn btn-success" onclick="iniciarSuministro()">
-                            <span>🔌</span> Iniciar Suministro
-                        </button>
-                    </div>`;
-            }}
-            else if (estadoFlujo === 'LISTO_PARA_INICIAR') {{
-                html = `
-                    <div class="button-group" style="background: #fff3cd;">
-                        <h3>⏳ Esperando Confirmación de Central</h3>
-                        <p>Señal enviada a la Central. El operador de Central debe confirmar el inicio del suministro.</p>
-                        <div style="text-align: center; padding: 20px;">
-                            <div class="spinner"></div>
-                            <p style="margin-top: 10px; color: #856404;">Aguardando confirmación...</p>
-                        </div>
-                    </div>`;
-            }}
-            else if (estadoFlujo === 'CARGANDO') {{
-                const progreso = data.objetivo_kwh ? ((data.kw_acumulados / data.objetivo_kwh) * 100).toFixed(1) : 0;
-                html = `
-                    <div class="button-group" style="background: #d1ecf1;">
-                        <h3>⚡ Suministro en Progreso</h3>
-                        <p><strong>Driver:</strong> ${{data.driver_actual}}<br>
-                           <strong>Energía:</strong> ${{data.kw_acumulados.toFixed(2)}} / ${{data.objetivo_kwh || '∞'}} kWh (${{progreso}}%)<br>
-                           <strong>Tiempo:</strong> ${{data.segundos}}s</p>
-                        <button class="btn btn-danger" onclick="solicitarFin()">
-                            <span>🛑</span> Solicitar Fin de Suministro
-                        </button>
-                    </div>`;
-            }}
-            else if (estadoFlujo === 'ESPERANDO_CONFIRMACION_FIN') {{
-                html = `
-                    <div class="button-group" style="background: #f8d7da;">
-                        <h3>⏳ Esperando Confirmación de Fin</h3>
-                        <p>Solicitud de fin enviada a la Central. El operador de Central debe confirmar el cierre del suministro.</p>
-                        <p><strong>Energía actual:</strong> ${{data.kw_acumulados.toFixed(2)}} kWh<br>
-                           <strong>Tiempo:</strong> ${{data.segundos}}s</p>
-                        <div style="text-align: center; padding: 20px;">
-                            <div class="spinner"></div>
-                            <p style="margin-top: 10px; color: #721c24;">Aguardando confirmación de fin...</p>
-                        </div>
-                    </div>`;
-            }}
-            else {{
-                html = `
-                    <div class="button-group">
-                        <h3>💤 En Reposo</h3>
-                        <p>El punto de carga está disponible. Esperando solicitud de un driver desde la Central.</p>
-                        <p style="color: #999; font-size: 12px; margin-top: 10px;">
-                            Los drivers deben solicitar carga a través de su aplicación móvil.
-                        </p>
-                    </div>`;
-            }}
+            if (estadoFlujo === 'ESPERANDO_DRIVER') {
+                var objetivo = data.objetivo_kwh || '?';
+                html = '<div class="button-group" style="background: #e8f5e9;">' +
+                    '<h3>✅ Driver Autorizado</h3>' +
+                    '<p><strong>Driver:</strong> ' + data.driver_actual + '<br>' +
+                    '<strong>Objetivo:</strong> ' + objetivo + ' kWh</p>' +
+                    '<p>La Central ha autorizado este driver. Pulsa el botón cuando el vehículo esté listo para iniciar la carga.</p>' +
+                    '<button class="btn btn-success" onclick="iniciarSuministro()">' +
+                    '<span>🔌</span> Iniciar Suministro' +
+                    '</button>' +
+                    '</div>';
+            }
+            else if (estadoFlujo === 'LISTO_PARA_INICIAR') {
+                html = '<div class="button-group" style="background: #fff3cd;">' +
+                    '<h3>⏳ Esperando Confirmación de Central</h3>' +
+                    '<p>Señal enviada a la Central. El operador de Central debe confirmar el inicio del suministro.</p>' +
+                    '<div style="text-align: center; padding: 20px;">' +
+                    '<div class="spinner"></div>' +
+                    '<p style="margin-top: 10px; color: #856404;">Aguardando confirmación...</p>' +
+                    '</div>' +
+                    '</div>';
+            }
+            else if (estadoFlujo === 'CARGANDO') {
+                var progreso = data.objetivo_kwh ? ((data.kw_acumulados / data.objetivo_kwh) * 100).toFixed(1) : 0;
+                var objetivo_texto = data.objetivo_kwh || '∞';
+                html = '<div class="button-group" style="background: #d1ecf1;">' +
+                    '<h3>⚡ Suministro en Progreso</h3>' +
+                    '<p><strong>Driver:</strong> ' + data.driver_actual + '<br>' +
+                    '<strong>Energía:</strong> ' + data.kw_acumulados.toFixed(2) + ' / ' + objetivo_texto + ' kWh (' + progreso + '%)<br>' +
+                    '<strong>Tiempo:</strong> ' + data.segundos + 's</p>' +
+                    '<button class="btn btn-danger" onclick="solicitarFin()">' +
+                    '<span>🛑</span> Solicitar Fin de Suministro' +
+                    '</button>' +
+                    '</div>';
+            }
+            else if (estadoFlujo === 'ESPERANDO_CONFIRMACION_FIN') {
+                html = '<div class="button-group" style="background: #f8d7da;">' +
+                    '<h3>⏳ Esperando Confirmación de Fin</h3>' +
+                    '<p>Solicitud de fin enviada a la Central. El operador de Central debe confirmar el cierre del suministro.</p>' +
+                    '<p><strong>Energía actual:</strong> ' + data.kw_acumulados.toFixed(2) + ' kWh<br>' +
+                    '<strong>Tiempo:</strong> ' + data.segundos + 's</p>' +
+                    '<div style="text-align: center; padding: 20px;">' +
+                    '<div class="spinner"></div>' +
+                    '<p style="margin-top: 10px; color: #721c24;">Aguardando confirmación de fin...</p>' +
+                    '</div>' +
+                    '</div>';
+            }
+            else {
+                html = '<div class="button-group">' +
+                    '<h3>💤 En Reposo</h3>' +
+                    '<p>El punto de carga está disponible. Esperando solicitud de un driver desde la Central.</p>' +
+                    '<p style="color: #999; font-size: 12px; margin-top: 10px;">' +
+                    'Los drivers deben solicitar carga a través de su aplicación móvil.' +
+                    '</p>' +
+                    '</div>';
+            }
             
             contenedor.innerHTML = html;
-        }}
+        }
         
-        function iniciarSuministro() {{
+        function iniciarSuministro() {
             if (!confirm('¿Iniciar el suministro? Se enviará señal a Central para confirmación.')) return;
             
-            fetch('/api/iniciar_suministro', {{
+            fetch('/api/iniciar_suministro', {
                 method: 'POST',
-                headers: {{ 'Content-Type': 'application/json' }}
-            }})
-            .then(response => response.json())
-            .then(data => {{
-                mostrarAlerta(data.status === 'ok' ? data.mensaje : 'Error: ' + data.mensaje,
-                             data.status === 'ok' ? 'success' : 'danger');
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                var mensaje = data.status === 'ok' ? data.mensaje : 'Error: ' + data.mensaje;
+                var tipo = data.status === 'ok' ? 'success' : 'danger';
+                mostrarAlerta(mensaje, tipo);
                 actualizarEstado();
-            }})
-            .catch(error => mostrarAlerta('Error: ' + error, 'danger'));
-        }}
+            })
+            .catch(function(error) { mostrarAlerta('Error: ' + error, 'danger'); });
+        }
         
-        function solicitarFin() {{
+        function solicitarFin() {
             if (!confirm('¿Solicitar fin del suministro? Se enviará señal a Central para confirmación.')) return;
             
-            fetch('/api/solicitar_fin', {{
+            fetch('/api/solicitar_fin', {
                 method: 'POST',
-                headers: {{ 'Content-Type': 'application/json' }}
-            }})
-            .then(response => response.json())
-            .then(data => {{
-                if (data.status === 'ok') {{
-                    const msg = `${{data.mensaje}} (${{data.kw_actual}} kWh, ${{data.segundos}}s)`;
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                if (data.status === 'ok') {
+                    var msg = data.mensaje + ' (' + data.kw_actual + ' kWh, ' + data.segundos + 's)';
                     mostrarAlerta(msg, 'warning');
-                }} else {{
+                } else {
                     mostrarAlerta('Error: ' + data.mensaje, 'danger');
-                }}
+                }
                 actualizarEstado();
-            }})
-            .catch(error => mostrarAlerta('Error: ' + error, 'danger'));
-        }}
+            })
+            .catch(function(error) { mostrarAlerta('Error: ' + error, 'danger'); });
+        }
         
-        function simularAveria(activar) {{
-            const motivo = activar ? prompt('Motivo de la avería:', 'Fallo simulado') : '';
+        function simularAveria(activar) {
+            var motivo = activar ? prompt('Motivo de la avería:', 'Fallo simulado') : '';
             if (activar && !motivo) return;
             
-            fetch('/api/simular_averia', {{
+            var motivoFinal = motivo || 'Avería simulada';
+            var payload = {'activar': activar, 'motivo': motivoFinal};
+            
+            fetch('/api/simular_averia', {
                 method: 'POST',
-                headers: {{ 'Content-Type': 'application/json' }},
-                body: JSON.stringify({{ activar: activar, motivo: motivo || 'Avería simulada' }})
-            }})
-            .then(response => response.json())
-            .then(data => {{
-                if (data.status === 'ok') {{
-                    mostrarAlerta(data.mensaje, activar ? 'danger' : 'success');
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                if (data.status === 'ok') {
+                    var tipo = activar ? 'danger' : 'success';
+                    mostrarAlerta(data.mensaje, tipo);
                     actualizarEstado();
-                }} else {{
+                } else {
                     mostrarAlerta('Error: ' + data.mensaje, 'danger');
-                }}
-            }})
-            .catch(error => mostrarAlerta('Error: ' + error, 'danger'));
-        }}
+                }
+            })
+            .catch(function(error) { mostrarAlerta('Error: ' + error, 'danger'); });
+        }
         
-        function conectarDriver() {{
-            const driverId = prompt('ID del Driver (opcional):', 'DRIVER_WEB') || 'DRIVER_WEB';
-            fetch('/api/conectar_driver', {{
+        function conectarDriver() {
+            var driverId = prompt('ID del Driver (opcional):', 'DRIVER_WEB') || 'DRIVER_WEB';
+            var payload = {'driver_id': driverId};
+            
+            fetch('/api/conectar_driver', {
                 method: 'POST',
-                headers: {{ 'Content-Type': 'application/json' }},
-                body: JSON.stringify({{ driver_id: driverId }})
-            }})
-            .then(response => response.json())
-            .then(data => {{
-                mostrarAlerta(data.status === 'ok' ? data.mensaje : 'Error: ' + data.mensaje, 
-                             data.status === 'ok' ? 'success' : 'danger');
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                var mensaje = data.status === 'ok' ? data.mensaje : 'Error: ' + data.mensaje;
+                var tipo = data.status === 'ok' ? 'success' : 'danger';
+                mostrarAlerta(mensaje, tipo);
                 actualizarEstado();
-            }})
-            .catch(error => mostrarAlerta('Error: ' + error, 'danger'));
-        }}
+            })
+            .catch(function(error) { mostrarAlerta('Error: ' + error, 'danger'); });
+        }
         
-        function desconectarDriver() {{
+        function desconectarDriver() {
             if (!confirm('¿Desconectar el driver actual?')) return;
-            fetch('/api/desconectar_driver', {{
+            fetch('/api/desconectar_driver', {
                 method: 'POST',
-                headers: {{ 'Content-Type': 'application/json' }}
-            }})
-            .then(response => response.json())
-            .then(data => {{
-                mostrarAlerta(data.status === 'ok' ? data.mensaje : 'Error: ' + data.mensaje,
-                             data.status === 'ok' ? 'warning' : 'danger');
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                var mensaje = data.status === 'ok' ? data.mensaje : 'Error: ' + data.mensaje;
+                var tipo = data.status === 'ok' ? 'warning' : 'danger';
+                mostrarAlerta(mensaje, tipo);
                 actualizarEstado();
-            }})
-            .catch(error => mostrarAlerta('Error: ' + error, 'danger'));
-        }}
+            })
+            .catch(function(error) { mostrarAlerta('Error: ' + error, 'danger'); });
+        }
         
-        function cerrarSuministro() {{
+        function cerrarSuministro() {
             if (!confirm('¿Cerrar el suministro actual?')) return;
-            fetch('/api/solicitar_cierre_suministro', {{
+            fetch('/api/solicitar_cierre_suministro', {
                 method: 'POST',
-                headers: {{ 'Content-Type': 'application/json' }}
-            }})
-            .then(response => response.json())
-            .then(data => {{
-                if (data.status === 'ok') {{
-                    const mensaje = `Suministro cerrado: ${{data.kw_final}} kWh, €${{data.importe}}, ${{data.duracion_s}}s`;
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                if (data.status === 'ok') {
+                    var mensaje = 'Suministro cerrado: ' + data.kw_final + ' kWh, €' + data.importe + ', ' + data.duracion_s + 's';
                     mostrarAlerta(mensaje, 'success');
                     actualizarEstado();
-                }} else {{
+                } else {
                     mostrarAlerta('Error: ' + data.mensaje, 'danger');
-                }}
-            }})
-            .catch(error => mostrarAlerta('Error: ' + error, 'danger'));
-        }}
+                }
+            })
+            .catch(function(error) { mostrarAlerta('Error: ' + error, 'danger'); });
+        }
         
+        console.log('[WEB] 🚀 Iniciando actualización automática...');
         actualizarEstado();
         updateInterval = setInterval(actualizarEstado, 2000);
+        console.log('[WEB] ✅ Intervalo configurado (cada 2 segundos)');
     </script>
 </body>
 </html>"""
@@ -1079,12 +1103,17 @@ def index():
 @app.route('/api/status')
 def api_status():
     """Devuelve el estado actual del engine."""
+    print(f"[WEB API] ⭐ /api/status llamado")
+    
     cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
     
+    # Leer variables globales directamente (sin STATE_LOCK para estas)
+    driver_actual = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
+    objetivo_kwh = globals().get('TARGET_KWH')
+    
+    print(f"[WEB API] 📊 Valores globales: driver={driver_actual}, objetivo={objetivo_kwh}")
+    
     with STATE_LOCK:
-        driver_actual = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
-        objetivo_kwh = globals().get('TARGET_KWH')
-        
         estado = {
             'cp_id': cp_id,
             'estado': obtener_estado_actual(),
@@ -1101,10 +1130,11 @@ def api_status():
     
     # Agregar estado del flujo interactivo
     with ESTADO_FLUJO_LOCK:
-        estado['estado_flujo'] = ESTADO_FLUJO
+        estado_flujo_actual = ESTADO_FLUJO
+        estado['estado_flujo'] = estado_flujo_actual
     
     # Debug: imprimir valores leídos
-    print(f"[WEB API] /api/status - driver_actual={driver_actual}, objetivo_kwh={objetivo_kwh}, estado_flujo={ESTADO_FLUJO}")
+    print(f"[WEB API] ✅ Respuesta: estado_flujo={estado_flujo_actual}, driver={driver_actual}, objetivo={objetivo_kwh}")
     
     return jsonify(estado)
 
