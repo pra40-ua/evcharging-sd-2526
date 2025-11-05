@@ -61,6 +61,11 @@ CP_SESION_DRIVER_ID_LOCK = threading.Lock()
 CP_COLA_ESPERA = {}  # cp_id -> Queue de (driver_id, kw_deseados, timestamp)
 CP_COLA_ESPERA_LOCK = threading.Lock()
 
+# Estados del flujo interactivo (para confirmaciones en web)
+# cp_id -> 'LISTO_PARA_INICIAR' o 'ESPERANDO_CONFIRMACION_FIN'
+CP_PENDIENTE_CONFIRMACION = {}
+CP_PENDIENTE_CONFIRMACION_LOCK = threading.Lock()
+
 # Lista de hilos de clientes para cierre ordenado
 CLIENT_THREADS = []
 CLIENT_THREADS_LOCK = threading.Lock()
@@ -684,14 +689,16 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                         })
 
                         try:
+                            # NUEVO: Enviar AUTH_REQ al Engine pero NO iniciar automáticamente
+                            # El Engine mostrará el botón "Iniciar Suministro" en su web
                             trama_auth = construir_trama('AUTH_REQ', [id_driver, kw_deseados])
                             cp_socket.sendall(trama_auth)
                             print(f"[CENTRAL] -> AUTH_REQ enviado a {cp_id} para driver {id_driver}")
                             registrar_evento(f"[CONTROL] AUTH_REQ enviado a {cp_id} (kW: {kw_deseados}).")
-                            registrar_evento(f"[LOGICA] Solicitud {id_driver} validada y autorizada.")
-                            # Estado: PRE-SUMINISTRO tras AUTH_REQ (esperando ACK/arranque)
+                            registrar_evento(f"[LOGICA] Solicitud {id_driver} validada. Esperando acción del operador del Engine.")
+                            # Estado: ESPERANDO_OPERADOR_ENGINE (ya no PRE-SUMINISTRO automático)
                             try:
-                                cambiar_estado_cp(cp_id, 'PRE-SUMINISTRO', db_connection)
+                                cambiar_estado_cp(cp_id, 'ESPERANDO_OPERADOR_ENGINE', db_connection)
                             except Exception:
                                 pass
                             
@@ -1445,6 +1452,92 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     except Exception as e:
                         print(f"[CENTRAL] Error publicando estado tras FIN: {e}")
 
+                # NUEVO: Manejar READY_TO_START desde Monitor/Engine
+                elif cod_op == 'READY_TO_START' and len(campos) >= 2:
+                    try:
+                        engine_cp_id = campos[0]
+                        driver_id = campos[1]
+                        print(f"[CENTRAL] 📩 READY_TO_START recibido de {engine_cp_id} (Driver: {driver_id})")
+                        registrar_evento(f"[FLUJO] {engine_cp_id} listo para iniciar. Driver: {driver_id}. Esperando confirmación del operador de Central.", "info")
+                        
+                        # Marcar CP como pendiente de confirmación
+                        with CP_PENDIENTE_CONFIRMACION_LOCK:
+                            CP_PENDIENTE_CONFIRMACION[engine_cp_id] = 'LISTO_PARA_INICIAR'
+                        
+                        # Cambiar estado en BD y telemetría
+                        try:
+                            cambiar_estado_cp(engine_cp_id, 'LISTO_PARA_INICIAR', db_connection)
+                        except Exception:
+                            pass
+                        
+                        # Publicar telemetría actualizada
+                        try:
+                            with TELEMETRIA_ACTUAL_LOCK:
+                                telemetria_actual = TELEMETRIA_ACTUAL.get(engine_cp_id, {})
+                            telemetria_actualizada = {
+                                **telemetria_actual,
+                                'cp_id': engine_cp_id,
+                                'estado_carga': 'LISTO_PARA_INICIAR',
+                                'estado': 'LISTO_PARA_INICIAR',
+                                'timestamp': time.time(),
+                                'tiene_sesion_activa': True,
+                                'driver_id_sesion': driver_id
+                            }
+                            with TELEMETRIA_ACTUAL_LOCK:
+                                TELEMETRIA_ACTUAL[engine_cp_id] = telemetria_actualizada
+                            if KAFKA_PRODUCER:
+                                KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                                KAFKA_PRODUCER.flush(timeout=1)
+                        except Exception as e:
+                            print(f"[CENTRAL] Error publicando telemetría: {e}")
+                        
+                    except Exception as e:
+                        print(f"[CENTRAL] Error procesando READY_TO_START: {e}")
+                
+                # NUEVO: Manejar REQUEST_STOP desde Monitor/Engine
+                elif cod_op == 'REQUEST_STOP' and len(campos) >= 4:
+                    try:
+                        engine_cp_id = campos[0]
+                        driver_id = campos[1]
+                        kw_actual = campos[2]
+                        segundos = campos[3]
+                        print(f"[CENTRAL] 📩 REQUEST_STOP recibido de {engine_cp_id} (Driver: {driver_id}, {kw_actual} kWh)")
+                        registrar_evento(f"[FLUJO] {engine_cp_id} solicita fin. Driver: {driver_id}, {kw_actual} kWh. Esperando confirmación del operador de Central.", "info")
+                        
+                        # Marcar CP como pendiente de confirmación de fin
+                        with CP_PENDIENTE_CONFIRMACION_LOCK:
+                            CP_PENDIENTE_CONFIRMACION[engine_cp_id] = 'ESPERANDO_CONFIRMACION_FIN'
+                        
+                        # Cambiar estado en BD y telemetría
+                        try:
+                            cambiar_estado_cp(engine_cp_id, 'ESPERANDO_CONFIRMACION_FIN', db_connection)
+                        except Exception:
+                            pass
+                        
+                        # Publicar telemetría actualizada
+                        try:
+                            with TELEMETRIA_ACTUAL_LOCK:
+                                telemetria_actual = TELEMETRIA_ACTUAL.get(engine_cp_id, {})
+                            telemetria_actualizada = {
+                                **telemetria_actual,
+                                'cp_id': engine_cp_id,
+                                'estado_carga': 'ESPERANDO_CONFIRMACION_FIN',
+                                'estado': 'ESPERANDO_CONFIRMACION_FIN',
+                                'timestamp': time.time(),
+                                'kw_entregados': float(kw_actual),
+                                'tiempo_carga_s': int(segundos)
+                            }
+                            with TELEMETRIA_ACTUAL_LOCK:
+                                TELEMETRIA_ACTUAL[engine_cp_id] = telemetria_actualizada
+                            if KAFKA_PRODUCER:
+                                KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                                KAFKA_PRODUCER.flush(timeout=1)
+                        except Exception as e:
+                            print(f"[CENTRAL] Error publicando telemetría: {e}")
+                        
+                    except Exception as e:
+                        print(f"[CENTRAL] Error procesando REQUEST_STOP: {e}")
+                
                 # [Lógica para manejar AVR, Suministro síncrono, etc.]
                 elif cod_op == 'AVR' and len(campos) >= 2:
                     try:
@@ -1521,7 +1614,11 @@ def cambiar_estado_cp(cp_id: str, nuevo_estado: str, db_connection: mysql.connec
                 'DESCONECTADO': 'Desconectado',
                 'ACTIVADO': 'Activado',
                 'PRE-SUMINISTRO': 'Pre-Suministro',
+                'ESPERANDO_OPERADOR_ENGINE': 'Esperando Operador Engine',
+                'LISTO_PARA_INICIAR': 'Listo Para Iniciar',
                 'SUMINISTRANDO': 'Suministrando',
+                'CARGANDO': 'Suministrando',
+                'ESPERANDO_CONFIRMACION_FIN': 'Esperando Confirmacion Fin',
                 'PARADO': 'Parado',
                 'AVERÍA': 'Averiado',
                 'AVERIA': 'Averiado',

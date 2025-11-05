@@ -562,6 +562,90 @@ def api_command():
         }), 500
 
 
+@app.route('/api/confirmar_inicio/<cp_id>', methods=['POST'])
+def api_confirmar_inicio(cp_id):
+    """
+    Confirma el inicio de suministro para un CP que está LISTO_PARA_INICIAR.
+    """
+    try:
+        print(f"[DASHBOARD] Confirmación de inicio solicitada para {cp_id}")
+        
+        # Enviar comando START a través de Kafka
+        with KAFKA_PRODUCER_LOCK:
+            if KAFKA_PRODUCER is None:
+                return jsonify({
+                    'status': 'error',
+                    'message': 'Productor Kafka no disponible'
+                }), 503
+            
+            comando_msg = {
+                'cp_id': cp_id,
+                'command': 'START',
+                'timestamp': datetime.now().isoformat(),
+                'source': 'web_dashboard_confirmacion'
+            }
+            
+            KAFKA_PRODUCER.send('central_commands', value=comando_msg)
+            KAFKA_PRODUCER.flush(timeout=2)
+            
+            registrar_evento(f"✅ Inicio de suministro CONFIRMADO para {cp_id}", 'command')
+            
+            return jsonify({
+                'status': 'ok',
+                'message': f'Inicio confirmado para {cp_id}. Suministro iniciándose...',
+                'cp_id': cp_id
+            })
+    
+    except Exception as e:
+        registrar_evento(f"Error confirmando inicio para {cp_id}: {e}", 'error')
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
+@app.route('/api/confirmar_fin/<cp_id>', methods=['POST'])
+def api_confirmar_fin(cp_id):
+    """
+    Confirma el fin de suministro para un CP que está ESPERANDO_CONFIRMACION_FIN.
+    """
+    try:
+        print(f"[DASHBOARD] Confirmación de fin solicitada para {cp_id}")
+        
+        # Enviar comando STOP a través de Kafka
+        with KAFKA_PRODUCER_LOCK:
+            if KAFKA_PRODUCER is None:
+                return jsonify({
+                    'status': 'error',
+                    'message': 'Productor Kafka no disponible'
+                }), 503
+            
+            comando_msg = {
+                'cp_id': cp_id,
+                'command': 'STOP',
+                'timestamp': datetime.now().isoformat(),
+                'source': 'web_dashboard_confirmacion'
+            }
+            
+            KAFKA_PRODUCER.send('central_commands', value=comando_msg)
+            KAFKA_PRODUCER.flush(timeout=2)
+            
+            registrar_evento(f"✅ Fin de suministro CONFIRMADO para {cp_id}", 'command')
+            
+            return jsonify({
+                'status': 'ok',
+                'message': f'Fin confirmado para {cp_id}. Generando ticket...',
+                'cp_id': cp_id
+            })
+    
+    except Exception as e:
+        registrar_evento(f"Error confirmando fin para {cp_id}: {e}", 'error')
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
 # =================================================================
 #                    TEMPLATES HTML
 # =================================================================

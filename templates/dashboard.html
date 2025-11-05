@@ -125,6 +125,19 @@
         .status-desconectado { background: #6c757d; color: white; }
         .status-reposo { background: #6c757d; color: white; }
         .status-pre-suministro { background: #fd7e14; color: white; }
+        .status-esperando-operador-engine { background: #ffc107; color: #333; }
+        .status-listo-para-iniciar { background: #28a745; color: white; animation: pulseStatus 2s infinite; }
+        .status-esperando-confirmacion-fin { background: #dc3545; color: white; animation: pulseStatus 2s infinite; }
+        
+        @keyframes pulseStatus {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        @keyframes pulseBtn {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+            50% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
+        }
         
         .btn-control {
             padding: 6px 12px;
@@ -371,24 +384,29 @@
                 html += `<td>${cp.timestamp_telemetria || '-'}</td>`;
                 html += '<td>';
                 
-                // Botones de control según el estado y si hay sesión activa
+                // NUEVO FLUJO: Botones de control según el estado
                 if (estado === 'DESCONECTADO' || estado === 'AVERIADO' || estado === 'AVERÍA') {
                     html += '<button class="btn-control" disabled>Sin Conexión</button>';
+                } else if (estado === 'LISTO_PARA_INICIAR' || estado === 'LISTO PARA INICIAR') {
+                    // Engine listo: mostrar botón de CONFIRMACIÓN
+                    html += `<button class="btn-control btn-start" onclick="confirmarInicio('${cp.cp_id}')" style="background: #28a745; animation: pulseBtn 1.5s infinite;">
+                        ✓ Confirmar Inicio
+                    </button>`;
+                } else if (estado === 'ESPERANDO_CONFIRMACION_FIN' || estado === 'ESPERANDO CONFIRMACION FIN') {
+                    // Engine solicitó fin: mostrar botón de CONFIRMACIÓN
+                    html += `<button class="btn-control btn-stop" onclick="confirmarFin('${cp.cp_id}')" style="background: #dc3545; animation: pulseBtn 1.5s infinite;">
+                        ✓ Confirmar Fin
+                    </button>`;
                 } else if (estado === 'SUMINISTRANDO' || estado === 'CARGANDO') {
-                    // Cargando: solo permitir detener
-                    html += `<button class="btn-control btn-stop" onclick="enviarComando('${cp.cp_id}', 'STOP')">⏸ Detener</button>`;
-                } else if (estado === 'PRE-SUMINISTRO') {
-                    // En PRE-SUMINISTRO, permitir iniciar carga
-                    html += `<button class="btn-control btn-start" onclick="enviarComando('${cp.cp_id}', 'START')">▶ Iniciar Carga</button>`;
+                    // Cargando: en proceso, sin acciones
+                    html += '<span style="color: #17a2b8; font-size: 12px;">⚡ Suministrando...</span>';
+                } else if (estado === 'ESPERANDO_OPERADOR_ENGINE' || estado === 'ESPERANDO OPERADOR ENGINE') {
+                    // Esperando que el operador del Engine pulse el botón
+                    html += '<span style="color: #ffc107; font-size: 12px;">⏳ Esperando Engine...</span>';
                 } else if (estado === 'ACTIVADO') {
-                    // En ACTIVADO: solo mostrar botón START si hay sesión activa
-                    if (tieneSesion) {
-                        html += `<button class="btn-control btn-start" onclick="enviarComando('${cp.cp_id}', 'START')">▶ Iniciar (${cp.driver_id_sesion || 'Driver'})</button>`;
-                    } else {
-                        html += '<span style="color: #999; font-size: 12px;">En espera de solicitud</span>';
-                    }
+                    html += '<span style="color: #28a745; font-size: 12px;">✓ Disponible</span>';
                 } else {
-                    html += '<span style="color: #999; font-size: 12px;">-</span>';
+                    html += `<span style="color: #999; font-size: 12px;">${estado}</span>`;
                 }
                 
                 html += '</td>';
@@ -417,7 +435,53 @@
             document.getElementById('events-container').innerHTML = html;
         }
         
-        // Función para enviar comandos a los CPs
+        // Función para confirmar inicio de suministro
+        function confirmarInicio(cpId) {
+            if (!confirm(`¿Confirmar INICIO de suministro en ${cpId}?`)) return;
+            
+            fetch(`/api/confirmar_inicio/${cpId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    mostrarNotificacion(`✓ ${data.message}`, 'success');
+                } else {
+                    mostrarNotificacion(`✗ ${data.message}`, 'error');
+                }
+                actualizarDashboard();
+            })
+            .catch(error => {
+                mostrarNotificacion(`Error: ${error}`, 'error');
+                console.error('Error confirmando inicio:', error);
+            });
+        }
+        
+        // Función para confirmar fin de suministro
+        function confirmarFin(cpId) {
+            if (!confirm(`¿Confirmar FIN de suministro en ${cpId}? Se generará el ticket para el driver.`)) return;
+            
+            fetch(`/api/confirmar_fin/${cpId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    mostrarNotificacion(`✓ ${data.message}`, 'success');
+                } else {
+                    mostrarNotificacion(`✗ ${data.message}`, 'error');
+                }
+                actualizarDashboard();
+            })
+            .catch(error => {
+                mostrarNotificacion(`Error: ${error}`, 'error');
+                console.error('Error confirmando fin:', error);
+            });
+        }
+        
+        // Función para enviar comandos a los CPs (DEPRECADO - usar confirmarInicio/confirmarFin)
         function enviarComando(cpId, comando) {
             // Deshabilitar el botón temporalmente
             event.target.disabled = true;

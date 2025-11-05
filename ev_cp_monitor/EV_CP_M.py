@@ -342,24 +342,43 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                     print(f"[{cp_id}] ❌ Error reenviando FIN a Central: {e}")
                     import traceback
                     traceback.print_exc()
+            elif cod_op == 'READY_TO_START':
+                # Nuevo mensaje: Engine listo para iniciar (tras click del operador)
+                # READY_TO_START#<cp_id>#<driver_id>
+                try:
+                    engine_cp_id = campos[0] if len(campos) > 0 else cp_id
+                    driver_id = campos[1] if len(campos) > 1 else 'UNKNOWN'
+                    print(f"[{cp_id}] 📩 READY_TO_START recibido del Engine (Driver: {driver_id})")
+                    
+                    # Reenviar a Central
+                    trama = construir_trama('READY_TO_START', [engine_cp_id, driver_id])
+                    central_socket.sendall(trama)
+                    print(f"[{cp_id}] 📤 READY_TO_START reenviado a Central")
+                except Exception as e:
+                    print(f"[{cp_id}] Error procesando READY_TO_START: {e}")
+            elif cod_op == 'REQUEST_STOP':
+                # Nuevo mensaje: Engine solicita fin de suministro (tras click del operador)
+                # REQUEST_STOP#<cp_id>#<driver_id>#<kw_actual>#<segundos>
+                try:
+                    engine_cp_id = campos[0] if len(campos) > 0 else cp_id
+                    driver_id = campos[1] if len(campos) > 1 else 'UNKNOWN'
+                    kw_actual = campos[2] if len(campos) > 2 else '0'
+                    segundos = campos[3] if len(campos) > 3 else '0'
+                    print(f"[{cp_id}] 📩 REQUEST_STOP recibido del Engine (Driver: {driver_id}, {kw_actual} kWh)")
+                    
+                    # Reenviar a Central
+                    trama = construir_trama('REQUEST_STOP', [engine_cp_id, driver_id, kw_actual, segundos])
+                    central_socket.sendall(trama)
+                    print(f"[{cp_id}] 📤 REQUEST_STOP reenviado a Central")
+                except Exception as e:
+                    print(f"[{cp_id}] Error procesando REQUEST_STOP: {e}")
             elif cod_op == 'STATE':
                 try:
                     estado = campos[1] if len(campos) > 1 else 'ACTIVADO'
                     print(f"[{cp_id}] STATE desde Engine: {estado}.")
-                    # Si el Engine indica que el vehículo ha sido 'enchufado', iniciar START si hay autorización previa
-                    try:
-                        if estado.upper() == 'PLUGGED' and globals().get('WAITING_FOR_PLUG') and globals().get('SESION_DRIVER_ID'):
-                            # Enviar START al Engine con objetivo y driver
-                            try:
-                                objetivo = globals().get('SESION_KW_SOLICITADOS')
-                                driver = globals().get('SESION_DRIVER_ID')
-                                COMMAND_QUEUE.put_nowait(('START', time.time(), objetivo, driver))
-                                globals()['WAITING_FOR_PLUG'] = False
-                                print(f"[{cp_id}] Accion PLUG detectada. START encolado hacia Engine (driver={driver}, objetivo={objetivo}).")
-                            except Exception as e:
-                                print(f"[{cp_id}] No se pudo encolar START tras PLUG: {e}")
-                    except Exception:
-                        pass
+                    # DEPRECADO: Ya no iniciamos START automáticamente tras PLUG
+                    # El flujo ahora requiere confirmación explícita del operador
+                    
                     # Reenviar el estado a la Central para trazabilidad
                     print(f"[{cp_id}] Avisando a Central del estado: {estado}.")
                     trama_state = construir_trama('STATE', [cp_id, estado])

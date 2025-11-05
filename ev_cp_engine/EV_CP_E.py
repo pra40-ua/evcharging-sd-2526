@@ -97,6 +97,11 @@ CURRENT_DRIVER_ID = 'UNKNOWN'
 SESSION_START_TS = None
 CURRENT_TX_ID = None
 
+# Estados del flujo interactivo
+# REPOSO -> ESPERANDO_DRIVER -> LISTO_PARA_INICIAR -> CARGANDO -> ESPERANDO_CONFIRMACION_FIN -> REPOSO
+ESTADO_FLUJO = 'REPOSO'  # REPOSO, ESPERANDO_DRIVER, LISTO_PARA_INICIAR, CARGANDO, ESPERANDO_CONFIRMACION_FIN
+ESTADO_FLUJO_LOCK = threading.Lock()
+
 # Conexión activa con Monitor (para poder enviar FIN desde el hilo de telemetría)
 ACTIVE_MONITOR_CONN: socket.socket | None = None
 ENGINE_CP_ID = None
@@ -275,9 +280,44 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                 respuesta = construir_trama('HCK_RESP', [status])
                 conn.sendall(respuesta)
                 # HCK es muy frecuente, no mostrar para no saturar la pantalla
+            elif cod_op == 'AUTH_REQ':
+                # Nuevo mensaje: Central autorizó un driver, pero NO inicia automáticamente
+                # AUTH_REQ#<driver_id>#<kw_objetivo>
+                try:
+                    driver_id = campos[0] if len(campos) > 0 else 'UNKNOWN'
+                    kw_objetivo = campos[1] if len(campos) > 1 else '0'
+                    
+                    print(f"\n{'='*70}")
+                    print(f"  [{cp_id}] 📩 MENSAJE RECIBIDO: AUTH_REQ")
+                    print(f"  Driver: {driver_id}")
+                    print(f"  Objetivo: {kw_objetivo} kWh")
+                    print(f"{'='*70}\n")
+                    
+                    # Guardar datos de sesión
+                    global TARGET_KWH, CURRENT_DRIVER_ID, ESTADO_FLUJO
+                    TARGET_KWH = float(kw_objetivo) if kw_objetivo else None
+                    CURRENT_DRIVER_ID = driver_id
+                    
+                    # Cambiar estado del flujo
+                    with ESTADO_FLUJO_LOCK:
+                        ESTADO_FLUJO = 'ESPERANDO_DRIVER'
+                    
+                    print(f"[{cp_id}] ⏳ Estado: REPOSO → ESPERANDO_DRIVER")
+                    print(f"[{cp_id}] 👤 Driver autorizado: {driver_id}")
+                    print(f"[{cp_id}] 🌐 Web: Botón 'Iniciar Suministro' ahora disponible")
+                    
+                    # Responder OK
+                    respuesta = construir_trama('ACK', ['AUTH_OK'])
+                    conn.sendall(respuesta)
+                    
+                except Exception as e:
+                    print(f"[{cp_id}] Error procesando AUTH_REQ: {e}")
+                continue
+                
             elif cod_op == 'CMD':
                 orden = (campos[0] if campos else '').upper()
                 if orden == 'START':
+                    # START confirmado por Central tras READY_TO_START
                     # Campos opcionales: kw_objetivo, driver_id
                     kw_objetivo = None
                     driver_id = 'UNKNOWN'
@@ -288,13 +328,20 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                             driver_id = str(campos[2])
                     except Exception:
                         pass
+                    
+                    # Si no vienen parámetros, usar los guardados de AUTH_REQ
+                    if kw_objetivo is None:
+                        kw_objetivo = globals().get('TARGET_KWH')
+                    if driver_id == 'UNKNOWN':
+                        driver_id = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
+                    
                     # Inicializar sesión
                     global kw_acumulados_global, segundos_global, TARGET_KWH, CURRENT_DRIVER_ID
                     global SESSION_START_TS, CURRENT_TX_ID, ACTIVE_MONITOR_CONN
-                    global TELEMETRY_STOP_EVENT, TELEMETRY_THREAD
+                    global TELEMETRY_STOP_EVENT, TELEMETRY_THREAD, ESTADO_FLUJO
                     
                     print(f"\n{'='*70}")
-                    print(f"  [{cp_id}] 📩 MENSAJE RECIBIDO: CMD START")
+                    print(f"  [{cp_id}] 📩 MENSAJE RECIBIDO: CMD START (Confirmado por Central)")
                     print(f"  Driver: {driver_id}")
                     print(f"  Objetivo: {kw_objetivo} kWh" if kw_objetivo else "  Objetivo: Sin límite")
                     print(f"{'='*70}\n")
@@ -319,7 +366,11 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                             )
                             TELEMETRY_THREAD.start()
                     
-                    print(f"[{cp_id}] ⚡ CARGA INICIADA - Estado: CARGANDO")
+                    # Cambiar estado del flujo
+                    with ESTADO_FLUJO_LOCK:
+                        ESTADO_FLUJO = 'CARGANDO'
+                    
+                    print(f"[{cp_id}] ⚡ CARGA INICIADA - Estado: LISTO_PARA_INICIAR → CARGANDO")
                     info_ack = 'START_OK'
                     if kw_objetivo is not None:
                         info_ack = f"START_OK {kw_objetivo}kWh"
@@ -329,9 +380,12 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                     print(f"  [{cp_id}] 📤 MENSAJE ENVIADO: ACK {info_ack}")
                     print(f"{'='*70}\n")
                 elif orden == 'STOP':
+                    # STOP confirmado por Central tras REQUEST_STOP
                     print(f"\n{'='*70}")
-                    print(f"  [{cp_id}] 📩 MENSAJE RECIBIDO: CMD STOP")
+                    print(f"  [{cp_id}] 📩 MENSAJE RECIBIDO: CMD STOP (Confirmado por Central)")
                     print(f"{'='*70}\n")
+                    
+                    global ESTADO_FLUJO
                     
                     with STATE_LOCK:
                         CHARGING_FLAG.clear()
@@ -344,7 +398,11 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                         except Exception:
                             pass
                     
-                    print(f"[{cp_id}] 🛑 CARGA DETENIDA - Estado: REPOSO")
+                    # Cambiar estado del flujo
+                    with ESTADO_FLUJO_LOCK:
+                        ESTADO_FLUJO = 'REPOSO'
+                    
+                    print(f"[{cp_id}] 🛑 CARGA DETENIDA - Estado: ESPERANDO_CONFIRMACION_FIN → REPOSO")
                     
                     # Enviar telemetría final en REPOSO
                     generar_y_enviar_telemetria(
@@ -361,7 +419,7 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                         importe = round(kw_final * precio_kwh, 2)
                         driver_id = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
                         tx_id = globals().get('CURRENT_TX_ID') or f"TX-{cp_id}-{int(time.time())}"
-                        motivo = 'Detenido manualmente'
+                        motivo = 'Confirmado por Central'
                         
                         trama_fin = construir_trama('FIN', [
                             cp_id, 
@@ -383,6 +441,11 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                         print(f"{'='*70}\n")
                         
                         print(f"[{cp_id}] ✓ Sesión finalizada. Listo para nuevo servicio.")
+                        
+                        # Resetear variables de sesión
+                        TARGET_KWH = None
+                        CURRENT_DRIVER_ID = 'UNKNOWN'
+                        
                     except Exception as e:
                         print(f"[{cp_id}] ✗ Error enviando FIN tras STOP: {e}")
                     
@@ -671,6 +734,19 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         }
         .badge-ok { background: #28a745; color: white; }
         .badge-ko { background: #dc3545; color: white; }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -717,33 +793,29 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         </div>
         
         <div class="control-panel">
-            <h2>🎮 Controles de Simulación</h2>
+            <h2>🎮 Control de Suministro</h2>
             
-            <div class="button-group">
-                <h3>1️⃣ Simular Avería</h3>
-                <p>Simula una avería en el punto de carga. El engine responderá KO al monitor.</p>
-                <button class="btn btn-danger" id="btn-activar-averia" onclick="simularAveria(true)">
-                    <span>⚠️</span> Activar Avería
-                </button>
-                <button class="btn btn-success" id="btn-desactivar-averia" onclick="simularAveria(false)" style="display: none;">
-                    <span>✓</span> Desactivar Avería
-                </button>
-                <div id="averia-status" style="margin-top: 10px;"></div>
+            <!-- Contenedor dinámico para botones según estado -->
+            <div id="flujo-container">
+                <div class="button-group">
+                    <p style="text-align: center; color: #999;">Cargando estado...</p>
+                </div>
             </div>
             
-            <div class="button-group">
-                <h3>2️⃣ Gestión de Conexión y Suministro</h3>
-                <p><strong>Conectar Driver:</strong> Simula que un vehículo se ha enchufado.<br>
-                <strong>Cerrar Suministro:</strong> Solicita el cierre y genera el ticket.</p>
-                <button class="btn btn-warning" onclick="conectarDriver()">
-                    <span>🔌</span> Simular Conexión de Driver
-                </button>
-                <button class="btn btn-secondary" onclick="desconectarDriver()">
-                    <span>🔓</span> Simular Desconexión
-                </button>
-                <button class="btn btn-danger" onclick="cerrarSuministro()">
-                    <span>🛑</span> Solicitar Cierre de Suministro
-                </button>
+            <!-- Sección de avería (siempre visible) -->
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #dee2e6;">
+                <h2>⚙️ Diagnóstico</h2>
+                <div class="button-group">
+                    <h3>Simular Avería</h3>
+                    <p>Simula una avería en el punto de carga. El engine responderá KO al monitor.</p>
+                    <button class="btn btn-danger" id="btn-activar-averia" onclick="simularAveria(true)">
+                        <span>⚠️</span> Activar Avería
+                    </button>
+                    <button class="btn btn-success" id="btn-desactivar-averia" onclick="simularAveria(false)" style="display: none;">
+                        <span>✓</span> Desactivar Avería
+                    </button>
+                    <div id="averia-status" style="margin-top: 10px;"></div>
+                </div>
             </div>
         </div>
         
@@ -760,7 +832,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             fetch('/api/status')
                 .then(response => response.json())
                 .then(data => {{
-                    document.getElementById('status-estado').textContent = data.estado || '-';
+                    // Actualizar estado del flujo
+                    document.getElementById('status-estado').textContent = data.estado_flujo || data.estado || '-';
                     document.getElementById('status-monitor').innerHTML = data.monitor_conectado 
                         ? '<span class="badge badge-ok">Conectado</span>' 
                         : '<span class="badge badge-ko">Desconectado</span>';
@@ -769,6 +842,10 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     document.getElementById('status-driver').textContent = data.driver_actual || '-';
                     document.getElementById('status-objetivo').textContent = data.objetivo_kwh ? data.objetivo_kwh + ' kWh' : '-';
                     
+                    // Actualizar botones según estado del flujo
+                    actualizarBotonesFlujo(data.estado_flujo, data);
+                    
+                    // Estado de avería
                     estadoAveria = data.averia_simulada;
                     if (estadoAveria) {{
                         document.getElementById('btn-activar-averia').style.display = 'none';
@@ -798,6 +875,109 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                 alert.classList.remove('show');
                 setTimeout(() => alert.remove(), 300);
             }}, 5000);
+        }}
+        
+        function actualizarBotonesFlujo(estadoFlujo, data) {{
+            const contenedor = document.getElementById('flujo-container');
+            let html = '';
+            
+            if (estadoFlujo === 'ESPERANDO_DRIVER') {{
+                html = `
+                    <div class="button-group" style="background: #e8f5e9;">
+                        <h3>✅ Driver Autorizado</h3>
+                        <p><strong>Driver:</strong> ${{data.driver_actual}}<br>
+                           <strong>Objetivo:</strong> ${{data.objetivo_kwh || '?'}} kWh</p>
+                        <p>La Central ha autorizado este driver. Pulsa el botón cuando el vehículo esté listo para iniciar la carga.</p>
+                        <button class="btn btn-success" onclick="iniciarSuministro()">
+                            <span>🔌</span> Iniciar Suministro
+                        </button>
+                    </div>`;
+            }}
+            else if (estadoFlujo === 'LISTO_PARA_INICIAR') {{
+                html = `
+                    <div class="button-group" style="background: #fff3cd;">
+                        <h3>⏳ Esperando Confirmación de Central</h3>
+                        <p>Señal enviada a la Central. El operador de Central debe confirmar el inicio del suministro.</p>
+                        <div style="text-align: center; padding: 20px;">
+                            <div class="spinner"></div>
+                            <p style="margin-top: 10px; color: #856404;">Aguardando confirmación...</p>
+                        </div>
+                    </div>`;
+            }}
+            else if (estadoFlujo === 'CARGANDO') {{
+                const progreso = data.objetivo_kwh ? ((data.kw_acumulados / data.objetivo_kwh) * 100).toFixed(1) : 0;
+                html = `
+                    <div class="button-group" style="background: #d1ecf1;">
+                        <h3>⚡ Suministro en Progreso</h3>
+                        <p><strong>Driver:</strong> ${{data.driver_actual}}<br>
+                           <strong>Energía:</strong> ${{data.kw_acumulados.toFixed(2)}} / ${{data.objetivo_kwh || '∞'}} kWh (${{progreso}}%)<br>
+                           <strong>Tiempo:</strong> ${{data.segundos}}s</p>
+                        <button class="btn btn-danger" onclick="solicitarFin()">
+                            <span>🛑</span> Solicitar Fin de Suministro
+                        </button>
+                    </div>`;
+            }}
+            else if (estadoFlujo === 'ESPERANDO_CONFIRMACION_FIN') {{
+                html = `
+                    <div class="button-group" style="background: #f8d7da;">
+                        <h3>⏳ Esperando Confirmación de Fin</h3>
+                        <p>Solicitud de fin enviada a la Central. El operador de Central debe confirmar el cierre del suministro.</p>
+                        <p><strong>Energía actual:</strong> ${{data.kw_acumulados.toFixed(2)}} kWh<br>
+                           <strong>Tiempo:</strong> ${{data.segundos}}s</p>
+                        <div style="text-align: center; padding: 20px;">
+                            <div class="spinner"></div>
+                            <p style="margin-top: 10px; color: #721c24;">Aguardando confirmación de fin...</p>
+                        </div>
+                    </div>`;
+            }}
+            else {{
+                html = `
+                    <div class="button-group">
+                        <h3>💤 En Reposo</h3>
+                        <p>El punto de carga está disponible. Esperando solicitud de un driver desde la Central.</p>
+                        <p style="color: #999; font-size: 12px; margin-top: 10px;">
+                            Los drivers deben solicitar carga a través de su aplicación móvil.
+                        </p>
+                    </div>`;
+            }}
+            
+            contenedor.innerHTML = html;
+        }}
+        
+        function iniciarSuministro() {{
+            if (!confirm('¿Iniciar el suministro? Se enviará señal a Central para confirmación.')) return;
+            
+            fetch('/api/iniciar_suministro', {{
+                method: 'POST',
+                headers: {{ 'Content-Type': 'application/json' }}
+            }})
+            .then(response => response.json())
+            .then(data => {{
+                mostrarAlerta(data.status === 'ok' ? data.mensaje : 'Error: ' + data.mensaje,
+                             data.status === 'ok' ? 'success' : 'danger');
+                actualizarEstado();
+            }})
+            .catch(error => mostrarAlerta('Error: ' + error, 'danger'));
+        }}
+        
+        function solicitarFin() {{
+            if (!confirm('¿Solicitar fin del suministro? Se enviará señal a Central para confirmación.')) return;
+            
+            fetch('/api/solicitar_fin', {{
+                method: 'POST',
+                headers: {{ 'Content-Type': 'application/json' }}
+            }})
+            .then(response => response.json())
+            .then(data => {{
+                if (data.status === 'ok') {{
+                    const msg = `${{data.mensaje}} (${{data.kw_actual}} kWh, ${{data.segundos}}s)`;
+                    mostrarAlerta(msg, 'warning');
+                }} else {{
+                    mostrarAlerta('Error: ' + data.mensaje, 'danger');
+                }}
+                actualizarEstado();
+            }})
+            .catch(error => mostrarAlerta('Error: ' + error, 'danger'));
         }}
         
         function simularAveria(activar) {{
@@ -912,6 +1092,10 @@ def api_status():
     with SIMULAR_AVERIA_LOCK:
         estado['averia_simulada'] = SIMULAR_AVERIA
     
+    # Agregar estado del flujo interactivo
+    with ESTADO_FLUJO_LOCK:
+        estado['estado_flujo'] = ESTADO_FLUJO
+    
     return jsonify(estado)
 
 @app.route('/api/simular_averia', methods=['POST'])
@@ -946,9 +1130,118 @@ def api_simular_averia():
         'mensaje': mensaje
     })
 
+@app.route('/api/iniciar_suministro', methods=['POST'])
+def api_iniciar_suministro():
+    """Operador del Engine inicia el suministro (envía READY_TO_START a Central)."""
+    global ESTADO_FLUJO
+    cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
+    
+    with ESTADO_FLUJO_LOCK:
+        if ESTADO_FLUJO != 'ESPERANDO_DRIVER':
+            return jsonify({
+                'status': 'error',
+                'mensaje': f'No se puede iniciar. Estado actual: {ESTADO_FLUJO}'
+            }), 400
+        
+        # Cambiar estado
+        ESTADO_FLUJO = 'LISTO_PARA_INICIAR'
+    
+    print(f"\n{'='*70}")
+    print(f"  [{cp_id}] 🔌 OPERADOR: Iniciando suministro")
+    print(f"  Estado: ESPERANDO_DRIVER → LISTO_PARA_INICIAR")
+    print(f"{'='*70}\n")
+    
+    # Enviar mensaje READY_TO_START al monitor
+    try:
+        conn = globals().get('ACTIVE_MONITOR_CONN')
+        if conn is None:
+            with ESTADO_FLUJO_LOCK:
+                ESTADO_FLUJO = 'ESPERANDO_DRIVER'
+            return jsonify({
+                'status': 'error',
+                'mensaje': 'No hay conexión con el Monitor'
+            }), 400
+        
+        driver_id = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
+        trama = construir_trama('READY_TO_START', [cp_id, driver_id])
+        conn.sendall(trama)
+        
+        print(f"[{cp_id}] 📤 READY_TO_START enviado a Monitor (Driver: {driver_id})")
+        
+        return jsonify({
+            'status': 'ok',
+            'mensaje': 'Señal enviada a Central. Esperando confirmación...',
+            'nuevo_estado': 'LISTO_PARA_INICIAR'
+        })
+    except Exception as e:
+        with ESTADO_FLUJO_LOCK:
+            ESTADO_FLUJO = 'ESPERANDO_DRIVER'
+        return jsonify({
+            'status': 'error',
+            'mensaje': f'Error enviando señal: {str(e)}'
+        }), 500
+
+@app.route('/api/solicitar_fin', methods=['POST'])
+def api_solicitar_fin():
+    """Operador del Engine solicita fin de suministro (envía REQUEST_STOP a Central)."""
+    global ESTADO_FLUJO
+    cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
+    
+    with ESTADO_FLUJO_LOCK:
+        if ESTADO_FLUJO != 'CARGANDO':
+            return jsonify({
+                'status': 'error',
+                'mensaje': f'No se puede solicitar fin. Estado actual: {ESTADO_FLUJO}'
+            }), 400
+        
+        # Cambiar estado
+        ESTADO_FLUJO = 'ESPERANDO_CONFIRMACION_FIN'
+    
+    with STATE_LOCK:
+        kw_actual = round(kw_acumulados_global, 2)
+        segundos = segundos_global
+    
+    print(f"\n{'='*70}")
+    print(f"  [{cp_id}] 🛑 OPERADOR: Solicitando fin de suministro")
+    print(f"  Estado: CARGANDO → ESPERANDO_CONFIRMACION_FIN")
+    print(f"  kWh actual: {kw_actual}, Tiempo: {segundos}s")
+    print(f"{'='*70}\n")
+    
+    # Enviar mensaje REQUEST_STOP al monitor
+    try:
+        conn = globals().get('ACTIVE_MONITOR_CONN')
+        if conn is None:
+            with ESTADO_FLUJO_LOCK:
+                ESTADO_FLUJO = 'CARGANDO'
+            return jsonify({
+                'status': 'error',
+                'mensaje': 'No hay conexión con el Monitor'
+            }), 400
+        
+        driver_id = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
+        trama = construir_trama('REQUEST_STOP', [cp_id, driver_id, str(kw_actual), str(segundos)])
+        conn.sendall(trama)
+        
+        print(f"[{cp_id}] 📤 REQUEST_STOP enviado a Monitor")
+        
+        return jsonify({
+            'status': 'ok',
+            'mensaje': 'Solicitud de fin enviada a Central. Esperando confirmación...',
+            'nuevo_estado': 'ESPERANDO_CONFIRMACION_FIN',
+            'kw_actual': kw_actual,
+            'segundos': segundos
+        })
+    except Exception as e:
+        with ESTADO_FLUJO_LOCK:
+            ESTADO_FLUJO = 'CARGANDO'
+        return jsonify({
+            'status': 'error',
+            'mensaje': f'Error enviando solicitud: {str(e)}'
+        }), 500
+
 @app.route('/api/conectar_driver', methods=['POST'])
 def api_conectar_driver():
-    """Simula la conexión física de un driver (enchufar)."""
+    """Simula la conexión física de un driver (enchufar) - DEPRECADO en nuevo flujo."""
     cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
     
     data = request.get_json()
@@ -998,76 +1291,9 @@ def api_desconectar_driver():
 
 @app.route('/api/solicitar_cierre_suministro', methods=['POST'])
 def api_solicitar_cierre_suministro():
-    """Solicita el cierre del suministro actual."""
-    cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
-    
-    print(f"\n{'='*70}")
-    print(f"  [{cp_id}] 🛑 SOLICITUD: Cierre de suministro desde web")
-    print(f"{'='*70}\n")
-    
-    try:
-        # Obtener conexión con monitor
-        conn = globals().get('ACTIVE_MONITOR_CONN')
-        if conn is None:
-            return jsonify({
-                'status': 'error',
-                'mensaje': 'No hay conexión con el Monitor'
-            }), 400
-        
-        # Detener telemetría
-        with STATE_LOCK:
-            CHARGING_FLAG.clear()
-            kw_final = round(kw_acumulados_global, 2)
-            secs_final = segundos_global
-            if 'TELEMETRY_STOP_EVENT' in globals() and TELEMETRY_STOP_EVENT:
-                TELEMETRY_STOP_EVENT.set()
-        
-        # Enviar telemetría final
-        generar_y_enviar_telemetria(
-            cp_id=cp_id,
-            estado_carga='REPOSO',
-            kw_entregados=kw_final,
-            tiempo_carga_s=secs_final,
-            potencia_kw=0.0
-        )
-        
-        # Enviar FIN al Monitor
-        precio_kwh = 0.48
-        importe = round(kw_final * precio_kwh, 2)
-        driver_id = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
-        tx_id = globals().get('CURRENT_TX_ID') or f"TX-{cp_id}-{int(time.time())}"
-        motivo = 'Cierre solicitado desde web'
-        
-        trama_fin = construir_trama('FIN', [
-            cp_id, 
-            driver_id, 
-            f"{kw_final:.2f}", 
-            f"{importe:.2f}", 
-            str(secs_final), 
-            motivo, 
-            tx_id
-        ])
-        conn.sendall(trama_fin)
-        
-        print(f"\n{'='*70}")
-        print(f"  [{cp_id}] 📤 FIN enviado al Monitor")
-        print(f"  Energía: {kw_final} kWh")
-        print(f"  Importe: €{importe}")
-        print(f"  Duración: {secs_final}s")
-        print(f"{'='*70}\n")
-        
-        return jsonify({
-            'status': 'ok',
-            'mensaje': 'Cierre de suministro solicitado',
-            'kw_final': kw_final,
-            'importe': importe,
-            'duracion_s': secs_final
-        })
-    except Exception as e:
-        return jsonify({
-            'status': 'error',
-            'mensaje': str(e)
-        }), 500
+    """DEPRECADO - Usar /api/solicitar_fin en su lugar."""
+    # Redirigir al nuevo endpoint
+    return api_solicitar_fin()
 
 def iniciar_servidor_web(puerto: int):
     """Inicia el servidor Flask en un hilo separado."""
