@@ -57,6 +57,10 @@ CP_SESION_OBJETIVO_KWH_LOCK = threading.Lock()
 CP_SESION_DRIVER_ID = {}
 CP_SESION_DRIVER_ID_LOCK = threading.Lock()
 
+# Cola de espera por CP (cuando múltiples drivers solicitan el mismo CP)
+CP_COLA_ESPERA = {}  # cp_id -> Queue de (driver_id, kw_deseados, timestamp)
+CP_COLA_ESPERA_LOCK = threading.Lock()
+
 # Lista de hilos de clientes para cierre ordenado
 CLIENT_THREADS = []
 CLIENT_THREADS_LOCK = threading.Lock()
@@ -77,7 +81,11 @@ EVENT_LOG_LOCK = threading.Lock()
 # =================================================================
 
 console = Console()
-logging.basicConfig(filename='/app/central.log', level=logging.INFO, format='%(asctime)s - %(message)s')
+# Usar una ruta compatible con Windows y Linux
+log_dir = os.path.join(os.path.dirname(__file__), '..', 'logs')
+os.makedirs(log_dir, exist_ok=True)
+log_file = os.path.join(log_dir, 'central.log')
+logging.basicConfig(filename=log_file, level=logging.INFO, format='%(asctime)s - %(message)s')
 
 def registrar_evento(mensaje: str, tipo="info") -> None:
     """Registro de eventos con Rich + logging a archivo."""
@@ -167,8 +175,28 @@ def _enviar_comando_cp(cp_id: str, orden: str) -> bool:
         registrar_evento(f"ERROR: CP {cp_id} no conectado")
         return False
     try:
-        trama = construir_trama(orden, ['MANUAL'])
+        # Para START, necesitamos enviar los parámetros de sesión si existen
+        if orden.upper() == 'START':
+            # Obtener los parámetros de la sesión activa
+            with CP_SESION_DRIVER_ID_LOCK:
+                driver_id = CP_SESION_DRIVER_ID.get(cp_id)
+            with CP_SESION_OBJETIVO_KWH_LOCK:
+                kw_objetivo = CP_SESION_OBJETIVO_KWH.get(cp_id)
+            
+            if driver_id and kw_objetivo:
+                # Hay sesión activa válida: iniciar carga
+                trama = construir_trama('START', [driver_id, str(kw_objetivo)])
+                registrar_evento(f"Iniciando carga en {cp_id} (Driver: {driver_id}, kW: {kw_objetivo})")
+            else:
+                # Sin sesión activa: NO se puede iniciar
+                registrar_evento(f"ERROR: No hay sesión activa en {cp_id}. Se requiere solicitud de driver primero.", "error")
+                return False
+        else:
+            # Para STOP y otros comandos
+            trama = construir_trama(orden, ['MANUAL'])
+        
         cp_socket.sendall(trama)
+<<<<<<< HEAD
         if orden.upper() == 'STOP':
             # CAMBIO: Tras STOP, volver a ACTIVADO (no PARADO)
             with CP_ESTADO_MANUAL_LOCK:
@@ -184,19 +212,39 @@ def _enviar_comando_cp(cp_id: str, orden: str) -> bool:
                         del CP_SESION_OBJETIVO_KWH[cp_id]
             except Exception:
                 pass
+=======
+        
+        if orden.upper() == 'START':
+            # Publicar telemetría actualizada con sesión activa
+>>>>>>> luis2
             try:
                 with CP_SESION_DRIVER_ID_LOCK:
-                    if cp_id in CP_SESION_DRIVER_ID:
-                        del CP_SESION_DRIVER_ID[cp_id]
-            except Exception:
-                pass
-        elif orden.upper() == 'START':
-            with CP_ESTADO_MANUAL_LOCK:
-                CP_ESTADO_MANUAL[cp_id] = 'ACTIVADO'
-            try:
-                cambiar_estado_cp(cp_id, 'ACTIVADO')
-            except Exception:
-                pass
+                    driver_id_sesion = CP_SESION_DRIVER_ID.get(cp_id)
+                with TELEMETRIA_ACTUAL_LOCK:
+                    telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                telemetria_actualizada = {
+                    **telemetria_actual,
+                    'cp_id': cp_id,
+                    'estado_carga': 'PRE-SUMINISTRO',
+                    'estado': 'PRE-SUMINISTRO',
+                    'timestamp': time.time(),
+                    'tiene_sesion_activa': True,
+                    'driver_id_sesion': driver_id_sesion
+                }
+                with TELEMETRIA_ACTUAL_LOCK:
+                    TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
+                if KAFKA_PRODUCER:
+                    KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                    KAFKA_PRODUCER.flush(timeout=1)
+                    print(f"[CENTRAL] Telemetría actualizada publicada para {cp_id} (sesión iniciada manualmente)")
+            except Exception as e:
+                print(f"[CENTRAL] No se pudo publicar telemetría actualizada: {e}")
+        elif orden.upper() == 'STOP':
+            # Al hacer STOP, el CP enviará FIN con los datos finales
+            # No limpiamos la sesión aquí, se limpiará al recibir FIN
+            registrar_evento(f"Enviando STOP a {cp_id}. Esperando FIN con datos finales...")
+            print(f"[CENTRAL] Comando STOP enviado a {cp_id}. Aguardando respuesta FIN del CP...")
+        
         registrar_evento(f"Comando {orden} enviado a {cp_id}")
         return True
     except Exception as e:
@@ -268,6 +316,7 @@ ETX = b'\x03'
 DELIMITER = '#'
 TELEMETRIA_TOPIC = 'telemetria_cp'
 DRIVER_REQUESTS_TOPIC = 'driver_requests'
+CENTRAL_COMMANDS_TOPIC = 'central_commands'
 
 # Productor Kafka global para notificar a Drivers
 KAFKA_PRODUCER = None
@@ -324,6 +373,12 @@ def consumir_telemetria_kafka(broker_list: str):
                     # Asegurar timestamp presente para heartbeat/TUI
                     if 'timestamp' not in telemetria or not telemetria.get('timestamp'):
                         telemetria['timestamp'] = time.time()
+                    
+                    # Enriquecer telemetría con información de sesión activa
+                    with CP_SESION_DRIVER_ID_LOCK:
+                        telemetria['tiene_sesion_activa'] = cp_id in CP_SESION_DRIVER_ID
+                        telemetria['driver_id_sesion'] = CP_SESION_DRIVER_ID.get(cp_id, None)
+                    
                     with TELEMETRIA_ACTUAL_LOCK:
                         TELEMETRIA_ACTUAL[cp_id] = telemetria
 
@@ -439,6 +494,65 @@ def consumir_telemetria_kafka(broker_list: str):
 #                    CONSUMIDOR DE DRIVER_REQUESTS
 # =================================================================
             
+def consumir_comandos_control_kafka(broker_list: str):
+    """
+    Se conecta a Kafka y consume mensajes del tópico de comandos de control (desde web dashboard).
+    """
+    print(f"[KAFKA CONSUMER] Iniciando consumidor para comandos de control: {CENTRAL_COMMANDS_TOPIC}")
+    consumer = None
+    try:
+        consumer = KafkaConsumer(
+            CENTRAL_COMMANDS_TOPIC,
+            bootstrap_servers=[broker_list],
+            security_protocol='PLAINTEXT',
+            api_version=(2, 5, 0),
+            auto_offset_reset='latest',
+            group_id='central-control-group',
+            value_deserializer=lambda x: json.loads(x.decode('utf-8'))
+        )
+        
+        print(f"[KAFKA CONSUMER] Suscrito a '{CENTRAL_COMMANDS_TOPIC}'. Esperando comandos de control...")
+        
+        while True:
+            with SHUTDOWN_LOCK:
+                if SHUTDOWN_REQUESTED:
+                    print("[KAFKA CONSUMER] Apagado solicitado, cerrando consumidor de comandos de control...")
+                    break
+            
+            records = consumer.poll(timeout_ms=1000)
+            if not records:
+                continue
+            
+            for _tp, batch in records.items():
+                for message in batch:
+                    comando = message.value
+                    cp_id = comando.get('cp_id')
+                    command = comando.get('command', '').upper()
+                    source = comando.get('source', 'unknown')
+                    
+                    if not cp_id or command not in ['START', 'STOP']:
+                        registrar_evento(f"[WARN] Comando inválido recibido: {comando}", "warn")
+                        continue
+                    
+                    registrar_evento(f"[CONTROL WEB] Comando {command} para {cp_id} desde {source}")
+                    print(f"[KAFKA CONSUMER] Comando recibido: {command} para {cp_id}")
+                    
+                    # Ejecutar el comando
+                    _enviar_comando_cp(cp_id, command)
+            
+            try:
+                consumer.commit()
+            except Exception:
+                pass
+                
+    except Exception as e:
+        print(f"[KAFKA CONSUMER] Error en consumidor de comandos de control: {e}")
+    finally:
+        if consumer:
+            consumer.close()
+            print("[KAFKA CONSUMER] Consumidor de comandos de control cerrado.")
+
+
 def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.connector.connection.MySQLConnection):
     """
     Se conecta a Kafka y consume mensajes del tópico de solicitudes de drivers.
@@ -513,6 +627,34 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                             continue
 
                         estado_inferior = estado_cp.strip().lower()
+                        
+                        # Verificar si el CP ya tiene una sesión activa
+                        with CP_SESION_DRIVER_ID_LOCK:
+                            tiene_sesion = cp_id in CP_SESION_DRIVER_ID and CP_SESION_DRIVER_ID[cp_id] is not None
+                        
+                        if tiene_sesion:
+                            # CP ocupado - añadir a cola de espera
+                            print(f"[CENTRAL] CP {cp_id} ocupado. Añadiendo {id_driver} a cola de espera...")
+                            
+                            with CP_COLA_ESPERA_LOCK:
+                                if cp_id not in CP_COLA_ESPERA:
+                                    from queue import Queue
+                                    CP_COLA_ESPERA[cp_id] = Queue()
+                                CP_COLA_ESPERA[cp_id].put((id_driver, kw_deseados, time.time()))
+                            
+                            # Obtener posición en la cola
+                            with CP_COLA_ESPERA_LOCK:
+                                posicion = CP_COLA_ESPERA[cp_id].qsize()
+                            
+                            notificar_driver(id_driver, 'EN_COLA', {
+                                'mensaje': f'CP {cp_id} ocupado. Posición en cola: {posicion}',
+                                'posicion': posicion,
+                                'cp_id': cp_id
+                            })
+                            
+                            registrar_evento(f"Driver {id_driver} en cola para {cp_id} (posición {posicion})", "info")
+                            continue
+                        
                         if estado_inferior in ('activado',):
                             pass
                         elif estado_inferior in ('suministrando',):
@@ -570,6 +712,29 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                                 cambiar_estado_cp(cp_id, 'PRE-SUMINISTRO', db_connection)
                             except Exception:
                                 pass
+                            
+                            # Publicar telemetría actualizada con la sesión activa para el dashboard
+                            try:
+                                with TELEMETRIA_ACTUAL_LOCK:
+                                    telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                                telemetria_actualizada = {
+                                    **telemetria_actual,
+                                    'cp_id': cp_id,
+                                    'estado_carga': 'PRE-SUMINISTRO',
+                                    'estado': 'PRE-SUMINISTRO',
+                                    'timestamp': time.time(),
+                                    'tiene_sesion_activa': True,
+                                    'driver_id_sesion': id_driver
+                                }
+                                with TELEMETRIA_ACTUAL_LOCK:
+                                    TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
+                                if KAFKA_PRODUCER:
+                                    KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                                    KAFKA_PRODUCER.flush(timeout=1)
+                                    print(f"[CENTRAL] Telemetría actualizada publicada para {cp_id} (sesión activa: {id_driver})")
+                            except Exception as e:
+                                print(f"[CENTRAL] No se pudo publicar telemetría actualizada: {e}")
+                            
                             notificar_driver(id_driver, 'PENDIENTE_RESPUESTA_CP', {
                                 'mensaje': 'Solicitud enviada al CP. Esperando confirmación.'
                             })
@@ -823,13 +988,19 @@ def notificar_driver(id_driver: str, evento: str, detalle=None):
 # =================================================================
 
 def monitorizar_actividad_cps(db_connection):
+<<<<<<< HEAD
     """
     Monitoriza la actividad de los CPs basándose en la conexión TCP, NO en telemetría.
     La telemetría solo se envía durante CARGANDO, por lo que no es un indicador de conexión.
     El estado DESCONECTADO solo se establece cuando el socket TCP se cierra.
     """
+=======
+    """Monitoriza la actividad de los CPs y publica heartbeats periódicos."""
+    contador_heartbeat = 0
+>>>>>>> luis2
     while not SHUTDOWN_REQUESTED:
         try:
+<<<<<<< HEAD
             # Verificar que los CPs con socket activo no estén marcados como DESCONECTADOS
             with CONEXIONES_ACTIVAS_LOCK:
                 cps_conectados = set(CONEXIONES_ACTIVAS.keys())
@@ -855,6 +1026,91 @@ def monitorizar_actividad_cps(db_connection):
             registrar_evento(f"[WARN] Monitor de actividad error: {e}", "warn")
         
         time.sleep(10)  # Verificar cada 10 segundos
+=======
+            # Verificar CPs sin actividad
+            with TELEMETRIA_ACTUAL_LOCK:
+                for cp_id, data in list(TELEMETRIA_ACTUAL.items()):
+                    ultima = data.get("timestamp", 0)
+                    if ahora - ultima > 15:
+                        if CP_ESTADO.get(cp_id) != "DESCONECTADO":
+                            registrar_evento(f"[⚠️] CP {cp_id} sin actividad → DESCONECTADO", "warn")
+                            cambiar_estado_cp(cp_id, "DESCONECTADO", db_connection)
+            
+            # Publicar heartbeat cada 10 segundos (cada 2 ciclos de 5s)
+            contador_heartbeat += 1
+            if contador_heartbeat >= 2:
+                contador_heartbeat = 0
+                publicar_heartbeat_cps()
+                
+        except Exception as e:
+            registrar_evento(f"[WARN] Monitor error: {e}", "warn")
+        time.sleep(5)
+
+
+def publicar_heartbeat_cps():
+    """Publica el estado actual de todos los CPs conectados para que el dashboard lo detecte."""
+    try:
+        with CONEXIONES_ACTIVAS_LOCK:
+            cps_conectados = list(CONEXIONES_ACTIVAS.keys())
+        
+        if not cps_conectados:
+            return
+        
+        print(f"[CENTRAL] 💓 Publicando heartbeat para {len(cps_conectados)} CP(s) conectados...")
+        
+        for cp_id in cps_conectados:
+            try:
+                # Obtener telemetría actual o crear una básica
+                with TELEMETRIA_ACTUAL_LOCK:
+                    telemetria = TELEMETRIA_ACTUAL.get(cp_id, {})
+                
+                # Asegurar que tenga los campos mínimos
+                if not telemetria or 'timestamp' not in telemetria:
+                    with CP_ESTADO_LOCK:
+                        estado = CP_ESTADO.get(cp_id, 'ACTIVADO')
+                    with CP_PRECIO_KWH_LOCK:
+                        precio = CP_PRECIO_KWH.get(cp_id, 0.0)
+                    
+                    telemetria = {
+                        'cp_id': cp_id,
+                        'estado_carga': estado,
+                        'estado': estado,
+                        'potencia_actual': 0.0,
+                        'energia_total': 0.0,
+                        'kw_entregados': 0.0,
+                        'tiempo_carga_s': 0,
+                        'timestamp': time.time(),
+                        'precio_kwh': precio,
+                        'tiene_sesion_activa': False,
+                        'driver_id_sesion': None
+                    }
+                else:
+                    # Actualizar timestamp del heartbeat
+                    telemetria = {**telemetria, 'timestamp': time.time()}
+                
+                # Enriquecer con información de sesión
+                with CP_SESION_DRIVER_ID_LOCK:
+                    telemetria['tiene_sesion_activa'] = cp_id in CP_SESION_DRIVER_ID
+                    telemetria['driver_id_sesion'] = CP_SESION_DRIVER_ID.get(cp_id, None)
+                
+                # Publicar en Kafka
+                if KAFKA_PRODUCER:
+                    KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria)
+                    print(f"[CENTRAL]   → {cp_id}: {telemetria.get('estado', 'N/D')}")
+                
+            except Exception as e:
+                print(f"[CENTRAL] ✗ Error publicando heartbeat de {cp_id}: {e}")
+        
+        # Flush para asegurar envío
+        if KAFKA_PRODUCER:
+            KAFKA_PRODUCER.flush(timeout=1)
+            print(f"[CENTRAL] ✓ Heartbeat enviado correctamente a Kafka")
+            
+    except Exception as e:
+        print(f"[CENTRAL] ✗ Error en publicar_heartbeat_cps: {e}")
+        import traceback
+        traceback.print_exc()
+>>>>>>> luis2
 def mostrar_estado_red():
     """Compat: imprime estado (modo no-TUI); preservado por si se usa sin Rich."""
     print("\n" + "="*60)
@@ -997,6 +1253,7 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     pass
             else:
                 registrar_evento(f"[NUEVO CP] Registro inicial de {cp_id}.")
+<<<<<<< HEAD
 
             
             # --- NUEVA LÓGICA: Almacenar la conexión ---
@@ -1004,6 +1261,9 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                 CONEXIONES_ACTIVAS[cp_id] = conn
                 print(f"[CENTRAL] Socket de {cp_id} guardado. Total: {len(CONEXIONES_ACTIVAS)}")
             registrar_evento(f"CP registrado y conectado: {cp_id} ({ubicacion})", "ok")
+=======
+            registrar_evento(f"CP registrado y conectado: {cp_id} ({ubicacion})")
+>>>>>>> luis2
             # Estado: ACTIVADO tras registro exitoso
             try:
                 cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection)
@@ -1016,6 +1276,38 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     CP_PRECIO_KWH[cp_id] = precio_kwh
             except Exception:
                 pass
+            
+            # --- PUBLICAR ESTADO INICIAL EN KAFKA PARA QUE EL DASHBOARD LO DETECTE ---
+            try:
+                telemetria_inicial = {
+                    'cp_id': cp_id,
+                    'estado_carga': 'ACTIVADO',
+                    'estado': 'ACTIVADO',
+                    'potencia_actual': 0.0,
+                    'energia_total': 0.0,
+                    'kw_entregados': 0.0,
+                    'tiempo_carga_s': 0,
+                    'timestamp': time.time(),
+                    'ubicacion': ubicacion,
+                    'precio_kwh': precio_kwh,
+                    'tiene_sesion_activa': False,
+                    'driver_id_sesion': None
+                }
+                with TELEMETRIA_ACTUAL_LOCK:
+                    TELEMETRIA_ACTUAL[cp_id] = telemetria_inicial
+                
+                if KAFKA_PRODUCER is None:
+                    print(f"[CENTRAL] ✗ ADVERTENCIA: Productor Kafka no disponible, no se puede publicar telemetría de {cp_id}")
+                else:
+                    print(f"[CENTRAL] → Publicando telemetría inicial de {cp_id} en topic '{TELEMETRIA_TOPIC}'...")
+                    future = KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_inicial)
+                    KAFKA_PRODUCER.flush(timeout=2)
+                    print(f"[CENTRAL] ✓ Telemetría inicial de {cp_id} publicada correctamente en Kafka")
+                    registrar_evento(f"Telemetría inicial publicada para {cp_id}", "ok")
+            except Exception as e:
+                print(f"[CENTRAL] ✗ ERROR publicando telemetría inicial de {cp_id}: {e}")
+                import traceback
+                traceback.print_exc()
             
             # --- LÓGICA BD: Insertar/Actualizar CP y marcar como ACTIVADO ---
             if db_connection and db_connection.is_connected():
@@ -1037,6 +1329,11 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                 conn.sendall(respuesta_trama)
                 print(f"[CENTRAL] <- Enviada respuesta AUTH: OK a {cp_id} (sin BD)")
                 registrar_evento(f"AUTH OK enviado a {cp_id} (sin BD)")
+            
+            # --- ALMACENAR CONEXIÓN SOLO DESPUÉS DE COMPLETAR AUTENTICACIÓN ---
+            with CONEXIONES_ACTIVAS_LOCK:
+                CONEXIONES_ACTIVAS[cp_id] = conn
+                print(f"[CENTRAL] Socket de {cp_id} guardado. Total: {len(CONEXIONES_ACTIVAS)}")
 
         else:
             print(f"[CENTRAL] Error: Mensaje inicial no válido ({cod_op}). Cerrando conexión.")
@@ -1122,10 +1419,78 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     if tx_id is not None:
                         detalle_ticket['tx_id'] = tx_id
 
+                    # Enviar ticket al driver ANTES de limpiar sesión
                     notificar_driver(driver_id, 'TICKET_FINAL', detalle_ticket)
+                    
+                    print(f"[CENTRAL] ✅ Ticket enviado a {driver_id}. CP {cp_fin} listo para nuevo servicio.")
+                    registrar_evento(f"✅ Ticket enviado a {driver_id}: {energia} kWh, {importe} €", "ok")
 
-                    cambiar_estado_cp(cp_fin, 'ACTIVADO', db_connection)
-                    # Limpiar información de sesión
+                    # Limpiar sesión actual ANTES de procesar la cola
+                    with CP_SESION_DRIVER_ID_LOCK:
+                        if cp_fin in CP_SESION_DRIVER_ID:
+                            del CP_SESION_DRIVER_ID[cp_fin]
+                            print(f"[CENTRAL] Sesión de {driver_id} en {cp_fin} limpiada")
+                    with CP_SESION_OBJETIVO_KWH_LOCK:
+                        if cp_fin in CP_SESION_OBJETIVO_KWH:
+                            del CP_SESION_OBJETIVO_KWH[cp_fin]
+                    
+                    # Procesar siguiente driver en cola si existe
+                    cola_procesada = False
+                    try:
+                        with CP_COLA_ESPERA_LOCK:
+                            if cp_fin in CP_COLA_ESPERA and not CP_COLA_ESPERA[cp_fin].empty():
+                                from queue import Empty
+                                try:
+                                    next_driver, next_kw, timestamp_cola = CP_COLA_ESPERA[cp_fin].get_nowait()
+                                    print(f"[CENTRAL] 🔄 Procesando siguiente en cola: {next_driver} para {cp_fin}")
+                                    cola_procesada = True
+                                    
+                                    # Autorizar al siguiente driver
+                                    with CP_SESION_DRIVER_ID_LOCK:
+                                        CP_SESION_DRIVER_ID[cp_fin] = next_driver
+                                    with CP_SESION_OBJETIVO_KWH_LOCK:
+                                        CP_SESION_OBJETIVO_KWH[cp_fin] = next_kw
+                                    
+                                    # Notificar autorización
+                                    notificar_driver(next_driver, 'AUTORIZADO', {
+                                        'mensaje': f'Autorizado para cargar en {cp_fin}',
+                                        'cp_id': cp_fin,
+                                        'kw_disponibles': next_kw
+                                    })
+                                    print(f"[CENTRAL] ✅ Driver {next_driver} notificado: AUTORIZADO")
+                                    
+                                    # Enviar AUTH_REQ al Monitor
+                                    with CONEXIONES_ACTIVAS_LOCK:
+                                        if cp_fin in CONEXIONES_ACTIVAS:
+                                            socket_cp = CONEXIONES_ACTIVAS[cp_fin]
+                                            trama_auth = construir_trama('AUTH_REQ', [next_driver, str(next_kw)])
+                                            socket_cp.sendall(trama_auth)
+                                            print(f"[CENTRAL] ✅ AUTH_REQ enviado a {cp_fin} para {next_driver}")
+                                            
+                                            # Cambiar estado a PRE-SUMINISTRO
+                                            cambiar_estado_cp(cp_fin, 'PRE-SUMINISTRO', db_connection, motivo=f'Autorizando {next_driver}')
+                                    
+                                    registrar_evento(f"✅ Driver {next_driver} autorizado desde cola para {cp_fin}", "ok")
+                                    
+                                except Empty:
+                                    pass
+                    except Exception as e:
+                        print(f"[CENTRAL] ✗ Error procesando cola de {cp_fin}: {e}")
+                    
+                    # Solo cambiar a ACTIVADO si NO se procesó nadie de la cola
+                    if not cola_procesada:
+                        cambiar_estado_cp(cp_fin, 'ACTIVADO', db_connection)
+                        print(f"[CENTRAL] {cp_fin} sin cola pendiente. Estado: ACTIVADO")
+                    
+                    # Limpiar estado manual si estaba PARADO
+                    try:
+                        with CP_ESTADO_MANUAL_LOCK:
+                            if cp_fin in CP_ESTADO_MANUAL:
+                                del CP_ESTADO_MANUAL[cp_fin]
+                    except Exception:
+                        pass
+                    
+                    # Limpiar información de sesión del driver
                     try:
                         with CP_SESION_OBJETIVO_KWH_LOCK:
                             if cp_fin in CP_SESION_OBJETIVO_KWH:
@@ -1138,6 +1503,31 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                                 del CP_SESION_DRIVER_ID[cp_fin]
                     except Exception:
                         pass
+                    
+                    # Publicar telemetría actualizada: CP en ACTIVADO, sin sesión, contadores en 0
+                    try:
+                        with TELEMETRIA_ACTUAL_LOCK:
+                            telemetria_actual = TELEMETRIA_ACTUAL.get(cp_fin, {})
+                        telemetria_actualizada = {
+                            **telemetria_actual,
+                            'cp_id': cp_fin,
+                            'estado_carga': 'ACTIVADO',
+                            'estado': 'ACTIVADO',
+                            'timestamp': time.time(),
+                            'tiene_sesion_activa': False,
+                            'driver_id_sesion': None,
+                            'kw_entregados': 0.0,
+                            'potencia_actual': 0.0,
+                            'tiempo_carga_s': 0
+                        }
+                        with TELEMETRIA_ACTUAL_LOCK:
+                            TELEMETRIA_ACTUAL[cp_fin] = telemetria_actualizada
+                        if KAFKA_PRODUCER:
+                            KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                            KAFKA_PRODUCER.flush(timeout=1)
+                            print(f"[CENTRAL] CP {cp_fin} resetado y listo para nuevo servicio (ACTIVADO)")
+                    except Exception as e:
+                        print(f"[CENTRAL] Error publicando estado tras FIN: {e}")
 
                 # [Lógica para manejar AVR, Suministro síncrono, etc.]
                 elif cod_op == 'AVR' and len(campos) >= 2:
@@ -1260,20 +1650,20 @@ def main():
     # Hacer accesible la conexión BD para el consumidor de telemetría (histórico)
     globals()['_DB_CONN_FOR_CONSUMER'] = db_connection
 
-    # Restaurar estado de CPs desde BD al inicio
+    # Al iniciar, marcar todos los CPs en BD como Desconectado
+    # Solo se marcarán como activos cuando se reconecten
     try:
         if db_connection and db_connection.is_connected():
             cursor = db_connection.cursor()
-            cursor.execute("SELECT cp_id, estado FROM charging_points")
-            for cp_id, estado in cursor.fetchall():
-                with CP_ESTADO_LOCK:
-                    CP_ESTADO[cp_id] = estado
-                with TELEMETRIA_ACTUAL_LOCK:
-                    TELEMETRIA_ACTUAL[cp_id] = {'timestamp': time.time(), 'estado': estado}
-                registrar_evento(f"[RESTORE] {cp_id} restaurado con estado {estado}", "ok")
+            # Marcar todos los CPs como desconectados (inicio limpio)
+            cursor.execute("UPDATE charging_points SET estado = 'Desconectado'")
+            db_connection.commit()
+            num_cps = cursor.rowcount
+            if num_cps > 0:
+                registrar_evento(f"[INICIO] {num_cps} CP(s) marcados como Desconectado. Esperando conexiones...", "info")
             cursor.close()
     except Exception as e:
-        registrar_evento(f"[ERROR] No se pudo restaurar el estado inicial: {e}", "error")
+        registrar_evento(f"[ERROR] No se pudo inicializar estado de CPs: {e}", "error")
 
     # Inicialización del productor Kafka para notificaciones
     inicializar_kafka_producer(args.kafka)
@@ -1312,6 +1702,13 @@ def main():
             daemon=True
         )
         driver_requests_thread.start()
+        # Hilo consumidor de Kafka para comandos de control desde web
+        control_commands_thread = threading.Thread(
+            target=consumir_comandos_control_kafka,
+            args=(args.kafka,),
+            daemon=True
+        )
+        control_commands_thread.start()
         # Lanzar monitor de actividad (heartbeat)
         threading.Thread(target=monitorizar_actividad_cps, args=(db_connection,), daemon=True).start()
         print(f"[EV_Central] Servidor escuchando en TCP (:{args.port})...")

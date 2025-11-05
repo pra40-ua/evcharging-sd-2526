@@ -1,21 +1,33 @@
-# Arrancar Kafka (en el host, accesible desde contenedores vÃ­a host.docker.internal)
-docker compose down
-docker compose up -d
+# Script de ejecución para EV_Central en PC_A
+# Este script debe ejecutarse desde el directorio raíz del proyecto
 
-# Crear red y volumen para MySQL
-docker network create evnet
-docker volume create ev_mysql_data
+# Leer la IP central del archivo
+$CENTRAL_IP = (Get-Content "central_ip.txt" -ErrorAction SilentlyContinue).Trim()
+if ([string]::IsNullOrEmpty($CENTRAL_IP)) {
+    $CENTRAL_IP = "127.0.0.1"
+    Write-Host "[ADVERTENCIA] No se pudo leer central_ip.txt, usando 127.0.0.1" -ForegroundColor Yellow
+}
 
-# Arrancar MySQL (primer arranque ejecuta db/init.sql)
-docker run -d --name mysql --network evnet -p 3306:3306 `
-  -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=evcharging `
-  -v ev_mysql_data:/var/lib/mysql `
-  -v ${PWD}\db\init.sql:/docker-entrypoint-initdb.d/01_schema.sql `
-  mysql:8
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host "   EJECUTANDO EV_CENTRAL (PC_A)" -ForegroundColor Cyan
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "Configuración:" -ForegroundColor Green
+Write-Host "  - IP Central:  $CENTRAL_IP" -ForegroundColor White
+Write-Host "  - Puerto:      5000" -ForegroundColor White
+Write-Host "  - Kafka:       $CENTRAL_IP:9092" -ForegroundColor White
+Write-Host "  - MySQL:       127.0.0.1:3306" -ForegroundColor White
+Write-Host ""
+Write-Host "El servidor Central estará escuchando conexiones de monitores..." -ForegroundColor Yellow
+Write-Host ""
 
-# Construir imagen de la central (si no existe)
-docker build -t ev_central:local -f ev_central/Dockerfile .
+# Ejecutar EV_Central con Python
+py ev_central\EV_Central.py `
+  --port 5000 `
+  --kafka "${CENTRAL_IP}:9092" `
+  --db "127.0.0.1:3306:root:root:evcharging"
 
+<<<<<<< HEAD
 # Arrancar Central (usa hostname mysql en la misma red y la IP real para Kafka)
 docker run --rm -it --name central --network evnet -p 5000:5000 `
   -e CENTRAL_PORT=5000 `
@@ -27,3 +39,8 @@ docker run --rm -it --name central --network evnet -p 5000:5000 `
 # Abre puertos 5000 y 9092 en el firewall de este PC.
 # IP Central detectada (PC_A): 192.168.1.43
 # Se ha guardado tambiÃ©n en central_ip.txt para facilitar la configuraciÃ³n de PC_B.
+=======
+Write-Host ""
+Write-Host "EV_Central ha finalizado." -ForegroundColor Red
+
+>>>>>>> luis2

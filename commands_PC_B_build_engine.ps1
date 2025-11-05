@@ -6,5 +6,5 @@ docker build -t ev_driver:local -f ev_driver/Dockerfile .
 # Arrancar Engine
 docker run --rm -p 5001:5001 --name engine `
   -e ENGINE_PORT=5001 -e CP_ID=CP_001 `
-  -e KAFKA_SERVER="172.21.42.5:9092" `
+  -e KAFKA_SERVER="192.168.1.43:9092" `
   ev_engine:local

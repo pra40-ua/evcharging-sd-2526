@@ -1,8 +1,8 @@
 import json
 import time
+import sys
 from kafka import KafkaProducer, KafkaConsumer
 import argparse
-from kafka import KafkaProducer
 
 # --- CONFIGURACIÓN ---
 KAFKA_SERVER = 'localhost:9092'
@@ -37,8 +37,9 @@ def enviar_solicitud(solicitud, broker):
             )
             producer.send(TOPIC_REQUESTS, value=solicitud)
             producer.flush()
-            print(f"[{solicitud['id_driver']}] Solicitud enviada correctamente (intento {intento+1})")
-            print(f"[DRIVER {solicitud['id_driver']}] Esperando respuesta de la Central...")
+            print(f"[{solicitud['id_driver']}] ✓ Solicitud enviada correctamente (intento {intento+1})")
+            cp_solicitado = solicitud.get('id_charging_point', '?')
+            print(f"[DRIVER {solicitud['id_driver']}] 📡 Esperando respuesta de la Central para {cp_solicitado}...")
             producer.close()
             break
         except Exception as e:
@@ -68,17 +69,35 @@ def consumir_notificaciones_driver(driver_id: str, broker: str, procesar_ticket_
             print(f"[DRIVER {driver_id}] Evento={evento} @ {ts} -> {detalle}")
             if evento == 'RECIBIDA':
                 print(f"[DRIVER {driver_id}] Solicitud recibida por Central. Validando CP...")
+            elif evento == 'EN_COLA':
+                posicion = detalle.get('posicion', '?')
+                cp_id = detalle.get('cp_id', '?')
+                print(f"[DRIVER {driver_id}] 🕐 CP {cp_id} ocupado. En cola de espera (posición {posicion})...")
+                print(f"[DRIVER {driver_id}] Esperando turno...")
             elif evento == 'AUTORIZADO':
-                print(f"[DRIVER {driver_id}] Autorizado por Central. Iniciando sesión de carga...")
+                cp_id = detalle.get('cp_id', '?')
+                print(f"[DRIVER {driver_id}] ✅ Autorizado por Central para {cp_id}!")
+                print(f"[DRIVER {driver_id}] Iniciando sesión de carga...")
+            elif evento == 'AUTORIZACION_EN_PROCESO':
+                print(f"[DRIVER {driver_id}] ⏳ Autorizando... {detalle.get('mensaje', '')}")
             elif evento == 'DENEGADA':
                 print(f"[DRIVER {driver_id}] Solicitud denegada: {detalle}")
-            if evento == 'TICKET_FINAL' and procesar_ticket_callback:
-                try:
-                    procesar_ticket_callback(detalle)
-                except Exception:
-                    pass
+                print(f"[DRIVER {driver_id}] ❌ Terminando proceso (solicitud denegada).")
+                consumer.close()
+                return False  # Retornar False para indicar fallo
+            elif evento == 'TICKET_FINAL':
+                # Procesar ticket y TERMINAR el driver
+                if procesar_ticket_callback:
+                    try:
+                        procesar_ticket_callback(detalle)
+                    except Exception as e:
+                        print(f"[DRIVER {driver_id}] Error procesando ticket: {e}")
+                print(f"[DRIVER {driver_id}] ✅ Ticket recibido. Terminando proceso.")
+                consumer.close()
+                return True  # Retornar True para indicar éxito
     except Exception as e:
         print(f"[DRIVER {driver_id}] Error consumiendo notificaciones: {e}")
+        return False
 
 # --- 3. EJECUCIÓN (Simulación del Driver) ---
 if __name__ == '__main__':
@@ -106,17 +125,44 @@ if __name__ == '__main__':
 
     if args.listen:
         def mostrar_ticket(ticket):
+            """Procesa y muestra el ticket final."""
             try:
                 cp = ticket.get('cp_id')
                 energia = ticket.get('energia_kwh')
                 importe = ticket.get('importe_eur')
-                print(f"[DRIVER {args.id}] Ticket final: CP={cp}, E={energia} kWh, €={importe}")
+                duracion = ticket.get('duracion_seg', 'N/D')
+                tx_id = ticket.get('tx_id', 'N/D')
+                
+                print("\n" + "="*60)
+                print(f"           🧾 TICKET FINAL - DRIVER {args.id}")
+                print("="*60)
+                print(f"  Punto de Carga:  {cp}")
+                print(f"  Energía:         {energia} kWh")
+                print(f"  Importe:         {importe} €")
+                print(f"  Duración:        {duracion} segundos")
+                print(f"  ID Transacción:  {tx_id}")
+                print(f"  Fecha/Hora:      {time.strftime('%Y-%m-%d %H:%M:%S')}")
+                print("="*60)
+                
+                # Guardar en archivo
                 with open("tickets_driver.txt", "a", encoding="utf-8") as f:
-                    f.write(f"{time.strftime('%Y-%m-%d %H:%M:%S')} | Driver={args.id} | CP={cp} | Energía={energia} kWh | Importe={importe} €\n")
-            except Exception:
-                print(f"[DRIVER {args.id}] Ticket final: {ticket}")
-            # Si estuviera procesando por fichero, esperar 4s y continuar
-            time.sleep(4)
-            print(f"[DRIVER {args.id}] Listo para solicitar siguiente servicio (si procede).")
+                    f.write(f"{time.strftime('%Y-%m-%d %H:%M:%S')} | Driver={args.id} | CP={cp} | Energía={energia} kWh | Importe={importe} € | TX={tx_id}\n")
+                
+                print(f"\n[DRIVER {args.id}] ✅ Ticket guardado en 'tickets_driver.txt'")
+            except Exception as e:
+                print(f"[DRIVER {args.id}] Error mostrando ticket: {e}")
+                print(f"[DRIVER {args.id}] Ticket raw: {ticket}")
 
-        consumir_notificaciones_driver(args.id, broker, procesar_ticket_callback=mostrar_ticket)
+        # Consumir notificaciones hasta recibir el ticket (o error)
+        exito = consumir_notificaciones_driver(args.id, broker, procesar_ticket_callback=mostrar_ticket)
+        
+        # Terminar con código de salida apropiado
+        if exito:
+            print(f"\n[DRIVER {args.id}] 🚗 Servicio completado exitosamente. Adiós!\n")
+            sys.exit(0)
+        else:
+            print(f"\n[DRIVER {args.id}] ❌ Servicio no completado.\n")
+            sys.exit(1)
+    else:
+        print(f"[DRIVER {args.id}] Solicitud enviada. Use --listen para recibir el ticket.")
+        sys.exit(0)
