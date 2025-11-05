@@ -21,7 +21,7 @@ import threading # Necesario si el Engine está corriendo en un bucle principal
 import os
 
 # Importaciones para la interfaz web
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, make_response
 from flask_cors import CORS
 
 # --- CONFIGURACIÓN ---
@@ -843,7 +843,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         
         function actualizarEstado() {
             console.log('[WEB] Llamando a /api/status...');
-            fetch('/api/status')
+            var url = '/api/status?t=' + Date.now();
+            fetch(url, { cache: 'no-store' })
                 .then(function(response) {
                     console.log('[WEB] Respuesta recibida:', response.status);
                     if (!response.ok) {
@@ -860,15 +861,14 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     try {
                         // Actualizar estado del flujo
                         console.log('[WEB] Actualizando elementos DOM...');
-                        // Derivar estado en el cliente: si hay driver y objetivo pero flujo=REPOSO, mostrar ESPERANDO_DRIVER
-                        var estadoDerivado = data.estado_flujo;
-                        if (!estadoDerivado || estadoDerivado === 'REPOSO') {
-                            if ((data.driver_actual && data.driver_actual !== 'UNKNOWN') && (data.objetivo_kwh !== null && data.objetivo_kwh !== undefined)) {
-                                console.log('[WEB] 🛡️ Derivando estado a ESPERANDO_DRIVER por sesión activa');
-                                estadoDerivado = 'ESPERANDO_DRIVER';
-                            }
+                        // Fuente de verdad: estado de flujo que envía el backend
+                        var estadoParaBotones = data.estado_flujo;
+                        // Salvaguarda: si el flujo es REPOSO pero hay sesión activa, derivar a ESPERANDO_DRIVER
+                        if (estadoParaBotones === 'REPOSO' && (data.driver_actual && data.driver_actual !== 'UNKNOWN') && (data.objetivo_kwh !== null && data.objetivo_kwh !== undefined)) {
+                            console.log('[WEB] 🛡️ Derivando estado a ESPERANDO_DRIVER por sesión activa');
+                            estadoParaBotones = 'ESPERANDO_DRIVER';
                         }
-                        document.getElementById('status-estado').textContent = estadoDerivado || data.estado || '-';
+                        document.getElementById('status-estado').textContent = estadoParaBotones || data.estado || '-';
                         document.getElementById('status-monitor').innerHTML = data.monitor_conectado 
                             ? '<span class="badge badge-ok">Conectado</span>' 
                             : '<span class="badge badge-ko">Desconectado</span>';
@@ -878,8 +878,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                         document.getElementById('status-objetivo').textContent = data.objetivo_kwh ? data.objetivo_kwh + ' kWh' : '-';
                         
                         // Actualizar botones según estado del flujo
-                        console.log('[WEB] Llamando a actualizarBotonesFlujo con estado:', estadoDerivado);
-                        actualizarBotonesFlujo(estadoDerivado, data);
+                        console.log('[WEB] Llamando a actualizarBotonesFlujo con estado:', estadoParaBotones);
+                        actualizarBotonesFlujo(estadoParaBotones, data);
                         console.log('[WEB] ✓ Botones actualizados');
                     } catch (e) {
                         console.error('[WEB] ❌ Error actualizando DOM:', e);
@@ -1134,7 +1134,12 @@ def index():
     try:
         # Usar replace en lugar de format para evitar problemas con las llaves de CSS/JS
         html = HTML_TEMPLATE.replace('__CP_ID__', cp_id)
-        return html
+        resp = make_response(html)
+        # Evitar cacheo agresivo del HTML
+        resp.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+        resp.headers['Pragma'] = 'no-cache'
+        resp.headers['Expires'] = '0'
+        return resp
     except Exception as e:
         print(f"[WEB] Error generando HTML: {e}")
         import traceback
@@ -1193,7 +1198,12 @@ def api_status():
     # Debug: imprimir valores finales que se van a enviar
     print(f"[WEB API] ✅ Enviando respuesta JSON: estado_flujo={estado_flujo_actual}, driver={driver_actual}, objetivo={objetivo_kwh}")
     
-    return jsonify(estado)
+    resp = jsonify(estado)
+    # Evitar cacheo del JSON de estado
+    resp.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    resp.headers['Pragma'] = 'no-cache'
+    resp.headers['Expires'] = '0'
+    return resp
 
 @app.route('/api/simular_averia', methods=['POST'])
 def api_simular_averia():
