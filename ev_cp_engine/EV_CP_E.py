@@ -20,6 +20,10 @@ from kafka import KafkaProducer
 import threading # Necesario si el Engine está corriendo en un bucle principal
 import os
 
+# Importaciones para la interfaz web
+from flask import Flask, render_template, jsonify, request
+from flask_cors import CORS
+
 # --- CONFIGURACIÓN ---
 KAFKA_SERVER = os.getenv('KAFKA_SERVER', '127.0.0.1:9092')
 TOPIC_TELEMETRY = 'telemetria_cp'
@@ -96,6 +100,15 @@ CURRENT_TX_ID = None
 # Conexión activa con Monitor (para poder enviar FIN desde el hilo de telemetría)
 ACTIVE_MONITOR_CONN: socket.socket | None = None
 ENGINE_CP_ID = None
+
+# Estado de avería simulada (para responder KO en HCK)
+SIMULAR_AVERIA = False
+SIMULAR_AVERIA_LOCK = threading.Lock()
+
+# Flask app para interfaz web
+app = Flask(__name__)
+CORS(app)
+WEB_PORT = 9000  # Puerto por defecto, se configurará según el CP
 
 def bucle_telemetria(cp_id: str, stop_event: threading.Event):
     """Emite telemetría de CARGANDO únicamente mientras dure la sesión (START..STOP)."""
@@ -247,9 +260,12 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
 
             if cod_op == 'HCK':
                 # --- Lógica de Simulación de Estado ---
-                # **Aquí puedes añadir lógica para simular un fallo (KO).**
-                # Ejemplo: status = "KO" si una bandera interna lo indica.
-                status = "OK" 
+                # Verificar si hay avería simulada desde la web
+                with SIMULAR_AVERIA_LOCK:
+                    if SIMULAR_AVERIA:
+                        status = "KO"
+                    else:
+                        status = "OK"
                 
                 respuesta = construir_trama('HCK_RESP', [status])
                 conn.sendall(respuesta)
@@ -500,23 +516,228 @@ def menu_interactivo_engine() -> None:
             
         print(f"[{cp_id}] ✗ Comando desconocido: '{cmd}'. Usa 'h' para ayuda.")
 
+# =================================================================
+#                    INTERFAZ WEB DEL ENGINE
+# =================================================================
+
+@app.route('/')
+def index():
+    """Página principal de control del engine."""
+    cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
+    return render_template('engine_control.html', cp_id=cp_id)
+
+@app.route('/api/status')
+def api_status():
+    """Devuelve el estado actual del engine."""
+    cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
+    
+    with STATE_LOCK:
+        estado = {
+            'cp_id': cp_id,
+            'estado': obtener_estado_actual(),
+            'cargando': CHARGING_FLAG.is_set(),
+            'kw_acumulados': round(kw_acumulados_global, 2),
+            'segundos': segundos_global,
+            'driver_actual': globals().get('CURRENT_DRIVER_ID', 'UNKNOWN'),
+            'objetivo_kwh': globals().get('TARGET_KWH'),
+            'monitor_conectado': globals().get('ACTIVE_MONITOR_CONN') is not None
+        }
+    
+    with SIMULAR_AVERIA_LOCK:
+        estado['averia_simulada'] = SIMULAR_AVERIA
+    
+    return jsonify(estado)
+
+@app.route('/api/simular_averia', methods=['POST'])
+def api_simular_averia():
+    """Activa/desactiva la simulación de avería."""
+    global SIMULAR_AVERIA
+    
+    data = request.get_json()
+    activar = data.get('activar', True)
+    motivo = data.get('motivo', 'Avería simulada desde web')
+    
+    with SIMULAR_AVERIA_LOCK:
+        SIMULAR_AVERIA = activar
+    
+    cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
+    
+    if activar:
+        print(f"\n{'='*70}")
+        print(f"  [{cp_id}] ⚠️  AVERÍA SIMULADA ACTIVADA")
+        print(f"  Motivo: {motivo}")
+        print(f"{'='*70}\n")
+        mensaje = f"Avería simulada activada: {motivo}"
+    else:
+        print(f"\n{'='*70}")
+        print(f"  [{cp_id}] ✓ AVERÍA SIMULADA DESACTIVADA")
+        print(f"{'='*70}\n")
+        mensaje = "Avería simulada desactivada"
+    
+    return jsonify({
+        'status': 'ok',
+        'averia_activa': SIMULAR_AVERIA,
+        'mensaje': mensaje
+    })
+
+@app.route('/api/conectar_driver', methods=['POST'])
+def api_conectar_driver():
+    """Simula la conexión física de un driver (enchufar)."""
+    cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
+    
+    data = request.get_json()
+    driver_id = data.get('driver_id', 'DRIVER_WEB')
+    
+    print(f"\n{'='*70}")
+    print(f"  [{cp_id}] 🔌 SIMULACIÓN: Driver conectado desde web")
+    print(f"  Driver ID: {driver_id}")
+    print(f"{'='*70}\n")
+    
+    # Enviar estado PLUGGED al monitor
+    enviar_estado_al_monitor('PLUGGED')
+    
+    return jsonify({
+        'status': 'ok',
+        'mensaje': f'Conexión de driver {driver_id} simulada. Estado PLUGGED enviado al monitor.'
+    })
+
+@app.route('/api/desconectar_driver', methods=['POST'])
+def api_desconectar_driver():
+    """Simula la desconexión física de un driver (desenchufar)."""
+    cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
+    
+    print(f"\n{'='*70}")
+    print(f"  [{cp_id}] 🔓 SIMULACIÓN: Driver desconectado desde web")
+    print(f"{'='*70}\n")
+    
+    try:
+        # Detener carga si está activa
+        with STATE_LOCK:
+            if 'TELEMETRY_STOP_EVENT' in globals() and TELEMETRY_STOP_EVENT:
+                TELEMETRY_STOP_EVENT.set()
+                CHARGING_FLAG.clear()
+        
+        # Enviar estado UNPLUGGED al monitor
+        enviar_estado_al_monitor('UNPLUGGED')
+        
+        return jsonify({
+            'status': 'ok',
+            'mensaje': 'Desconexión simulada. Estado UNPLUGGED enviado al monitor.'
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'mensaje': str(e)
+        }), 500
+
+@app.route('/api/solicitar_cierre_suministro', methods=['POST'])
+def api_solicitar_cierre_suministro():
+    """Solicita el cierre del suministro actual."""
+    cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
+    
+    print(f"\n{'='*70}")
+    print(f"  [{cp_id}] 🛑 SOLICITUD: Cierre de suministro desde web")
+    print(f"{'='*70}\n")
+    
+    try:
+        # Obtener conexión con monitor
+        conn = globals().get('ACTIVE_MONITOR_CONN')
+        if conn is None:
+            return jsonify({
+                'status': 'error',
+                'mensaje': 'No hay conexión con el Monitor'
+            }), 400
+        
+        # Detener telemetría
+        with STATE_LOCK:
+            CHARGING_FLAG.clear()
+            kw_final = round(kw_acumulados_global, 2)
+            secs_final = segundos_global
+            if 'TELEMETRY_STOP_EVENT' in globals() and TELEMETRY_STOP_EVENT:
+                TELEMETRY_STOP_EVENT.set()
+        
+        # Enviar telemetría final
+        generar_y_enviar_telemetria(
+            cp_id=cp_id,
+            estado_carga='REPOSO',
+            kw_entregados=kw_final,
+            tiempo_carga_s=secs_final,
+            potencia_kw=0.0
+        )
+        
+        # Enviar FIN al Monitor
+        precio_kwh = 0.48
+        importe = round(kw_final * precio_kwh, 2)
+        driver_id = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
+        tx_id = globals().get('CURRENT_TX_ID') or f"TX-{cp_id}-{int(time.time())}"
+        motivo = 'Cierre solicitado desde web'
+        
+        trama_fin = construir_trama('FIN', [
+            cp_id, 
+            driver_id, 
+            f"{kw_final:.2f}", 
+            f"{importe:.2f}", 
+            str(secs_final), 
+            motivo, 
+            tx_id
+        ])
+        conn.sendall(trama_fin)
+        
+        print(f"\n{'='*70}")
+        print(f"  [{cp_id}] 📤 FIN enviado al Monitor")
+        print(f"  Energía: {kw_final} kWh")
+        print(f"  Importe: €{importe}")
+        print(f"  Duración: {secs_final}s")
+        print(f"{'='*70}\n")
+        
+        return jsonify({
+            'status': 'ok',
+            'mensaje': 'Cierre de suministro solicitado',
+            'kw_final': kw_final,
+            'importe': importe,
+            'duracion_s': secs_final
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'mensaje': str(e)
+        }), 500
+
+def iniciar_servidor_web(puerto: int):
+    """Inicia el servidor Flask en un hilo separado."""
+    print(f"[WEB] Iniciando servidor web del engine en puerto {puerto}...")
+    app.run(host='0.0.0.0', port=puerto, debug=False, threaded=True, use_reloader=False)
+
 def main():
     parser = argparse.ArgumentParser(description="Proceso EV_CP_E (Charging Point Engine)")
     parser.add_argument("--port", type=int, required=True, help="Puerto de escucha local")
     parser.add_argument("--cp-id", type=str, default="CP001", help="ID del Charging Point")
     parser.add_argument("--kafka", type=str, default=os.getenv('KAFKA_SERVER', '127.0.0.1:9092'), help="Broker Kafka (IP:puerto)")
+    parser.add_argument("--web-port", type=int, help="Puerto para la interfaz web (default: 9000 + número del CP)")
     args = parser.parse_args()
     
     # Configurar broker Kafka efectivo y productor
-    global KAFKA_SERVER
+    global KAFKA_SERVER, WEB_PORT
     KAFKA_SERVER = args.kafka
     initialize_producer(KAFKA_SERVER)
+    
+    # Determinar puerto web
+    if args.web_port:
+        WEB_PORT = args.web_port
+    else:
+        # Extraer número del CP_ID (ej: CP001 -> 1, CP002 -> 2)
+        try:
+            cp_num = int(''.join(filter(str.isdigit, args.cp_id)))
+            WEB_PORT = 9000 + cp_num
+        except:
+            WEB_PORT = 9000
     
     print("="*40)
     print("[EV_CP_E] INICIADO")
     print(f"Puerto de escucha: {args.port}")
     print(f"CP ID: {args.cp_id}")
     print(f"Kafka: {KAFKA_SERVER}")
+    print(f"Puerto Web: {WEB_PORT}")
     print("="*40)
 
     # El hilo de telemetría NO se inicia en arranque; solo tras recibir START
@@ -525,6 +746,12 @@ def main():
     try:
         # Guardar CP_ID global para el menú/estado
         globals()['ENGINE_CP_ID'] = args.cp_id
+        
+        # Iniciar servidor web en hilo separado
+        web_thread = threading.Thread(target=iniciar_servidor_web, args=(WEB_PORT,), daemon=True)
+        web_thread.start()
+        print(f"[ENGINE] Interfaz web disponible en http://localhost:{WEB_PORT}")
+        
         # Lanzar menú interactivo solo si hay TTY; si no, evitar bucle de prompts
         if sys.stdin and sys.stdin.isatty():
             menu_thread = threading.Thread(target=menu_interactivo_engine, daemon=True)

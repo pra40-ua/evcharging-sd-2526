@@ -1,0 +1,112 @@
+============================================================ 
+ LOG DE EJECUCION - PC_B_RUN.bat 
+ Fecha/Hora: 05/11/2025 10:58:46,86 
+============================================================ 
+ 
+Docker version 28.4.0, build d8eb465
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 516B done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 0.9s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
+#3 resolve docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6 0.0s done
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/python:3.10-slim
+#4 DONE 0.6s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 275B done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 24.72kB done
+#6 DONE 0.0s
+
+#7 [1/6] FROM docker.io/library/python:3.10-slim@sha256:2a8c7d9efdae9b636de80a187a4ce31374ffb3883a7be06232d25a96e8538bf4
+#7 resolve docker.io/library/python:3.10-slim@sha256:2a8c7d9efdae9b636de80a187a4ce31374ffb3883a7be06232d25a96e8538bf4 0.0s done
+#7 DONE 0.0s
+
+#8 [3/6] COPY requirements.txt ./
+#8 CACHED
+
+#9 [5/6] COPY ev_cp_engine/ ev_cp_engine/
+#9 CACHED
+
+#10 [2/6] WORKDIR /app
+#10 CACHED
+
+#11 [4/6] RUN pip install --no-cache-dir -r requirements.txt
+#11 CACHED
+
+#12 [6/6] COPY ev_common/ ev_common/
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 exporting manifest sha256:79aab8a8b3d677c788f0d1e0a60e8ee04c982536d108157af0b94d55ca332b5b done
+#13 exporting config sha256:9939eb538683770f0a1224409d9405dc15ec5363d4949c8229df1520476f53c9 done
+#13 exporting attestation manifest sha256:be7bcb3c98275ed74a896004ee96ddd3acfcf24ee1ec351f7b557ada541218a4
+#13 exporting attestation manifest sha256:be7bcb3c98275ed74a896004ee96ddd3acfcf24ee1ec351f7b557ada541218a4 0.0s done
+#13 exporting manifest list sha256:73ce6ae21f4e7044f0d681f55c5d083e610e358305ad16c5342f3971ec678ba4 0.0s done
+#13 naming to docker.io/library/ev_engine:local done
+#13 unpacking to docker.io/library/ev_engine:local 0.0s done
+#13 DONE 0.1s
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 615B done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 0.2s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
+#3 resolve docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6 0.0s done
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/python:3.10-slim
+#4 DONE 0.2s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 275B done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 22.56kB done
+#6 DONE 0.0s
+
+#7 [1/6] FROM docker.io/library/python:3.10-slim@sha256:2a8c7d9efdae9b636de80a187a4ce31374ffb3883a7be06232d25a96e8538bf4
+#7 resolve docker.io/library/python:3.10-slim@sha256:2a8c7d9efdae9b636de80a187a4ce31374ffb3883a7be06232d25a96e8538bf4 0.0s done
+#7 DONE 0.0s
+
+#8 [2/6] WORKDIR /app
+#8 CACHED
+
+#9 [3/6] COPY requirements.txt ./
+#9 CACHED
+
+#10 [4/6] RUN pip install --no-cache-dir -r requirements.txt
+#10 CACHED
+
+#11 [5/6] COPY ev_cp_monitor/ ev_cp_monitor/
+#11 CACHED
+
+#12 [6/6] COPY ev_common/ ev_common/
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 exporting manifest sha256:42ddd74696273b782284a9ee7cda255be8ad7d30d0b97e91d3620e7d5527f453 done
+#13 exporting config sha256:2e96fc3a35fbc76d72ec5006881cbebc8627d2c937fe60bb16a71fd472892012 done
+#13 exporting attestation manifest sha256:fa531c2fd18b4c9dea10a14b0fba6db83f545e1fbb821a9589fe9e7aec9f23d7
+#13 exporting attestation manifest sha256:fa531c2fd18b4c9dea10a14b0fba6db83f545e1fbb821a9589fe9e7aec9f23d7 0.0s done
+#13 exporting manifest list sha256:ca80cbf4c2920399342d34b347edba03e070199a5beacdf3f26d0541b0724528 0.0s done
+#13 naming to docker.io/library/ev_monitor:local done
+#13 unpacking to docker.io/library/ev_monitor:local 0.0s done
+#13 DONE 0.1s

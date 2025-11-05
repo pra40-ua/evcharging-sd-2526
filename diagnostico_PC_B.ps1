@@ -180,3 +180,4 @@ if ($pingResult -and $wait -and $tcpClient.Connected) {
 Write-Host ""
 pause
 
+

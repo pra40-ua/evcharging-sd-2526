@@ -1,0 +1,16 @@
+============================================================ 
+ LOG DE EJECUCION - PC_B_RUN.bat 
+ Fecha/Hora: 05/11/2025 10:54:49,22 
+============================================================ 
+ 
+[05/11/2025 10:54:49,25] DRIVER_ID formateado: DRIVER_00 
+[05/11/2025 10:54:49,26] CP asignado aleatoriamente: CP_000 (numero 0 de ) 
+[05/11/2025 10:54:49,27] Parametros: kW=21, MAT=7946-ABC 
+[05/11/2025 10:54:49,28] Ejecutando START para Driver DRIVER_00... 
+[05/11/2025 10:54:49,30] Comando START para Driver DRIVER_00 ejecutado (errorlevel: 0) 
+[05/11/2025 10:54:49,31] Driver DRIVER_00 lanzado exitosamente 
+[05/11/2025 10:54:49,32] Verificando disponibilidad de Docker... 
+Docker version 28.4.0, build d8eb465
+[05/11/2025 10:54:49,39] Docker esta disponible 
+[05/11/2025 10:54:49,41] Detectando IP de la Central... 
+[05/11/2025 10:54:49,42] Central IP detectada desde archivo: 192.168.1.43 

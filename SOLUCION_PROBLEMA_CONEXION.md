@@ -181,3 +181,4 @@ Test-NetConnection -ComputerName 192.168.1.43 -Port 5000
 - `commands_PC_B_monitor_fixed.ps1` - Monitor con network host
 - `SOLUCION_PROBLEMA_CONEXION.md` - Este documento
 
+
