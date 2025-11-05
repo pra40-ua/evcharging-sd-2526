@@ -1128,7 +1128,7 @@ def index():
 @app.route('/api/status')
 def api_status():
     """Devuelve el estado actual del engine."""
-    global TARGET_KWH, CURRENT_DRIVER_ID, ENGINE_CP_ID, ACTIVE_MONITOR_CONN, SESSION_LOCK
+    global TARGET_KWH, CURRENT_DRIVER_ID, ENGINE_CP_ID, ACTIVE_MONITOR_CONN, ESTADO_FLUJO
     
     print(f"[WEB API] ⭐ /api/status llamado")
     
