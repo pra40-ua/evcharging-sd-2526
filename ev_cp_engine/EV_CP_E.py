@@ -91,11 +91,12 @@ STATE_LOCK = threading.Lock()
 kw_acumulados_global = 0.0
 segundos_global = 0
 
-# Objetivo y sesión
+# Objetivo y sesión (con lock para sincronización)
 TARGET_KWH = None
 CURRENT_DRIVER_ID = 'UNKNOWN'
 SESSION_START_TS = None
 CURRENT_TX_ID = None
+SESSION_LOCK = threading.Lock()
 
 # Estados del flujo interactivo
 # REPOSO -> ESPERANDO_DRIVER -> LISTO_PARA_INICIAR -> CARGANDO -> ESPERANDO_CONFIRMACION_FIN -> REPOSO
@@ -296,14 +297,16 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                     print(f"  Objetivo: {kw_objetivo} kWh")
                     print(f"{'='*70}\n")
                     
-                    # Guardar datos de sesión usando asignación explícita global
+                    # Guardar datos de sesión usando lock para thread-safety
                     try:
                         kw_float = float(kw_objetivo) if kw_objetivo else None
                     except:
                         kw_float = None
                     
-                    TARGET_KWH = kw_float
-                    CURRENT_DRIVER_ID = driver_id
+                    # Usar SESSION_LOCK para garantizar sincronización entre hilos
+                    with SESSION_LOCK:
+                        TARGET_KWH = kw_float
+                        CURRENT_DRIVER_ID = driver_id
                     
                     # Cambiar estado del flujo
                     with ESTADO_FLUJO_LOCK:
@@ -312,8 +315,10 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                     print(f"[{cp_id}] ⏳ Estado: REPOSO → ESPERANDO_DRIVER")
                     print(f"[{cp_id}] 👤 Driver autorizado: {driver_id} (kWh objetivo: {kw_float})")
                     print(f"[{cp_id}] 🌐 Web: Botón 'Iniciar Suministro' ahora disponible")
-                    print(f"[{cp_id}] DEBUG: TARGET_KWH={TARGET_KWH}, CURRENT_DRIVER_ID={CURRENT_DRIVER_ID}")
-                    print(f"[{cp_id}] DEBUG: globals()['TARGET_KWH']={globals().get('TARGET_KWH')}, globals()['CURRENT_DRIVER_ID']={globals().get('CURRENT_DRIVER_ID')}")
+                    
+                    # Debug: verificar valores
+                    with SESSION_LOCK:
+                        print(f"[{cp_id}] DEBUG: TARGET_KWH={TARGET_KWH}, CURRENT_DRIVER_ID={CURRENT_DRIVER_ID}")
                     
                     # Responder OK
                     respuesta = construir_trama('ACK', ['AUTH_OK'])
@@ -1103,13 +1108,16 @@ def index():
 @app.route('/api/status')
 def api_status():
     """Devuelve el estado actual del engine."""
+    global TARGET_KWH, CURRENT_DRIVER_ID, ENGINE_CP_ID, ACTIVE_MONITOR_CONN
+    
     print(f"[WEB API] ⭐ /api/status llamado")
     
-    cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
+    # Leer variables de sesión con lock
+    with SESSION_LOCK:
+        driver_actual = CURRENT_DRIVER_ID
+        objetivo_kwh = TARGET_KWH
     
-    # Leer variables globales directamente (sin STATE_LOCK para estas)
-    driver_actual = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
-    objetivo_kwh = globals().get('TARGET_KWH')
+    cp_id = ENGINE_CP_ID or 'CP_UNKNOWN'
     
     print(f"[WEB API] 📊 Valores globales: driver={driver_actual}, objetivo={objetivo_kwh}")
     
@@ -1122,7 +1130,7 @@ def api_status():
             'segundos': segundos_global,
             'driver_actual': driver_actual,
             'objetivo_kwh': objetivo_kwh,
-            'monitor_conectado': globals().get('ACTIVE_MONITOR_CONN') is not None
+            'monitor_conectado': ACTIVE_MONITOR_CONN is not None
         }
     
     with SIMULAR_AVERIA_LOCK:
@@ -1173,8 +1181,9 @@ def api_simular_averia():
 @app.route('/api/iniciar_suministro', methods=['POST'])
 def api_iniciar_suministro():
     """Operador del Engine inicia el suministro (envía READY_TO_START a Central)."""
-    global ESTADO_FLUJO
-    cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
+    global ESTADO_FLUJO, ENGINE_CP_ID, ACTIVE_MONITOR_CONN, CURRENT_DRIVER_ID
+    
+    cp_id = ENGINE_CP_ID or 'CP_UNKNOWN'
     
     with ESTADO_FLUJO_LOCK:
         if ESTADO_FLUJO != 'ESPERANDO_DRIVER':
@@ -1193,8 +1202,7 @@ def api_iniciar_suministro():
     
     # Enviar mensaje READY_TO_START al monitor
     try:
-        conn = globals().get('ACTIVE_MONITOR_CONN')
-        if conn is None:
+        if ACTIVE_MONITOR_CONN is None:
             with ESTADO_FLUJO_LOCK:
                 ESTADO_FLUJO = 'ESPERANDO_DRIVER'
             return jsonify({
@@ -1202,9 +1210,11 @@ def api_iniciar_suministro():
                 'mensaje': 'No hay conexión con el Monitor'
             }), 400
         
-        driver_id = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
+        with SESSION_LOCK:
+            driver_id = CURRENT_DRIVER_ID
+        
         trama = construir_trama('READY_TO_START', [cp_id, driver_id])
-        conn.sendall(trama)
+        ACTIVE_MONITOR_CONN.sendall(trama)
         
         print(f"[{cp_id}] 📤 READY_TO_START enviado a Monitor (Driver: {driver_id})")
         
@@ -1224,8 +1234,9 @@ def api_iniciar_suministro():
 @app.route('/api/solicitar_fin', methods=['POST'])
 def api_solicitar_fin():
     """Operador del Engine solicita fin de suministro (envía REQUEST_STOP a Central)."""
-    global ESTADO_FLUJO
-    cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
+    global ESTADO_FLUJO, ENGINE_CP_ID, ACTIVE_MONITOR_CONN, CURRENT_DRIVER_ID
+    
+    cp_id = ENGINE_CP_ID or 'CP_UNKNOWN'
     
     with ESTADO_FLUJO_LOCK:
         if ESTADO_FLUJO != 'CARGANDO':
@@ -1249,8 +1260,7 @@ def api_solicitar_fin():
     
     # Enviar mensaje REQUEST_STOP al monitor
     try:
-        conn = globals().get('ACTIVE_MONITOR_CONN')
-        if conn is None:
+        if ACTIVE_MONITOR_CONN is None:
             with ESTADO_FLUJO_LOCK:
                 ESTADO_FLUJO = 'CARGANDO'
             return jsonify({
@@ -1258,9 +1268,11 @@ def api_solicitar_fin():
                 'mensaje': 'No hay conexión con el Monitor'
             }), 400
         
-        driver_id = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
+        with SESSION_LOCK:
+            driver_id = CURRENT_DRIVER_ID
+        
         trama = construir_trama('REQUEST_STOP', [cp_id, driver_id, str(kw_actual), str(segundos)])
-        conn.sendall(trama)
+        ACTIVE_MONITOR_CONN.sendall(trama)
         
         print(f"[{cp_id}] 📤 REQUEST_STOP enviado a Monitor")
         
