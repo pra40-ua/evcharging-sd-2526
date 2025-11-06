@@ -71,12 +71,15 @@ def generar_y_enviar_telemetria(cp_id: str, estado_carga: str, kw_entregados: fl
     except:
         pass
 
-    # Obtener información de sesión activa
+    # Obtener información de sesión activa (según flujo)
     try:
         driver_id_sesion = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
-        # Mantener la sesión visible durante ESPERANDO_CONFIRMACION_FIN
-        tiene_sesion = driver_id_sesion != 'UNKNOWN' and estado_carga in ['CARGANDO', 'PRE-SUMINISTRO', 'ESPERANDO_CONFIRMACION_FIN']
-    except:
+        with ESTADO_FLUJO_LOCK:
+            estado_flujo_actual = ESTADO_FLUJO
+        # Considerar sesión activa mientras esté en cualquiera de estas fases
+        fases_con_sesion = ['ESPERANDO_DRIVER', 'LISTO_PARA_INICIAR', 'CARGANDO', 'ESPERANDO_CONFIRMACION_FIN']
+        tiene_sesion = (driver_id_sesion is not None and driver_id_sesion != 'UNKNOWN' and estado_flujo_actual in fases_con_sesion)
+    except Exception:
         driver_id_sesion = None
         tiene_sesion = False
 
@@ -1596,7 +1599,7 @@ def api_simular_averia():
     global SIMULAR_AVERIA
     
     data = request.get_json(silent=True)
-    if data is None:
+    if not data:
         # Si no hay JSON, intentar leer como form data o usar valores por defecto
         activar = request.form.get('activar', 'true').lower() == 'true'
         motivo = request.form.get('motivo', 'Avería simulada desde web')

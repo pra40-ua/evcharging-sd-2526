@@ -399,10 +399,13 @@
                     // Durante carga: NO permitir detener (debe ser desde Engine)
                     html += '<span style="color: #17a2b8; font-size: 12px;">⚡ Suministrando...</span>';
                 } else if (estado === 'ACTIVADO') {
-                    // CP disponible
+                    // Si hay una sesión marcada pero el estado figura como ACTIVADO (p.ej. por telemetría/heartbeat),
+                    // ofrecer la acción de PREPARAR SUMINISTRO igualmente
                     if (tieneSesion) {
-                        html += `<span style="color: #666; font-size: 12px;">👤 ${cp.driver_id_sesion || 'Driver'} esperando...</span>`;
+                        const driver = cp.driver_id_sesion || 'Driver';
+                        html += `<button class="btn-control btn-start" onclick="prepararSuministro('${cp.cp_id}')" style="background: #007bff; animation: pulse 2s infinite;">🚀 PREPARAR SUMINISTRO (${driver})</button>`;
                     } else {
+                        // CP disponible
                         html += '<span style="color: #999; font-size: 12px;">💤 Disponible</span>';
                     }
                 } else {
