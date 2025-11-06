@@ -1936,8 +1936,86 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                             cambiar_estado_cp(cp_id, 'AVERÍA', db_connection, motivo=f"{motivo} ({codigo})")
                         except Exception:
                             pass
-                    except Exception:
+                        
+                        # Si hay una sesión activa, cerrar la sesión y enviar ticket al driver
+                        with CP_SESION_DRIVER_ID_LOCK:
+                            driver_id_sesion = CP_SESION_DRIVER_ID.get(cp_id)
+                        
+                        if driver_id_sesion:
+                            registrar_evento(f"⚠️ Avería detectada durante suministro activo. Cerrando sesión de {driver_id_sesion} en {cp_id}")
+                            
+                            # Obtener telemetría actual para calcular ticket
+                            with TELEMETRIA_ACTUAL_LOCK:
+                                telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                            
+                            # Calcular energía entregada
+                            energia = (
+                                telemetria_actual.get('energia_total')
+                                if 'energia_total' in telemetria_actual
+                                else telemetria_actual.get('kw_entregados', 0.0)
+                            )
+                            try:
+                                energia_val = float(energia)
+                            except Exception:
+                                energia_val = 0.0
+                            
+                            # Calcular duración
+                            tiempo_carga_s = telemetria_actual.get('tiempo_carga_s', 0)
+                            try:
+                                duracion_seg = int(tiempo_carga_s)
+                            except Exception:
+                                duracion_seg = 0
+                            
+                            # Calcular importe usando precio del CP
+                            with CP_PRECIO_KWH_LOCK:
+                                precio_kwh = CP_PRECIO_KWH.get(cp_id, 0.48)  # Precio por defecto 0.48
+                            
+                            try:
+                                precio_val = float(precio_kwh)
+                            except Exception:
+                                precio_val = 0.48
+                            
+                            importe = round(energia_val * precio_val, 2)
+                            
+                            # Generar tx_id
+                            tx_id = f"TX-{cp_id}-{int(time.time())}"
+                            
+                            # Crear ticket
+                            detalle_ticket = {
+                                'cp_id': cp_id,
+                                'energia_kwh': energia_val,
+                                'importe_eur': importe,
+                                'duracion_seg': duracion_seg,
+                                'motivo': f'Avería: {motivo}',
+                                'tx_id': tx_id
+                            }
+                            
+                            # Enviar ticket al driver
+                            notificar_driver(driver_id_sesion, 'TICKET_FINAL', detalle_ticket)
+                            registrar_evento(f"✅ Ticket enviado a {driver_id_sesion} por avería: {energia_val} kWh, {importe} €", "ok")
+                            print(f"[CENTRAL] ✅ Ticket enviado a {driver_id_sesion} por avería en {cp_id}. Energía: {energia_val} kWh, Importe: {importe} €")
+                            
+                            # Enviar STOP al CP para cerrar la sesión
+                            try:
+                                _enviar_comando_cp(cp_id, 'STOP')
+                                registrar_evento(f"🛑 Comando STOP enviado a {cp_id} debido a avería")
+                            except Exception as e:
+                                registrar_evento(f"⚠️ Error enviando STOP a {cp_id}: {e}", "warn")
+                            
+                            # Limpiar sesión
+                            with CP_SESION_DRIVER_ID_LOCK:
+                                if cp_id in CP_SESION_DRIVER_ID:
+                                    del CP_SESION_DRIVER_ID[cp_id]
+                            with CP_SESION_OBJETIVO_KWH_LOCK:
+                                if cp_id in CP_SESION_OBJETIVO_KWH:
+                                    del CP_SESION_OBJETIVO_KWH[cp_id]
+                            
+                            print(f"[CENTRAL] Sesión de {driver_id_sesion} en {cp_id} cerrada debido a avería")
+                    except Exception as e:
                         registrar_evento(f"⚠️ Avería reportada por {cp_id}")
+                        print(f"[CENTRAL] Error procesando AVR con sesión activa: {e}")
+                        import traceback
+                        traceback.print_exc()
                 
                 elif cod_op == 'AVR_CLR':
                     try:

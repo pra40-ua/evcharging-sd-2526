@@ -59,8 +59,19 @@ def generar_y_enviar_telemetria(cp_id: str, estado_carga: str, kw_entregados: fl
     if TELEMETRY_PRODUCER is None:
         return
 
-    # Verificar si hay avería simulada y sobrescribir estado si es necesario
+    # Verificar si está cargando - si CHARGING_FLAG está activo, el estado debe ser SUMINISTRANDO
+    # Esto asegura que incluso si el estado del flujo no está sincronizado, el estado correcto se reporte
     estado_final = estado_carga
+    try:
+        with STATE_LOCK:
+            cargando = CHARGING_FLAG.is_set()
+        # Si está cargando, el estado debe ser SUMINISTRANDO (a menos que haya avería)
+        if cargando and estado_carga != 'ESPERANDO_CONFIRMACION_FIN':
+            estado_final = 'SUMINISTRANDO'
+    except:
+        pass
+
+    # Verificar si hay avería simulada y sobrescribir estado si es necesario
     averia_activa = False
     try:
         with SIMULAR_AVERIA_LOCK:
@@ -163,8 +174,11 @@ def bucle_telemetria_periodica(cp_id: str, stop_event: threading.Event):
             continue
         
         # Determinar estado a reportar
+        # NOTA: Si está cargando, el bucle_telemetria ya está enviando con estado SUMINISTRANDO
+        # Aquí solo manejamos estados cuando NO está cargando
         if estado_flujo == 'CARGANDO':
-            estado = 'CARGANDO'
+            # Si el flujo dice CARGANDO pero no está cargando (caso raro), reportar como ACTIVADO
+            estado = 'ACTIVADO'
         elif estado_flujo == 'ESPERANDO_DRIVER':
             estado = 'ESPERANDO_DRIVER'
         elif estado_flujo == 'LISTO_PARA_INICIAR':
@@ -186,16 +200,17 @@ def bucle_telemetria_periodica(cp_id: str, stop_event: threading.Event):
 
 
 def bucle_telemetria(cp_id: str, stop_event: threading.Event):
-    """Emite telemetría de CARGANDO únicamente mientras dure la sesión (START..STOP)."""
+    """Emite telemetría de SUMINISTRANDO únicamente mientras dure la sesión (START..STOP)."""
     global kw_acumulados_global, segundos_global
-    print(f"[{cp_id}] Bucle de telemetría de CARGANDO iniciado.")
+    print(f"[{cp_id}] Bucle de telemetría de SUMINISTRANDO iniciado.")
     while not stop_event.is_set():
         time.sleep(1)
         with STATE_LOCK:
             segundos_global += 1
             kw_acumulados_global += 0.05
             # Determinar el estado a reportar en telemetría respetando el flujo interactivo
-            estado = 'CARGANDO'
+            # Cuando se está cargando (CHARGING_FLAG activo), el estado debe ser SUMINISTRANDO
+            estado = 'SUMINISTRANDO'
             try:
                 with ESTADO_FLUJO_LOCK:
                     if ESTADO_FLUJO == 'ESPERANDO_CONFIRMACION_FIN':
