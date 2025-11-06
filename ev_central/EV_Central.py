@@ -385,6 +385,22 @@ def consumir_telemetria_kafka(broker_list: str):
                     if 'timestamp' not in telemetria or not telemetria.get('timestamp'):
                         telemetria['timestamp'] = time.time()
                     
+                    # Verificar estado autoritativo antes de almacenar (preservar estados interactivos)
+                    with CP_ESTADO_LOCK:
+                        estado_autoritativo = CP_ESTADO.get(cp_id, 'ACTIVADO')
+                    
+                    estados_interactivos = {
+                        'PENDIENTE_CONFIRMACION_CENTRAL',
+                        'ESPERANDO_OPERADOR_ENGINE',
+                        'LISTO_PARA_INICIAR',
+                        'ESPERANDO_CONFIRMACION_FIN'
+                    }
+                    
+                    # Si está en estado interactivo, preservar el estado autoritativo en la telemetría almacenada
+                    if estado_autoritativo.upper() in estados_interactivos:
+                        telemetria['estado'] = estado_autoritativo
+                        telemetria['estado_carga'] = estado_autoritativo
+                    
                     # Enriquecer telemetría con información de sesión activa
                     with CP_SESION_DRIVER_ID_LOCK:
                         telemetria['tiene_sesion_activa'] = cp_id in CP_SESION_DRIVER_ID
@@ -495,11 +511,29 @@ def consumir_telemetria_kafka(broker_list: str):
                             except Exception:
                                 precio_val = 0.0
                             importe = round(energia_val * precio_val, 2)
+                            
+                            # Usar estado autoritativo de Central (prioridad sobre telemetría recibida)
+                            with CP_ESTADO_LOCK:
+                                estado_autoritativo = CP_ESTADO.get(cp_id, 'ACTIVADO')
+                            
+                            estados_interactivos = {
+                                'PENDIENTE_CONFIRMACION_CENTRAL',
+                                'ESPERANDO_OPERADOR_ENGINE',
+                                'LISTO_PARA_INICIAR',
+                                'ESPERANDO_CONFIRMACION_FIN'
+                            }
+                            
+                            # Si está en estado interactivo, usar el autoritativo; si no, usar el de telemetría
+                            if estado_autoritativo.upper() in estados_interactivos:
+                                estado_para_driver = estado_autoritativo
+                            else:
+                                estado_para_driver = telemetria.get('estado') or telemetria.get('estado_carga') or estado_autoritativo
+                            
                             notificar_driver(driver_id, 'TELEMETRIA', {
                                 'cp_id': cp_id,
                                 'energia_kwh': energia_val,
                                 'importe_eur': importe,
-                                'estado': telemetria.get('estado') or telemetria.get('estado_carga'),
+                                'estado': estado_para_driver,
                                 'potencia_kw': telemetria.get('potencia_actual'),
                                 'timestamp': telemetria.get('timestamp'),
                             })
