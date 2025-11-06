@@ -91,7 +91,7 @@ echo [VALIDADO] NUM_CPS_DISPONIBLES final: !NUM_CPS_DISPONIBLES! >> "%LOG_FILE%"
 
 echo.
 echo Se lanzaran !NUM_DRIVERS! Driver(s) para !NUM_CPS_DISPONIBLES! CP(s) disponibles
-echo Los drivers se asignaran aleatoriamente a los CPs
+echo Los drivers se asignaran secuencialmente solo a CPs sin driver asignado
 echo.
 timeout /t 2 /nobreak >nul
 
@@ -125,9 +125,9 @@ echo.
 
 timeout /t 2 /nobreak >nul
 
-REM DETECTAR DRIVERS EXISTENTES
+REM DETECTAR DRIVERS EXISTENTES Y CPs OCUPADOS
 echo ============================================================
-echo [2/3] DETECTANDO DRIVERS EXISTENTES
+echo [2/3] DETECTANDO DRIVERS EXISTENTES Y CPs OCUPADOS
 echo ============================================================
 echo.
 
@@ -139,7 +139,34 @@ for /f %%i in ('docker ps -q --filter "label=component=driver" 2^>nul ^| find /c
 echo [DEBUG] DRIVER_OFFSET detectado: !DRIVER_OFFSET! >> "%LOG_FILE%"
 echo [LOG] Drivers existentes: !DRIVER_OFFSET! >> "%LOG_FILE%"
 
+REM Detectar CPs ya asignados
+echo [DEBUG] Detectando CPs ya asignados... >> "%LOG_FILE%"
+set CPs_OCUPADOS=
+for /f "tokens=*" %%i in ('docker ps -q --filter "label=component=driver" --filter "label=project=evcharging-pc-c" 2^>nul') do (
+    for /f "tokens=*" %%c in ('docker inspect --format={{.Config.Labels.cp_id}} %%i 2^>nul') do (
+        if not "%%c"=="" (
+            echo [DEBUG] CP ocupado detectado: %%c >> "%LOG_FILE%"
+            if "!CPs_OCUPADOS!"=="" (
+                set CPs_OCUPADOS=%%c
+            ) else (
+                set CPs_OCUPADOS=!CPs_OCUPADOS! %%c
+            )
+        )
+    )
+)
+
+echo [DEBUG] CPs_OCUPADOS: !CPs_OCUPADOS! >> "%LOG_FILE%"
+echo [LOG] Drivers existentes: !DRIVER_OFFSET! >> "%LOG_FILE%"
+if not "!CPs_OCUPADOS!"=="" (
+    echo [LOG] CPs ya ocupados: !CPs_OCUPADOS! >> "%LOG_FILE%"
+) else (
+    echo [LOG] No hay CPs ocupados >> "%LOG_FILE%"
+)
+
 echo Drivers existentes: !DRIVER_OFFSET!
+if not "!CPs_OCUPADOS!"=="" (
+    echo CPs ya ocupados: !CPs_OCUPADOS!
+)
 echo Comenzando lanzamiento...
 echo.
 timeout /t 2 /nobreak >nul
@@ -162,6 +189,7 @@ echo [DEBUG] NUM_DRIVERS=!NUM_DRIVERS! >> "%LOG_FILE%"
 echo [DEBUG] NUM_CPS_DISPONIBLES=!NUM_CPS_DISPONIBLES! >> "%LOG_FILE%"
 echo. >> "%LOG_FILE%"
 
+set DRIVERS_ASIGNADOS=0
 for /L %%i in (1,1,!NUM_DRIVERS!) do (
     set /a DRIVER_NUM=!DRIVER_OFFSET!+%%i
     echo. >> "%LOG_FILE%"
@@ -172,6 +200,14 @@ for /L %%i in (1,1,!NUM_DRIVERS!) do (
     echo [DEBUG] A punto de llamar a LANZAR_DRIVER con DRIVER_NUM=!DRIVER_NUM! >> "%LOG_FILE%"
     
     call :LANZAR_DRIVER !DRIVER_NUM! !NUM_CPS_DISPONIBLES!
+    set RESULTADO=!errorlevel!
+    
+    if !RESULTADO! equ 0 (
+        set /a DRIVERS_ASIGNADOS+=1
+        echo [DEBUG] Driver asignado exitosamente. Total: !DRIVERS_ASIGNADOS! >> "%LOG_FILE%"
+    ) else (
+        echo [DEBUG] Driver no asignado (sin CPs disponibles) >> "%LOG_FILE%"
+    )
     
     echo [DEBUG] Retorno de LANZAR_DRIVER completado >> "%LOG_FILE%"
     echo [MAIN] Esperando 1 segundo antes del siguiente driver... >> "%LOG_FILE%"
@@ -179,19 +215,28 @@ for /L %%i in (1,1,!NUM_DRIVERS!) do (
 )
 
 echo [DEBUG] Bucle FOR completado >> "%LOG_FILE%"
+echo [LOG] Total de drivers asignados: !DRIVERS_ASIGNADOS! de !NUM_DRIVERS! >> "%LOG_FILE%"
 
 echo.
 echo ============================================================
-echo      !NUM_DRIVERS! DRIVER(S) INICIADO(S) CORRECTAMENTE
+echo      !DRIVERS_ASIGNADOS! DRIVER(S) INICIADO(S) CORRECTAMENTE
+if !DRIVERS_ASIGNADOS! LSS !NUM_DRIVERS! (
+    set /a NO_ASIGNADOS=!NUM_DRIVERS!-!DRIVERS_ASIGNADOS!
+    echo      !NO_ASIGNADOS! DRIVER(S) NO ASIGNADO(S) (sin CPs disponibles)
+)
 echo ============================================================
 echo.
-echo Ventanas abiertas (PowerShell): !NUM_DRIVERS! Drivers
+if !DRIVERS_ASIGNADOS! GTR 0 (
+    echo Ventanas abiertas (PowerShell): !DRIVERS_ASIGNADOS! Driver(s)
+)
 echo.
 echo Los drivers se detendran automaticamente al recibir su ticket.
 echo Para detener manualmente: PC_B_STOP_ALL.bat
 echo.
 echo Presiona cualquier tecla para cerrar esta ventana...
-echo (Los Drivers seguiran ejecutandose en sus ventanas)
+if !DRIVERS_ASIGNADOS! GTR 0 (
+    echo (Los Drivers seguiran ejecutandose en sus ventanas)
+)
 echo.
 pause
 exit /b 0
@@ -219,14 +264,59 @@ if %DRIVER_NUM% LSS 10 (
     set DRIVER_ID=DRIVER_%DRIVER_NUM%
 )
 
-REM Asignar CP aleatorio entre 1 y NUM_CPS_TOTAL
-set /a RANDOM_CP=%RANDOM% %% %NUM_CPS_TOTAL% + 1
-if %RANDOM_CP% LSS 10 (
-    set CP_ID=CP_00%RANDOM_CP%
-) else if %RANDOM_CP% LSS 100 (
-    set CP_ID=CP_0%RANDOM_CP%
-) else (
-    set CP_ID=CP_%RANDOM_CP%
+REM Detectar CPs ocupados nuevamente para esta iteración
+set CPs_OCUPADOS=
+for /f "tokens=*" %%i in ('docker ps -q --filter "label=component=driver" --filter "label=project=evcharging-pc-c" 2^>nul') do (
+    for /f "tokens=*" %%c in ('docker inspect --format={{.Config.Labels.cp_id}} %%i 2^>nul') do (
+        if not "%%c"=="" (
+            if "!CPs_OCUPADOS!"=="" (
+                set CPs_OCUPADOS=%%c
+            ) else (
+                set CPs_OCUPADOS=!CPs_OCUPADOS! %%c
+            )
+        )
+    )
+)
+
+echo [DEBUG] CPs ocupados en esta iteracion: !CPs_OCUPADOS! >> "%LOG_FILE%"
+
+REM Buscar el primer CP disponible secuencialmente
+set CP_ID=
+set CP_ENCONTRADO=0
+for /L %%j in (1,1,%NUM_CPS_TOTAL%) do (
+    if %%j LSS 10 (
+        set CP_CANDIDATO=CP_00%%j
+    ) else if %%j LSS 100 (
+        set CP_CANDIDATO=CP_0%%j
+    ) else (
+        set CP_CANDIDATO=CP_%%j
+    )
+    
+    REM Verificar si este CP está ocupado
+    set CP_OCUPADO=0
+    if not "!CPs_OCUPADOS!"=="" (
+        echo !CPs_OCUPADOS! | findstr /C:"!CP_CANDIDATO!" >nul 2>&1
+        if !errorlevel! equ 0 set CP_OCUPADO=1
+    )
+    
+    REM Si el CP no está ocupado y aún no hemos encontrado uno, asignarlo
+    if !CP_OCUPADO! equ 0 (
+        if !CP_ENCONTRADO! equ 0 (
+            set CP_ID=!CP_CANDIDATO!
+            set CP_ENCONTRADO=1
+            echo [DEBUG] CP disponible encontrado: !CP_ID! >> "%LOG_FILE%"
+        )
+    )
+)
+
+REM Si no se encontró CP disponible, no asignar driver
+if "!CP_ID!"=="" (
+    echo [WARNING] No hay CPs disponibles para asignar al driver !DRIVER_ID! >> "%LOG_FILE%"
+    echo [WARNING] Todos los CPs estan ocupados. Saltando asignacion de !DRIVER_ID! >> "%LOG_FILE%"
+    echo.
+    echo [ADVERTENCIA] No hay CPs disponibles. El driver !DRIVER_ID! no sera asignado.
+    endlocal
+    exit /b 1
 )
 
 REM kW aleatorios entre 10 y 50
@@ -241,8 +331,8 @@ echo [DEBUG] CP_ID asignado: !CP_ID! >> "%LOG_FILE%"
 echo [DEBUG] RANDOM_KW: !RANDOM_KW! >> "%LOG_FILE%"
 echo [DEBUG] MAT: !MAT! >> "%LOG_FILE%"
 
-REM Construir comando PowerShell completo
-set "PS_DRIVER_CMD=Write-Host 'Iniciando Driver (!DRIVER_ID!) -> !CP_ID! (!RANDOM_KW! kWh)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --name driver_!DRIVER_ID! --label project=evcharging-pc-c --label component=driver --label driver_id=!DRIVER_ID! -e KAFKA_BROKER=!KAFKA_SERVER! -e DRIVER_ID=!DRIVER_ID! -e CP_ID=!CP_ID! -e MAT=!MAT! -e KW=!RANDOM_KW! -e LISTEN=true ev_driver:local"
+REM Construir comando PowerShell completo (agregando label cp_id)
+set "PS_DRIVER_CMD=Write-Host 'Iniciando Driver (!DRIVER_ID!) -> !CP_ID! (!RANDOM_KW! kWh)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --name driver_!DRIVER_ID! --label project=evcharging-pc-c --label component=driver --label driver_id=!DRIVER_ID! --label cp_id=!CP_ID! -e KAFKA_BROKER=!KAFKA_SERVER! -e DRIVER_ID=!DRIVER_ID! -e CP_ID=!CP_ID! -e MAT=!MAT! -e KW=!RANDOM_KW! -e LISTEN=true ev_driver:local"
 
 echo [DEBUG] ---- COMANDO POWERSHELL DRIVER ---- >> "%LOG_FILE%"
 echo !PS_DRIVER_CMD! >> "%LOG_FILE%"
@@ -253,9 +343,9 @@ echo [DEBUG] Ejecutando START PowerShell para Driver... >> "%LOG_FILE%"
 start "Driver_!DRIVER_ID!" powershell -NoExit -Command "!PS_DRIVER_CMD!"
 echo [DEBUG] START ejecutado para Driver (errorlevel: !errorlevel!) >> "%LOG_FILE%"
 
-echo [DEBUG] !DRIVER_ID! completado >> "%LOG_FILE%"
+echo [DEBUG] !DRIVER_ID! completado exitosamente >> "%LOG_FILE%"
 echo ============================================================ >> "%LOG_FILE%"
 
 endlocal
-goto :eof
+exit /b 0
 
