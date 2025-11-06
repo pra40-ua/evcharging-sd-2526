@@ -222,7 +222,9 @@ def consumir_telemetria(broker: str):
                                     CPS_STATE[cp_id] = {
                                         'cp_id': cp_id,
                                         'estado': 'DESCONOCIDO',
-                                        'ultima_actualizacion': time.time()
+                                        'ultima_actualizacion': time.time(),
+                                        'tiene_sesion_activa': False,
+                                        'driver_id_sesion': None
                                     }
                                     # Registrar evento solo si es un CP nuevo
                                     registrar_evento(f"Nuevo CP detectado: {cp_id}", 'info')
@@ -248,14 +250,18 @@ def consumir_telemetria(broker: str):
                                 estado_anterior_upper = estado_anterior.upper()
                                 estado_recibido_upper = estado_carga_recibido.upper()
                                 
+                                # Si el estado recibido es interactivo, usarlo directamente (prioridad)
+                                if estado_recibido_upper in estados_interactivos:
+                                    estado_carga = estado_carga_recibido
+                                    print(f"[DASHBOARD] Estado interactivo recibido para {cp_id}: {estado_carga_recibido}")
                                 # Si el estado anterior es interactivo y el recibido es ACTIVADO/REPOSO, preservar el interactivo
-                                if estado_anterior_upper in estados_interactivos:
+                                elif estado_anterior_upper in estados_interactivos:
                                     if estado_recibido_upper in ('ACTIVADO', 'REPOSO', 'IDLE', 'READY'):
                                         # Preservar estado interactivo, no degradar
                                         estado_carga = estado_anterior
                                         print(f"[DASHBOARD] Preservando estado interactivo {estado_anterior} para {cp_id} (telemetría reporta {estado_carga_recibido})")
                                     else:
-                                        # El nuevo estado es más avanzado (ej: SUMINISTRANDO, LISTO_PARA_INICIAR), usarlo
+                                        # El nuevo estado es más avanzado (ej: SUMINISTRANDO), usarlo
                                         estado_carga = estado_carga_recibido
                                 else:
                                     # Estado anterior no es interactivo, usar el recibido
@@ -266,11 +272,17 @@ def consumir_telemetria(broker: str):
                                 potencia = telemetria.get('potencia_actual', 0)
                                 tiempo = telemetria.get('tiempo_carga_s', 0)
                                 
+                                # Guardar también información de sesión activa en CPS_STATE
+                                tiene_sesion = telemetria.get('tiene_sesion_activa', False)
+                                driver_id = telemetria.get('driver_id_sesion', None)
+                                
                                 CPS_STATE[cp_id].update({
                                     'estado': estado_carga,
                                     'ultima_actualizacion': time.time(),
                                     'ubicacion': telemetria.get('ubicacion', CPS_STATE[cp_id].get('ubicacion', '-')),
-                                    'precio_kwh': telemetria.get('precio_kwh', CPS_STATE[cp_id].get('precio_kwh', 0.0))
+                                    'precio_kwh': telemetria.get('precio_kwh', CPS_STATE[cp_id].get('precio_kwh', 0.0)),
+                                    'tiene_sesion_activa': tiene_sesion,
+                                    'driver_id_sesion': driver_id
                                 })
                                 
                                 # Registrar evento solo si el estado cambió
