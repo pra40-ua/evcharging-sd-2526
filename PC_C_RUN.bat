@@ -139,11 +139,23 @@ for /f %%i in ('docker ps -q --filter "label=component=driver" 2^>nul ^| find /c
 echo [DEBUG] DRIVER_OFFSET detectado: !DRIVER_OFFSET! >> "%LOG_FILE%"
 echo [LOG] Drivers existentes: !DRIVER_OFFSET! >> "%LOG_FILE%"
 
-REM Detectar CPs ya asignados
+REM Detectar CPs ya asignados (buscar TODOS los drivers, no solo los de PC_C)
 echo [DEBUG] Detectando CPs ya asignados... >> "%LOG_FILE%"
 set CPs_OCUPADOS=
-for /f "tokens=*" %%i in ('docker ps -q --filter "label=component=driver" --filter "label=project=evcharging-pc-c" 2^>nul') do (
+set TEMP_FILE_INIT=%TEMP%\cps_ocupados_init_%RANDOM%.txt
+echo. > "!TEMP_FILE_INIT!"
+
+for /f "tokens=*" %%i in ('docker ps -q --filter "label=component=driver" 2^>nul') do (
     for /f "tokens=*" %%c in ('docker inspect --format={{.Config.Labels.cp_id}} %%i 2^>nul') do (
+        if not "%%c"=="" (
+            echo %%c >> "!TEMP_FILE_INIT!"
+        )
+    )
+)
+
+REM Leer todos los CPs ocupados desde el archivo temporal
+if exist "!TEMP_FILE_INIT!" (
+    for /f "tokens=*" %%c in (!TEMP_FILE_INIT!) do (
         if not "%%c"=="" (
             echo [DEBUG] CP ocupado detectado: %%c >> "%LOG_FILE%"
             if "!CPs_OCUPADOS!"=="" (
@@ -153,6 +165,7 @@ for /f "tokens=*" %%i in ('docker ps -q --filter "label=component=driver" --filt
             )
         )
     )
+    del "!TEMP_FILE_INIT!" >nul 2>&1
 )
 
 echo [DEBUG] CPs_OCUPADOS: !CPs_OCUPADOS! >> "%LOG_FILE%"
@@ -210,8 +223,8 @@ for /L %%i in (1,1,!NUM_DRIVERS!) do (
     )
     
     echo [DEBUG] Retorno de LANZAR_DRIVER completado >> "%LOG_FILE%"
-    echo [MAIN] Esperando 1 segundo antes del siguiente driver... >> "%LOG_FILE%"
-    timeout /t 1 /nobreak >nul
+    echo [MAIN] Esperando 2 segundos antes del siguiente driver para que Docker registre el contenedor... >> "%LOG_FILE%"
+    timeout /t 2 /nobreak >nul
 )
 
 echo [DEBUG] Bucle FOR completado >> "%LOG_FILE%"
@@ -264,10 +277,26 @@ if %DRIVER_NUM% LSS 10 (
     set DRIVER_ID=DRIVER_%DRIVER_NUM%
 )
 
+REM Esperar un momento para que los drivers anteriores se registren
+timeout /t 1 /nobreak >nul
+
 REM Detectar CPs ocupados nuevamente para esta iteración
+REM Buscar TODOS los drivers (no solo los de PC_C) para detectar CPs ocupados
 set CPs_OCUPADOS=
-for /f "tokens=*" %%i in ('docker ps -q --filter "label=component=driver" --filter "label=project=evcharging-pc-c" 2^>nul') do (
+set TEMP_FILE=%TEMP%\cps_ocupados_%RANDOM%.txt
+echo. > "!TEMP_FILE!"
+
+for /f "tokens=*" %%i in ('docker ps -q --filter "label=component=driver" 2^>nul') do (
     for /f "tokens=*" %%c in ('docker inspect --format={{.Config.Labels.cp_id}} %%i 2^>nul') do (
+        if not "%%c"=="" (
+            echo %%c >> "!TEMP_FILE!"
+        )
+    )
+)
+
+REM Leer todos los CPs ocupados desde el archivo temporal
+if exist "!TEMP_FILE!" (
+    for /f "tokens=*" %%c in (!TEMP_FILE!) do (
         if not "%%c"=="" (
             if "!CPs_OCUPADOS!"=="" (
                 set CPs_OCUPADOS=%%c
@@ -276,6 +305,7 @@ for /f "tokens=*" %%i in ('docker ps -q --filter "label=component=driver" --filt
             )
         )
     )
+    del "!TEMP_FILE!" >nul 2>&1
 )
 
 echo [DEBUG] CPs ocupados en esta iteracion: !CPs_OCUPADOS! >> "%LOG_FILE%"
@@ -284,6 +314,7 @@ REM Buscar el primer CP disponible secuencialmente
 set CP_ID=
 set CP_ENCONTRADO=0
 for /L %%j in (1,1,%NUM_CPS_TOTAL%) do (
+    REM Formatear CP candidato
     if %%j LSS 10 (
         set CP_CANDIDATO=CP_00%%j
     ) else if %%j LSS 100 (
@@ -292,11 +323,15 @@ for /L %%j in (1,1,%NUM_CPS_TOTAL%) do (
         set CP_CANDIDATO=CP_%%j
     )
     
-    REM Verificar si este CP está ocupado
+    REM Verificar si este CP está ocupado usando una verificación más robusta
     set CP_OCUPADO=0
     if not "!CPs_OCUPADOS!"=="" (
+        REM Buscar el CP en la lista de ocupados (usando findstr con /C para buscar la cadena exacta)
         echo !CPs_OCUPADOS! | findstr /C:"!CP_CANDIDATO!" >nul 2>&1
-        if !errorlevel! equ 0 set CP_OCUPADO=1
+        if !errorlevel! equ 0 (
+            set CP_OCUPADO=1
+            echo [DEBUG] CP !CP_CANDIDATO! esta ocupado >> "%LOG_FILE%"
+        )
     )
     
     REM Si el CP no está ocupado y aún no hemos encontrado uno, asignarlo
@@ -305,9 +340,11 @@ for /L %%j in (1,1,%NUM_CPS_TOTAL%) do (
             set CP_ID=!CP_CANDIDATO!
             set CP_ENCONTRADO=1
             echo [DEBUG] CP disponible encontrado: !CP_ID! >> "%LOG_FILE%"
+            goto :CP_ENCONTRADO
         )
     )
 )
+:CP_ENCONTRADO
 
 REM Si no se encontró CP disponible, no asignar driver
 if "!CP_ID!"=="" (
@@ -344,7 +381,10 @@ start "Driver_!DRIVER_ID!" powershell -NoExit -Command "!PS_DRIVER_CMD!"
 echo [DEBUG] START ejecutado para Driver (errorlevel: !errorlevel!) >> "%LOG_FILE%"
 
 echo [DEBUG] !DRIVER_ID! completado exitosamente >> "%LOG_FILE%"
+echo [DEBUG] Driver !DRIVER_ID! asignado a !CP_ID! >> "%LOG_FILE%"
 echo ============================================================ >> "%LOG_FILE%"
+echo.
+echo [OK] Driver !DRIVER_ID! asignado a !CP_ID!
 
 endlocal
 exit /b 0
