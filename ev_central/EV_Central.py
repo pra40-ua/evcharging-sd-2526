@@ -1657,12 +1657,12 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
     finally:
         if cp_id != "Desconocido":
             registrar_evento(f"Monitor desconectado: {cp_id}")
-        # --- LÓGICA DB: Marcar el CP como DESCONECTADO ---
+        # --- LÓGICA DB: Marcar el CP como AVERÍA ante desconexión inesperada ---
         if cp_id != "Desconocido" and db_connection and db_connection.is_connected():
-            actualizar_estado_cp(db_connection, cp_id, "Desconectado")
+            actualizar_estado_cp(db_connection, cp_id, "Averiado")
         try:
             if cp_id != "Desconocido":
-                cambiar_estado_cp(cp_id, 'DESCONECTADO', db_connection)
+                cambiar_estado_cp(cp_id, 'AVERÍA', db_connection, motivo='Desconexión inesperada del CP')
         except Exception:
             pass
         

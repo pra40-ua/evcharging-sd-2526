@@ -126,10 +126,10 @@ echo.
 echo [OK] Servicios Docker iniciados.
 echo.
 echo Esperando a que Kafka y MySQL esten listos...
-echo (20 segundos)
+echo (5 segundos)
 
 REM Esperar con progreso visual
-for /L %%i in (1,1,20) do (
+for /L %%i in (1,1,5) do (
     echo|set /p="."
     timeout /t 1 /nobreak >nul
 )
