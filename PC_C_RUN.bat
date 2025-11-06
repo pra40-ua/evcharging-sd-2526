@@ -63,7 +63,7 @@ echo    CONFIGURACION DE DRIVERS
 echo ============================================================
 echo.
 
-echo Cuantos Drivers deseas lanzar? (1-5)
+echo Cuantos Drivers deseas lanzar? (1-20)
 set /p NUM_DRIVERS="Numero de Drivers: "
 
 echo [INPUT] Usuario ingreso: NUM_DRIVERS=!NUM_DRIVERS! >> "%LOG_FILE%"
@@ -71,12 +71,12 @@ echo [INPUT] Usuario ingreso: NUM_DRIVERS=!NUM_DRIVERS! >> "%LOG_FILE%"
 REM Validar entrada
 if "%NUM_DRIVERS%"=="" set NUM_DRIVERS=1
 if !NUM_DRIVERS! LSS 1 set NUM_DRIVERS=1
-if !NUM_DRIVERS! GTR 5 set NUM_DRIVERS=5
+if !NUM_DRIVERS! GTR 20 set NUM_DRIVERS=20
 
 echo [VALIDADO] NUM_DRIVERS final: !NUM_DRIVERS! >> "%LOG_FILE%"
 
 echo.
-echo Cuantos Charging Points estan disponibles? (1-10)
+echo Cuantos Charging Points estan disponibles? (1-20)
 echo (Debe coincidir con el numero de CPs ejecutandose en PC_B)
 set /p NUM_CPS_DISPONIBLES="Numero de CPs disponibles: "
 
@@ -85,7 +85,7 @@ echo [INPUT] Usuario ingreso: NUM_CPS_DISPONIBLES=!NUM_CPS_DISPONIBLES! >> "%LOG
 REM Validar entrada
 if "%NUM_CPS_DISPONIBLES%"=="" set NUM_CPS_DISPONIBLES=5
 if !NUM_CPS_DISPONIBLES! LSS 1 set NUM_CPS_DISPONIBLES=1
-if !NUM_CPS_DISPONIBLES! GTR 10 set NUM_CPS_DISPONIBLES=10
+if !NUM_CPS_DISPONIBLES! GTR 20 set NUM_CPS_DISPONIBLES=20
 
 echo [VALIDADO] NUM_CPS_DISPONIBLES final: !NUM_CPS_DISPONIBLES! >> "%LOG_FILE%"
 

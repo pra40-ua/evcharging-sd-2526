@@ -64,8 +64,8 @@ echo ============================================================
 echo.
 echo Que deseas lanzar?
 echo.
-echo   [1] Multiples CPs (hasta 5 CPs simultaneos)
-echo   [2] Multiples Drivers (hasta 5 Drivers simultaneos)
+echo   [1] Multiples CPs (hasta 20 CPs simultaneos)
+echo   [2] Multiples Drivers (hasta 20 Drivers simultaneos)
 echo   [3] CLASICO: 1 CP + 1 Driver
 echo   [0] SALIR
 echo.
@@ -112,7 +112,7 @@ echo    MODO: MULTIPLES CHARGING POINTS
 echo ============================================================
 echo.
 
-echo Cuantos Charging Points deseas lanzar? (1-5)
+echo Cuantos Charging Points deseas lanzar? (1-20)
 set /p NUM_CPS="Numero de CPs: "
 
 echo [INPUT] Usuario ingreso: NUM_CPS=!NUM_CPS! >> "%LOG_FILE%"
@@ -120,7 +120,7 @@ echo [INPUT] Usuario ingreso: NUM_CPS=!NUM_CPS! >> "%LOG_FILE%"
 REM Validar entrada
 if "%NUM_CPS%"=="" set NUM_CPS=1
 if !NUM_CPS! LSS 1 set NUM_CPS=1
-if !NUM_CPS! GTR 5 set NUM_CPS=5
+if !NUM_CPS! GTR 20 set NUM_CPS=20
 
 echo [VALIDADO] NUM_CPS final: !NUM_CPS! >> "%LOG_FILE%"
 
@@ -296,7 +296,7 @@ echo    MODO: MULTIPLES DRIVERS
 echo ============================================================
 echo.
 
-echo Cuantos Drivers deseas lanzar? (1-5)
+echo Cuantos Drivers deseas lanzar? (1-20)
 set /p NUM_DRIVERS="Numero de Drivers: "
 
 echo [INPUT] Usuario ingreso: NUM_DRIVERS=!NUM_DRIVERS! >> "%LOG_FILE%"
@@ -304,12 +304,12 @@ echo [INPUT] Usuario ingreso: NUM_DRIVERS=!NUM_DRIVERS! >> "%LOG_FILE%"
 REM Validar entrada
 if "%NUM_DRIVERS%"=="" set NUM_DRIVERS=1
 if !NUM_DRIVERS! LSS 1 set NUM_DRIVERS=1
-if !NUM_DRIVERS! GTR 5 set NUM_DRIVERS=5
+if !NUM_DRIVERS! GTR 20 set NUM_DRIVERS=20
 
 echo [VALIDADO] NUM_DRIVERS final: !NUM_DRIVERS! >> "%LOG_FILE%"
 
 echo.
-echo Cuantos Charging Points estan disponibles? (1-10)
+echo Cuantos Charging Points estan disponibles? (1-20)
 set /p NUM_CPS_DISPONIBLES="Numero de CPs disponibles: "
 
 echo [INPUT] Usuario ingreso: NUM_CPS_DISPONIBLES=!NUM_CPS_DISPONIBLES! >> "%LOG_FILE%"
@@ -317,7 +317,7 @@ echo [INPUT] Usuario ingreso: NUM_CPS_DISPONIBLES=!NUM_CPS_DISPONIBLES! >> "%LOG
 REM Validar entrada
 if "%NUM_CPS_DISPONIBLES%"=="" set NUM_CPS_DISPONIBLES=5
 if !NUM_CPS_DISPONIBLES! LSS 1 set NUM_CPS_DISPONIBLES=1
-if !NUM_CPS_DISPONIBLES! GTR 10 set NUM_CPS_DISPONIBLES=10
+if !NUM_CPS_DISPONIBLES! GTR 20 set NUM_CPS_DISPONIBLES=20
 
 echo [VALIDADO] NUM_CPS_DISPONIBLES final: !NUM_CPS_DISPONIBLES! >> "%LOG_FILE%"
 
