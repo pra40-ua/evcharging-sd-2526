@@ -309,6 +309,30 @@ CENTRAL_COMMANDS_TOPIC = 'central_commands'
 KAFKA_PRODUCER = None
 KAFKA_PRODUCER_LOCK = threading.Lock()
 
+def publicar_telemetria_kafka(cp_id: str, telemetria_data: dict):
+    """
+    Publica telemetría actualizada a Kafka para que el dashboard la vea.
+    """
+    try:
+        if KAFKA_PRODUCER:
+            # Enriquecer con información de sesión
+            with CP_SESION_DRIVER_ID_LOCK:
+                telemetria_data['tiene_sesion_activa'] = cp_id in CP_SESION_DRIVER_ID
+                telemetria_data['driver_id_sesion'] = CP_SESION_DRIVER_ID.get(cp_id, None)
+            
+            # Asegurar campos obligatorios
+            if 'timestamp' not in telemetria_data:
+                telemetria_data['timestamp'] = time.time()
+            if 'cp_id' not in telemetria_data:
+                telemetria_data['cp_id'] = cp_id
+            
+            # Publicar a Kafka
+            KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_data)
+            KAFKA_PRODUCER.flush(timeout=1)
+            print(f"[CENTRAL] → Telemetría de {cp_id} publicada a Kafka: kW={telemetria_data.get('kw_entregados', 0)}, P={telemetria_data.get('potencia_actual', 0)}")
+    except Exception as e:
+        print(f"[CENTRAL] Error publicando telemetría a Kafka: {e}")
+
 def consumir_telemetria_kafka(broker_list: str):
     """
     Se conecta a Kafka y consume mensajes del tópico de telemetría.

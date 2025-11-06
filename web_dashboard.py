@@ -171,7 +171,7 @@ def consumir_telemetria(broker: str):
                 bootstrap_servers=[broker],
                 auto_offset_reset='latest',
                 enable_auto_commit=True,
-                group_id='dashboard-telemetry-group',
+                group_id='web-dashboard-telemetry-group',  # Diferente del Central para recibir TODOS los mensajes
                 value_deserializer=lambda m: json.loads(m.decode('utf-8')),
                 api_version=(2, 5, 0),
                 session_timeout_ms=30000,
@@ -347,12 +347,28 @@ def api_status():
     with CPS_STATE_LOCK:
         cps_list = list(CPS_STATE.values())
     
-    # Enriquecer con telemetría
+    # Enriquecer con telemetría (extraer campos para el frontend)
     with TELEMETRIA_LOCK:
         for cp in cps_list:
             cp_id = cp['cp_id']
             if cp_id in TELEMETRIA:
-                cp['telemetria'] = TELEMETRIA[cp_id]
+                tel = TELEMETRIA[cp_id]
+                cp['telemetria'] = tel  # Mantener el objeto completo para debug
+                # Extraer campos individuales para el frontend
+                cp['energia_kwh'] = tel.get('kw_entregados', 0) or tel.get('energia_total', 0)
+                cp['potencia_kw'] = tel.get('potencia_actual', 0)
+                cp['tiempo_carga_s'] = tel.get('tiempo_carga_s', 0)
+                cp['timestamp_telemetria'] = tel.get('timestamp_str', '-')
+                cp['tiene_sesion_activa'] = tel.get('tiene_sesion_activa', False)
+                cp['driver_id_sesion'] = tel.get('driver_id_sesion', None)
+            else:
+                # Sin telemetría, valores por defecto
+                cp['energia_kwh'] = 0
+                cp['potencia_kw'] = 0
+                cp['tiempo_carga_s'] = 0
+                cp['timestamp_telemetria'] = '-'
+                cp['tiene_sesion_activa'] = False
+                cp['driver_id_sesion'] = None
     
     return jsonify({
         'status': 'ok',
