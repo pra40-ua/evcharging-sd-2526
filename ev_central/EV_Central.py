@@ -57,10 +57,6 @@ CP_SESION_OBJETIVO_KWH_LOCK = threading.Lock()
 CP_SESION_DRIVER_ID = {}
 CP_SESION_DRIVER_ID_LOCK = threading.Lock()
 
-# Cola de espera por CP (cuando múltiples drivers solicitan el mismo CP)
-CP_COLA_ESPERA = {}  # cp_id -> Queue de (driver_id, kw_deseados, timestamp)
-CP_COLA_ESPERA_LOCK = threading.Lock()
-
 # Estados del flujo interactivo (para confirmaciones en web)
 # cp_id -> 'LISTO_PARA_INICIAR' o 'ESPERANDO_CONFIRMACION_FIN'
 CP_PENDIENTE_CONFIRMACION = {}
@@ -829,27 +825,29 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                             tiene_sesion = cp_id in CP_SESION_DRIVER_ID and CP_SESION_DRIVER_ID[cp_id] is not None
                         
                         if tiene_sesion:
-                            # CP ocupado - añadir a cola de espera
-                            print(f"[CENTRAL] CP {cp_id} ocupado. Añadiendo {id_driver} a cola de espera...")
+                            # CP ocupado - buscar otro CP disponible
+                            print(f"[CENTRAL] CP {cp_id} ocupado. Buscando otro CP disponible para {id_driver}...")
+                            cp_disponible, estado_disponible = buscar_cp_disponible(db_connection, cp_solicitado=cp_id)
                             
-                            with CP_COLA_ESPERA_LOCK:
-                                if cp_id not in CP_COLA_ESPERA:
-                                    from queue import Queue
-                                    CP_COLA_ESPERA[cp_id] = Queue()
-                                CP_COLA_ESPERA[cp_id].put((id_driver, kw_deseados, time.time()))
-                            
-                            # Obtener posición en la cola
-                            with CP_COLA_ESPERA_LOCK:
-                                posicion = CP_COLA_ESPERA[cp_id].qsize()
-                            
-                            notificar_driver(id_driver, 'EN_COLA', {
-                                'mensaje': f'CP {cp_id} ocupado. Posición en cola: {posicion}',
-                                'posicion': posicion,
-                                'cp_id': cp_id
-                            })
-                            
-                            registrar_evento(f"Driver {id_driver} en cola para {cp_id} (posición {posicion})", "info")
-                            continue
+                            if cp_disponible:
+                                print(f"[CENTRAL] ✓ CP disponible encontrado: {cp_disponible} (estado: {estado_disponible})")
+                                # Actualizar cp_id para usar el CP disponible
+                                cp_id = cp_disponible
+                                estado_cp = estado_disponible
+                                estado_inferior = (estado_disponible or '').strip().lower()
+                                notificar_driver(id_driver, 'CP_REASIGNADO', {
+                                    'mensaje': f'CP solicitado ocupado. Reasignado a {cp_disponible}',
+                                    'cp_id_original': solicitud.get('id_charging_point'),
+                                    'cp_id_nuevo': cp_disponible
+                                })
+                            else:
+                                # No hay CP's disponibles - denegar
+                                print(f"[CENTRAL] No hay CP's disponibles. Denegando solicitud de {id_driver}")
+                                notificar_driver(id_driver, 'DENEGADA', {
+                                    'motivo': f'CP {cp_id} ocupado y no hay otros CP disponibles'
+                                })
+                                registrar_evento(f"Driver {id_driver} denegado: CP {cp_id} ocupado y sin alternativas", "warn")
+                                continue
                         
                         # Estados válidos para aceptar solicitudes (case-insensitive)
                         estados_validos = {
@@ -876,25 +874,29 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                             # Estado válido, continuar con el proceso
                             pass
                         elif estado_inferior in estados_ocupados:
-                            # CP ocupado - añadir a cola
-                            print(f"[CENTRAL] CP {cp_id} ocupado ({estado_cp}). Añadiendo {id_driver} a cola de espera...")
+                            # CP ocupado - buscar otro CP disponible
+                            print(f"[CENTRAL] CP {cp_id} ocupado ({estado_cp}). Buscando otro CP disponible para {id_driver}...")
+                            cp_disponible, estado_disponible = buscar_cp_disponible(db_connection, cp_solicitado=cp_id)
                             
-                            with CP_COLA_ESPERA_LOCK:
-                                if cp_id not in CP_COLA_ESPERA:
-                                    from queue import Queue
-                                    CP_COLA_ESPERA[cp_id] = Queue()
-                                CP_COLA_ESPERA[cp_id].put((id_driver, kw_deseados, time.time()))
-                            
-                            with CP_COLA_ESPERA_LOCK:
-                                posicion = CP_COLA_ESPERA[cp_id].qsize()
-                            
-                            notificar_driver(id_driver, 'EN_COLA', {
-                                'mensaje': f'CP {cp_id} ocupado ({estado_cp}). Posición en cola: {posicion}',
-                                'posicion': posicion,
-                                'cp_id': cp_id
-                            })
-                            registrar_evento(f"Driver {id_driver} en cola para {cp_id} (posición {posicion})", "info")
-                            continue
+                            if cp_disponible:
+                                print(f"[CENTRAL] ✓ CP disponible encontrado: {cp_disponible} (estado: {estado_disponible})")
+                                # Actualizar cp_id para usar el CP disponible
+                                cp_id = cp_disponible
+                                estado_cp = estado_disponible
+                                estado_inferior = (estado_disponible or '').strip().lower()
+                                notificar_driver(id_driver, 'CP_REASIGNADO', {
+                                    'mensaje': f'CP solicitado ocupado. Reasignado a {cp_disponible}',
+                                    'cp_id_original': solicitud.get('id_charging_point'),
+                                    'cp_id_nuevo': cp_disponible
+                                })
+                            else:
+                                # No hay CP's disponibles - denegar
+                                print(f"[CENTRAL] No hay CP's disponibles. Denegando solicitud de {id_driver}")
+                                notificar_driver(id_driver, 'DENEGADA', {
+                                    'motivo': f'CP {cp_id} ocupado ({estado_cp}) y no hay otros CP disponibles'
+                                })
+                                registrar_evento(f"Driver {id_driver} denegado: CP {cp_id} ocupado y sin alternativas", "warn")
+                                continue
                         elif estado_inferior in estados_no_disponibles:
                             notificar_driver(id_driver, 'DENEGADA', {
                                 'motivo': f'CP {cp_id} no disponible: {estado_cp}'
@@ -925,19 +927,42 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                             })
                             continue
 
-                        # Paso 4: Registrar objetivo de sesión PERO NO ENVIAR AUTH_REQ TODAVÍA
-                        # Esperar a que el operador de Central de click en "Iniciar Suministro"
-                        try:
-                            with CP_SESION_OBJETIVO_KWH_LOCK:
-                                CP_SESION_OBJETIVO_KWH[cp_id] = float(kw_deseados)
-                        except Exception:
-                            with CP_SESION_OBJETIVO_KWH_LOCK:
-                                CP_SESION_OBJETIVO_KWH[cp_id] = kw_deseados
-                        try:
-                            with CP_SESION_DRIVER_ID_LOCK:
-                                CP_SESION_DRIVER_ID[cp_id] = id_driver
-                        except Exception:
-                            pass
+                        # Paso 4: Verificar nuevamente que el CP no tenga sesión (race condition)
+                        # Usar lock para asegurar que dos drivers no soliciten el mismo CP simultáneamente
+                        with CP_SESION_DRIVER_ID_LOCK:
+                            # Verificar una vez más si el CP tiene sesión (puede haber cambiado mientras procesábamos)
+                            if cp_id in CP_SESION_DRIVER_ID and CP_SESION_DRIVER_ID[cp_id] is not None:
+                                # CP fue asignado a otro driver mientras procesábamos - buscar otro
+                                print(f"[CENTRAL] CP {cp_id} fue asignado a otro driver. Buscando alternativa...")
+                                cp_disponible, estado_disponible = buscar_cp_disponible(db_connection, cp_solicitado=cp_id)
+                                
+                                if cp_disponible:
+                                    cp_id = cp_disponible
+                                    estado_cp = estado_disponible
+                                    estado_inferior = (estado_disponible or '').strip().lower()
+                                    notificar_driver(id_driver, 'CP_REASIGNADO', {
+                                        'mensaje': f'CP fue asignado a otro driver. Reasignado a {cp_disponible}',
+                                        'cp_id_original': solicitud.get('id_charging_point'),
+                                        'cp_id_nuevo': cp_disponible
+                                    })
+                                else:
+                                    notificar_driver(id_driver, 'DENEGADA', {
+                                        'motivo': f'CP {cp_id} fue asignado a otro driver y no hay alternativas disponibles'
+                                    })
+                                    registrar_evento(f"Driver {id_driver} denegado: CP asignado a otro driver", "warn")
+                                    continue
+                            
+                            # Registrar objetivo de sesión PERO NO ENVIAR AUTH_REQ TODAVÍA
+                            # Esperar a que el operador de Central de click en "Iniciar Suministro"
+                            try:
+                                with CP_SESION_OBJETIVO_KWH_LOCK:
+                                    CP_SESION_OBJETIVO_KWH[cp_id] = float(kw_deseados)
+                            except Exception:
+                                with CP_SESION_OBJETIVO_KWH_LOCK:
+                                    CP_SESION_OBJETIVO_KWH[cp_id] = kw_deseados
+                            
+                            # Asignar driver al CP (con lock para evitar race conditions)
+                            CP_SESION_DRIVER_ID[cp_id] = id_driver
 
                         # NUEVO: Cambiar a estado PENDIENTE_CONFIRMACION_CENTRAL
                         # El operador de Central debe confirmar desde la web
@@ -1262,6 +1287,63 @@ def obtener_estado_cp(connection: mysql.connector.connection.MySQLConnection, cp
     except Exception as e:
         print(f"[CENTRAL] Error inesperado consultando estado de CP {cp_id}: {e}")
         return None
+
+def buscar_cp_disponible(db_connection: mysql.connector.connection.MySQLConnection, cp_solicitado: str = None):
+    """
+    Busca un CP disponible (sin driver asignado, conectado y en estado válido).
+    Si se proporciona cp_solicitado, lo excluye de la búsqueda.
+    Retorna (cp_id, estado) o (None, None) si no hay disponibles.
+    """
+    try:
+        # Estados válidos para aceptar solicitudes
+        estados_validos = {
+            'activado', 'reposo', 'ready', 'idle',
+            'pendiente confirmacion central',
+            'pendiente_confirmacion_central',
+            'esperando operador engine',
+            'esperando_operador_engine',
+            'listo para iniciar',
+            'listo_para_iniciar'
+        }
+        
+        # Obtener todos los CP's de la BD
+        cursor = db_connection.cursor()
+        cursor.execute("SELECT cp_id, estado FROM charging_points")
+        todos_cps = cursor.fetchall()
+        cursor.close()
+        
+        # Filtrar CP's disponibles
+        cps_disponibles = []
+        for cp_id, estado_bd in todos_cps:
+            # Excluir el CP solicitado si se proporciona
+            if cp_solicitado and cp_id == cp_solicitado:
+                continue
+            
+            # Verificar que no tenga sesión activa
+            with CP_SESION_DRIVER_ID_LOCK:
+                tiene_sesion = cp_id in CP_SESION_DRIVER_ID and CP_SESION_DRIVER_ID[cp_id] is not None
+            if tiene_sesion:
+                continue
+            
+            # Verificar que esté conectado
+            with CONEXIONES_ACTIVAS_LOCK:
+                esta_conectado = cp_id in CONEXIONES_ACTIVAS
+            if not esta_conectado:
+                continue
+            
+            # Verificar estado válido
+            estado_lower = (estado_bd or '').strip().lower()
+            if estado_lower in estados_validos:
+                cps_disponibles.append((cp_id, estado_bd))
+        
+        # Retornar el primer CP disponible (o None si no hay)
+        if cps_disponibles:
+            return cps_disponibles[0]
+        return None, None
+        
+    except Exception as e:
+        print(f"[CENTRAL] Error buscando CP disponible: {e}")
+        return None, None
 
 # =================================================================
 #                      FUNCIONES DE NOTIFICACIÓN (Kafka)
@@ -1841,61 +1923,20 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                 CONEXIONES_ACTIVAS[cp_id] = conn
                 print(f"[CENTRAL] Socket de {cp_id} guardado. Total: {len(CONEXIONES_ACTIVAS)}")
             
-            # --- PROCESAR COLA SI HAY DRIVERS ESPERANDO ---
+            # --- CP reconectado - no hay colas, solo cambiar estado si no tiene sesión activa ---
             try:
-                with CP_COLA_ESPERA_LOCK:
-                    if cp_id in CP_COLA_ESPERA and not CP_COLA_ESPERA[cp_id].empty():
-                        from queue import Empty
-                        try:
-                            next_driver, next_kw, timestamp_cola = CP_COLA_ESPERA[cp_id].get_nowait()
-                            print(f"[CENTRAL] 🔄 CP {cp_id} reconectado. Procesando primer driver en cola: {next_driver}")
-                            
-                            # Registrar sesión
-                            with CP_SESION_DRIVER_ID_LOCK:
-                                CP_SESION_DRIVER_ID[cp_id] = next_driver
-                            with CP_SESION_OBJETIVO_KWH_LOCK:
-                                CP_SESION_OBJETIVO_KWH[cp_id] = next_kw
-                            
-                            # Estado: PENDIENTE_CONFIRMACION_CENTRAL
-                            try:
-                                cambiar_estado_cp(cp_id, 'PENDIENTE_CONFIRMACION_CENTRAL', db_connection)
-                            except Exception:
-                                pass
-                            
-                            # Publicar telemetría para que aparezca el botón en el dashboard
-                            try:
-                                with TELEMETRIA_ACTUAL_LOCK:
-                                    telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
-                                telemetria_actualizada = {
-                                    **telemetria_actual,
-                                    'cp_id': cp_id,
-                                    'estado_carga': 'PENDIENTE_CONFIRMACION_CENTRAL',
-                                    'estado': 'PENDIENTE_CONFIRMACION_CENTRAL',
-                                    'timestamp': time.time(),
-                                    'tiene_sesion_activa': True,
-                                    'driver_id_sesion': next_driver,
-                                    'objetivo_kwh': next_kw
-                                }
-                                with TELEMETRIA_ACTUAL_LOCK:
-                                    TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
-                                if KAFKA_PRODUCER:
-                                    KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
-                                    KAFKA_PRODUCER.flush(timeout=1)
-                                    print(f"[CENTRAL] ✓ Telemetría PENDIENTE_CONFIRMACION_CENTRAL publicada para {cp_id} (driver: {next_driver})")
-                            except Exception as e:
-                                print(f"[CENTRAL] Error publicando telemetría (reconexión→cola): {e}")
-                            
-                            # Notificar al driver
-                            notificar_driver(next_driver, 'EN_ESPERA_CONFIRMACION', {
-                                'mensaje': f'CP {cp_id} reconectado. Solicitud pendiente de confirmación del operador de Central.',
-                                'cp_id': cp_id,
-                                'kw_disponibles': next_kw
-                            })
-                            registrar_evento(f"✅ Driver {next_driver} pasado de cola a pendiente tras reconexión de {cp_id}", "ok")
-                        except Empty:
-                            pass
+                with CP_SESION_DRIVER_ID_LOCK:
+                    tiene_sesion = cp_id in CP_SESION_DRIVER_ID and CP_SESION_DRIVER_ID[cp_id] is not None
+                
+                if not tiene_sesion:
+                    # CP sin sesión - cambiar a ACTIVADO
+                    try:
+                        cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection)
+                        print(f"[CENTRAL] CP {cp_id} reconectado sin sesión. Estado: ACTIVADO")
+                    except Exception:
+                        pass
             except Exception as e:
-                print(f"[CENTRAL] Error procesando cola tras reconexión de {cp_id}: {e}")
+                print(f"[CENTRAL] Error procesando reconexión de {cp_id}: {e}")
 
         else:
             print(f"[CENTRAL] Error: Mensaje inicial no válido ({cod_op}). Cerrando conexión.")
@@ -1999,7 +2040,7 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     print(f"[CENTRAL] ✅ Ticket enviado a {driver_id}. CP {cp_fin} listo para nuevo servicio.")
                     registrar_evento(f"✅ Ticket enviado a {driver_id}: {energia} kWh, {importe} €", "ok")
 
-                    # Limpiar sesión actual ANTES de procesar la cola
+                    # Limpiar sesión actual
                     with CP_SESION_DRIVER_ID_LOCK:
                         if cp_fin in CP_SESION_DRIVER_ID:
                             del CP_SESION_DRIVER_ID[cp_fin]
@@ -2008,71 +2049,9 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                         if cp_fin in CP_SESION_OBJETIVO_KWH:
                             del CP_SESION_OBJETIVO_KWH[cp_fin]
                     
-                    # Procesar siguiente driver en cola si existe
-                    cola_procesada = False
-                    try:
-                        with CP_COLA_ESPERA_LOCK:
-                            if cp_fin in CP_COLA_ESPERA and not CP_COLA_ESPERA[cp_fin].empty():
-                                from queue import Empty
-                                try:
-                                    next_driver, next_kw, timestamp_cola = CP_COLA_ESPERA[cp_fin].get_nowait()
-                                    print(f"[CENTRAL] 🔄 Procesando siguiente en cola: {next_driver} para {cp_fin}")
-                                    cola_procesada = True
-                                    
-                                    # Autorizar al siguiente driver
-                                    with CP_SESION_DRIVER_ID_LOCK:
-                                        CP_SESION_DRIVER_ID[cp_fin] = next_driver
-                                    with CP_SESION_OBJETIVO_KWH_LOCK:
-                                        CP_SESION_OBJETIVO_KWH[cp_fin] = next_kw
-                                    
-                                    # NO enviar AUTH_REQ aún: seguir el flujo interactivo.
-                                    # Estado: PENDIENTE_CONFIRMACION_CENTRAL para que Central pulse "PREPARAR SUMINISTRO"
-                                    try:
-                                        cambiar_estado_cp(cp_fin, 'PENDIENTE_CONFIRMACION_CENTRAL', db_connection)
-                                    except Exception:
-                                        pass
-
-                                    # Publicar telemetría para que aparezca el botón en el dashboard
-                                    try:
-                                        with TELEMETRIA_ACTUAL_LOCK:
-                                            telemetria_actual = TELEMETRIA_ACTUAL.get(cp_fin, {})
-                                        telemetria_actualizada = {
-                                            **telemetria_actual,
-                                            'cp_id': cp_fin,
-                                            'estado_carga': 'PENDIENTE_CONFIRMACION_CENTRAL',
-                                            'estado': 'PENDIENTE_CONFIRMACION_CENTRAL',
-                                            'timestamp': time.time(),
-                                            'tiene_sesion_activa': True,
-                                            'driver_id_sesion': next_driver,
-                                            'objetivo_kwh': next_kw
-                                        }
-                                        with TELEMETRIA_ACTUAL_LOCK:
-                                            TELEMETRIA_ACTUAL[cp_fin] = telemetria_actualizada
-                                        if KAFKA_PRODUCER:
-                                            KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
-                                            KAFKA_PRODUCER.flush(timeout=1)
-                                    except Exception as e:
-                                        print(f"[CENTRAL] No se pudo publicar telemetría (cola→pendiente): {e}")
-
-                                    # Notificar al driver que su turno está pendiente de confirmación de Central
-                                    notificar_driver(next_driver, 'EN_ESPERA_CONFIRMACION', {
-                                        'mensaje': f'Solicitud en cola ahora pendiente de confirmación del operador de Central.',
-                                        'cp_id': cp_fin,
-                                        'kw_disponibles': next_kw
-                                    })
-                                    print(f"[CENTRAL] ✅ Driver {next_driver} notificado: EN_ESPERA_CONFIRMACION")
-
-                                    registrar_evento(f"✅ Driver {next_driver} pasado de cola a pendiente de confirmación en {cp_fin}", "ok")
-                                    
-                                except Empty:
-                                    pass
-                    except Exception as e:
-                        print(f"[CENTRAL] ✗ Error procesando cola de {cp_fin}: {e}")
-                    
-                    # Solo cambiar a ACTIVADO si NO se procesó nadie de la cola
-                    if not cola_procesada:
-                        cambiar_estado_cp(cp_fin, 'ACTIVADO', db_connection)
-                        print(f"[CENTRAL] {cp_fin} sin cola pendiente. Estado: ACTIVADO")
+                    # Cambiar a ACTIVADO (sin colas, los drivers se asignarán automáticamente cuando soliciten)
+                    cambiar_estado_cp(cp_fin, 'ACTIVADO', db_connection)
+                    print(f"[CENTRAL] {cp_fin} disponible. Estado: ACTIVADO")
                     
                     # Limpiar estado manual si estaba PARADO
                     try:
@@ -2082,46 +2061,30 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     except Exception:
                         pass
                     
-                    # Limpezas y publicación ACTIVADO solo si NO hay siguiente en cola
-                    if not cola_procesada:
-                        # Limpiar información de sesión del driver
-                        try:
-                            with CP_SESION_OBJETIVO_KWH_LOCK:
-                                if cp_fin in CP_SESION_OBJETIVO_KWH:
-                                    del CP_SESION_OBJETIVO_KWH[cp_fin]
-                        except Exception:
-                            pass
-                        try:
-                            with CP_SESION_DRIVER_ID_LOCK:
-                                if cp_fin in CP_SESION_DRIVER_ID:
-                                    del CP_SESION_DRIVER_ID[cp_fin]
-                        except Exception:
-                            pass
-                        
-                        # Publicar telemetría actualizada: CP en ACTIVADO, sin sesión, contadores en 0
-                        try:
-                            with TELEMETRIA_ACTUAL_LOCK:
-                                telemetria_actual = TELEMETRIA_ACTUAL.get(cp_fin, {})
-                            telemetria_actualizada = {
-                                **telemetria_actual,
-                                'cp_id': cp_fin,
-                                'estado_carga': 'ACTIVADO',
-                                'estado': 'ACTIVADO',
-                                'timestamp': time.time(),
-                                'tiene_sesion_activa': False,
-                                'driver_id_sesion': None,
-                                'kw_entregados': 0.0,
-                                'potencia_actual': 0.0,
-                                'tiempo_carga_s': 0
-                            }
-                            with TELEMETRIA_ACTUAL_LOCK:
-                                TELEMETRIA_ACTUAL[cp_fin] = telemetria_actualizada
-                            if KAFKA_PRODUCER:
-                                KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
-                                KAFKA_PRODUCER.flush(timeout=1)
-                                print(f"[CENTRAL] CP {cp_fin} resetado y listo para nuevo servicio (ACTIVADO)")
-                        except Exception as e:
-                            print(f"[CENTRAL] Error publicando estado tras FIN: {e}")
+                    # Publicar telemetría actualizada: CP en ACTIVADO, sin sesión, contadores en 0
+                    try:
+                        with TELEMETRIA_ACTUAL_LOCK:
+                            telemetria_actual = TELEMETRIA_ACTUAL.get(cp_fin, {})
+                        telemetria_actualizada = {
+                            **telemetria_actual,
+                            'cp_id': cp_fin,
+                            'estado_carga': 'ACTIVADO',
+                            'estado': 'ACTIVADO',
+                            'timestamp': time.time(),
+                            'tiene_sesion_activa': False,
+                            'driver_id_sesion': None,
+                            'kw_entregados': 0.0,
+                            'potencia_actual': 0.0,
+                            'tiempo_carga_s': 0
+                        }
+                        with TELEMETRIA_ACTUAL_LOCK:
+                            TELEMETRIA_ACTUAL[cp_fin] = telemetria_actualizada
+                        if KAFKA_PRODUCER:
+                            KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                            KAFKA_PRODUCER.flush(timeout=1)
+                            print(f"[CENTRAL] CP {cp_fin} resetado y listo para nuevo servicio (ACTIVADO)")
+                    except Exception as e:
+                        print(f"[CENTRAL] Error publicando estado tras FIN: {e}")
 
                 # NUEVO: Manejar READY_TO_START desde Monitor/Engine
                 elif cod_op == 'READY_TO_START' and len(campos) >= 2:
