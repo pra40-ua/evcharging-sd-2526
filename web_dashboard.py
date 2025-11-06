@@ -250,8 +250,25 @@ def consumir_telemetria(broker: str):
                                 estado_anterior_upper = estado_anterior.upper()
                                 estado_recibido_upper = estado_carga_recibido.upper()
                                 
-                                # Si el estado recibido es interactivo, usarlo directamente (prioridad)
-                                if estado_recibido_upper in estados_interactivos:
+                                # PROTECCIÓN: Si ya está SUMINISTRANDO/CARGANDO, ignorar regresiones a estados interactivos
+                                if estado_anterior_upper in ("SUMINISTRANDO", "CARGANDO"):
+                                    if estado_recibido_upper in estados_interactivos:
+                                        # Ignorar regresión: mantener SUMINISTRANDO
+                                        estado_carga = estado_anterior
+                                        print(f"[DASHBOARD] Ignorando regresión de {cp_id}: {estado_anterior} → {estado_carga_recibido} (manteniendo {estado_anterior})")
+                                    elif estado_recibido_upper in ("SUMINISTRANDO", "CARGANDO"):
+                                        # Confirmar que sigue suministrando
+                                        estado_carga = estado_carga_recibido
+                                    else:
+                                        # Otro estado no interactivo: mantener SUMINISTRANDO si hay energía entregada
+                                        kw_entregados = telemetria.get('kw_entregados', 0) or telemetria.get('energia_total', 0)
+                                        if float(kw_entregados) > 0:
+                                            estado_carga = estado_anterior
+                                            print(f"[DASHBOARD] Manteniendo {estado_anterior} para {cp_id} (hay energía entregada: {kw_entregados} kWh)")
+                                        else:
+                                            estado_carga = estado_carga_recibido
+                                # Si el estado recibido es interactivo, usarlo directamente (prioridad) - solo si no está suministrando
+                                elif estado_recibido_upper in estados_interactivos:
                                     estado_carga = estado_carga_recibido
                                     print(f"[DASHBOARD] Estado interactivo recibido para {cp_id}: {estado_carga_recibido}")
                                 # Si el estado anterior es interactivo y el recibido es ACTIVADO/REPOSO, preservar el interactivo
@@ -260,8 +277,11 @@ def consumir_telemetria(broker: str):
                                         # Preservar estado interactivo, no degradar
                                         estado_carga = estado_anterior
                                         print(f"[DASHBOARD] Preservando estado interactivo {estado_anterior} para {cp_id} (telemetría reporta {estado_carga_recibido})")
+                                    elif estado_recibido_upper in ("SUMINISTRANDO", "CARGANDO"):
+                                        # El nuevo estado es SUMINISTRANDO, usarlo (progresión válida)
+                                        estado_carga = estado_carga_recibido
                                     else:
-                                        # El nuevo estado es más avanzado (ej: SUMINISTRANDO), usarlo
+                                        # Otro estado, usar el recibido
                                         estado_carga = estado_carga_recibido
                                 else:
                                     # Estado anterior no es interactivo, usar el recibido
