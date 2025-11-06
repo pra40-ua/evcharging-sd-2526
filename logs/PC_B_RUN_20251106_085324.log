@@ -1,0 +1,190 @@
+============================================================ 
+ LOG DE EJECUCION - PC_B_RUN.bat 
+ Fecha/Hora: 06/11/2025  8:53:24,30 
+============================================================ 
+ 
+Docker version 28.4.0, build d8eb465
+ 
+============================================================ 
+[MODO] MULTIPLES CPS SELECCIONADO 
+============================================================ 
+[INPUT] Usuario ingreso: NUM_CPS=1 
+[VALIDADO] NUM_CPS final: 1 
+[BUILD] Iniciando construccion de imagenes 
+[BUILD] Fecha/Hora: 06/11/2025  8:53:30,12 
+ 
+[BUILD] Ejecutando: docker build -t ev_engine:local -f ev_cp_engine/Dockerfile . 
+[BUILD] ---- INICIO OUTPUT DOCKER BUILD ENGINE ---- 
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 580B done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 0.5s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
+#3 resolve docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6 0.0s done
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/python:3.10-slim
+#4 DONE 0.5s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 275B done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 103.38kB 0.0s done
+#6 DONE 0.0s
+
+#7 [1/6] FROM docker.io/library/python:3.10-slim@sha256:2a8c7d9efdae9b636de80a187a4ce31374ffb3883a7be06232d25a96e8538bf4
+#7 resolve docker.io/library/python:3.10-slim@sha256:2a8c7d9efdae9b636de80a187a4ce31374ffb3883a7be06232d25a96e8538bf4 0.0s done
+#7 DONE 0.0s
+
+#8 [2/6] WORKDIR /app
+#8 CACHED
+
+#9 [4/6] RUN pip install --no-cache-dir -r requirements.txt
+#9 CACHED
+
+#10 [5/6] COPY ev_cp_engine/ ev_cp_engine/
+#10 CACHED
+
+#11 [3/6] COPY requirements.txt ./
+#11 CACHED
+
+#12 [6/6] COPY ev_common/ ev_common/
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 exporting manifest sha256:1ff1a8cd8113b9e74e509898b1bfbb2f7646e97c016c561e887c7c46a787f6d7 done
+#13 exporting config sha256:1658277352cb6f4222228160104b43643674d46edbdc70c78891ff8b68ee5484 done
+#13 exporting attestation manifest sha256:d7233b7e53699603891eb836650ab6da60b6b93db89f04d43a603a2cb77f4781 0.0s done
+#13 exporting manifest list sha256:ce3a5fba74e83d97f6e80dff259b2d0bee1a59807855f525c67635b7f1e5deaa 0.0s done
+#13 naming to docker.io/library/ev_engine:local done
+#13 unpacking to docker.io/library/ev_engine:local 0.0s done
+#13 DONE 0.1s
+[BUILD] ---- FIN OUTPUT DOCKER BUILD ENGINE ---- 
+[BUILD] Resultado (errorlevel): 0 
+[BUILD OK] ev_engine construido exitosamente 
+[BUILD] Ejecutando: docker build -t ev_monitor:local -f ev_cp_monitor/Dockerfile . 
+[BUILD] ---- INICIO OUTPUT DOCKER BUILD MONITOR ---- 
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 615B done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 0.3s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
+#3 resolve docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6 0.0s done
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/python:3.10-slim
+#4 DONE 0.2s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 275B done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 30.91kB done
+#6 DONE 0.0s
+
+#7 [1/6] FROM docker.io/library/python:3.10-slim@sha256:2a8c7d9efdae9b636de80a187a4ce31374ffb3883a7be06232d25a96e8538bf4
+#7 resolve docker.io/library/python:3.10-slim@sha256:2a8c7d9efdae9b636de80a187a4ce31374ffb3883a7be06232d25a96e8538bf4 0.0s done
+#7 DONE 0.0s
+
+#8 [2/6] WORKDIR /app
+#8 CACHED
+
+#9 [3/6] COPY requirements.txt ./
+#9 CACHED
+
+#10 [4/6] RUN pip install --no-cache-dir -r requirements.txt
+#10 CACHED
+
+#11 [5/6] COPY ev_cp_monitor/ ev_cp_monitor/
+#11 CACHED
+
+#12 [6/6] COPY ev_common/ ev_common/
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 exporting manifest sha256:f6dc8ade17ff21e096aacb5580659bdaecfb5dcea6ac8119107aa2edcd118971 done
+#13 exporting config sha256:53e5a98f8e87686210a9326c228e5e960a6c56458d80dd958e62dffd96acf4eb
+#13 exporting config sha256:53e5a98f8e87686210a9326c228e5e960a6c56458d80dd958e62dffd96acf4eb done
+#13 exporting attestation manifest sha256:2201ded847d900f7d99e6f8e4d3572506dd54df7952fdca9dd7721897a07c09a 0.0s done
+#13 exporting manifest list sha256:8c252af9333051edcee16a00a915a2076b42ae3eae30091dfc15c1297912fe8e 0.0s done
+#13 naming to docker.io/library/ev_monitor:local done
+#13 unpacking to docker.io/library/ev_monitor:local 0.0s done
+#13 DONE 0.1s
+[BUILD] ---- FIN OUTPUT DOCKER BUILD MONITOR ---- 
+[BUILD] Resultado (errorlevel): 0 
+[BUILD OK] ev_monitor construido exitosamente 
+[DEBUG] Ejecutando: docker ps -q --filter "label=component=engine" 
+[DEBUG] CP_OFFSET detectado: 1 
+[LOG] CPs existentes: 1 
+[DEBUG] Antes de mostrar mensaje... 
+[DEBUG] Mensaje mostrado 
+[DEBUG] Iniciando timeout de 2 segundos... 
+[DEBUG] Timeout completado, continuando... 
+ 
+============================================================ 
+[MAIN] INICIANDO LANZAMIENTO DE 1 CPs 
+============================================================ 
+[DEBUG] BASE_PORT=5000 
+[DEBUG] KAFKA_SERVER=192.168.1.43:9092 
+[DEBUG] CENTRAL_IP=192.168.1.43 
+[DEBUG] CP_OFFSET=1 
+[DEBUG] NUM_CPS=1 
+ 
+[DEBUG] Antes de iniciar bucle FOR 
+[DEBUG] Rango del bucle: 1 a 1 
+ 
+[MAIN] ================================================ 
+[MAIN] Iteracion 1 de 1 
+[MAIN] CP_NUM calculado: 2 
+[MAIN] ================================================ 
+[DEBUG] A punto de llamar a LANZAR_CP con CP_NUM=2 
+ 
+============================================================ 
+[FUNCION] LANZAR_CP INICIADA 
+============================================================ 
+[DEBUG] LANZAR_CP llamado con CP_NUM=2 
+[DEBUG] BASE_PORT=5000 
+[DEBUG] KAFKA_SERVER=192.168.1.43:9092 
+[DEBUG] CENTRAL_IP=192.168.1.43 
+[DEBUG] CP_ID calculado: CP_002 
+[DEBUG] ENGINE_PORT calculado: 5002 
+ 
+[DEBUG] ---- COMANDO ENGINE ---- 
+docker run --rm -p 5002:5002 -p 9002:9002 --name engine_CP_002 --label project=evcharging-pc-b --label component=engine --label cp_id=CP_002 -e ENGINE_PORT=5002 -e CP_ID=CP_002 -e KAFKA_SERVER=192.168.1.43:9092 -e WEB_PORT=9002 ev_engine:local 
+ 
+[DEBUG] ---- COMANDO MONITOR ---- 
+docker run --rm --network host --name monitor_CP_002 --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_002 -e CP_ID=CP_002 -e CENTRAL_IP=192.168.1.43 -e CENTRAL_PORT=5000 -e ENGINE_IP=localhost -e ENGINE_PORT=5002 ev_monitor:local 
+ 
+[DEBUG] ---- COMANDO POWERSHELL ENGINE ---- 
+Write-Host 'Iniciando Engine (CP_002) en puerto 5002...' -ForegroundColor Cyan; Write-Host ''; docker run --rm -p 5002:5002 -p 9002:9002 --name engine_CP_002 --label project=evcharging-pc-b --label component=engine --label cp_id=CP_002 -e ENGINE_PORT=5002 -e CP_ID=CP_002 -e KAFKA_SERVER=192.168.1.43:9092 -e WEB_PORT=9002 ev_engine:local 
+ 
+[DEBUG] ---- COMANDO POWERSHELL MONITOR ---- 
+Write-Host 'Iniciando Monitor (CP_002)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --network host --name monitor_CP_002 --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_002 -e CP_ID=CP_002 -e CENTRAL_IP=192.168.1.43 -e CENTRAL_PORT=5000 -e ENGINE_IP=localhost -e ENGINE_PORT=5002 ev_monitor:local 
+ 
+[DEBUG] Ejecutando START PowerShell para Engine... 
+[DEBUG] START ejecutado para Engine (errorlevel: 0) 
+[DEBUG] Esperando 3 segundos... 
+[DEBUG] Abriendo navegador en http://localhost:9002 
+[DEBUG] Navegador abierto (errorlevel: 0) 
+[DEBUG] Ejecutando START PowerShell para Monitor... 
+[DEBUG] START ejecutado para Monitor (errorlevel: 0) 
+[DEBUG] CP_002 completado 
+============================================================ 
+[DEBUG] Retorno de LANZAR_CP completado 
+[MAIN] Esperando 2 segundos antes del siguiente CP... 
+[DEBUG] Bucle FOR completado 

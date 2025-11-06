@@ -430,6 +430,14 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                     except Exception as e:
                         print(f"[{cp_id}] Error procesando READY_TO_START: {e}")
                     return
+                if cod == 'AVR_CLR':
+                    try:
+                        # Reenviar a Central tal cual: AVR_CLR#cp_id#motivo#codigo
+                        central_socket.sendall(trama_completa if trama_completa else construir_trama('AVR_CLR', args))
+                        print(f"[{cp_id}] 📤 AVR_CLR reenviado a Central")
+                    except Exception as e:
+                        print(f"[{cp_id}] Error reenviando AVR_CLR a Central: {e}")
+                    return
                 if cod == 'REQUEST_STOP':
                     try:
                         engine_cp_id = args[0] if len(args) > 0 else cp_id

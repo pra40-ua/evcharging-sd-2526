@@ -307,7 +307,7 @@ def actualizar_estadisticas():
     with STATS_LOCK, CPS_STATE_LOCK, TELEMETRIA_LOCK:
         STATS['total_cps'] = len(CPS_STATE)
         STATS['cps_activos'] = sum(1 for cp in CPS_STATE.values() 
-                                    if cp.get('estado', '').upper() in ['ACTIVADO', 'SUMINISTRANDO', 'CARGANDO', 'PRE-SUMINISTRO', 
+                                    if cp.get('estado', '').upper() in ['ACTIVADO', 'REPOSO', 'SUMINISTRANDO', 'CARGANDO', 'PRE-SUMINISTRO', 
                                                                          'PENDIENTE_CONFIRMACION_CENTRAL', 'ESPERANDO_OPERADOR_ENGINE', 
                                                                          'LISTO_PARA_INICIAR'])
         STATS['cps_suministrando'] = sum(1 for cp in CPS_STATE.values() 
@@ -1084,7 +1084,9 @@ def crear_templates():
             html += '</tr></thead><tbody>';
             
             cps.forEach(cp => {
-                const estado = (cp.estado || 'DESCONOCIDO').toUpperCase();
+                const estadoRaw = (cp.estado || 'DESCONOCIDO').toUpperCase();
+                // Regla UX: mostrar REPOSO como ACTIVADO (conectado y disponible)
+                const estado = (estadoRaw === 'REPOSO') ? 'ACTIVADO' : estadoRaw;
                 const estadoClass = 'status-' + estado.toLowerCase().replace('í', 'i').replace('-', '-');
                 const tieneSesion = cp.tiene_sesion_activa || false;
                 

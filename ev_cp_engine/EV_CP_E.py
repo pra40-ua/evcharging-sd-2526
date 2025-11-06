@@ -59,6 +59,18 @@ def generar_y_enviar_telemetria(cp_id: str, estado_carga: str, kw_entregados: fl
     if TELEMETRY_PRODUCER is None:
         return
 
+    # Verificar si hay avería simulada y sobrescribir estado si es necesario
+    estado_final = estado_carga
+    averia_activa = False
+    try:
+        with SIMULAR_AVERIA_LOCK:
+            if SIMULAR_AVERIA:
+                # Si hay avería, el estado debe ser AVERIADO
+                estado_final = 'AVERIADO'
+                averia_activa = True
+    except:
+        pass
+
     # Obtener información de sesión activa
     try:
         driver_id_sesion = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
@@ -71,14 +83,15 @@ def generar_y_enviar_telemetria(cp_id: str, estado_carga: str, kw_entregados: fl
     telemetria_msg = {
         'cp_id': cp_id,
         'timestamp': time.time(),
-        'estado_carga': estado_carga,
-        'estado': estado_carga,  # Agregar campo 'estado' también para compatibilidad
+        'estado_carga': estado_final,
+        'estado': estado_final,  # Agregar campo 'estado' también para compatibilidad
         'kw_entregados': kw_entregados,
         'energia_total': kw_entregados,  # Compatibilidad con diferentes lectores
         'potencia_actual': potencia_kw,
         'tiempo_carga_s': tiempo_carga_s,
         'tiene_sesion_activa': tiene_sesion,
-        'driver_id_sesion': driver_id_sesion if tiene_sesion else None
+        'driver_id_sesion': driver_id_sesion if tiene_sesion else None,
+        'averia_activa': averia_activa  # Nuevo campo para indicar avería
     }
 
     try:
@@ -126,6 +139,48 @@ _static_dir = os_flask.path.join(_current_dir, 'static')
 app = Flask(__name__, template_folder=_template_dir, static_folder=_static_dir)
 CORS(app)
 WEB_PORT = 9000  # Puerto por defecto, se configurará según el CP
+
+def bucle_telemetria_periodica(cp_id: str, stop_event: threading.Event):
+    """Emite telemetría periódica del estado del CP (incluyendo avería) incluso cuando no hay carga."""
+    print(f"[{cp_id}] Bucle de telemetría periódica iniciado (estado general).")
+    while not stop_event.is_set():
+        time.sleep(10)  # Enviar cada 10 segundos
+        
+        # Determinar el estado actual
+        with ESTADO_FLUJO_LOCK:
+            estado_flujo = ESTADO_FLUJO
+        
+        with STATE_LOCK:
+            kw = round(kw_acumulados_global, 2)
+            secs = segundos_global
+            cargando = CHARGING_FLAG.is_set()
+        
+        # Si está cargando, el bucle de telemetría de carga ya está enviando, no duplicar
+        if cargando:
+            continue
+        
+        # Determinar estado a reportar
+        if estado_flujo == 'CARGANDO':
+            estado = 'CARGANDO'
+        elif estado_flujo == 'ESPERANDO_DRIVER':
+            estado = 'ESPERANDO_DRIVER'
+        elif estado_flujo == 'LISTO_PARA_INICIAR':
+            estado = 'LISTO_PARA_INICIAR'
+        elif estado_flujo == 'ESPERANDO_CONFIRMACION_FIN':
+            estado = 'ESPERANDO_CONFIRMACION_FIN'
+        else:
+            # Estado por defecto visible en Central: ACTIVADO (evitar marcar REPOSO automáticamente)
+            estado = 'ACTIVADO'
+        
+        # Enviar telemetría con estado actual (la función ya maneja la avería)
+        generar_y_enviar_telemetria(
+            cp_id=cp_id,
+            estado_carga=estado,
+            kw_entregados=kw,
+            tiempo_carga_s=secs,
+            potencia_kw=0.0
+        )
+
 
 def bucle_telemetria(cp_id: str, stop_event: threading.Event):
     """Emite telemetría de CARGANDO únicamente mientras dure la sesión (START..STOP)."""
@@ -319,7 +374,7 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                     # Usar SESSION_LOCK para garantizar sincronización entre hilos
                     with SESSION_LOCK:
                         TARGET_KWH = kw_float
-                        CURRENT_DRIVER_ID = driver_id
+                    CURRENT_DRIVER_ID = driver_id
 
                     # Actualizar caché de AUTH para UI robusta
                     with AUTH_CACHE_LOCK:
@@ -857,6 +912,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     <button class="btn btn-success" id="btn-desactivar-averia" onclick="simularAveria(false)" style="display: none;">
                         <span>✓</span> Desactivar Avería
                     </button>
+                    <button class="btn btn-secondary" id="btn-recuperar" onclick="recuperarAveria()" style="margin-left: 8px;">
+                        <span>🩺</span> Recuperar CP
+                    </button>
                     <div id="averia-status" style="margin-top: 10px;"></div>
                 </div>
             </div>
@@ -890,7 +948,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     console.log('[WEB] Objetivo kWh:', data.objetivo_kwh);
                     
                     try {
-                        // Actualizar estado del flujo
+                    // Actualizar estado del flujo
                         console.log('[WEB] Actualizando elementos DOM...');
                         // Fuente de verdad: estado de flujo que envía el backend
                         var estadoParaBotones = data.estado_flujo;
@@ -900,15 +958,15 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                             estadoParaBotones = 'ESPERANDO_DRIVER';
                         }
                         document.getElementById('status-estado').textContent = estadoParaBotones || data.estado || '-';
-                        document.getElementById('status-monitor').innerHTML = data.monitor_conectado 
-                            ? '<span class="badge badge-ok">Conectado</span>' 
-                            : '<span class="badge badge-ko">Desconectado</span>';
-                        document.getElementById('status-kwh').textContent = data.kw_acumulados.toFixed(2);
-                        document.getElementById('status-tiempo').textContent = data.segundos;
-                        document.getElementById('status-driver').textContent = data.driver_actual || '-';
-                        document.getElementById('status-objetivo').textContent = data.objetivo_kwh ? data.objetivo_kwh + ' kWh' : '-';
-                        
-                        // Actualizar botones según estado del flujo
+                    document.getElementById('status-monitor').innerHTML = data.monitor_conectado 
+                        ? '<span class="badge badge-ok">Conectado</span>' 
+                        : '<span class="badge badge-ko">Desconectado</span>';
+                    document.getElementById('status-kwh').textContent = data.kw_acumulados.toFixed(2);
+                    document.getElementById('status-tiempo').textContent = data.segundos;
+                    document.getElementById('status-driver').textContent = data.driver_actual || '-';
+                    document.getElementById('status-objetivo').textContent = data.objetivo_kwh ? data.objetivo_kwh + ' kWh' : '-';
+                    
+                    // Actualizar botones según estado del flujo
                         console.log('[WEB] Llamando a actualizarBotonesFlujo con estado:', estadoParaBotones);
                         actualizarBotonesFlujo(estadoParaBotones, data);
                         console.log('[WEB] ✓ Botones actualizados');
@@ -1125,6 +1183,22 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             .catch(function(error) { mostrarAlerta('Error: ' + error, 'danger'); });
         }
         
+        function recuperarAveria() {
+            if (!confirm('¿Recuperar el CP de la avería y notificar a Central?')) return;
+            fetch('/api/recuperar_averia', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                var tipo = data.status === 'ok' ? 'success' : 'danger';
+                var msg = data.mensaje || (data.status === 'ok' ? 'Recuperación notificada' : 'No se pudo notificar la recuperación');
+                mostrarAlerta(msg, tipo);
+                actualizarEstado();
+            })
+            .catch(function(error) { mostrarAlerta('Error: ' + error, 'danger'); });
+        }
+        
         function conectarDriver() {
             var driverId = prompt('ID del Driver (opcional):', 'DRIVER_WEB') || 'DRIVER_WEB';
             var payload = {'driver_id': driverId};
@@ -1319,6 +1393,17 @@ def panel_local():
       log('POST ' + url + ' -> ' + JSON.stringify(j));
       await estado();
     }}
+    async function simularAveria() {{
+      const motivo = prompt('Motivo de la avería (opcional):', 'Avería simulada desde web') || 'Avería simulada desde web';
+      const r = await fetch('/api/simular_averia', {{
+        method: 'POST',
+        headers: {{ 'Content-Type': 'application/json' }},
+        body: JSON.stringify({{ activar: true, motivo: motivo }})
+      }});
+      const j = await r.json().catch(() => ({{ status: 'error', mensaje: 'Respuesta no JSON' }}));
+      log('POST /api/simular_averia -> ' + JSON.stringify(j));
+      await estado();
+    }}
     async function estado() {{
       const r = await fetch('/api/status?t=' + Date.now(), {{ cache: 'no-store' }});
       const j = await r.json();
@@ -1392,14 +1477,17 @@ def panel_local():
     <button id=\"btn-start\" class=\"ok\" style=\"display:none\" onclick=\"post('/api/iniciar_suministro')\">🔌 Confirmar Inicio (Invoke-WebRequest)</button>
     <button id=\"btn-stop\" class=\"danger\" style=\"display:none\" onclick=\"post('/api/solicitar_fin')\">🛑 Solicitar Fin</button>
     <button id=\"btn-sync\" class=\"warn\" style=\"display:none\" onclick=\"post('/api/forzar_esperando')\">🛠️ Sincronizar ESPERANDO_DRIVER</button>
+    <button id=\"btn-averia\" class=\"danger\" onclick=\"simularAveria()\">⚠️ Simular Avería</button>
     <button id=\"btn-refresh\" class=\"muted\" onclick=\"estado()\">🔄 Actualizar Estado</button>
   </div>
   <div id=\"info-flujo\" style=\"margin:8px 0 16px; color:#2d3436; font-weight:600; display:none;\"></div>
   <div style=\"margin: 0 0 16px; color:#636e72; font-size:13px;\">
     Este botón simula ejecutar en PowerShell:
-    <pre style=\"white-space: pre-wrap; background:#fff; padding:10px; border-radius:6px;\">Invoke-WebRequest -Method POST -Uri http://127.0.0.1:{web_port}/api/iniciar_suministro | Select-Object -ExpandProperty Content</pre>
+    <pre style=\"white-space: pre-wrap; background:#fff; padding:10px; border-radius:6px;\">Invoke-WebRequest -Method POST -Uri http://127.0.0.1:{web_port}/api/iniciar_suministro</pre>
     Para solicitar fin del suministro:
-    <pre style=\"white-space: pre-wrap; background:#fff; padding:10px; border-radius:6px;\">Invoke-WebRequest -Method POST -Uri http://127.0.0.1:{web_port}/api/solicitar_fin | Select-Object -ExpandProperty Content</pre>
+    <pre style=\"white-space: pre-wrap; background:#fff; padding:10px; border-radius:6px;\">Invoke-WebRequest -Method POST -Uri http://127.0.0.1:{web_port}/api/solicitar_fin</pre>
+    Para simular una avería:
+    <pre style=\"white-space: pre-wrap; background:#fff; padding:10px; border-radius:6px;\">$body = @{{activar=$true;motivo=\"Avería simulada\"}} | ConvertTo-Json; Invoke-WebRequest -Method POST -Uri http://127.0.0.1:{web_port}/api/simular_averia -ContentType \"application/json\" -Body $body</pre>
   </div>
   <h3>Estado</h3>
   <pre id=\"estado\">Cargando...</pre>
@@ -1498,9 +1586,14 @@ def api_simular_averia():
     """Activa/desactiva la simulación de avería."""
     global SIMULAR_AVERIA
     
-    data = request.get_json()
-    activar = data.get('activar', True)
-    motivo = data.get('motivo', 'Avería simulada desde web')
+    data = request.get_json(silent=True)
+    if data is None:
+        # Si no hay JSON, intentar leer como form data o usar valores por defecto
+        activar = request.form.get('activar', 'true').lower() == 'true'
+        motivo = request.form.get('motivo', 'Avería simulada desde web')
+    else:
+        activar = data.get('activar', True)
+        motivo = data.get('motivo', 'Avería simulada desde web')
     
     with SIMULAR_AVERIA_LOCK:
         SIMULAR_AVERIA = activar
@@ -1524,6 +1617,37 @@ def api_simular_averia():
         'averia_activa': SIMULAR_AVERIA,
         'mensaje': mensaje
     })
+
+@app.route('/api/recuperar_averia', methods=['POST'])
+def api_recuperar_averia():
+    """Recupera el CP de una avería: desactiva avería local y notifica a Central via Monitor."""
+    global SIMULAR_AVERIA, ACTIVE_MONITOR_CONN, ENGINE_CP_ID
+    cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
+    
+    # Desactivar avería local
+    with SIMULAR_AVERIA_LOCK:
+        SIMULAR_AVERIA = False
+    
+    # Notificar a Central a través del Monitor
+    try:
+        if ACTIVE_MONITOR_CONN is None:
+            return jsonify({
+                'status': 'error',
+                'mensaje': 'No hay conexión con el Monitor para notificar la recuperación'
+            }), 400
+        # AVR_CLR#<cp_id>#<motivo>#<codigo>
+        trama = construir_trama('AVR_CLR', [cp_id, 'RECUPERADA', 'OK'])
+        ACTIVE_MONITOR_CONN.sendall(trama)
+        print(f"[{cp_id}] 📤 AVR_CLR enviado a Central a través del Monitor")
+        return jsonify({
+            'status': 'ok',
+            'mensaje': 'Recuperación notificada a Central. Estado volverá a ACTIVADO'
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'mensaje': f'Error notificando recuperación: {str(e)}'
+        }), 500
 
 @app.route('/api/iniciar_suministro', methods=['POST'])
 def api_iniciar_suministro():
@@ -1765,6 +1889,16 @@ def main():
 
     # El hilo de telemetría NO se inicia en arranque; solo tras recibir START
     print(f"[EV_CP_E] Telemetría en reposo. A la espera de START para {args.cp_id}")
+    
+    # Iniciar hilo de telemetría periódica para reportar estado (incluyendo avería) incluso sin carga
+    TELEMETRY_PERIODIC_STOP_EVENT = threading.Event()
+    telemetry_periodic_thread = threading.Thread(
+        target=bucle_telemetria_periodica,
+        args=(args.cp_id, TELEMETRY_PERIODIC_STOP_EVENT),
+        daemon=True
+    )
+    telemetry_periodic_thread.start()
+    print(f"[EV_CP_E] Hilo de telemetría periódica iniciado (reporta estado cada 10s)")
 
     try:
         # Guardar CP_ID global para el menú/estado

@@ -1625,6 +1625,17 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     except Exception:
                         registrar_evento(f"⚠️ Avería reportada por {cp_id}")
                 
+                elif cod_op == 'AVR_CLR':
+                    try:
+                        motivo = campos[1] if len(campos) > 1 else 'RECUPERADA'
+                        with CP_ALERTA_LOCK:
+                            CP_ALERTA[cp_id] = False
+                        cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection, motivo=motivo)
+                        registrar_evento(f"✅ {cp_id} recuperado de avería: {motivo}")
+                        print(f"[CENTRAL] {cp_id} marcado como ACTIVADO tras AVR_CLR")
+                    except Exception as e:
+                        print(f"[CENTRAL] Error procesando AVR_CLR: {e}")
+                
                 # ====== NUEVO BLOQUE AÑADIDO: MANEJO DE STATE ====== 
                 elif cod_op == 'STATE' and len(campos) >= 2:
                     cp_state = campos[0]
