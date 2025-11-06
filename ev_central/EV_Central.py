@@ -1445,26 +1445,44 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                                     with CP_SESION_OBJETIVO_KWH_LOCK:
                                         CP_SESION_OBJETIVO_KWH[cp_fin] = next_kw
                                     
-                                    # Notificar autorización
-                                    notificar_driver(next_driver, 'AUTORIZADO', {
-                                        'mensaje': f'Autorizado para cargar en {cp_fin}',
+                                    # NO enviar AUTH_REQ aún: seguir el flujo interactivo.
+                                    # Estado: PENDIENTE_CONFIRMACION_CENTRAL para que Central pulse "PREPARAR SUMINISTRO"
+                                    try:
+                                        cambiar_estado_cp(cp_fin, 'PENDIENTE_CONFIRMACION_CENTRAL', db_connection)
+                                    except Exception:
+                                        pass
+
+                                    # Publicar telemetría para que aparezca el botón en el dashboard
+                                    try:
+                                        with TELEMETRIA_ACTUAL_LOCK:
+                                            telemetria_actual = TELEMETRIA_ACTUAL.get(cp_fin, {})
+                                        telemetria_actualizada = {
+                                            **telemetria_actual,
+                                            'cp_id': cp_fin,
+                                            'estado_carga': 'PENDIENTE_CONFIRMACION_CENTRAL',
+                                            'estado': 'PENDIENTE_CONFIRMACION_CENTRAL',
+                                            'timestamp': time.time(),
+                                            'tiene_sesion_activa': True,
+                                            'driver_id_sesion': next_driver,
+                                            'objetivo_kwh': next_kw
+                                        }
+                                        with TELEMETRIA_ACTUAL_LOCK:
+                                            TELEMETRIA_ACTUAL[cp_fin] = telemetria_actualizada
+                                        if KAFKA_PRODUCER:
+                                            KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                                            KAFKA_PRODUCER.flush(timeout=1)
+                                    except Exception as e:
+                                        print(f"[CENTRAL] No se pudo publicar telemetría (cola→pendiente): {e}")
+
+                                    # Notificar al driver que su turno está pendiente de confirmación de Central
+                                    notificar_driver(next_driver, 'EN_ESPERA_CONFIRMACION', {
+                                        'mensaje': f'Solicitud en cola ahora pendiente de confirmación del operador de Central.',
                                         'cp_id': cp_fin,
                                         'kw_disponibles': next_kw
                                     })
-                                    print(f"[CENTRAL] ✅ Driver {next_driver} notificado: AUTORIZADO")
-                                    
-                                    # Enviar AUTH_REQ al Monitor
-                                    with CONEXIONES_ACTIVAS_LOCK:
-                                        if cp_fin in CONEXIONES_ACTIVAS:
-                                            socket_cp = CONEXIONES_ACTIVAS[cp_fin]
-                                            trama_auth = construir_trama('AUTH_REQ', [next_driver, str(next_kw)])
-                                            socket_cp.sendall(trama_auth)
-                                            print(f"[CENTRAL] ✅ AUTH_REQ enviado a {cp_fin} para {next_driver}")
-                                            
-                                            # Cambiar estado a PRE-SUMINISTRO
-                                            cambiar_estado_cp(cp_fin, 'PRE-SUMINISTRO', db_connection, motivo=f'Autorizando {next_driver}')
-                                    
-                                    registrar_evento(f"✅ Driver {next_driver} autorizado desde cola para {cp_fin}", "ok")
+                                    print(f"[CENTRAL] ✅ Driver {next_driver} notificado: EN_ESPERA_CONFIRMACION")
+
+                                    registrar_evento(f"✅ Driver {next_driver} pasado de cola a pendiente de confirmación en {cp_fin}", "ok")
                                     
                                 except Empty:
                                     pass
