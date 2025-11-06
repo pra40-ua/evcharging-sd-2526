@@ -16,7 +16,7 @@ DELIMITER = '#'
 
 import json
 import time
-from kafka import KafkaProducer
+from kafka import KafkaProducer, KafkaConsumer
 import threading # Necesario si el Engine está corriendo en un bucle principal
 import os
 import subprocess
@@ -281,6 +281,102 @@ def bucle_telemetria(cp_id: str, stop_event: threading.Event):
         except Exception as e:
             print(f"[{cp_id}] No se pudo enviar FIN a Monitor: {e}")
         
+
+def consumir_telemetria_propia(cp_id: str, broker: str):
+    """
+    Consume mensajes de telemetría del topic Kafka y muestra solo los mensajes
+    que pertenecen a este Engine (cp_id).
+    """
+    print(f"[{cp_id}] Iniciando consumidor de telemetría propia en {broker}...")
+    print(f"[{cp_id}] Topic: {TOPIC_TELEMETRY}")
+    print(f"[{cp_id}] Filtro: Solo mensajes de {cp_id}")
+    
+    reintentos = 0
+    max_reintentos = 10
+    
+    while True:
+        consumer = None
+        try:
+            if reintentos > 0:
+                print(f"[{cp_id}] Reintentando conexión a Kafka... (intento {reintentos + 1}/{max_reintentos})")
+                time.sleep(2)
+            
+            consumer = KafkaConsumer(
+                TOPIC_TELEMETRY,
+                bootstrap_servers=[broker],
+                auto_offset_reset='latest',
+                enable_auto_commit=True,
+                group_id=f'engine-{cp_id}-telemetry-group',
+                value_deserializer=lambda m: json.loads(m.decode('utf-8')),
+                api_version=(2, 5, 0),
+                session_timeout_ms=30000,
+                heartbeat_interval_ms=10000,
+                max_poll_interval_ms=300000,
+                request_timeout_ms=40000
+            )
+            
+            print(f"[{cp_id}] ✓ Consumidor de telemetría conectado. Escuchando mensajes de {cp_id}...")
+            reintentos = 0  # Reset contador tras conexión exitosa
+            
+            # Bucle de consumo
+            while True:
+                try:
+                    records = consumer.poll(timeout_ms=1000, max_records=10)
+                    
+                    if not records:
+                        continue
+                    
+                    # Procesar mensajes recibidos
+                    for topic_partition, messages in records.items():
+                        for message in messages:
+                            telemetria = message.value
+                            mensaje_cp_id = telemetria.get('cp_id', 'UNKNOWN')
+                            
+                            # Solo mostrar mensajes de este CP
+                            if mensaje_cp_id == cp_id:
+                                estado = telemetria.get('estado_carga', telemetria.get('estado', 'N/D'))
+                                kw = telemetria.get('kw_entregados', 0) or telemetria.get('energia_total', 0)
+                                potencia = telemetria.get('potencia_actual', 0)
+                                tiempo = telemetria.get('tiempo_carga_s', 0)
+                                driver_id = telemetria.get('driver_id_sesion', 'N/A')
+                                averia = telemetria.get('averia_activa', False)
+                                
+                                # Formato de salida legible
+                                timestamp_str = time.strftime('%H:%M:%S', time.localtime(telemetria.get('timestamp', time.time())))
+                                
+                                # Iconos según estado
+                                icono = '⚡' if estado == 'SUMINISTRANDO' else \
+                                        '⏳' if 'ESPERANDO' in estado else \
+                                        '⚠️' if averia or estado == 'AVERIADO' else \
+                                        '✅' if estado == 'ACTIVADO' else \
+                                        '💤' if estado == 'REPOSO' else '📊'
+                                
+                                print(f"\n[{timestamp_str}] {icono} [TELEMETRÍA] {cp_id}")
+                                print(f"    Estado: {estado}")
+                                print(f"    Energía: {kw:.2f} kWh | Potencia: {potencia:.2f} kW | Tiempo: {tiempo}s")
+                                if driver_id and driver_id != 'N/A' and driver_id != 'UNKNOWN':
+                                    print(f"    Driver: {driver_id}")
+                                if averia:
+                                    print(f"    ⚠️ AVERÍA ACTIVA")
+                                
+                except Exception as e:
+                    print(f"[{cp_id}] Error procesando mensaje de telemetría: {e}")
+                    continue
+                    
+        except Exception as e:
+            reintentos += 1
+            print(f"[{cp_id}] ✗ Error en consumidor de telemetría: {e}")
+            if reintentos >= max_reintentos:
+                print(f"[{cp_id}] ✗ Máximo de reintentos alcanzado. Reintentando en 30 segundos...")
+                time.sleep(30)
+                reintentos = 0
+            if consumer:
+                try:
+                    consumer.close()
+                except:
+                    pass
+            time.sleep(2)
+
 
 def calcular_lrc(data_bytes: bytes) -> bytes:
     """Calcula el Longitudinal Redundancy Check (XOR de todos los bytes)."""
@@ -1926,6 +2022,15 @@ def main():
     )
     telemetry_periodic_thread.start()
     print(f"[EV_CP_E] Hilo de telemetría periódica iniciado (reporta estado cada 10s)")
+    
+    # Iniciar hilo consumidor de telemetría para mostrar mensajes propios del Engine
+    telemetry_consumer_thread = threading.Thread(
+        target=consumir_telemetria_propia,
+        args=(args.cp_id, KAFKA_SERVER),
+        daemon=True
+    )
+    telemetry_consumer_thread.start()
+    print(f"[EV_CP_E] Consumidor de telemetría propia iniciado (mostrará mensajes de {args.cp_id})")
 
     try:
         # Guardar CP_ID global para el menú/estado
