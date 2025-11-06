@@ -483,7 +483,8 @@ def consumir_telemetria_kafka(broker_list: str):
                         # Evitar regresión: si ya está CARGANDO/SUMINISTRANDO, ignorar LISTO_PARA_INICIAR
                         if str(estado_actual).upper() in ("CARGANDO", "SUMINISTRANDO") and est in ("listo_para_iniciar", "listo para iniciar"):
                             print(f"[KAFKA CONSUMER] Ignorando regresión de {cp_id}: {estado_actual} -> {est_raw}")
-                            pass
+                            # No procesar más, evitar cambio de estado
+                            continue
                         
                         if est in ("cargando", "suministrando", "charging", "en_carga"):
                             if not manual_parado:
@@ -497,17 +498,28 @@ def consumir_telemetria_kafka(broker_list: str):
                                         print(f"[{cp_id}] Progreso: {energia_actual:.2f}/{objetivo_kwh:.2f} kWh ({progreso:.1f}%)")
                                     except Exception:
                                         pass
+                        elif est in ("listo_para_iniciar", "listo para iniciar"):
+                            # Solo cambiar a LISTO_PARA_INICIAR si no está ya SUMINISTRANDO/CARGANDO
+                            if str(estado_actual).upper() not in ("CARGANDO", "SUMINISTRANDO"):
+                                if not en_estado_interactivo or estado_actual.upper() != 'LISTO_PARA_INICIAR':
+                                    cambiar_estado_cp(cp_id, 'LISTO_PARA_INICIAR')
+                            else:
+                                print(f"[KAFKA CONSUMER] Ignorando LISTO_PARA_INICIAR para {cp_id}: ya está en {estado_actual}")
                         elif est == "esperando_operador_engine":
                             # Mapear ESPERANDO_DRIVER a ESPERANDO_OPERADOR_ENGINE
                             if not en_estado_interactivo or estado_actual.upper() != 'ESPERANDO_OPERADOR_ENGINE':
                                 cambiar_estado_cp(cp_id, 'ESPERANDO_OPERADOR_ENGINE')
                         elif est in ("finalizado", "reposo", "idle", "ready", "activado"):
                             # Solo volver a ACTIVADO si no está PARADO manualmente Y no está en estado interactivo
-                            if not manual_parado and not en_estado_interactivo:
-                                cambiar_estado_cp(cp_id, 'ACTIVADO')
-                            elif en_estado_interactivo:
-                                # Preservar estado interactivo, solo actualizar telemetría
-                                print(f"[KAFKA CONSUMER] Preservando estado interactivo {estado_actual} para {cp_id} (telemetría reporta {est})")
+                            # Y no está SUMINISTRANDO (evitar regresión durante carga activa)
+                            if str(estado_actual).upper() not in ("CARGANDO", "SUMINISTRANDO"):
+                                if not manual_parado and not en_estado_interactivo:
+                                    cambiar_estado_cp(cp_id, 'ACTIVADO')
+                                elif en_estado_interactivo:
+                                    # Preservar estado interactivo, solo actualizar telemetría
+                                    print(f"[KAFKA CONSUMER] Preservando estado interactivo {estado_actual} para {cp_id} (telemetría reporta {est})")
+                            else:
+                                print(f"[KAFKA CONSUMER] Ignorando cambio a {est} para {cp_id}: ya está en {estado_actual}")
                     except Exception:
                         pass
 
@@ -1438,7 +1450,11 @@ def render_panel():
                 "ACTIVADO": "green",
                 "SUMINISTRANDO": "cyan",
                 "DESCONECTADO": "red",
-                "AVERÍA": "magenta"
+                "AVERÍA": "magenta",
+                "PENDIENTE_CONFIRMACION_CENTRAL": "blue",
+                "ESPERANDO_OPERADOR_ENGINE": "yellow",
+                "LISTO_PARA_INICIAR": "bright_yellow",
+                "ESPERANDO_CONFIRMACION_FIN": "bright_red"
             }.get(str(estado).upper(), "white")
             table.add_row(cp_id, f"[{color}]{estado}[/{color}]", f"{float(energia):.2f}", f"{t_ago}s")
     return table
