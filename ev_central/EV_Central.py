@@ -1058,6 +1058,11 @@ def monitorizar_actividad_cps(db_connection):
                 for cp_id, data in list(TELEMETRIA_ACTUAL.items()):
                     ultima = data.get("timestamp", 0)
                     if ahora - ultima > 15:
+                        # No desconectar si está en avería activa
+                        with CP_ALERTA_LOCK:
+                            alerta = CP_ALERTA.get(cp_id, False)
+                        if alerta:
+                            continue
                         if CP_ESTADO.get(cp_id) != "DESCONECTADO":
                             registrar_evento(f"[⚠️] CP {cp_id} sin actividad → DESCONECTADO", "warn")
                             cambiar_estado_cp(cp_id, "DESCONECTADO", db_connection)
@@ -1683,8 +1688,16 @@ def cambiar_estado_cp(cp_id: str, nuevo_estado: str, db_connection: mysql.connec
     Estados esperados: DESCONECTADO, ACTIVADO, PRE-SUMINISTRO, SUMINISTRANDO, PARADO, AVERÍA.
     """
     nuevo_estado_norm = nuevo_estado.strip().upper() if isinstance(nuevo_estado, str) else str(nuevo_estado)
-    with CP_ESTADO_LOCK:
+    with CP_ESTADO_LOCK, CP_ALERTA_LOCK:
         anterior = CP_ESTADO.get(cp_id)
+        # Regla: si está en AVERÍA, no permitir cambios a estados distintos de AVERÍA, salvo recuperación explícita
+        if anterior and anterior.upper() in ['AVERÍA', 'AVERIA'] and nuevo_estado_norm not in ['AVERÍA', 'AVERIA']:
+            # Permitir solo si la alerta ha sido limpiada (AVR_CLR ya gestionó CP_ALERTA=False)
+            alerta = CP_ALERTA.get(cp_id, False)
+            if alerta:
+                # Ignorar cambio mientras persista avería
+                registrar_evento(f"[IGNORADO] {cp_id}: en AVERÍA → se ignora cambio a {nuevo_estado_norm}")
+                return
         CP_ESTADO[cp_id] = nuevo_estado_norm
     detalle = f" (antes: {anterior})" if anterior and anterior != nuevo_estado_norm else ""
     extra = f" Motivo: {motivo}" if motivo else ""

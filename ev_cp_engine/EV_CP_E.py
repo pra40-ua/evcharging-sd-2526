@@ -912,10 +912,21 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     <button class="btn btn-success" id="btn-desactivar-averia" onclick="simularAveria(false)" style="display: none;">
                         <span>✓</span> Desactivar Avería
                     </button>
-                    <button class="btn btn-secondary" id="btn-recuperar" onclick="recuperarAveria()" style="margin-left: 8px;">
-                        <span>🩺</span> Recuperar CP
-                    </button>
                     <div id="averia-status" style="margin-top: 10px;"></div>
+                </div>
+                <div class="button-group" style="margin-top: 20px; background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                    <h3>💻 Comandos PowerShell</h3>
+                    <p style="color: #666; font-size: 13px; margin-bottom: 15px;">Comandos para ejecutar desde PowerShell:</p>
+                    <div style="margin: 0 0 16px; color: #636e72; font-size: 13px;">
+                        <p style="margin-bottom: 8px;"><strong>Para iniciar suministro:</strong></p>
+                        <pre style="white-space: pre-wrap; background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #dee2e6; font-size: 12px; margin-bottom: 15px;">Invoke-WebRequest -Method POST -Uri http://127.0.0.1:<span id="web-port-display">9000</span>/api/iniciar_suministro</pre>
+                        <p style="margin-bottom: 8px;"><strong>Para solicitar fin del suministro:</strong></p>
+                        <pre style="white-space: pre-wrap; background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #dee2e6; font-size: 12px; margin-bottom: 15px;">Invoke-WebRequest -Method POST -Uri http://127.0.0.1:<span id="web-port-display-2">9000</span>/api/solicitar_fin</pre>
+                        <p style="margin-bottom: 8px;"><strong>Para simular una avería:</strong></p>
+                        <pre style="white-space: pre-wrap; background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #dee2e6; font-size: 12px; margin-bottom: 15px;">$body = @{activar=$true;motivo="Avería simulada"} | ConvertTo-Json; Invoke-WebRequest -Method POST -Uri http://127.0.0.1:<span id="web-port-display-3">9000</span>/api/simular_averia -ContentType "application/json" -Body $body</pre>
+                        <p style="margin-bottom: 8px;"><strong>Para recuperar de avería:</strong></p>
+                        <pre style="white-space: pre-wrap; background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #dee2e6; font-size: 12px;">Invoke-WebRequest -Method POST -Uri http://127.0.0.1:<span id="web-port-display-4">9000</span>/api/recuperar_averia</pre>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1183,21 +1194,6 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             .catch(function(error) { mostrarAlerta('Error: ' + error, 'danger'); });
         }
         
-        function recuperarAveria() {
-            if (!confirm('¿Recuperar el CP de la avería y notificar a Central?')) return;
-            fetch('/api/recuperar_averia', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'}
-            })
-            .then(function(response) { return response.json(); })
-            .then(function(data) {
-                var tipo = data.status === 'ok' ? 'success' : 'danger';
-                var msg = data.mensaje || (data.status === 'ok' ? 'Recuperación notificada' : 'No se pudo notificar la recuperación');
-                mostrarAlerta(msg, tipo);
-                actualizarEstado();
-            })
-            .catch(function(error) { mostrarAlerta('Error: ' + error, 'danger'); });
-        }
         
         function conectarDriver() {
             var driverId = prompt('ID del Driver (opcional):', 'DRIVER_WEB') || 'DRIVER_WEB';
@@ -1253,8 +1249,19 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             .catch(function(error) { mostrarAlerta('Error: ' + error, 'danger'); });
         }
         
+        // Actualizar puertos dinámicamente en los comandos PowerShell
+        function actualizarPuertosComandos() {
+            var port = window.location.port || '9000';
+            var elements = ['web-port-display', 'web-port-display-2', 'web-port-display-3', 'web-port-display-4'];
+            elements.forEach(function(id) {
+                var el = document.getElementById(id);
+                if (el) el.textContent = port;
+            });
+        }
+        
         console.log('[WEB] 🚀 Iniciando actualización automática...');
         actualizarEstado();
+        actualizarPuertosComandos();
         updateInterval = setInterval(actualizarEstado, 2000);
         console.log('[WEB] ✅ Intervalo configurado (cada 2 segundos)');
     </script>
@@ -1488,6 +1495,8 @@ def panel_local():
     <pre style=\"white-space: pre-wrap; background:#fff; padding:10px; border-radius:6px;\">Invoke-WebRequest -Method POST -Uri http://127.0.0.1:{web_port}/api/solicitar_fin</pre>
     Para simular una avería:
     <pre style=\"white-space: pre-wrap; background:#fff; padding:10px; border-radius:6px;\">$body = @{{activar=$true;motivo=\"Avería simulada\"}} | ConvertTo-Json; Invoke-WebRequest -Method POST -Uri http://127.0.0.1:{web_port}/api/simular_averia -ContentType \"application/json\" -Body $body</pre>
+    Para recuperar el CP de una avería:
+    <pre style=\"white-space: pre-wrap; background:#fff; padding:10px; border-radius:6px;\">Invoke-WebRequest -Method POST -Uri http://127.0.0.1:{web_port}/api/recuperar_averia</pre>
   </div>
   <h3>Estado</h3>
   <pre id=\"estado\">Cargando...</pre>
