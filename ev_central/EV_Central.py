@@ -1502,44 +1502,46 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     except Exception:
                         pass
                     
-                    # Limpiar información de sesión del driver
-                    try:
-                        with CP_SESION_OBJETIVO_KWH_LOCK:
-                            if cp_fin in CP_SESION_OBJETIVO_KWH:
-                                del CP_SESION_OBJETIVO_KWH[cp_fin]
-                    except Exception:
-                        pass
-                    try:
-                        with CP_SESION_DRIVER_ID_LOCK:
-                            if cp_fin in CP_SESION_DRIVER_ID:
-                                del CP_SESION_DRIVER_ID[cp_fin]
-                    except Exception:
-                        pass
-                    
-                    # Publicar telemetría actualizada: CP en ACTIVADO, sin sesión, contadores en 0
-                    try:
-                        with TELEMETRIA_ACTUAL_LOCK:
-                            telemetria_actual = TELEMETRIA_ACTUAL.get(cp_fin, {})
-                        telemetria_actualizada = {
-                            **telemetria_actual,
-                            'cp_id': cp_fin,
-                            'estado_carga': 'ACTIVADO',
-                            'estado': 'ACTIVADO',
-                            'timestamp': time.time(),
-                            'tiene_sesion_activa': False,
-                            'driver_id_sesion': None,
-                            'kw_entregados': 0.0,
-                            'potencia_actual': 0.0,
-                            'tiempo_carga_s': 0
-                        }
-                        with TELEMETRIA_ACTUAL_LOCK:
-                            TELEMETRIA_ACTUAL[cp_fin] = telemetria_actualizada
-                        if KAFKA_PRODUCER:
-                            KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
-                            KAFKA_PRODUCER.flush(timeout=1)
-                            print(f"[CENTRAL] CP {cp_fin} resetado y listo para nuevo servicio (ACTIVADO)")
-                    except Exception as e:
-                        print(f"[CENTRAL] Error publicando estado tras FIN: {e}")
+                    # Limpezas y publicación ACTIVADO solo si NO hay siguiente en cola
+                    if not cola_procesada:
+                        # Limpiar información de sesión del driver
+                        try:
+                            with CP_SESION_OBJETIVO_KWH_LOCK:
+                                if cp_fin in CP_SESION_OBJETIVO_KWH:
+                                    del CP_SESION_OBJETIVO_KWH[cp_fin]
+                        except Exception:
+                            pass
+                        try:
+                            with CP_SESION_DRIVER_ID_LOCK:
+                                if cp_fin in CP_SESION_DRIVER_ID:
+                                    del CP_SESION_DRIVER_ID[cp_fin]
+                        except Exception:
+                            pass
+                        
+                        # Publicar telemetría actualizada: CP en ACTIVADO, sin sesión, contadores en 0
+                        try:
+                            with TELEMETRIA_ACTUAL_LOCK:
+                                telemetria_actual = TELEMETRIA_ACTUAL.get(cp_fin, {})
+                            telemetria_actualizada = {
+                                **telemetria_actual,
+                                'cp_id': cp_fin,
+                                'estado_carga': 'ACTIVADO',
+                                'estado': 'ACTIVADO',
+                                'timestamp': time.time(),
+                                'tiene_sesion_activa': False,
+                                'driver_id_sesion': None,
+                                'kw_entregados': 0.0,
+                                'potencia_actual': 0.0,
+                                'tiempo_carga_s': 0
+                            }
+                            with TELEMETRIA_ACTUAL_LOCK:
+                                TELEMETRIA_ACTUAL[cp_fin] = telemetria_actualizada
+                            if KAFKA_PRODUCER:
+                                KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                                KAFKA_PRODUCER.flush(timeout=1)
+                                print(f"[CENTRAL] CP {cp_fin} resetado y listo para nuevo servicio (ACTIVADO)")
+                        except Exception as e:
+                            print(f"[CENTRAL] Error publicando estado tras FIN: {e}")
 
                 # NUEVO: Manejar READY_TO_START desde Monitor/Engine
                 elif cod_op == 'READY_TO_START' and len(campos) >= 2:
