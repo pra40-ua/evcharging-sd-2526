@@ -712,25 +712,28 @@ echo.
 echo if "%%OPCION%%"=="1" ^(
 echo     set "DESCRIPCION=Iniciar Suministro"
 echo     set "COMANDO_PS=Invoke-WebRequest -Method POST -Uri %%API_BASE_URL%%/iniciar_suministro"
+echo     set "COMANDO_ESPECIAL="
 echo     goto EJECUTAR
 echo ^)
 echo.
 echo if "%%OPCION%%"=="2" ^(
 echo     set "DESCRIPCION=Solicitar Fin del Suministro"
 echo     set "COMANDO_PS=Invoke-WebRequest -Method POST -Uri %%API_BASE_URL%%/solicitar_fin"
+echo     set "COMANDO_ESPECIAL="
 echo     goto EJECUTAR
 echo ^)
 echo.
 echo if "%%OPCION%%"=="3" ^(
 echo     set "DESCRIPCION=Simular Avería"
-echo     set "BODY=$body = @{activar=$true;motivo='Avería simulada'} | ConvertTo-Json"
-echo     set "COMANDO_PS=%%BODY%%; Invoke-WebRequest -Method POST -Uri %%API_BASE_URL%%/simular_averia -ContentType ""application/json"" -Body $body"
+echo     set "COMANDO_ESPECIAL=3"
+echo     set "COMANDO_PS="
 echo     goto EJECUTAR
 echo ^)
 echo.
 echo if "%%OPCION%%"=="4" ^(
 echo     set "DESCRIPCION=Recuperar Avería"
 echo     set "COMANDO_PS=Invoke-WebRequest -Method POST -Uri %%API_BASE_URL%%/recuperar_averia"
+echo     set "COMANDO_ESPECIAL="
 echo     goto EJECUTAR
 echo ^)
 echo.
@@ -749,12 +752,22 @@ echo.
 echo :EJECUTAR
 echo echo [INFO] Ejecutando: %%DESCRIPCION%%
 echo echo ------------------------------------------------------------
-echo echo Comando: %%COMANDO_PS%%
+echo if defined COMANDO_ESPECIAL ^(
+echo     echo Comando: Simular Avería ^(comando especial^)
+echo ^) else if defined COMANDO_PS ^(
+echo     echo Comando: %%COMANDO_PS%%
+echo ^) else ^(
+echo     echo Comando: No definido
+echo ^)
 echo echo ------------------------------------------------------------
 echo echo.
-echo.
+echo echo.
 echo REM Ejecutar el comando de PowerShell
-echo powershell -Command "try { %%COMANDO_PS%%; Write-Host '[ÉXITO] Operación completada correctamente' -ForegroundColor Green } catch { Write-Host '[ERROR] Error al ejecutar la operación:' -ForegroundColor Red; Write-Host $_.Exception.Message -ForegroundColor Red }"
+echo if defined COMANDO_ESPECIAL ^(
+echo     powershell -NoProfile -ExecutionPolicy Bypass -Command "$body = @{activar=$true;motivo='Avería simulada'} | ConvertTo-Json; try { Invoke-WebRequest -Method POST -Uri %%API_BASE_URL%%/simular_averia -ContentType 'application/json' -Body $body; Write-Host '[ÉXITO] Operación completada correctamente' -ForegroundColor Green } catch { Write-Host '[ERROR] Error al ejecutar la operación:' -ForegroundColor Red; Write-Host $_.Exception.Message -ForegroundColor Red }"
+echo ^) else ^(
+echo     powershell -NoProfile -ExecutionPolicy Bypass -Command "try { %%COMANDO_PS%%; Write-Host '[ÉXITO] Operación completada correctamente' -ForegroundColor Green } catch { Write-Host '[ERROR] Error al ejecutar la operación:' -ForegroundColor Red; Write-Host $_.Exception.Message -ForegroundColor Red }"
+echo ^)
 echo.
 echo echo.
 echo echo Presiona cualquier tecla para volver al menú principal...
