@@ -2295,9 +2295,13 @@ def main():
                 print("\n[EV_Central] Apagando por interrupción de usuario...")
                 break
             except Exception as e:
-                print(f"[EV_Central] Error en bucle principal: {e}")
+                print("\n" + "="*60)
+                print("[EV_Central] ERROR en bucle principal:")
+                print("="*60)
+                print(f"Error: {e}")
                 import traceback
                 traceback.print_exc()
+                print("="*60)
                 # Continuar el bucle en lugar de terminar
                 time.sleep(1)  # Esperar un poco antes de reintentar
                 continue
@@ -2306,41 +2310,61 @@ def main():
     except KeyboardInterrupt:
         print("\n[EV_Central] Apagando por interrupción de usuario...")
     except Exception as e:
-        print(f"[EV_Central] Error crítico: {e}")
+        print("\n" + "="*60)
+        print("[EV_Central] ERROR CRÍTICO - La aplicación se cerrará:")
+        print("="*60)
+        print(f"Error: {e}")
+        print("\nTraceback completo:")
         import traceback
         traceback.print_exc()
+        print("="*60)
     finally:
-        # Cerrar todas las conexiones activas
-        print("[EV_Central] Cerrando todas las conexiones activas...")
-        with CONEXIONES_ACTIVAS_LOCK:
-            for cp_id, conn in CONEXIONES_ACTIVAS.items():
-                try:
-                    conn.close()
-                    print(f"[EV_Central] Conexión con {cp_id} cerrada.")
-                except:
-                    pass
+        try:
+            # Cerrar todas las conexiones activas
+            print("[EV_Central] Cerrando todas las conexiones activas...")
+            with CONEXIONES_ACTIVAS_LOCK:
+                for cp_id, conn in CONEXIONES_ACTIVAS.items():
+                    try:
+                        conn.close()
+                        print(f"[EV_Central] Conexión con {cp_id} cerrada.")
+                    except Exception as e:
+                        print(f"[EV_Central] Error cerrando conexión con {cp_id}: {e}")
             CONEXIONES_ACTIVAS.clear()
-        registrar_evento("Central cerrando...")
-        # Esperar a que terminen los hilos de clientes (con timeout)
-        with CLIENT_THREADS_LOCK:
-            for t in CLIENT_THREADS:
+            registrar_evento("Central cerrando...")
+            # Esperar a que terminen los hilos de clientes (con timeout)
+            with CLIENT_THREADS_LOCK:
+                for t in CLIENT_THREADS:
+                    try:
+                        t.join(timeout=2.0)
+                    except Exception as e:
+                        print(f"[EV_Central] Error esperando hilo de cliente: {e}")
+                CLIENT_THREADS.clear()
+            
+            # Cerrar el servidor socket
+            if 'server_socket' in locals():
                 try:
-                    t.join(timeout=2.0)
-                except Exception:
-                    pass
-            CLIENT_THREADS.clear()
-        
-        # Cerrar el servidor socket
-        if 'server_socket' in locals():
-            server_socket.close()
-            print("[EV_Central] Servidor socket cerrado.")
-        
-        # Cerrar conexión a BD
-        if db_connection and db_connection.is_connected():
-            db_connection.close()
-            print("[EV_Central] Conexión a BD cerrada.")
-        
-        print("[EV_Central] Apagado completado.")
+                    server_socket.close()
+                    print("[EV_Central] Servidor socket cerrado.")
+                except Exception as e:
+                    print(f"[EV_Central] Error cerrando servidor socket: {e}")
+            
+            # Cerrar conexión a BD
+            if db_connection and db_connection.is_connected():
+                try:
+                    db_connection.close()
+                    print("[EV_Central] Conexión a BD cerrada.")
+                except Exception as e:
+                    print(f"[EV_Central] Error cerrando conexión a BD: {e}")
+            
+            print("[EV_Central] Apagado completado.")
+        except Exception as e:
+            print("\n" + "="*60)
+            print("[EV_Central] ERROR durante el cierre de la aplicación:")
+            print("="*60)
+            print(f"Error: {e}")
+            import traceback
+            traceback.print_exc()
+            print("="*60)
 
 if __name__ == "__main__":
     main()
