@@ -24,3 +24,4 @@ if ($confirmacion -eq "S" -or $confirmacion -eq "s") {
     Write-Host "`nOperación cancelada." -ForegroundColor Red
 }
 
+
