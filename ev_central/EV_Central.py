@@ -192,6 +192,17 @@ def _enviar_comando_cp(cp_id: str, orden: str) -> bool:
                 # Hay sesión activa válida: iniciar carga
                 trama = construir_trama('START', [driver_id, str(kw_objetivo)])
                 registrar_evento(f"Iniciando carga en {cp_id} (Driver: {driver_id}, kW: {kw_objetivo})")
+                
+                # Persistir servicio activo en BD
+                try:
+                    db_conn = globals().get('_DB_CONN_FOR_CONSUMER') or globals().get('DB_CONNECTION')
+                    tx_id = f"TX-{cp_id}-{int(time.time())}"
+                    persistir_servicio_activo(
+                        db_conn, driver_id, cp_id, 'CARGANDO', 
+                        float(kw_objetivo), 0.0, tx_id
+                    )
+                except Exception as e:
+                    print(f"[CENTRAL] Error persistiendo servicio al iniciar: {e}")
             else:
                 # Sin sesión activa: NO se puede iniciar
                 registrar_evento(f"ERROR: No hay sesión activa en {cp_id}. Se requiere solicitud de driver primero.", "error")
@@ -511,6 +522,19 @@ def consumir_telemetria_kafka(broker_list: str):
                     except Exception:
                         pass
 
+                    # Actualizar servicio activo en BD con kw_actual si está cargando
+                    try:
+                        with CP_SESION_DRIVER_ID_LOCK:
+                            driver_id = CP_SESION_DRIVER_ID.get(cp_id)
+                        if driver_id:
+                            kw_entregados = telemetria.get('kw_entregados', telemetria.get('energia_total', 0.0))
+                            estado_carga = telemetria.get('estado_carga', telemetria.get('estado', ''))
+                            db_conn = globals().get('_DB_CONN_FOR_CONSUMER') or globals().get('DB_CONNECTION')
+                            if estado_carga.upper() in ('CARGANDO', 'SUMINISTRANDO'):
+                                actualizar_servicio_activo(db_conn, driver_id, float(kw_entregados), estado_carga)
+                    except Exception as e:
+                        print(f"[CENTRAL] Error actualizando servicio con telemetría: {e}")
+                    
                     # Reenviar actualización periódica al Driver asociado (si existe)
                     try:
                         with CP_SESION_DRIVER_ID_LOCK:
@@ -1253,6 +1277,228 @@ def notificar_driver(id_driver: str, evento: str, detalle=None):
         print(f"[CENTRAL] Error notificando al driver {id_driver}: {e}")
 
 # =================================================================
+#              FUNCIONES DE PERSISTENCIA DE SERVICIOS
+# =================================================================
+
+def persistir_servicio_activo(db_connection: mysql.connector.connection.MySQLConnection | None,
+                              driver_id: str, cp_id: str, estado: str, kw_objetivo: float | None = None,
+                              kw_actual: float = 0.0, tx_id: str | None = None) -> bool:
+    """Crea o actualiza un servicio activo en la BD."""
+    if not db_connection or not db_connection.is_connected():
+        db_connection = _asegurar_conexion_bd(db_connection)
+        if not db_connection:
+            return False
+    
+    try:
+        cursor = db_connection.cursor()
+        # Verificar si ya existe un servicio activo para este driver
+        cursor.execute("""
+            SELECT id FROM servicios_activos 
+            WHERE driver_id = %s AND estado NOT IN ('FINALIZADO', 'CANCELADO')
+        """, (driver_id,))
+        existing = cursor.fetchone()
+        
+        if existing:
+            # Actualizar servicio existente
+            cursor.execute("""
+                UPDATE servicios_activos 
+                SET cp_id = %s, estado = %s, kw_objetivo = %s, kw_actual = %s,
+                    fecha_ultima_actualizacion = %s, tx_id = %s
+                WHERE id = %s
+            """, (cp_id, estado, kw_objetivo, kw_actual, datetime.now(), tx_id, existing[0]))
+            print(f"[CENTRAL] Servicio actualizado en BD: {driver_id} -> {cp_id} ({estado})")
+        else:
+            # Crear nuevo servicio
+            cursor.execute("""
+                INSERT INTO servicios_activos 
+                (driver_id, cp_id, estado, kw_objetivo, kw_actual, fecha_inicio, fecha_ultima_actualizacion, tx_id)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            """, (driver_id, cp_id, estado, kw_objetivo, kw_actual, datetime.now(), datetime.now(), tx_id))
+            print(f"[CENTRAL] Servicio persistido en BD: {driver_id} -> {cp_id} ({estado})")
+        
+        db_connection.commit()
+        cursor.close()
+        return True
+    except Exception as e:
+        print(f"[CENTRAL] Error persistiendo servicio activo: {e}")
+        try:
+            db_connection.rollback()
+        except:
+            pass
+        return False
+
+def actualizar_servicio_activo(db_connection: mysql.connector.connection.MySQLConnection | None,
+                               driver_id: str, kw_actual: float | None = None, estado: str | None = None) -> bool:
+    """Actualiza el estado o kw_actual de un servicio activo."""
+    if not db_connection or not db_connection.is_connected():
+        db_connection = _asegurar_conexion_bd(db_connection)
+        if not db_connection:
+            return False
+    
+    try:
+        cursor = db_connection.cursor()
+        updates = []
+        params = []
+        
+        if kw_actual is not None:
+            updates.append("kw_actual = %s")
+            params.append(kw_actual)
+        if estado:
+            updates.append("estado = %s")
+            params.append(estado)
+        
+        if not updates:
+            cursor.close()
+            return False
+        
+        updates.append("fecha_ultima_actualizacion = %s")
+        params.append(datetime.now())
+        params.append(driver_id)
+        
+        query = f"""
+            UPDATE servicios_activos 
+            SET {', '.join(updates)}
+            WHERE driver_id = %s AND estado NOT IN ('FINALIZADO', 'CANCELADO')
+        """
+        cursor.execute(query, params)
+        db_connection.commit()
+        cursor.close()
+        return True
+    except Exception as e:
+        print(f"[CENTRAL] Error actualizando servicio activo: {e}")
+        try:
+            db_connection.rollback()
+        except:
+            pass
+        return False
+
+def finalizar_servicio_activo(db_connection: mysql.connector.connection.MySQLConnection | None,
+                              driver_id: str, estado_final: str = 'FINALIZADO') -> bool:
+    """Marca un servicio como finalizado en la BD."""
+    if not db_connection or not db_connection.is_connected():
+        db_connection = _asegurar_conexion_bd(db_connection)
+        if not db_connection:
+            return False
+    
+    try:
+        cursor = db_connection.cursor()
+        cursor.execute("""
+            UPDATE servicios_activos 
+            SET estado = %s, fecha_ultima_actualizacion = %s
+            WHERE driver_id = %s AND estado NOT IN ('FINALIZADO', 'CANCELADO')
+        """, (estado_final, datetime.now(), driver_id))
+        db_connection.commit()
+        cursor.close()
+        print(f"[CENTRAL] Servicio finalizado en BD: {driver_id}")
+        return True
+    except Exception as e:
+        print(f"[CENTRAL] Error finalizando servicio activo: {e}")
+        try:
+            db_connection.rollback()
+        except:
+            pass
+        return False
+
+def almacenar_ticket_pendiente(db_connection: mysql.connector.connection.MySQLConnection | None,
+                              driver_id: str, cp_id: str, energia_kwh: float, importe_eur: float,
+                              duracion_seg: int | None = None, motivo: str | None = None,
+                              tx_id: str | None = None) -> bool:
+    """Almacena un ticket pendiente en la BD para que el driver lo recupere al reconectar."""
+    if not db_connection or not db_connection.is_connected():
+        db_connection = _asegurar_conexion_bd(db_connection)
+        if not db_connection:
+            return False
+    
+    try:
+        cursor = db_connection.cursor()
+        cursor.execute("""
+            INSERT INTO tickets_pendientes 
+            (driver_id, cp_id, energia_kwh, importe_eur, duracion_seg, motivo, tx_id, fecha_creacion, entregado)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, FALSE)
+        """, (driver_id, cp_id, energia_kwh, importe_eur, duracion_seg, motivo, tx_id, datetime.now()))
+        db_connection.commit()
+        cursor.close()
+        print(f"[CENTRAL] Ticket pendiente almacenado en BD para {driver_id}")
+        return True
+    except Exception as e:
+        print(f"[CENTRAL] Error almacenando ticket pendiente: {e}")
+        try:
+            db_connection.rollback()
+        except:
+            pass
+        return False
+
+def obtener_servicios_pendientes_driver(db_connection: mysql.connector.connection.MySQLConnection | None,
+                                        driver_id: str) -> list:
+    """Obtiene servicios activos pendientes para un driver."""
+    if not db_connection or not db_connection.is_connected():
+        db_connection = _asegurar_conexion_bd(db_connection)
+        if not db_connection:
+            return []
+    
+    try:
+        cursor = db_connection.cursor(dictionary=True)
+        cursor.execute("""
+            SELECT * FROM servicios_activos 
+            WHERE driver_id = %s AND estado NOT IN ('FINALIZADO', 'CANCELADO')
+            ORDER BY fecha_inicio DESC
+        """, (driver_id,))
+        servicios = cursor.fetchall()
+        cursor.close()
+        return servicios
+    except Exception as e:
+        print(f"[CENTRAL] Error obteniendo servicios pendientes: {e}")
+        return []
+
+def obtener_tickets_pendientes_driver(db_connection: mysql.connector.connection.MySQLConnection | None,
+                                      driver_id: str) -> list:
+    """Obtiene tickets pendientes no entregados para un driver."""
+    if not db_connection or not db_connection.is_connected():
+        db_connection = _asegurar_conexion_bd(db_connection)
+        if not db_connection:
+            return []
+    
+    try:
+        cursor = db_connection.cursor(dictionary=True)
+        cursor.execute("""
+            SELECT * FROM tickets_pendientes 
+            WHERE driver_id = %s AND entregado = FALSE
+            ORDER BY fecha_creacion DESC
+        """, (driver_id,))
+        tickets = cursor.fetchall()
+        cursor.close()
+        return tickets
+    except Exception as e:
+        print(f"[CENTRAL] Error obteniendo tickets pendientes: {e}")
+        return []
+
+def marcar_ticket_entregado(db_connection: mysql.connector.connection.MySQLConnection | None,
+                            ticket_id: int) -> bool:
+    """Marca un ticket como entregado."""
+    if not db_connection or not db_connection.is_connected():
+        db_connection = _asegurar_conexion_bd(db_connection)
+        if not db_connection:
+            return False
+    
+    try:
+        cursor = db_connection.cursor()
+        cursor.execute("""
+            UPDATE tickets_pendientes 
+            SET entregado = TRUE, fecha_entrega = %s
+            WHERE id = %s
+        """, (datetime.now(), ticket_id))
+        db_connection.commit()
+        cursor.close()
+        return True
+    except Exception as e:
+        print(f"[CENTRAL] Error marcando ticket como entregado: {e}")
+        try:
+            db_connection.rollback()
+        except:
+            pass
+        return False
+
+# =================================================================
 #                       LÓGICA DEL SERVIDOR CENTRAL
 # =================================================================
 
@@ -1700,8 +1946,25 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     if tx_id is not None:
                         detalle_ticket['tx_id'] = tx_id
 
+                    # Almacenar ticket pendiente en BD (por si el driver no está escuchando)
+                    try:
+                        db_conn = globals().get('_DB_CONN_FOR_CONSUMER') or globals().get('DB_CONNECTION')
+                        almacenar_ticket_pendiente(
+                            db_conn, driver_id, cp_fin, float(energia), float(importe),
+                            int(dur_s) if dur_s else None, motivo, tx_id
+                        )
+                    except Exception as e:
+                        print(f"[CENTRAL] Error almacenando ticket pendiente: {e}")
+                    
                     # Enviar ticket al driver ANTES de limpiar sesión
                     notificar_driver(driver_id, 'TICKET_FINAL', detalle_ticket)
+                    
+                    # Finalizar servicio activo en BD
+                    try:
+                        db_conn = globals().get('_DB_CONN_FOR_CONSUMER') or globals().get('DB_CONNECTION')
+                        finalizar_servicio_activo(db_conn, driver_id, 'FINALIZADO')
+                    except Exception as e:
+                        print(f"[CENTRAL] Error finalizando servicio en BD: {e}")
                     
                     print(f"[CENTRAL] ✅ Ticket enviado a {driver_id}. CP {cp_fin} listo para nuevo servicio.")
                     registrar_evento(f"✅ Ticket enviado a {driver_id}: {energia} kWh, {importe} €", "ok")

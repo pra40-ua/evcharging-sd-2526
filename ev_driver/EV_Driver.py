@@ -47,19 +47,76 @@ def enviar_solicitud(solicitud, broker):
             if intento < 2:
                 time.sleep(2)
 
-def consumir_notificaciones_driver(driver_id: str, broker: str, procesar_ticket_callback=None):
-    """Escucha el tópico driver_status_<driver_id> y muestra mensajes, incluyendo TICKET_FINAL."""
+def consumir_notificaciones_driver(driver_id: str, broker: str, procesar_ticket_callback=None, leer_desde_inicio=False):
+    """Escucha el tópico driver_status_<driver_id> y muestra mensajes, incluyendo TICKET_FINAL.
+    
+    Args:
+        driver_id: ID del driver
+        broker: Broker de Kafka
+        procesar_ticket_callback: Función para procesar tickets
+        leer_desde_inicio: Si True, lee desde el principio del topic para recuperar mensajes perdidos
+    """
     topic = f"{EVENT_PREFIX}{driver_id}"
     try:
+        # Si leer_desde_inicio es True, usar 'earliest' para leer todos los mensajes pendientes
+        # Esto permite recuperar tickets que se enviaron mientras el driver estaba desconectado
+        offset_reset = 'earliest' if leer_desde_inicio else 'latest'
+        
         consumer = KafkaConsumer(
             topic,
             bootstrap_servers=[broker],
-            auto_offset_reset='latest',
+            auto_offset_reset=offset_reset,
             enable_auto_commit=True,
             group_id=f'driver-{driver_id}-group',
             value_deserializer=lambda m: json.loads(m.decode('utf-8')),
-            api_version=(2, 8, 0)
+            api_version=(2, 8, 0),
+            consumer_timeout_ms=5000 if leer_desde_inicio else None  # Timeout para leer mensajes antiguos
         )
+        
+        if leer_desde_inicio:
+            print(f"[DRIVER {driver_id}] 🔄 Recuperando mensajes pendientes desde el principio del topic '{topic}'...")
+            # Leer todos los mensajes pendientes primero
+            mensajes_pendientes = []
+            try:
+                for msg in consumer:
+                    mensajes_pendientes.append(msg.value)
+            except Exception:
+                pass  # Timeout esperado cuando no hay más mensajes
+            
+            if mensajes_pendientes:
+                print(f"[DRIVER {driver_id}] 📨 Se encontraron {len(mensajes_pendientes)} mensaje(s) pendiente(s)")
+                # Procesar mensajes pendientes en orden
+                for payload in mensajes_pendientes:
+                    evento = payload.get('evento')
+                    detalle = payload.get('detalle')
+                    ts = payload.get('timestamp')
+                    print(f"[DRIVER {driver_id}] [PENDIENTE] Evento={evento} @ {ts} -> {detalle}")
+                    
+                    if evento == 'TICKET_FINAL':
+                        # Procesar ticket pendiente
+                        if procesar_ticket_callback:
+                            try:
+                                procesar_ticket_callback(detalle)
+                            except Exception as e:
+                                print(f"[DRIVER {driver_id}] Error procesando ticket pendiente: {e}")
+                        print(f"[DRIVER {driver_id}] ✅ Ticket pendiente procesado. Terminando proceso.")
+                        consumer.close()
+                        return True
+            else:
+                print(f"[DRIVER {driver_id}] ✓ No hay mensajes pendientes")
+            
+            # Cerrar el consumer anterior y crear uno nuevo para escuchar mensajes nuevos
+            consumer.close()
+            consumer = KafkaConsumer(
+                topic,
+                bootstrap_servers=[broker],
+                auto_offset_reset='latest',
+                enable_auto_commit=True,
+                group_id=f'driver-{driver_id}-group',
+                value_deserializer=lambda m: json.loads(m.decode('utf-8')),
+                api_version=(2, 8, 0)
+            )
+        
         print(f"[DRIVER {driver_id}] Escuchando notificaciones en '{topic}'...")
         for msg in consumer:
             payload = msg.value
@@ -154,7 +211,8 @@ if __name__ == '__main__':
                 print(f"[DRIVER {args.id}] Ticket raw: {ticket}")
 
         # Consumir notificaciones hasta recibir el ticket (o error)
-        exito = consumir_notificaciones_driver(args.id, broker, procesar_ticket_callback=mostrar_ticket)
+        # Leer desde el principio para recuperar mensajes perdidos si el driver se desconectó
+        exito = consumir_notificaciones_driver(args.id, broker, procesar_ticket_callback=mostrar_ticket, leer_desde_inicio=True)
         
         # Terminar con código de salida apropiado
         if exito:
