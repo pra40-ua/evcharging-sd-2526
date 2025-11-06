@@ -90120,3 +90120,701 @@ kafka.errors.CommitFailedError: CommitFailedError: Commit cannot be completed si
 2025-11-06 08:26:21,242 - [08:26:21] [ESTADO] CP_001 -> SUMINISTRANDO.
 2025-11-06 08:26:31,246 - [08:26:31] Telemetría recibida de CP_001: est=CARGANDO, E=2.45, P=3.0 | Solicitado=15.00 kWh
 2025-11-06 08:26:31,248 - [08:26:31] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:26:41,252 - [08:26:41] Telemetría recibida de CP_001: est=CARGANDO, E=2.45, P=3.0 | Solicitado=15.00 kWh
+2025-11-06 08:26:41,254 - [08:26:41] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:26:51,257 - [08:26:51] Telemetría recibida de CP_001: est=CARGANDO, E=2.45, P=3.0 | Solicitado=15.00 kWh
+2025-11-06 08:26:51,259 - [08:26:51] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:27:01,263 - [08:27:01] Telemetría recibida de CP_001: est=CARGANDO, E=2.45, P=3.0 | Solicitado=15.00 kWh
+2025-11-06 08:27:01,265 - [08:27:01] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:27:11,269 - [08:27:11] Telemetría recibida de CP_001: est=CARGANDO, E=2.45, P=3.0 | Solicitado=15.00 kWh
+2025-11-06 08:27:11,271 - [08:27:11] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:27:21,274 - [08:27:21] Telemetría recibida de CP_001: est=CARGANDO, E=2.45, P=3.0 | Solicitado=15.00 kWh
+2025-11-06 08:27:21,276 - [08:27:21] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:27:25,949 - [08:27:25] Monitor desconectado: CP_001
+2025-11-06 08:27:25,957 - [08:27:25] [ESTADO] CP_001 -> DESCONECTADO (antes: SUMINISTRANDO).
+2025-11-06 08:27:25,961 - [08:27:25] [INFO] CP_001 podrá reconectarse automáticamente al reiniciar su Monitor.
+2025-11-06 08:27:30,296 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:27:30,296 - Auto offset commit failed for group central_processing_group: [Error 16] NotCoordinatorForGroupError: central_processing_group
+2025-11-06 08:27:30,312 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:27:30,312 - Auto offset commit failed for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError: central-telemetry-group
+2025-11-06 08:27:30,345 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 08:27:30,345 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:30,345 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 08:27:30,346 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:30,346 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 08:27:30,346 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-06 08:27:30,346 - Marking the coordinator dead (node coordinator-1) for group central-control-group: Node Disconnected.
+2025-11-06 08:27:30,346 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:30,346 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:30,398 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 08:27:30,398 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-06 08:27:30,398 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:30,398 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:30,398 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:30,398 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-06 08:27:30,404 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:30,404 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:30,405 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:30,405 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:30,405 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:30,413 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 08:27:30,413 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-06 08:27:30,414 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:30,414 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:30,414 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:30,414 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-06 08:27:30,447 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:30,447 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:30,447 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:30,447 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-06 08:27:30,573 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:30,573 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:30,573 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:30,573 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:30,574 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:30,574 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:30,574 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:30,574 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:30,574 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:30,574 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:30,588 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:30,589 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:30,589 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:30,590 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:30,590 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:30,619 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:30,619 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:30,620 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:30,620 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:30,620 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:30,742 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:30,742 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:30,742 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:30,743 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:30,743 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:30,743 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:30,743 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:30,743 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:30,744 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:30,744 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:30,758 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:30,758 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:30,759 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:30,759 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:30,759 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:30,788 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:30,788 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:30,789 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:30,789 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:30,789 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:30,912 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:30,912 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:30,912 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:30,912 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:30,913 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:30,913 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:30,913 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:30,913 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:30,913 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:30,913 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:30,928 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:30,928 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:30,929 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:30,929 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:30,929 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:30,959 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:30,959 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:30,960 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:30,960 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:30,960 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:31,083 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:31,083 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:31,084 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:31,084 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:31,084 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:31,084 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:31,085 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:31,084 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:31,085 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:31,085 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:31,098 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:31,099 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:31,099 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:31,099 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:31,099 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:31,129 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:31,130 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:31,130 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:31,130 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:31,131 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:31,253 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:31,254 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:31,254 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:31,254 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:31,269 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:31,270 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:31,300 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:31,300 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:27:31,415 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:31,415 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:31,415 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:31,415 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:31,415 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:31,415 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:31,415 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:31,415 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:31,415 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:31,415 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:27:31,415 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:27:31,416 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:27:31,416 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:31,416 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:31,416 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:27:31,579 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:14,729 - [08:28:14] Modo consola simple activado
+2025-11-06 08:28:14,733 - Updating subscribed topics to: ('driver_requests',)
+2025-11-06 08:28:14,735 - Updating subscribed topics to: ('central_commands',)
+2025-11-06 08:28:14,736 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-06 08:28:14,737 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:14,737 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:14,738 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:14,738 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:14,738 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:14,738 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:14,778 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:14,778 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:14,945 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:28:14,946 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 08:28:14,946 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:28:14,946 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 08:28:14,946 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:28:14,946 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 08:28:14,946 - Starting new heartbeat thread
+2025-11-06 08:28:14,946 - Starting new heartbeat thread
+2025-11-06 08:28:14,946 - Starting new heartbeat thread
+2025-11-06 08:28:14,946 - Revoking previously assigned partitions set() for group central-control-group
+2025-11-06 08:28:14,947 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-11-06 08:28:14,947 - Revoking previously assigned partitions set() for group central_processing_group
+2025-11-06 08:28:14,947 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:14,947 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:14,947 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:14,948 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:14,948 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 08:28:14,948 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:14,948 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 08:28:14,948 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:14,948 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 08:28:15,048 - (Re-)joining group central_processing_group
+2025-11-06 08:28:15,049 - (Re-)joining group central-control-group
+2025-11-06 08:28:15,049 - (Re-)joining group central-telemetry-group
+2025-11-06 08:28:15,052 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:28:15,052 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:28:15,052 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:28:15,153 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:15,153 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:15,153 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:15,153 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:15,154 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:15,154 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:15,256 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:28:15,256 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 08:28:15,256 - (Re-)joining group central_processing_group
+2025-11-06 08:28:15,256 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:28:15,256 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 08:28:15,256 - (Re-)joining group central-telemetry-group
+2025-11-06 08:28:15,256 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:28:15,256 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 08:28:15,256 - (Re-)joining group central-control-group
+2025-11-06 08:28:18,270 - Elected group leader -- performing partition assignments using range
+2025-11-06 08:28:18,272 - Elected group leader -- performing partition assignments using range
+2025-11-06 08:28:18,272 - Elected group leader -- performing partition assignments using range
+2025-11-06 08:28:18,285 - Successfully joined group central_processing_group with generation 1
+2025-11-06 08:28:18,285 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)]
+2025-11-06 08:28:18,285 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)} for group central_processing_group
+2025-11-06 08:28:18,285 - Successfully joined group central-telemetry-group with generation 1
+2025-11-06 08:28:18,285 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)]
+2025-11-06 08:28:18,285 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)} for group central-telemetry-group
+2025-11-06 08:28:18,285 - Successfully joined group central-control-group with generation 1
+2025-11-06 08:28:18,286 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-11-06 08:28:18,286 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-06 08:28:36,647 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 08:28:36,647 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:28:36,647 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 08:28:36,647 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 08:28:36,648 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:28:36,648 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 08:28:36,648 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-06 08:28:36,647 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 08:28:36,648 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:28:36,648 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 08:28:36,648 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-06 08:28:36,648 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: Node Disconnected.
+2025-11-06 08:28:36,648 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: Node Disconnected.
+2025-11-06 08:28:36,648 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 08:28:36,649 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-06 08:28:36,649 - Marking the coordinator dead (node coordinator-1) for group central-control-group: Node Disconnected.
+2025-11-06 08:28:36,649 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:36,649 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:36,649 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:36,649 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:36,649 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:36,649 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:36,750 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:28:36,750 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:28:36,750 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:28:36,750 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:28:36,750 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:28:36,750 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:28:36,751 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-06 08:28:36,750 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:28:36,751 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:28:36,751 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:28:36,751 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-06 08:28:36,751 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-06 08:28:36,922 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:36,922 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:36,922 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:36,922 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:36,922 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:36,922 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:36,923 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:28:36,923 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:28:36,923 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:28:36,923 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:28:36,923 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:28:36,923 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:28:36,923 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:28:36,923 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:28:36,923 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:28:37,091 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:37,091 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:37,091 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:37,091 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:37,091 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:37,091 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:37,092 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:28:37,092 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:28:37,092 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:28:37,092 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:28:37,092 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:28:37,092 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:28:37,092 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:28:37,093 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:28:37,093 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:28:37,260 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:37,260 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:37,261 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:37,261 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:37,261 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:37,261 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:37,261 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:28:37,262 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:28:37,262 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:28:37,261 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:28:37,262 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:28:37,262 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:28:37,261 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:28:37,262 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:28:37,262 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:28:37,432 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:37,432 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:37,432 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:37,433 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:37,433 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:37,433 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:28:37,468 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:28:37,468 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:28:37,468 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:28:37,468 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:28:37,468 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:28:37,468 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:28:37,468 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:28:37,469 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:28:37,469 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:28:37,632 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:37,632 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:28:37,632 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:29:19,095 - [08:29:19] Modo consola simple activado
+2025-11-06 08:29:19,100 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-06 08:29:19,101 - Updating subscribed topics to: ('driver_requests',)
+2025-11-06 08:29:19,102 - Updating subscribed topics to: ('central_commands',)
+2025-11-06 08:29:19,104 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:29:19,104 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:29:19,104 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:29:19,104 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:29:19,104 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:29:19,105 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:29:19,149 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:29:19,149 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:29:19,311 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:29:19,311 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 08:29:19,311 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:29:19,311 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 08:29:19,311 - Starting new heartbeat thread
+2025-11-06 08:29:19,311 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:29:19,312 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 08:29:19,312 - Revoking previously assigned partitions set() for group central-control-group
+2025-11-06 08:29:19,312 - Starting new heartbeat thread
+2025-11-06 08:29:19,312 - Starting new heartbeat thread
+2025-11-06 08:29:19,312 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:29:19,312 - Revoking previously assigned partitions set() for group central_processing_group
+2025-11-06 08:29:19,312 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-11-06 08:29:19,313 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:29:19,313 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:29:19,313 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:29:19,313 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 08:29:19,313 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:29:19,313 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 08:29:19,313 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:29:19,314 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 08:29:19,414 - (Re-)joining group central_processing_group
+2025-11-06 08:29:19,414 - (Re-)joining group central-control-group
+2025-11-06 08:29:19,414 - (Re-)joining group central-telemetry-group
+2025-11-06 08:29:19,418 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:29:19,418 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:29:19,418 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:29:19,519 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:29:19,519 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:29:19,519 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:29:19,520 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:29:19,520 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:29:19,520 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:29:19,623 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:29:19,623 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 08:29:19,623 - (Re-)joining group central-telemetry-group
+2025-11-06 08:29:19,623 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:29:19,624 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 08:29:19,624 - (Re-)joining group central-control-group
+2025-11-06 08:29:19,623 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:29:19,624 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 08:29:19,624 - (Re-)joining group central_processing_group
+2025-11-06 08:29:19,625 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:29:19,728 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:29:19,728 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 08:29:19,728 - (Re-)joining group central-telemetry-group
+2025-11-06 08:29:22,637 - Elected group leader -- performing partition assignments using range
+2025-11-06 08:29:22,639 - Elected group leader -- performing partition assignments using range
+2025-11-06 08:29:22,652 - Successfully joined group central_processing_group with generation 1
+2025-11-06 08:29:22,653 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)]
+2025-11-06 08:29:22,653 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)} for group central_processing_group
+2025-11-06 08:29:22,653 - Successfully joined group central-control-group with generation 1
+2025-11-06 08:29:22,653 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-11-06 08:29:22,653 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-06 08:29:22,731 - Elected group leader -- performing partition assignments using range
+2025-11-06 08:29:22,733 - Successfully joined group central-telemetry-group with generation 1
+2025-11-06 08:29:22,733 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)]
+2025-11-06 08:29:22,733 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=2), TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1)} for group central-telemetry-group
+2025-11-06 08:29:43,301 - [08:29:43] [NUEVO CP] Registro inicial de CP_001.
+2025-11-06 08:29:43,302 - [08:29:43] CP registrado y conectado: CP_001 (C/Mayor, 45)
+2025-11-06 08:29:43,303 - [08:29:43] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 08:29:43,310 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:29:43,310 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:29:43,310 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 08:29:43,318 - [08:29:43] Telemetría inicial publicada para CP_001
+2025-11-06 08:29:43,323 - [08:29:43] AUTH OK enviado a CP_001
+2025-11-06 08:29:44,112 - [08:29:44] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:29:54,118 - [08:29:54] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:30:00,203 - [08:30:00] Solicitud de recarga recibida
+2025-11-06 08:30:00,211 - Topic driver_status_DRIVER_001 not found in cluster metadata
+2025-11-06 08:30:00,322 - [08:30:00] [ESTADO] CP_001 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-06 08:30:00,336 - [08:30:00] [FLUJO] Solicitud DRIVER_001 \u2192 CP_001 (24.0 kWh). Esperando confirmación de operador Central.
+2025-11-06 08:30:00,337 - [08:30:00] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:04,125 - [08:30:04] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:04,186 - [08:30:04] [CONTROL WEB] Comando PREPARE_SUPPLY para CP_001 desde web_dashboard_paso1
+2025-11-06 08:30:04,190 - [08:30:04] [FLUJO] AUTH_REQ enviado a CP_001. Esperando acción del operador del Engine.
+2025-11-06 08:30:04,191 - [08:30:04] [ESTADO] CP_001 -> ESPERANDO_OPERADOR_ENGINE (antes: PENDIENTE_CONFIRMACION_CENTRAL).
+2025-11-06 08:30:04,198 - [08:30:04] [CONTROL] Confirmación síncrona de CP_001: AUTH_ACK#OK.
+2025-11-06 08:30:04,200 - [08:30:04] Telemetría recibida de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:14,131 - [08:30:14] Telemetría recibida de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:23,838 - [08:30:23] [FLUJO] CP_001 listo para iniciar. Driver: DRIVER_001. Esperando confirmación del operador de Central.
+2025-11-06 08:30:23,842 - [08:30:23] [ESTADO] CP_001 -> LISTO_PARA_INICIAR (antes: ESPERANDO_OPERADOR_ENGINE).
+2025-11-06 08:30:23,855 - [08:30:23] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.00, P=0.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:24,137 - [08:30:24] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.00, P=0.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:28,815 - [08:30:28] [CONTROL WEB] Comando START para CP_001 desde web_dashboard_confirmacion_final
+2025-11-06 08:30:28,817 - [08:30:28] Iniciando carga en CP_001 (Driver: DRIVER_001, kW: 24.0)
+2025-11-06 08:30:28,821 - [08:30:28] Comando START enviado a CP_001
+2025-11-06 08:30:28,826 - [08:30:28] [CONTROL] Estado reportado por CP_001: ACTIVADO
+2025-11-06 08:30:28,827 - [08:30:28] [ESTADO] CP_001 -> ACTIVADO (antes: LISTO_PARA_INICIAR).
+2025-11-06 08:30:28,828 - [08:30:28] Telemetría recibida de CP_001: est=PRE-SUMINISTRO, E=0.00, P=0.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:29,949 - [08:30:29] Telemetría recibida de CP_001: est=CARGANDO, E=0.05, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:29,951 - [08:30:29] [ESTADO] CP_001 -> SUMINISTRANDO (antes: ACTIVADO).
+2025-11-06 08:30:30,907 - [08:30:30] Telemetría recibida de CP_001: est=CARGANDO, E=0.10, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:30,909 - [08:30:30] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:31,942 - [08:30:31] Telemetría recibida de CP_001: est=CARGANDO, E=0.15, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:31,944 - [08:30:31] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:32,908 - [08:30:32] Telemetría recibida de CP_001: est=CARGANDO, E=0.20, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:32,911 - [08:30:32] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:33,912 - [08:30:33] Telemetría recibida de CP_001: est=CARGANDO, E=0.25, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:33,914 - [08:30:33] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:34,143 - [08:30:34] Telemetría recibida de CP_001: est=CARGANDO, E=0.25, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:34,145 - [08:30:34] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:34,913 - [08:30:34] Telemetría recibida de CP_001: est=CARGANDO, E=0.30, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:34,915 - [08:30:34] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:35,914 - [08:30:35] Telemetría recibida de CP_001: est=CARGANDO, E=0.35, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:35,916 - [08:30:35] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:36,916 - [08:30:36] Telemetría recibida de CP_001: est=CARGANDO, E=0.40, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:36,918 - [08:30:36] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:37,919 - [08:30:37] Telemetría recibida de CP_001: est=CARGANDO, E=0.45, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:37,922 - [08:30:37] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:38,918 - [08:30:38] Telemetría recibida de CP_001: est=CARGANDO, E=0.50, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:38,921 - [08:30:38] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:39,920 - [08:30:39] Telemetría recibida de CP_001: est=CARGANDO, E=0.55, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:39,922 - [08:30:39] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:40,921 - [08:30:40] Telemetría recibida de CP_001: est=CARGANDO, E=0.60, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:40,923 - [08:30:40] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:41,922 - [08:30:41] Telemetría recibida de CP_001: est=CARGANDO, E=0.65, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:41,925 - [08:30:41] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:42,924 - [08:30:42] Telemetría recibida de CP_001: est=CARGANDO, E=0.70, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:42,926 - [08:30:42] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:43,926 - [08:30:43] Telemetría recibida de CP_001: est=CARGANDO, E=0.75, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:43,928 - [08:30:43] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:44,149 - [08:30:44] Telemetría recibida de CP_001: est=CARGANDO, E=0.75, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:44,151 - [08:30:44] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:44,927 - [08:30:44] Telemetría recibida de CP_001: est=CARGANDO, E=0.80, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:44,929 - [08:30:44] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:45,932 - [08:30:45] Telemetría recibida de CP_001: est=CARGANDO, E=0.85, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:45,934 - [08:30:45] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:46,933 - [08:30:46] Telemetría recibida de CP_001: est=CARGANDO, E=0.90, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:46,935 - [08:30:46] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:47,933 - [08:30:47] Telemetría recibida de CP_001: est=CARGANDO, E=0.95, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:47,935 - [08:30:47] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:48,935 - [08:30:48] Telemetría recibida de CP_001: est=CARGANDO, E=1.00, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:48,937 - [08:30:48] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:49,937 - [08:30:49] Telemetría recibida de CP_001: est=CARGANDO, E=1.05, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:49,939 - [08:30:49] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:50,937 - [08:30:50] Telemetría recibida de CP_001: est=CARGANDO, E=1.10, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:50,939 - [08:30:50] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:51,939 - [08:30:51] Telemetría recibida de CP_001: est=CARGANDO, E=1.15, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:51,941 - [08:30:51] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:30:52,942 - [08:30:52] Telemetría recibida de CP_001: est=ESPERANDO_CONFIRMACION_FIN, E=1.20, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:53,183 - [08:30:53] [FLUJO] CP_001 solicita fin. Driver: DRIVER_001, 1.15 kWh. Esperando confirmación del operador de Central.
+2025-11-06 08:30:53,184 - [08:30:53] [ESTADO] CP_001 -> ESPERANDO_CONFIRMACION_FIN (antes: SUMINISTRANDO).
+2025-11-06 08:30:53,198 - [08:30:53] Telemetría recibida de CP_001: est=ESPERANDO_CONFIRMACION_FIN, E=1.20, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:53,941 - [08:30:53] Telemetría recibida de CP_001: est=ESPERANDO_CONFIRMACION_FIN, E=1.25, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:54,155 - [08:30:54] Telemetría recibida de CP_001: est=ESPERANDO_CONFIRMACION_FIN, E=1.25, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:54,942 - [08:30:54] Telemetría recibida de CP_001: est=ESPERANDO_CONFIRMACION_FIN, E=1.30, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:55,944 - [08:30:55] Telemetría recibida de CP_001: est=ESPERANDO_CONFIRMACION_FIN, E=1.35, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:56,945 - [08:30:56] Telemetría recibida de CP_001: est=ESPERANDO_CONFIRMACION_FIN, E=1.40, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:57,947 - [08:30:57] Telemetría recibida de CP_001: est=ESPERANDO_CONFIRMACION_FIN, E=1.45, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:58,948 - [08:30:58] Telemetría recibida de CP_001: est=ESPERANDO_CONFIRMACION_FIN, E=1.50, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:30:59,363 - [08:30:59] [CONTROL WEB] Comando STOP para CP_001 desde web_dashboard_confirmacion
+2025-11-06 08:30:59,365 - [08:30:59] Enviando STOP a CP_001. Esperando FIN con datos finales...
+2025-11-06 08:30:59,367 - [08:30:59] Comando STOP enviado a CP_001
+2025-11-06 08:30:59,403 - [08:30:59] [CONTROL] Estado reportado por CP_001: PARADO
+2025-11-06 08:30:59,404 - [08:30:59] [ESTADO] CP_001 -> PARADO (antes: ESPERANDO_CONFIRMACION_FIN).
+2025-11-06 08:30:59,950 - [08:30:59] Telemetría recibida de CP_001: est=ESPERANDO_CONFIRMACION_FIN, E=1.55, P=3.0 | Solicitado=24.00 kWh
+2025-11-06 08:31:00,266 - [08:31:00] [CONTROL] Fin de carga recibido de CP_001: 1.55 kWh, 0.74 €
+2025-11-06 08:31:00,270 - [08:31:00] \u2705 Ticket enviado a DRIVER_001: 1.55 kWh, 0.74 €
+2025-11-06 08:31:00,273 - [08:31:00] [ESTADO] CP_001 -> ACTIVADO (antes: PARADO).
+2025-11-06 08:31:00,273 - [08:31:00] Telemetría recibida de CP_001: est=REPOSO, E=1.55, P=0.0 | Solicitado=24.00 kWh
+2025-11-06 08:31:00,275 - [08:31:00] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 08:31:00,289 - [08:31:00] Telemetría recibida de CP_001: est=ACTIVADO, E=1.55, P=0.0
+2025-11-06 08:31:00,951 - [08:31:00] Telemetría recibida de CP_001: est=CARGANDO, E=1.60, P=3.0
+2025-11-06 08:31:00,954 - [08:31:00] [ESTADO] CP_001 -> SUMINISTRANDO (antes: ACTIVADO).
+2025-11-06 08:31:00,959 - [08:31:00] Telemetría recibida de CP_001: est=REPOSO, E=1.60, P=0.0
+2025-11-06 08:31:00,961 - [08:31:00] [ESTADO] CP_001 -> ACTIVADO (antes: SUMINISTRANDO).
+2025-11-06 08:31:04,161 - [08:31:04] Telemetría recibida de CP_001: est=REPOSO, E=1.60, P=0.0
+2025-11-06 08:31:04,163 - [08:31:04] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 08:31:14,167 - [08:31:14] Telemetría recibida de CP_001: est=REPOSO, E=1.60, P=0.0
+2025-11-06 08:31:14,169 - [08:31:14] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 08:31:24,173 - [08:31:24] Telemetría recibida de CP_001: est=REPOSO, E=1.60, P=0.0
+2025-11-06 08:31:24,175 - [08:31:24] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 08:31:34,179 - [08:31:34] Telemetría recibida de CP_001: est=REPOSO, E=1.60, P=0.0
+2025-11-06 08:31:34,181 - [08:31:34] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 08:31:37,299 - [08:31:37] Solicitud de recarga recibida
+2025-11-06 08:31:37,308 - [08:31:37] [ESTADO] CP_001 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-06 08:31:37,321 - [08:31:37] [FLUJO] Solicitud DRIVER_001 \u2192 CP_001 (26.0 kWh). Esperando confirmación de operador Central.
+2025-11-06 08:31:37,322 - [08:31:37] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=1.60, P=0.0 | Solicitado=26.00 kWh
+2025-11-06 08:31:44,184 - [08:31:44] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=1.60, P=0.0 | Solicitado=26.00 kWh
+2025-11-06 08:31:44,770 - [08:31:44] [CONTROL WEB] Comando PREPARE_SUPPLY para CP_001 desde web_dashboard_paso1
+2025-11-06 08:31:44,773 - [08:31:44] [FLUJO] AUTH_REQ enviado a CP_001. Esperando acción del operador del Engine.
+2025-11-06 08:31:44,774 - [08:31:44] [ESTADO] CP_001 -> ESPERANDO_OPERADOR_ENGINE (antes: PENDIENTE_CONFIRMACION_CENTRAL).
+2025-11-06 08:31:44,782 - [08:31:44] Telemetría recibida de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=1.60, P=0.0 | Solicitado=26.00 kWh
+2025-11-06 08:31:44,798 - [08:31:44] [CONTROL] Confirmación síncrona de CP_001: AUTH_ACK#OK.
+2025-11-06 08:31:54,190 - [08:31:54] Telemetría recibida de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=1.60, P=0.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:00,974 - [08:32:00] [FLUJO] CP_001 listo para iniciar. Driver: DRIVER_001. Esperando confirmación del operador de Central.
+2025-11-06 08:32:00,979 - [08:32:00] [ESTADO] CP_001 -> LISTO_PARA_INICIAR (antes: ESPERANDO_OPERADOR_ENGINE).
+2025-11-06 08:32:00,993 - [08:32:00] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.60, P=0.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:04,198 - [08:32:04] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.60, P=0.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:05,849 - [08:32:05] [CONTROL WEB] Comando START para CP_001 desde web_dashboard_confirmacion_final
+2025-11-06 08:32:05,851 - [08:32:05] Iniciando carga en CP_001 (Driver: DRIVER_001, kW: 26.0)
+2025-11-06 08:32:05,855 - [08:32:05] Comando START enviado a CP_001
+2025-11-06 08:32:05,859 - [08:32:05] [CONTROL] Estado reportado por CP_001: ACTIVADO
+2025-11-06 08:32:05,861 - [08:32:05] [ESTADO] CP_001 -> ACTIVADO (antes: LISTO_PARA_INICIAR).
+2025-11-06 08:32:05,862 - [08:32:05] Telemetría recibida de CP_001: est=PRE-SUMINISTRO, E=1.60, P=0.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:07,044 - [08:32:07] Telemetría recibida de CP_001: est=CARGANDO, E=0.05, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:07,046 - [08:32:07] [ESTADO] CP_001 -> SUMINISTRANDO (antes: ACTIVADO).
+2025-11-06 08:32:08,042 - [08:32:08] Telemetría recibida de CP_001: est=CARGANDO, E=0.10, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:08,045 - [08:32:08] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:09,045 - [08:32:09] Telemetría recibida de CP_001: est=CARGANDO, E=0.15, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:09,048 - [08:32:09] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:10,046 - [08:32:10] Telemetría recibida de CP_001: est=CARGANDO, E=0.20, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:10,049 - [08:32:10] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:11,048 - [08:32:11] Telemetría recibida de CP_001: est=CARGANDO, E=0.25, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:11,050 - [08:32:11] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:12,050 - [08:32:12] Telemetría recibida de CP_001: est=CARGANDO, E=0.30, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:12,052 - [08:32:12] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:13,051 - [08:32:13] Telemetría recibida de CP_001: est=CARGANDO, E=0.35, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:13,053 - [08:32:13] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:14,056 - [08:32:14] Telemetría recibida de CP_001: est=CARGANDO, E=0.40, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:14,058 - [08:32:14] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:14,202 - [08:32:14] Telemetría recibida de CP_001: est=CARGANDO, E=0.40, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:14,204 - [08:32:14] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:15,054 - [08:32:15] Telemetría recibida de CP_001: est=CARGANDO, E=0.45, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:15,056 - [08:32:15] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:16,057 - [08:32:16] Telemetría recibida de CP_001: est=CARGANDO, E=0.50, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:16,059 - [08:32:16] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:17,059 - [08:32:17] Telemetría recibida de CP_001: est=CARGANDO, E=0.55, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:17,061 - [08:32:17] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:18,064 - [08:32:18] Telemetría recibida de CP_001: est=CARGANDO, E=0.60, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:18,066 - [08:32:18] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:19,062 - [08:32:19] Telemetría recibida de CP_001: est=CARGANDO, E=0.65, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:19,064 - [08:32:19] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:20,064 - [08:32:20] Telemetría recibida de CP_001: est=CARGANDO, E=0.70, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:20,066 - [08:32:20] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:21,067 - [08:32:21] Telemetría recibida de CP_001: est=CARGANDO, E=0.75, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:21,070 - [08:32:21] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:22,068 - [08:32:22] Telemetría recibida de CP_001: est=CARGANDO, E=0.80, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:22,071 - [08:32:22] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:23,067 - [08:32:23] Telemetría recibida de CP_001: est=CARGANDO, E=0.85, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:23,070 - [08:32:23] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:24,080 - [08:32:24] Telemetría recibida de CP_001: est=CARGANDO, E=0.90, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:24,083 - [08:32:24] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:24,208 - [08:32:24] Telemetría recibida de CP_001: est=CARGANDO, E=0.90, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:24,210 - [08:32:24] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:25,071 - [08:32:25] Telemetría recibida de CP_001: est=CARGANDO, E=0.95, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:25,073 - [08:32:25] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:26,072 - [08:32:26] Telemetría recibida de CP_001: est=CARGANDO, E=1.00, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:26,075 - [08:32:26] [ESTADO] CP_001 -> SUMINISTRANDO.
+2025-11-06 08:32:27,073 - [08:32:27] Telemetría recibida de CP_001: est=ESPERANDO_CONFIRMACION_FIN, E=1.05, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:27,284 - [08:32:27] [FLUJO] CP_001 solicita fin. Driver: DRIVER_001, 1.0 kWh. Esperando confirmación del operador de Central.
+2025-11-06 08:32:27,286 - [08:32:27] [ESTADO] CP_001 -> ESPERANDO_CONFIRMACION_FIN (antes: SUMINISTRANDO).
+2025-11-06 08:32:27,300 - [08:32:27] Telemetría recibida de CP_001: est=ESPERANDO_CONFIRMACION_FIN, E=1.05, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:28,074 - [08:32:28] Telemetría recibida de CP_001: est=ESPERANDO_CONFIRMACION_FIN, E=1.10, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:29,103 - [08:32:29] Telemetría recibida de CP_001: est=ESPERANDO_CONFIRMACION_FIN, E=1.15, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:30,079 - [08:32:30] Telemetría recibida de CP_001: est=ESPERANDO_CONFIRMACION_FIN, E=1.20, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:31,079 - [08:32:31] Telemetría recibida de CP_001: est=ESPERANDO_CONFIRMACION_FIN, E=1.25, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:32,082 - [08:32:32] Telemetría recibida de CP_001: est=ESPERANDO_CONFIRMACION_FIN, E=1.30, P=3.0 | Solicitado=26.00 kWh
+2025-11-06 08:32:32,265 - [08:32:32] [CONTROL WEB] Comando STOP para CP_001 desde web_dashboard_confirmacion
+2025-11-06 08:32:32,267 - [08:32:32] Enviando STOP a CP_001. Esperando FIN con datos finales...
+2025-11-06 08:32:32,269 - [08:32:32] Comando STOP enviado a CP_001
+2025-11-06 08:32:32,275 - [08:32:32] [CONTROL] Estado reportado por CP_001: PARADO
+2025-11-06 08:32:32,276 - [08:32:32] [ESTADO] CP_001 -> PARADO (antes: ESPERANDO_CONFIRMACION_FIN).
+2025-11-06 08:32:32,343 - [08:32:32] [CONTROL] Fin de carga recibido de CP_001: 1.30 kWh, 0.62 €
+2025-11-06 08:32:32,348 - [08:32:32] \u2705 Ticket enviado a DRIVER_001: 1.30 kWh, 0.62 €
+2025-11-06 08:32:32,350 - [08:32:32] [ESTADO] CP_001 -> ACTIVADO (antes: PARADO).
+2025-11-06 08:36:43,751 - [08:36:43] [INICIO] 1 CP(s) marcados como Desconectado. Esperando conexiones...
+2025-11-06 08:36:43,755 - [08:36:43] Modo consola simple activado
+2025-11-06 08:36:43,760 - Updating subscribed topics to: ('driver_requests',)
+2025-11-06 08:36:43,761 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-06 08:36:43,762 - Updating subscribed topics to: ('central_commands',)
+2025-11-06 08:36:43,764 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:36:43,764 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:36:43,764 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:36:43,764 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:36:43,764 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:36:43,764 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:36:43,819 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:36:43,819 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:36:43,971 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:36:43,971 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 08:36:43,971 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:36:43,971 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 08:36:43,971 - Starting new heartbeat thread
+2025-11-06 08:36:43,972 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:36:43,972 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 08:36:43,972 - Revoking previously assigned partitions set() for group central-control-group
+2025-11-06 08:36:43,972 - Starting new heartbeat thread
+2025-11-06 08:36:43,972 - Starting new heartbeat thread
+2025-11-06 08:36:43,972 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:36:43,973 - Revoking previously assigned partitions set() for group central_processing_group
+2025-11-06 08:36:43,972 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-11-06 08:36:43,973 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:36:43,973 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:36:43,973 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:36:43,973 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 08:36:43,973 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:36:43,973 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 08:36:43,973 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:36:43,974 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 08:36:44,074 - (Re-)joining group central-telemetry-group
+2025-11-06 08:36:44,074 - (Re-)joining group central-control-group
+2025-11-06 08:36:44,074 - (Re-)joining group central_processing_group
+2025-11-06 08:36:44,079 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:36:44,079 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:36:44,079 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:36:44,180 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:36:44,180 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:36:44,180 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:36:44,180 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:36:44,180 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:36:44,181 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:36:44,284 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:36:44,284 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 08:36:44,284 - (Re-)joining group central-control-group
+2025-11-06 08:36:44,284 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:36:44,284 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 08:36:44,284 - (Re-)joining group central-telemetry-group
+2025-11-06 08:36:44,284 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:36:44,285 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 08:36:44,285 - (Re-)joining group central_processing_group
+2025-11-06 08:36:44,285 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:36:44,286 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:36:44,286 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:36:44,388 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:36:44,388 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 08:36:44,388 - (Re-)joining group central_processing_group
+2025-11-06 08:36:44,388 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:36:44,389 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 08:36:44,389 - (Re-)joining group central-control-group
+2025-11-06 08:36:44,388 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:36:44,389 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 08:36:44,389 - (Re-)joining group central-telemetry-group
+2025-11-06 08:36:47,404 - Elected group leader -- performing partition assignments using range
+2025-11-06 08:36:47,405 - Elected group leader -- performing partition assignments using range
+2025-11-06 08:36:47,406 - Elected group leader -- performing partition assignments using range
+2025-11-06 08:36:47,419 - Successfully joined group central_processing_group with generation 1
+2025-11-06 08:36:47,419 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)]
+2025-11-06 08:36:47,419 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)} for group central_processing_group
+2025-11-06 08:36:47,419 - Successfully joined group central-telemetry-group with generation 1
+2025-11-06 08:36:47,420 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)]
+2025-11-06 08:36:47,420 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)} for group central-telemetry-group
+2025-11-06 08:36:47,419 - Successfully joined group central-control-group with generation 1
+2025-11-06 08:36:47,420 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-11-06 08:36:47,420 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-06 08:37:16,406 - [08:37:16] [NUEVO CP] Registro inicial de CP_001.
+2025-11-06 08:37:16,407 - [08:37:16] CP registrado y conectado: CP_001 (C/Mayor, 45)
+2025-11-06 08:37:16,408 - [08:37:16] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 08:37:16,415 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:37:16,416 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:37:16,416 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 08:37:16,424 - [08:37:16] Telemetría inicial publicada para CP_001
+2025-11-06 08:37:16,429 - [08:37:16] AUTH OK enviado a CP_001
+2025-11-06 08:37:18,773 - [08:37:18] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:37:28,778 - [08:37:28] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:37:32,878 - [08:37:32] Solicitud de recarga recibida
+2025-11-06 08:37:32,885 - Topic driver_status_DRIVER_001 not found in cluster metadata
+2025-11-06 08:37:32,996 - [08:37:32] [ESTADO] CP_001 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-06 08:37:33,010 - [08:37:33] [FLUJO] Solicitud DRIVER_001 \u2192 CP_001 (30.0 kWh). Esperando confirmación de operador Central.
+2025-11-06 08:37:33,010 - [08:37:33] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:37:38,784 - [08:37:38] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:37:48,791 - [08:37:48] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:37:58,796 - [08:37:58] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:38:08,801 - [08:38:08] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:38:18,807 - [08:38:18] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:38:28,813 - [08:38:28] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:38:38,818 - [08:38:38] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:38:48,824 - [08:38:48] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:38:58,830 - [08:38:58] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:39:08,836 - [08:39:08] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:39:18,841 - [08:39:18] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:39:28,848 - [08:39:28] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:39:38,853 - [08:39:38] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:39:48,859 - [08:39:48] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:39:58,865 - [08:39:58] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:40:08,871 - [08:40:08] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:40:18,877 - [08:40:18] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:40:28,883 - [08:40:28] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:40:38,889 - [08:40:38] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:40:48,896 - [08:40:48] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:40:58,901 - [08:40:58] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
