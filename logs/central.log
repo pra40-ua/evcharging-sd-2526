@@ -90818,3 +90818,1399 @@ kafka.errors.CommitFailedError: CommitFailedError: Commit cannot be completed si
 2025-11-06 08:40:38,889 - [08:40:38] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
 2025-11-06 08:40:48,896 - [08:40:48] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
 2025-11-06 08:40:58,901 - [08:40:58] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 08:44:26,095 - [08:44:26] [INICIO] 1 CP(s) marcados como Desconectado. Esperando conexiones...
+2025-11-06 08:44:26,099 - [08:44:26] Modo consola simple activado
+2025-11-06 08:44:26,104 - Updating subscribed topics to: ('central_commands',)
+2025-11-06 08:44:26,105 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-06 08:44:26,106 - Updating subscribed topics to: ('driver_requests',)
+2025-11-06 08:44:26,109 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:44:26,109 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:44:26,109 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:44:26,109 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:44:26,109 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:44:26,109 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:44:26,152 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:44:26,153 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:44:26,316 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:44:26,317 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 08:44:26,316 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:44:26,317 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 08:44:26,317 - Starting new heartbeat thread
+2025-11-06 08:44:26,317 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:44:26,317 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 08:44:26,317 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-11-06 08:44:26,317 - Starting new heartbeat thread
+2025-11-06 08:44:26,317 - Starting new heartbeat thread
+2025-11-06 08:44:26,318 - Revoking previously assigned partitions set() for group central-control-group
+2025-11-06 08:44:26,318 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:44:26,318 - Revoking previously assigned partitions set() for group central_processing_group
+2025-11-06 08:44:26,318 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:44:26,318 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:44:26,319 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 08:44:26,318 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:44:26,319 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:44:26,319 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 08:44:26,319 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:44:26,319 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 08:44:26,420 - (Re-)joining group central-control-group
+2025-11-06 08:44:26,420 - (Re-)joining group central_processing_group
+2025-11-06 08:44:26,420 - (Re-)joining group central-telemetry-group
+2025-11-06 08:44:26,424 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:44:26,424 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:44:26,424 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:44:26,525 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:44:26,525 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:44:26,525 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:44:26,526 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:44:26,526 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:44:26,526 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:44:26,629 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:44:26,629 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 08:44:26,629 - (Re-)joining group central_processing_group
+2025-11-06 08:44:26,629 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:44:26,629 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 08:44:26,629 - (Re-)joining group central-telemetry-group
+2025-11-06 08:44:26,629 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:44:26,629 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 08:44:26,630 - (Re-)joining group central-control-group
+2025-11-06 08:44:26,631 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:44:26,631 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:44:26,631 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:44:26,733 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:44:26,733 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 08:44:26,733 - (Re-)joining group central-telemetry-group
+2025-11-06 08:44:26,733 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:44:26,733 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 08:44:26,733 - (Re-)joining group central_processing_group
+2025-11-06 08:44:26,733 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:44:26,734 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 08:44:26,734 - (Re-)joining group central-control-group
+2025-11-06 08:44:29,747 - Elected group leader -- performing partition assignments using range
+2025-11-06 08:44:29,749 - Elected group leader -- performing partition assignments using range
+2025-11-06 08:44:29,749 - Elected group leader -- performing partition assignments using range
+2025-11-06 08:44:29,767 - Successfully joined group central-telemetry-group with generation 1
+2025-11-06 08:44:29,768 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)]
+2025-11-06 08:44:29,768 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)} for group central-telemetry-group
+2025-11-06 08:44:29,768 - Successfully joined group central_processing_group with generation 1
+2025-11-06 08:44:29,768 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)]
+2025-11-06 08:44:29,768 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)} for group central_processing_group
+2025-11-06 08:44:29,768 - Successfully joined group central-control-group with generation 1
+2025-11-06 08:44:29,768 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-11-06 08:44:29,768 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-06 08:44:53,350 - [08:44:53] [NUEVO CP] Registro inicial de CP_001.
+2025-11-06 08:44:53,351 - [08:44:53] CP registrado y conectado: CP_001 (C/Mayor, 45)
+2025-11-06 08:44:53,352 - [08:44:53] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 08:44:53,362 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:44:53,362 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:44:53,362 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 08:44:53,370 - [08:44:53] Telemetría inicial publicada para CP_001
+2025-11-06 08:44:53,375 - [08:44:53] AUTH OK enviado a CP_001
+2025-11-06 08:45:01,118 - [08:45:01] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:45:11,123 - [08:45:11] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:45:21,129 - [08:45:21] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:45:29,812 - [08:45:29] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:29,813 - [08:45:29] [ESTADO] CP_001 -> AVERÍA (antes: ACTIVADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:30,823 - [08:45:30] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:30,824 - [08:45:30] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:31,135 - [08:45:31] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:45:31,837 - [08:45:31] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:31,838 - [08:45:31] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:32,847 - [08:45:32] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:32,849 - [08:45:32] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:33,859 - [08:45:33] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:33,860 - [08:45:33] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:34,870 - [08:45:34] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:34,871 - [08:45:34] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:35,882 - [08:45:35] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:35,883 - [08:45:35] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:36,896 - [08:45:36] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:36,898 - [08:45:36] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:37,906 - [08:45:37] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:37,907 - [08:45:37] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:38,922 - [08:45:38] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:38,923 - [08:45:38] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:39,931 - [08:45:39] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:39,932 - [08:45:39] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:40,942 - [08:45:40] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:40,943 - [08:45:40] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:41,141 - [08:45:41] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:45:41,954 - [08:45:41] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:41,955 - [08:45:41] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:42,965 - [08:45:42] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:42,967 - [08:45:42] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:43,978 - [08:45:43] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:43,979 - [08:45:43] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:44,990 - [08:45:44] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:44,991 - [08:45:44] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:46,002 - [08:45:46] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:46,003 - [08:45:46] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:47,016 - [08:45:47] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:47,017 - [08:45:47] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:48,025 - [08:45:48] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:48,026 - [08:45:48] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:49,037 - [08:45:49] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:49,038 - [08:45:49] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:50,050 - [08:45:50] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:50,051 - [08:45:50] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:51,075 - [08:45:51] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:51,076 - [08:45:51] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:51,147 - [08:45:51] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:45:52,074 - [08:45:52] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:52,075 - [08:45:52] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:53,086 - [08:45:53] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:53,087 - [08:45:53] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:54,098 - [08:45:54] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:54,099 - [08:45:54] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:55,111 - [08:45:55] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:55,112 - [08:45:55] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:56,122 - [08:45:56] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:56,123 - [08:45:56] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:57,134 - [08:45:57] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:57,135 - [08:45:57] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:58,160 - [08:45:58] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:58,161 - [08:45:58] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:59,160 - [08:45:59] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:45:59,161 - [08:45:59] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:00,172 - [08:46:00] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:00,174 - [08:46:00] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:01,152 - [08:46:01] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:46:01,181 - [08:46:01] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:01,182 - [08:46:01] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:02,195 - [08:46:02] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:02,197 - [08:46:02] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:03,206 - [08:46:03] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:03,208 - [08:46:03] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:04,218 - [08:46:04] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:04,219 - [08:46:04] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:05,230 - [08:46:05] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:05,231 - [08:46:05] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:06,242 - [08:46:06] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:06,243 - [08:46:06] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:07,253 - [08:46:07] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:07,254 - [08:46:07] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:08,277 - [08:46:08] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:08,278 - [08:46:08] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:09,280 - [08:46:09] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:09,281 - [08:46:09] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:10,290 - [08:46:10] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:10,292 - [08:46:10] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:11,158 - [08:46:11] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:46:11,319 - [08:46:11] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:11,320 - [08:46:11] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:12,372 - [08:46:12] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:12,373 - [08:46:12] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:13,325 - [08:46:13] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:13,326 - [08:46:13] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:14,337 - [08:46:14] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:14,339 - [08:46:14] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:15,352 - [08:46:15] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:15,353 - [08:46:15] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:16,362 - [08:46:16] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:16,363 - [08:46:16] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:17,374 - [08:46:17] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:17,375 - [08:46:17] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:18,386 - [08:46:18] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:18,387 - [08:46:18] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:19,398 - [08:46:19] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:19,399 - [08:46:19] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:20,410 - [08:46:20] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:20,411 - [08:46:20] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:21,164 - [08:46:21] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:46:21,426 - [08:46:21] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:21,427 - [08:46:21] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:22,462 - [08:46:22] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:22,463 - [08:46:22] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:23,448 - [08:46:23] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:23,449 - [08:46:23] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:24,459 - [08:46:24] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:24,460 - [08:46:24] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:25,473 - [08:46:25] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:25,474 - [08:46:25] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:26,483 - [08:46:26] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:26,484 - [08:46:26] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:27,496 - [08:46:27] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:27,497 - [08:46:27] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:28,511 - [08:46:28] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:28,512 - [08:46:28] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:29,523 - [08:46:29] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:29,524 - [08:46:29] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:30,533 - [08:46:30] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:30,534 - [08:46:30] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:31,170 - [08:46:31] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:46:31,545 - [08:46:31] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:31,546 - [08:46:31] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:32,556 - [08:46:32] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:32,557 - [08:46:32] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:33,568 - [08:46:33] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:33,569 - [08:46:33] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:34,580 - [08:46:34] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:34,581 - [08:46:34] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:35,593 - [08:46:35] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:35,594 - [08:46:35] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:36,604 - [08:46:36] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:36,605 - [08:46:36] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:37,617 - [08:46:37] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:37,618 - [08:46:37] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:38,629 - [08:46:38] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:38,631 - [08:46:38] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:39,642 - [08:46:39] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:39,643 - [08:46:39] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:40,652 - [08:46:40] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:40,654 - [08:46:40] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:41,174 - [08:46:41] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:46:41,665 - [08:46:41] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:41,666 - [08:46:41] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:42,680 - [08:46:42] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:42,681 - [08:46:42] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:43,688 - [08:46:43] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:43,689 - [08:46:43] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:44,700 - [08:46:44] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:44,701 - [08:46:44] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:45,712 - [08:46:45] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:45,713 - [08:46:45] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:46,741 - [08:46:46] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:46,742 - [08:46:46] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:47,735 - [08:46:47] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:47,736 - [08:46:47] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:48,747 - [08:46:48] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:48,748 - [08:46:48] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:49,761 - [08:46:49] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:49,762 - [08:46:49] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:50,774 - [08:46:50] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:50,775 - [08:46:50] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:51,178 - [08:46:51] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:46:51,784 - [08:46:51] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:51,785 - [08:46:51] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:52,797 - [08:46:52] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:52,798 - [08:46:52] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:53,807 - [08:46:53] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:53,808 - [08:46:53] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:54,819 - [08:46:54] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:54,820 - [08:46:54] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:55,832 - [08:46:55] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:55,833 - [08:46:55] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:56,844 - [08:46:56] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:56,845 - [08:46:56] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:57,856 - [08:46:57] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:57,857 - [08:46:57] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:58,870 - [08:46:58] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:58,871 - [08:46:58] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:59,880 - [08:46:59] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:46:59,881 - [08:46:59] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:00,913 - [08:47:00] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:00,914 - [08:47:00] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:01,190 - [08:47:01] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:47:01,905 - [08:47:01] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:01,906 - [08:47:01] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:02,916 - [08:47:02] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:02,917 - [08:47:02] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:03,942 - [08:47:03] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:03,943 - [08:47:03] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:04,940 - [08:47:04] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:04,941 - [08:47:04] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:05,953 - [08:47:05] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:05,954 - [08:47:05] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:06,984 - [08:47:06] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:06,985 - [08:47:06] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:08,000 - [08:47:07] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:08,001 - [08:47:08] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:08,990 - [08:47:08] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:08,991 - [08:47:08] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:10,001 - [08:47:10] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:10,002 - [08:47:10] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:11,013 - [08:47:11] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:11,014 - [08:47:11] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:11,205 - [08:47:11] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:47:12,027 - [08:47:12] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:12,028 - [08:47:12] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:13,037 - [08:47:13] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:13,038 - [08:47:13] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:14,050 - [08:47:14] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:14,051 - [08:47:14] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:15,061 - [08:47:15] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:15,062 - [08:47:15] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:16,077 - [08:47:16] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:16,079 - [08:47:16] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:17,085 - [08:47:17] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:17,086 - [08:47:17] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:18,118 - [08:47:18] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:18,119 - [08:47:18] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:19,110 - [08:47:19] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:19,111 - [08:47:19] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:20,121 - [08:47:20] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:20,122 - [08:47:20] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:21,134 - [08:47:21] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:21,135 - [08:47:21] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:21,195 - [08:47:21] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:47:22,145 - [08:47:22] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:22,146 - [08:47:22] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:23,157 - [08:47:23] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:23,158 - [08:47:23] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:24,169 - [08:47:24] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:24,170 - [08:47:24] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:25,182 - [08:47:25] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:25,183 - [08:47:25] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:26,193 - [08:47:26] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:26,194 - [08:47:26] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:27,205 - [08:47:27] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:27,206 - [08:47:27] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:28,217 - [08:47:28] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:28,218 - [08:47:28] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:29,228 - [08:47:29] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:29,230 - [08:47:29] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:30,242 - [08:47:30] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:30,243 - [08:47:30] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:31,202 - [08:47:31] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:47:31,256 - [08:47:31] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:31,257 - [08:47:31] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:32,266 - [08:47:32] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:32,267 - [08:47:32] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:33,276 - [08:47:33] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:33,277 - [08:47:33] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:34,288 - [08:47:34] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:34,289 - [08:47:34] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:35,301 - [08:47:35] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:35,302 - [08:47:35] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:36,314 - [08:47:36] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:36,315 - [08:47:36] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:37,329 - [08:47:37] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:37,330 - [08:47:37] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:38,343 - [08:47:38] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:38,345 - [08:47:38] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:39,349 - [08:47:39] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:39,350 - [08:47:39] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:40,360 - [08:47:40] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:40,361 - [08:47:40] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:41,208 - [08:47:41] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:47:41,376 - [08:47:41] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:41,377 - [08:47:41] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:42,384 - [08:47:42] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:42,385 - [08:47:42] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:43,397 - [08:47:43] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:43,398 - [08:47:43] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:44,408 - [08:47:44] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:44,409 - [08:47:44] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:45,420 - [08:47:45] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:45,421 - [08:47:45] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:46,432 - [08:47:46] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:46,433 - [08:47:46] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:47,444 - [08:47:47] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:47,445 - [08:47:47] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:48,463 - [08:47:48] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:48,464 - [08:47:48] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:49,468 - [08:47:49] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:49,469 - [08:47:49] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:50,479 - [08:47:50] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:50,480 - [08:47:50] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:51,213 - [08:47:51] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:47:51,491 - [08:47:51] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:51,492 - [08:47:51] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:52,519 - [08:47:52] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:52,519 - [08:47:52] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:53,518 - [08:47:53] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:53,519 - [08:47:53] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:54,527 - [08:47:54] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:54,528 - [08:47:54] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:55,541 - [08:47:55] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:55,542 - [08:47:55] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:56,579 - [08:47:56] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:56,581 - [08:47:56] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:57,563 - [08:47:57] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:57,564 - [08:47:57] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:58,578 - [08:47:58] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:58,579 - [08:47:58] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:59,587 - [08:47:59] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:47:59,588 - [08:47:59] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:00,598 - [08:48:00] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:00,599 - [08:48:00] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:01,218 - [08:48:01] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:48:01,609 - [08:48:01] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:01,610 - [08:48:01] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:02,645 - [08:48:02] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:02,646 - [08:48:02] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:03,635 - [08:48:03] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:03,636 - [08:48:03] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:04,647 - [08:48:04] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:04,648 - [08:48:04] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:05,660 - [08:48:05] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:05,661 - [08:48:05] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:06,671 - [08:48:06] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:06,672 - [08:48:06] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:07,683 - [08:48:07] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:07,684 - [08:48:07] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:08,694 - [08:48:08] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:08,695 - [08:48:08] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:09,706 - [08:48:09] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:09,707 - [08:48:09] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:10,718 - [08:48:10] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:10,719 - [08:48:10] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:11,223 - [08:48:11] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:48:11,730 - [08:48:11] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:11,731 - [08:48:11] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:12,744 - [08:48:12] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:12,745 - [08:48:12] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:13,785 - [08:48:13] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:13,786 - [08:48:13] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:14,765 - [08:48:14] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:14,767 - [08:48:14] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:15,779 - [08:48:15] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:15,780 - [08:48:15] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:16,790 - [08:48:16] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:16,791 - [08:48:16] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:17,802 - [08:48:17] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:17,803 - [08:48:17] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:18,814 - [08:48:18] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:18,816 - [08:48:18] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:19,828 - [08:48:19] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:19,829 - [08:48:19] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:20,839 - [08:48:20] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:20,840 - [08:48:20] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:21,230 - [08:48:21] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:48:21,851 - [08:48:21] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:21,852 - [08:48:21] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:22,864 - [08:48:22] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:22,865 - [08:48:22] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:23,878 - [08:48:23] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:23,879 - [08:48:23] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:24,888 - [08:48:24] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:24,889 - [08:48:24] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:25,901 - [08:48:25] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:25,902 - [08:48:25] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:26,970 - [08:48:26] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:26,971 - [08:48:26] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:27,925 - [08:48:27] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:27,926 - [08:48:27] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:28,936 - [08:48:28] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:28,937 - [08:48:28] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:29,952 - [08:48:29] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:29,953 - [08:48:29] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:30,960 - [08:48:30] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:30,962 - [08:48:30] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:31,235 - [08:48:31] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:48:31,973 - [08:48:31] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:31,974 - [08:48:31] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:32,988 - [08:48:32] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:32,990 - [08:48:32] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:33,997 - [08:48:33] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:33,998 - [08:48:33] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:35,007 - [08:48:35] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:35,008 - [08:48:35] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:36,020 - [08:48:36] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:36,021 - [08:48:36] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:37,032 - [08:48:37] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:37,033 - [08:48:37] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:38,044 - [08:48:38] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:38,045 - [08:48:38] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:39,056 - [08:48:39] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:39,057 - [08:48:39] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:40,067 - [08:48:40] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:40,068 - [08:48:40] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:41,098 - [08:48:41] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:41,099 - [08:48:41] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:41,240 - [08:48:41] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:48:42,092 - [08:48:42] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:42,093 - [08:48:42] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:43,104 - [08:48:43] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:43,105 - [08:48:43] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:44,116 - [08:48:44] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:44,117 - [08:48:44] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:45,130 - [08:48:45] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:45,131 - [08:48:45] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:46,140 - [08:48:46] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:46,141 - [08:48:46] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:47,164 - [08:48:47] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:47,166 - [08:48:47] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:48,185 - [08:48:48] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:48,186 - [08:48:48] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:49,180 - [08:48:49] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:49,181 - [08:48:49] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:50,188 - [08:48:50] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:50,189 - [08:48:50] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:51,202 - [08:48:51] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:51,203 - [08:48:51] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:51,246 - [08:48:51] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:48:52,214 - [08:48:52] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:52,215 - [08:48:52] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:53,224 - [08:48:53] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:53,225 - [08:48:53] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:54,237 - [08:48:54] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:54,238 - [08:48:54] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:55,249 - [08:48:55] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:55,250 - [08:48:55] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:56,262 - [08:48:56] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:56,263 - [08:48:56] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:57,273 - [08:48:57] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:57,274 - [08:48:57] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:58,285 - [08:48:58] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:58,287 - [08:48:58] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:59,297 - [08:48:59] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:48:59,298 - [08:48:59] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:00,310 - [08:49:00] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:00,311 - [08:49:00] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:01,252 - [08:49:01] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:49:01,322 - [08:49:01] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:01,323 - [08:49:01] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:02,334 - [08:49:02] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:02,335 - [08:49:02] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:03,346 - [08:49:03] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:03,347 - [08:49:03] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:04,358 - [08:49:04] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:04,359 - [08:49:04] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:05,370 - [08:49:05] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:05,371 - [08:49:05] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:06,382 - [08:49:06] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:06,383 - [08:49:06] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:07,394 - [08:49:07] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:07,395 - [08:49:07] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:08,406 - [08:49:08] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:08,407 - [08:49:08] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:09,455 - [08:49:09] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:09,456 - [08:49:09] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:10,431 - [08:49:10] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:10,432 - [08:49:10] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:11,258 - [08:49:11] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:49:11,442 - [08:49:11] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:11,444 - [08:49:11] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:12,454 - [08:49:12] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:12,455 - [08:49:12] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:13,468 - [08:49:13] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:13,469 - [08:49:13] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:14,483 - [08:49:14] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:14,484 - [08:49:14] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:15,491 - [08:49:15] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:15,492 - [08:49:15] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:16,503 - [08:49:16] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:16,504 - [08:49:16] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:17,548 - [08:49:17] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:17,549 - [08:49:17] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:18,526 - [08:49:18] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:18,527 - [08:49:18] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:19,540 - [08:49:19] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:19,541 - [08:49:19] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:20,550 - [08:49:20] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:20,551 - [08:49:20] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:21,263 - [08:49:21] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:49:21,562 - [08:49:21] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:21,563 - [08:49:21] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:22,573 - [08:49:22] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:22,575 - [08:49:22] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:23,586 - [08:49:23] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:23,588 - [08:49:23] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:24,598 - [08:49:24] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:24,599 - [08:49:24] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:25,611 - [08:49:25] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:25,612 - [08:49:25] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:26,622 - [08:49:26] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:26,623 - [08:49:26] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:27,634 - [08:49:27] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:27,635 - [08:49:27] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:28,674 - [08:49:28] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:28,675 - [08:49:28] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:29,657 - [08:49:29] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:29,658 - [08:49:29] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:30,669 - [08:49:30] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:30,670 - [08:49:30] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:31,270 - [08:49:31] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:49:31,682 - [08:49:31] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:31,684 - [08:49:31] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:32,693 - [08:49:32] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:32,694 - [08:49:32] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:33,705 - [08:49:33] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:33,706 - [08:49:33] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:34,717 - [08:49:34] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:34,718 - [08:49:34] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:35,732 - [08:49:35] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:35,733 - [08:49:35] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:36,783 - [08:49:36] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:36,784 - [08:49:36] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:37,754 - [08:49:37] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:37,755 - [08:49:37] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:38,765 - [08:49:38] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:38,766 - [08:49:38] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:39,790 - [08:49:39] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:39,791 - [08:49:39] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:40,788 - [08:49:40] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:40,789 - [08:49:40] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:41,276 - [08:49:41] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:49:41,801 - [08:49:41] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:41,802 - [08:49:41] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:42,833 - [08:49:42] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:42,834 - [08:49:42] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:43,850 - [08:49:43] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:43,851 - [08:49:43] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:44,836 - [08:49:44] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:44,837 - [08:49:44] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:45,851 - [08:49:45] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:45,852 - [08:49:45] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:46,859 - [08:49:46] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:46,860 - [08:49:46] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:47,872 - [08:49:47] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:47,873 - [08:49:47] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:48,884 - [08:49:48] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:48,885 - [08:49:48] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:49,896 - [08:49:49] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:49,897 - [08:49:49] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:50,908 - [08:49:50] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:50,909 - [08:49:50] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:51,282 - [08:49:51] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:49:51,923 - [08:49:51] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:51,924 - [08:49:51] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:52,932 - [08:49:52] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:52,934 - [08:49:52] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:53,945 - [08:49:53] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:53,946 - [08:49:53] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:54,956 - [08:49:54] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:54,957 - [08:49:54] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:55,969 - [08:49:55] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:55,970 - [08:49:55] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:56,983 - [08:49:56] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:56,984 - [08:49:56] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:57,992 - [08:49:57] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:57,993 - [08:49:57] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:59,015 - [08:49:59] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:49:59,016 - [08:49:59] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:00,020 - [08:50:00] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:00,021 - [08:50:00] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:01,028 - [08:50:01] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:01,029 - [08:50:01] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:01,287 - [08:50:01] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:50:02,040 - [08:50:02] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:02,041 - [08:50:02] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:03,053 - [08:50:03] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:03,054 - [08:50:03] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:04,064 - [08:50:04] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:04,065 - [08:50:04] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:05,077 - [08:50:05] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:05,078 - [08:50:05] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:06,089 - [08:50:06] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:06,089 - [08:50:06] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:07,108 - [08:50:07] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:07,109 - [08:50:07] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:08,113 - [08:50:08] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:08,114 - [08:50:08] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:09,124 - [08:50:09] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:09,125 - [08:50:09] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:10,137 - [08:50:10] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:10,138 - [08:50:10] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:11,149 - [08:50:11] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:11,150 - [08:50:11] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:11,293 - [08:50:11] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:50:12,161 - [08:50:12] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:12,162 - [08:50:12] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:13,172 - [08:50:13] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:13,173 - [08:50:13] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:14,194 - [08:50:14] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:14,195 - [08:50:14] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:15,196 - [08:50:15] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:15,197 - [08:50:15] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:16,208 - [08:50:16] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:16,210 - [08:50:16] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:17,220 - [08:50:17] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:17,221 - [08:50:17] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:18,234 - [08:50:18] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:18,235 - [08:50:18] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:19,247 - [08:50:19] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:19,248 - [08:50:19] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:20,257 - [08:50:20] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:20,258 - [08:50:20] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:21,269 - [08:50:21] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:21,270 - [08:50:21] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:21,297 - [08:50:21] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:50:22,284 - [08:50:22] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:22,285 - [08:50:22] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:23,292 - [08:50:23] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:23,293 - [08:50:23] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:24,312 - [08:50:24] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:24,314 - [08:50:24] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:25,316 - [08:50:25] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:25,318 - [08:50:25] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:26,329 - [08:50:26] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:26,330 - [08:50:26] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:27,349 - [08:50:27] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:27,350 - [08:50:27] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:28,369 - [08:50:28] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:28,370 - [08:50:28] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:29,366 - [08:50:29] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:29,367 - [08:50:29] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:30,379 - [08:50:30] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:30,380 - [08:50:30] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:31,303 - [08:50:31] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:50:31,387 - [08:50:31] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:31,389 - [08:50:31] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:32,430 - [08:50:32] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:32,431 - [08:50:32] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:33,413 - [08:50:33] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:33,414 - [08:50:33] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:34,425 - [08:50:34] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:34,426 - [08:50:34] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:35,437 - [08:50:35] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:35,438 - [08:50:35] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:36,450 - [08:50:36] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:36,451 - [08:50:36] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:37,461 - [08:50:37] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:37,462 - [08:50:37] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:38,494 - [08:50:38] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:38,495 - [08:50:38] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:39,486 - [08:50:39] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:39,487 - [08:50:39] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:40,497 - [08:50:40] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:40,498 - [08:50:40] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:41,310 - [08:50:41] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:50:41,510 - [08:50:41] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:41,511 - [08:50:41] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:42,522 - [08:50:42] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:42,523 - [08:50:42] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:43,536 - [08:50:43] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:43,537 - [08:50:43] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:44,546 - [08:50:44] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:44,546 - [08:50:44] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:45,558 - [08:50:45] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:45,559 - [08:50:45] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:46,569 - [08:50:46] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:46,571 - [08:50:46] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:47,585 - [08:50:47] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:47,586 - [08:50:47] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:48,595 - [08:50:48] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:48,596 - [08:50:48] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:49,607 - [08:50:49] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:49,608 - [08:50:49] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:50,618 - [08:50:50] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:50,619 - [08:50:50] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:51,315 - [08:50:51] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 08:50:51,630 - [08:50:51] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:51,631 - [08:50:51] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:52,700 - [08:50:52] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:52,701 - [08:50:52] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:53,654 - [08:50:53] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:53,654 - [08:50:53] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:54,666 - [08:50:54] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:54,667 - [08:50:54] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:55,680 - [08:50:55] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:55,681 - [08:50:55] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:56,690 - [08:50:56] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:56,691 - [08:50:56] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:57,702 - [08:50:57] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:57,703 - [08:50:57] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:58,715 - [08:50:58] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:58,716 - [08:50:58] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:59,572 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 08:50:59,573 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:50:59,573 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 08:50:59,573 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:50:59,573 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 08:50:59,573 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:50:59,573 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 08:50:59,574 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-06 08:50:59,573 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 08:50:59,574 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:50:59,574 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 08:50:59,574 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-06 08:50:59,574 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: Node Disconnected.
+2025-11-06 08:50:59,574 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: Node Disconnected.
+2025-11-06 08:50:59,574 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 08:50:59,574 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-06 08:50:59,574 - Marking the coordinator dead (node coordinator-1) for group central-control-group: Node Disconnected.
+2025-11-06 08:50:59,575 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:50:59,575 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:50:59,575 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:50:59,575 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:50:59,575 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:50:59,575 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:50:59,627 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:50:59,627 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:50:59,628 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:50:59,628 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:50:59,628 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:50:59,676 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:50:59,676 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:50:59,676 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:50:59,676 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:50:59,676 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:50:59,676 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:50:59,676 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-06 08:50:59,676 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:50:59,676 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:50:59,676 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:50:59,676 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-06 08:50:59,677 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-06 08:50:59,726 - [08:50:59] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:59,727 - [08:50:59] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:50:59,798 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:50:59,798 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:50:59,799 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:50:59,799 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:50:59,799 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:50:59,844 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:50:59,844 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:50:59,844 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:50:59,844 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:50:59,844 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:50:59,845 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:50:59,845 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:50:59,845 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:50:59,845 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:50:59,845 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:50:59,845 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:50:59,845 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:50:59,845 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:50:59,845 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:50:59,846 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:50:59,968 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:50:59,968 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:50:59,969 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:50:59,969 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:50:59,969 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:51:00,015 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:51:00,015 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:51:00,015 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:51:00,015 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:51:00,015 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:51:00,016 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:51:00,016 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:51:00,016 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:51:00,016 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:51:00,016 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:51:00,017 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:51:00,017 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:51:00,016 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:51:00,017 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:51:00,017 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:51:00,139 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:51:00,139 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:51:00,140 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:51:00,140 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:51:00,140 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:51:00,185 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:51:00,185 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:51:00,185 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:51:00,185 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:51:00,186 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:51:00,186 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:51:00,187 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:51:00,187 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:51:00,187 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:51:00,187 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:51:00,187 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:51:00,187 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:51:00,187 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:51:00,187 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:51:00,187 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:51:00,309 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:51:00,309 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:51:00,310 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:51:00,310 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:51:00,310 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:51:00,355 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:51:00,355 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:51:00,355 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:51:00,356 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:51:00,356 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:51:00,356 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:51:00,356 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:51:00,356 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:51:00,356 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:51:00,356 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:51:00,357 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:51:00,357 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:51:00,356 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:51:00,357 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:51:00,357 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:51:00,478 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:51:00,478 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:51:00,520 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 08:51:00,520 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 08:51:00,520 - Node 1 connection failed -- refreshing metadata
+2025-11-06 08:51:00,524 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:51:00,524 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:51:00,524 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:51:00,693 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:51:00,739 - [08:51:00] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:51:00,740 - [08:51:00] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:51:01,751 - [08:51:01] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:51:01,752 - [08:51:01] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:51:02,776 - [08:51:02] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:51:02,777 - [08:51:02] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:51:03,775 - [08:51:03] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:51:03,776 - [08:51:03] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:52:11,106 - [08:52:11] [INICIO] 1 CP(s) marcados como Desconectado. Esperando conexiones...
+2025-11-06 08:52:11,110 - [08:52:11] Modo consola simple activado
+2025-11-06 08:52:11,115 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-06 08:52:11,116 - Updating subscribed topics to: ('driver_requests',)
+2025-11-06 08:52:11,116 - Updating subscribed topics to: ('central_commands',)
+2025-11-06 08:52:11,119 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:52:11,119 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:52:11,119 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:52:11,119 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:52:11,119 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:52:11,119 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:52:11,167 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:52:11,167 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:52:11,326 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:52:11,327 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 08:52:11,327 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:52:11,327 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 08:52:11,327 - Starting new heartbeat thread
+2025-11-06 08:52:11,326 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:52:11,327 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 08:52:11,327 - Starting new heartbeat thread
+2025-11-06 08:52:11,327 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-11-06 08:52:11,327 - Revoking previously assigned partitions set() for group central_processing_group
+2025-11-06 08:52:11,327 - Starting new heartbeat thread
+2025-11-06 08:52:11,328 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:52:11,328 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:52:11,328 - Revoking previously assigned partitions set() for group central-control-group
+2025-11-06 08:52:11,328 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:52:11,328 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:52:11,329 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 08:52:11,329 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:52:11,329 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 08:52:11,328 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:52:11,329 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 08:52:11,429 - (Re-)joining group central-telemetry-group
+2025-11-06 08:52:11,429 - (Re-)joining group central_processing_group
+2025-11-06 08:52:11,429 - (Re-)joining group central-control-group
+2025-11-06 08:52:11,433 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:52:11,434 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:52:11,434 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:52:11,534 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:52:11,535 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:52:11,535 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:52:11,535 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:52:11,535 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:52:11,535 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:52:11,637 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:52:11,638 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 08:52:11,638 - (Re-)joining group central-control-group
+2025-11-06 08:52:11,638 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:52:11,638 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 08:52:11,638 - (Re-)joining group central_processing_group
+2025-11-06 08:52:11,637 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:52:11,638 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 08:52:11,638 - (Re-)joining group central-telemetry-group
+2025-11-06 08:52:11,639 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:52:11,639 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:52:11,640 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 08:52:11,741 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:52:11,741 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 08:52:11,741 - (Re-)joining group central-control-group
+2025-11-06 08:52:11,741 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:52:11,742 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 08:52:11,742 - (Re-)joining group central-telemetry-group
+2025-11-06 08:52:11,741 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 08:52:11,742 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 08:52:11,742 - (Re-)joining group central_processing_group
+2025-11-06 08:52:14,756 - Elected group leader -- performing partition assignments using range
+2025-11-06 08:52:14,757 - Elected group leader -- performing partition assignments using range
+2025-11-06 08:52:14,757 - Elected group leader -- performing partition assignments using range
+2025-11-06 08:52:14,771 - Successfully joined group central-telemetry-group with generation 1
+2025-11-06 08:52:14,771 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)]
+2025-11-06 08:52:14,771 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)} for group central-telemetry-group
+2025-11-06 08:52:14,771 - Successfully joined group central-control-group with generation 1
+2025-11-06 08:52:14,771 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-11-06 08:52:14,772 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-06 08:52:14,771 - Successfully joined group central_processing_group with generation 1
+2025-11-06 08:52:14,772 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)]
+2025-11-06 08:52:14,772 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)} for group central_processing_group
+2025-11-06 08:52:38,322 - [08:52:38] [NUEVO CP] Registro inicial de CP_001.
+2025-11-06 08:52:38,323 - [08:52:38] CP registrado y conectado: CP_001 (C/Mayor, 45)
+2025-11-06 08:52:38,324 - [08:52:38] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 08:52:38,332 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 08:52:38,333 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 08:52:38,333 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 08:52:38,341 - [08:52:38] Telemetría inicial publicada para CP_001
+2025-11-06 08:52:38,346 - [08:52:38] AUTH OK enviado a CP_001
+2025-11-06 08:52:45,798 - [08:52:45] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 08:52:45,800 - [08:52:45] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 08:52:46,126 - [08:52:46] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 08:52:46,128 - [08:52:46] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 08:52:55,776 - [08:52:55] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 08:52:55,778 - [08:52:55] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 08:52:56,132 - [08:52:56] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 08:52:56,134 - [08:52:56] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 08:52:58,647 - [08:52:58] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:52:58,649 - [08:52:58] [ESTADO] CP_001 -> AVERÍA (antes: ACTIVADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:52:59,642 - [08:52:59] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:52:59,643 - [08:52:59] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:00,623 - [08:53:00] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:00,624 - [08:53:00] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:01,635 - [08:53:01] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:01,636 - [08:53:01] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:02,647 - [08:53:02] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:02,648 - [08:53:02] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:03,659 - [08:53:03] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:03,660 - [08:53:03] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:04,672 - [08:53:04] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:04,673 - [08:53:04] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:05,683 - [08:53:05] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:05,684 - [08:53:05] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:05,785 - [08:53:05] Telemetría recibida de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-06 08:53:06,139 - [08:53:06] Telemetría recibida de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-06 08:53:06,695 - [08:53:06] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:06,696 - [08:53:06] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:07,708 - [08:53:07] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:07,709 - [08:53:07] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:08,719 - [08:53:08] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:08,720 - [08:53:08] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:09,785 - [08:53:09] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:09,786 - [08:53:09] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:10,743 - [08:53:10] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:10,744 - [08:53:10] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:11,755 - [08:53:11] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:11,756 - [08:53:11] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:12,768 - [08:53:12] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:12,769 - [08:53:12] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:13,779 - [08:53:13] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:13,780 - [08:53:13] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:14,822 - [08:53:14] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:14,823 - [08:53:14] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:15,798 - [08:53:15] Telemetría recibida de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-06 08:53:15,803 - [08:53:15] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:15,804 - [08:53:15] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:16,145 - [08:53:16] Telemetría recibida de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-06 08:53:16,815 - [08:53:16] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:16,816 - [08:53:16] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:17,827 - [08:53:17] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:17,828 - [08:53:17] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:18,843 - [08:53:18] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:18,844 - [08:53:18] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:19,852 - [08:53:19] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:19,853 - [08:53:19] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:20,864 - [08:53:20] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:20,865 - [08:53:20] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:21,875 - [08:53:21] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:21,876 - [08:53:21] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:22,900 - [08:53:22] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:22,901 - [08:53:22] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:23,899 - [08:53:23] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:23,900 - [08:53:23] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:24,911 - [08:53:24] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:24,912 - [08:53:24] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:25,807 - [08:53:25] Telemetría recibida de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-06 08:53:25,923 - [08:53:25] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:25,924 - [08:53:25] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:26,150 - [08:53:26] Telemetría recibida de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-06 08:53:26,935 - [08:53:26] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:26,936 - [08:53:26] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:27,946 - [08:53:27] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:27,948 - [08:53:27] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:28,959 - [08:53:28] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:28,961 - [08:53:28] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:29,981 - [08:53:29] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:29,982 - [08:53:29] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:30,982 - [08:53:30] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:30,983 - [08:53:30] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:31,994 - [08:53:31] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:31,996 - [08:53:31] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:33,006 - [08:53:33] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:33,007 - [08:53:33] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:34,020 - [08:53:34] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:34,021 - [08:53:34] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:35,030 - [08:53:35] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:35,031 - [08:53:35] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:35,816 - [08:53:35] Telemetría recibida de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-06 08:53:36,044 - [08:53:36] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:36,046 - [08:53:36] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:36,156 - [08:53:36] Telemetría recibida de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-06 08:53:37,055 - [08:53:37] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:37,056 - [08:53:37] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:38,065 - [08:53:38] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:38,066 - [08:53:38] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:39,078 - [08:53:39] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:39,079 - [08:53:39] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:40,089 - [08:53:40] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:40,090 - [08:53:40] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:41,101 - [08:53:41] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:41,102 - [08:53:41] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:42,113 - [08:53:42] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:42,114 - [08:53:42] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:43,136 - [08:53:43] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:43,137 - [08:53:43] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:43,366 - [08:53:43] [NUEVO CP] Registro inicial de CP_002.
+2025-11-06 08:53:43,367 - [08:53:43] CP registrado y conectado: CP_002 (C/Mayor, 45)
+2025-11-06 08:53:43,369 - [08:53:43] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 08:53:43,377 - [08:53:43] Telemetría inicial publicada para CP_002
+2025-11-06 08:53:43,384 - [08:53:43] AUTH OK enviado a CP_002
+2025-11-06 08:53:44,157 - [08:53:44] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:44,158 - [08:53:44] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:45,148 - [08:53:45] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:45,149 - [08:53:45] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:45,828 - [08:53:45] Telemetría recibida de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-06 08:53:46,162 - [08:53:46] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:46,163 - [08:53:46] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 08:53:46,164 - [08:53:46] Telemetría recibida de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-06 08:53:46,170 - [08:53:46] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 09:07:44,251 - [09:07:44] [INICIO] 2 CP(s) marcados como Desconectado. Esperando conexiones...
+2025-11-06 09:07:44,255 - [09:07:44] Modo consola simple activado
+2025-11-06 09:07:44,260 - Updating subscribed topics to: ('central_commands',)
+2025-11-06 09:07:44,261 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-06 09:07:44,261 - Updating subscribed topics to: ('driver_requests',)
+2025-11-06 09:07:44,264 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:07:44,264 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:07:44,265 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:07:44,265 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:07:44,265 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:07:44,265 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:07:44,311 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:07:44,312 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:07:44,472 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 09:07:44,472 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 09:07:44,472 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 09:07:44,472 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 09:07:44,472 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 09:07:44,472 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 09:07:44,472 - Starting new heartbeat thread
+2025-11-06 09:07:44,472 - Starting new heartbeat thread
+2025-11-06 09:07:44,473 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-11-06 09:07:44,473 - Starting new heartbeat thread
+2025-11-06 09:07:44,473 - Revoking previously assigned partitions set() for group central-control-group
+2025-11-06 09:07:44,473 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:07:44,473 - Revoking previously assigned partitions set() for group central_processing_group
+2025-11-06 09:07:44,473 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:07:44,474 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:07:44,474 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:07:44,474 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 09:07:44,474 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:07:44,474 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 09:07:44,474 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:07:44,474 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 09:07:44,574 - (Re-)joining group central-telemetry-group
+2025-11-06 09:07:44,575 - (Re-)joining group central_processing_group
+2025-11-06 09:07:44,575 - (Re-)joining group central-control-group
+2025-11-06 09:07:44,578 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 09:07:44,578 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 09:07:44,578 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 09:07:44,679 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:07:44,679 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:07:44,679 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:07:44,679 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:07:44,679 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:07:44,679 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:07:44,782 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 09:07:44,782 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 09:07:44,782 - (Re-)joining group central_processing_group
+2025-11-06 09:07:44,782 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 09:07:44,782 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 09:07:44,783 - (Re-)joining group central-control-group
+2025-11-06 09:07:44,783 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 09:07:44,783 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 09:07:44,783 - (Re-)joining group central-telemetry-group
+2025-11-06 09:07:44,784 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 09:07:44,886 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 09:07:44,887 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 09:07:44,887 - (Re-)joining group central-telemetry-group
+2025-11-06 09:07:47,796 - Elected group leader -- performing partition assignments using range
+2025-11-06 09:07:47,797 - Elected group leader -- performing partition assignments using range
+2025-11-06 09:07:47,813 - Successfully joined group central-control-group with generation 1
+2025-11-06 09:07:47,813 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-11-06 09:07:47,813 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-06 09:07:47,813 - Successfully joined group central_processing_group with generation 1
+2025-11-06 09:07:47,813 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)]
+2025-11-06 09:07:47,813 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)} for group central_processing_group
+2025-11-06 09:07:47,889 - Elected group leader -- performing partition assignments using range
+2025-11-06 09:07:47,891 - Successfully joined group central-telemetry-group with generation 1
+2025-11-06 09:07:47,891 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)]
+2025-11-06 09:07:47,891 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=2), TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1)} for group central-telemetry-group
+2025-11-06 09:08:09,341 - [09:08:09] [NUEVO CP] Registro inicial de CP_001.
+2025-11-06 09:08:09,342 - [09:08:09] CP registrado y conectado: CP_001 (C/Mayor, 45)
+2025-11-06 09:08:09,343 - [09:08:09] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:08:09,350 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:08:09,350 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:08:09,350 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 09:08:09,359 - [09:08:09] Telemetría inicial publicada para CP_001
+2025-11-06 09:08:09,364 - [09:08:09] AUTH OK enviado a CP_001
+2025-11-06 09:08:16,686 - [09:08:16] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:08:16,688 - [09:08:16] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:08:19,271 - [09:08:19] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:08:19,273 - [09:08:19] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:08:26,663 - [09:08:26] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:08:26,665 - [09:08:26] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:08:29,277 - [09:08:29] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:08:29,279 - [09:08:29] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:08:36,671 - [09:08:36] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:08:36,673 - [09:08:36] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:08:39,282 - [09:08:39] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:08:39,284 - [09:08:39] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:08:46,682 - [09:08:46] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:08:46,684 - [09:08:46] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:08:49,288 - [09:08:49] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:08:49,290 - [09:08:49] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:08:56,695 - [09:08:56] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:08:56,697 - [09:08:56] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:08:59,294 - [09:08:59] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:08:59,296 - [09:08:59] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:09:06,716 - [09:09:06] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:09:06,718 - [09:09:06] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:09:09,300 - [09:09:09] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:09:09,302 - [09:09:09] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:09:16,712 - [09:09:16] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:09:16,714 - [09:09:16] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:09:19,305 - [09:09:19] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:09:19,307 - [09:09:19] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:09:26,720 - [09:09:26] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:09:26,722 - [09:09:26] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:09:29,311 - [09:09:29] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:09:29,312 - [09:09:29] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:09:36,726 - [09:09:36] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:09:36,728 - [09:09:36] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:09:39,316 - [09:09:39] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:09:39,318 - [09:09:39] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:09:46,736 - [09:09:46] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:09:46,738 - [09:09:46] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:09:49,321 - [09:09:49] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:09:49,323 - [09:09:49] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:09:56,748 - [09:09:56] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:09:56,750 - [09:09:56] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:09:59,327 - [09:09:59] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:09:59,329 - [09:09:59] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:10:06,758 - [09:10:06] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:10:06,760 - [09:10:06] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:10:09,332 - [09:10:09] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:10:09,334 - [09:10:09] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:10:16,777 - [09:10:16] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:10:16,779 - [09:10:16] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:10:19,338 - [09:10:19] Telemetría recibida de CP_001: est=REPOSO, E=0.00, P=0.0
+2025-11-06 09:10:19,340 - [09:10:19] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:10:23,035 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 09:10:23,035 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,035 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 09:10:23,035 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,035 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 09:10:23,035 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,036 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 09:10:23,036 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,035 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 09:10:23,036 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,036 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: Node Disconnected.
+2025-11-06 09:10:23,036 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 09:10:23,036 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,036 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-06 09:10:23,037 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,037 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,037 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: Node Disconnected.
+2025-11-06 09:10:23,037 - Marking the coordinator dead (node coordinator-1) for group central-control-group: Node Disconnected.
+2025-11-06 09:10:23,037 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,037 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:23,037 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,037 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:23,038 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:23,097 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,098 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:23,098 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:23,099 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:23,099 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,138 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:23,138 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:23,138 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,138 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:23,138 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:23,138 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,138 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-06 09:10:23,139 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:23,139 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:23,139 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,139 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-06 09:10:23,139 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-06 09:10:23,268 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,269 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:23,269 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:23,269 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:23,270 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,316 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,316 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,316 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,316 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:23,316 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:23,316 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:23,317 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:23,317 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:23,317 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,317 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:23,317 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:23,317 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,317 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:23,317 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:23,317 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,441 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,441 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:23,442 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:23,442 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:23,442 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,488 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,488 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,488 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,488 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:23,488 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:23,489 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:23,489 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:23,489 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:23,489 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,489 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:23,489 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:23,489 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,489 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:23,489 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:23,489 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,612 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,613 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:23,614 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:23,614 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:23,614 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,658 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,658 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,658 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,658 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:23,658 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:23,659 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:23,659 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:23,659 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:23,659 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,659 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:23,659 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:23,659 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,659 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:23,659 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:23,659 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,783 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,783 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:23,784 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:23,784 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:23,784 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,829 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,829 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,829 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,830 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:23,830 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:23,830 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:23,830 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:23,830 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:23,830 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,830 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:23,830 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:23,831 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,830 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:23,831 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:23,831 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:23,953 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:23,953 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:24,001 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:24,001 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:24,001 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:24,001 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:24,001 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:24,002 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:10:24,090 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:24,091 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:24,091 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:24,091 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:24,091 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:24,091 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:24,091 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:24,091 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:24,092 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:24,091 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-06 09:10:24,092 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-06 09:10:24,092 - Node 1 connection failed -- refreshing metadata
+2025-11-06 09:10:24,091 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:24,092 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:24,092 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:10:24,261 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
