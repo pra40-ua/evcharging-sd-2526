@@ -62,7 +62,8 @@ def generar_y_enviar_telemetria(cp_id: str, estado_carga: str, kw_entregados: fl
     # Obtener información de sesión activa
     try:
         driver_id_sesion = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
-        tiene_sesion = driver_id_sesion != 'UNKNOWN' and estado_carga in ['CARGANDO', 'PRE-SUMINISTRO']
+        # Mantener la sesión visible durante ESPERANDO_CONFIRMACION_FIN
+        tiene_sesion = driver_id_sesion != 'UNKNOWN' and estado_carga in ['CARGANDO', 'PRE-SUMINISTRO', 'ESPERANDO_CONFIRMACION_FIN']
     except:
         driver_id_sesion = None
         tiene_sesion = False
@@ -135,7 +136,14 @@ def bucle_telemetria(cp_id: str, stop_event: threading.Event):
         with STATE_LOCK:
             segundos_global += 1
             kw_acumulados_global += 0.05
+            # Determinar el estado a reportar en telemetría respetando el flujo interactivo
             estado = 'CARGANDO'
+            try:
+                with ESTADO_FLUJO_LOCK:
+                    if ESTADO_FLUJO == 'ESPERANDO_CONFIRMACION_FIN':
+                        estado = 'ESPERANDO_CONFIRMACION_FIN'
+            except Exception:
+                pass
             kw = round(kw_acumulados_global, 2)
             secs = segundos_global
             potencia = 3.0  # Potencia constante simulada en kW
@@ -1390,6 +1398,8 @@ def panel_local():
   <div style=\"margin: 0 0 16px; color:#636e72; font-size:13px;\">
     Este botón simula ejecutar en PowerShell:
     <pre style=\"white-space: pre-wrap; background:#fff; padding:10px; border-radius:6px;\">Invoke-WebRequest -Method POST -Uri http://127.0.0.1:{web_port}/api/iniciar_suministro | Select-Object -ExpandProperty Content</pre>
+    Para solicitar fin del suministro:
+    <pre style=\"white-space: pre-wrap; background:#fff; padding:10px; border-radius:6px;\">Invoke-WebRequest -Method POST -Uri http://127.0.0.1:{web_port}/api/solicitar_fin | Select-Object -ExpandProperty Content</pre>
   </div>
   <h3>Estado</h3>
   <pre id=\"estado\">Cargando...</pre>
