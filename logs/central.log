@@ -99049,3 +99049,1188 @@ nnection. KafkaConnectionError: socket disconnected
 2025-11-06 20:43:27,570 - [20:43:27] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
 2025-11-06 20:43:27,589 - [20:43:27] [ESTADO] CP_001 -> ACTIVADO.
 2025-11-06 20:43:27,607 - [20:43:27] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=15.00 kWh
+2025-11-06 21:58:31,556 - [21:58:31] [INICIO] 2 CP(s) marcados como Desconectado. Esperando conexiones...
+2025-11-06 21:58:31,560 - [21:58:31] Modo consola simple activado
+2025-11-06 21:58:31,566 - Updating subscribed topics to: ('central_commands',)
+2025-11-06 21:58:31,567 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-06 21:58:31,568 - Updating subscribed topics to: ('driver_requests',)
+2025-11-06 21:58:31,570 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 21:58:31,570 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 21:58:31,570 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 21:58:31,571 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 21:58:31,571 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 21:58:31,571 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 21:58:31,622 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 21:58:31,622 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 21:58:31,778 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 21:58:31,778 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 21:58:31,778 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 21:58:31,778 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 21:58:31,778 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 21:58:31,778 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 21:58:31,778 - Starting new heartbeat thread
+2025-11-06 21:58:31,779 - Starting new heartbeat thread
+2025-11-06 21:58:31,779 - Starting new heartbeat thread
+2025-11-06 21:58:31,779 - Revoking previously assigned partitions set() for group central-control-group
+2025-11-06 21:58:31,779 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-11-06 21:58:31,779 - Revoking previously assigned partitions set() for group central_processing_group
+2025-11-06 21:58:31,780 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 21:58:31,780 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 21:58:31,780 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 21:58:31,780 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 21:58:31,780 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 21:58:31,780 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 21:58:31,780 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 21:58:31,781 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 21:58:31,781 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 21:58:31,881 - (Re-)joining group central-control-group
+2025-11-06 21:58:31,881 - (Re-)joining group central-telemetry-group
+2025-11-06 21:58:31,881 - (Re-)joining group central_processing_group
+2025-11-06 21:58:31,882 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 21:58:31,882 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 21:58:31,885 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 21:58:31,885 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 21:58:31,885 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 21:58:31,986 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 21:58:31,986 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 21:58:31,987 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 21:58:31,987 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 21:58:31,988 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 21:58:31,988 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 21:58:31,988 - (Re-)joining group central-control-group
+2025-11-06 21:58:31,989 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 21:58:32,090 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 21:58:32,090 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 21:58:32,090 - (Re-)joining group central-telemetry-group
+2025-11-06 21:58:32,090 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 21:58:32,090 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 21:58:32,090 - (Re-)joining group central_processing_group
+2025-11-06 21:58:32,091 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 21:58:32,091 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 21:58:32,091 - (Re-)joining group central-control-group
+2025-11-06 21:58:32,091 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 21:58:32,092 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 21:58:32,092 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 21:58:32,194 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 21:58:32,194 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 21:58:32,195 - (Re-)joining group central_processing_group
+2025-11-06 21:58:32,194 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 21:58:32,195 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 21:58:32,195 - (Re-)joining group central-control-group
+2025-11-06 21:58:32,194 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 21:58:32,195 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 21:58:32,195 - (Re-)joining group central-telemetry-group
+2025-11-06 21:58:35,208 - Elected group leader -- performing partition assignments using range
+2025-11-06 21:58:35,210 - Elected group leader -- performing partition assignments using range
+2025-11-06 21:58:35,210 - Elected group leader -- performing partition assignments using range
+2025-11-06 21:58:35,210 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 21:58:35,211 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 21:58:35,211 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 21:58:35,224 - Successfully joined group central-control-group with generation 1
+2025-11-06 21:58:35,225 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-11-06 21:58:35,225 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-06 21:58:35,225 - Successfully joined group central-telemetry-group with generation 1
+2025-11-06 21:58:35,225 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)]
+2025-11-06 21:58:35,225 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)} for group central-telemetry-group
+2025-11-06 21:58:35,225 - Successfully joined group central_processing_group with generation 1
+2025-11-06 21:58:35,225 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)]
+2025-11-06 21:58:35,225 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2), TopicPartition(topic='driver_requests', partition=0)} for group central_processing_group
+2025-11-06 21:59:03,701 - [21:59:03] [NUEVO CP] Registro inicial de CP_001.
+2025-11-06 21:59:03,701 - [21:59:03] CP registrado y conectado: CP_001 (C/Mayor, 45)
+2025-11-06 21:59:03,702 - [21:59:03] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 21:59:03,710 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 21:59:03,710 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 21:59:03,710 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 21:59:03,719 - [21:59:03] Telemetría inicial publicada para CP_001
+2025-11-06 21:59:03,724 - [21:59:03] AUTH OK enviado a CP_001
+2025-11-06 21:59:06,580 - [21:59:06] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:06,582 - [21:59:06] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 21:59:09,725 - [21:59:09] [NUEVO CP] Registro inicial de CP_002.
+2025-11-06 21:59:09,726 - [21:59:09] CP registrado y conectado: CP_002 (C/Mayor, 45)
+2025-11-06 21:59:09,727 - [21:59:09] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 21:59:09,739 - [21:59:09] Telemetría inicial publicada para CP_002
+2025-11-06 21:59:09,744 - [21:59:09] AUTH OK enviado a CP_002
+2025-11-06 21:59:10,630 - [21:59:10] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:10,632 - [21:59:10] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 21:59:15,723 - [21:59:15] [NUEVO CP] Registro inicial de CP_003.
+2025-11-06 21:59:15,724 - [21:59:15] CP registrado y conectado: CP_003 (C/Mayor, 45)
+2025-11-06 21:59:15,725 - [21:59:15] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 21:59:15,734 - [21:59:15] Telemetría inicial publicada para CP_003
+2025-11-06 21:59:15,742 - [21:59:15] AUTH OK enviado a CP_003
+2025-11-06 21:59:16,586 - [21:59:16] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:16,589 - [21:59:16] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 21:59:16,598 - [21:59:16] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:16,600 - [21:59:16] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 21:59:16,606 - [21:59:16] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:16,608 - [21:59:16] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 21:59:16,616 - [21:59:16] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:16,618 - [21:59:16] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 21:59:20,591 - [21:59:20] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:20,594 - [21:59:20] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 21:59:21,682 - [21:59:21] [NUEVO CP] Registro inicial de CP_004.
+2025-11-06 21:59:21,684 - [21:59:21] CP registrado y conectado: CP_004 (C/Mayor, 45)
+2025-11-06 21:59:21,685 - [21:59:21] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 21:59:21,695 - [21:59:21] Telemetría inicial publicada para CP_004
+2025-11-06 21:59:21,704 - [21:59:21] AUTH OK enviado a CP_004
+2025-11-06 21:59:22,675 - [21:59:22] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:22,678 - [21:59:22] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 21:59:26,557 - [21:59:26] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:26,560 - [21:59:26] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 21:59:26,597 - [21:59:26] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:26,600 - [21:59:26] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 21:59:26,609 - [21:59:26] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:26,612 - [21:59:26] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 21:59:26,618 - [21:59:26] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:26,621 - [21:59:26] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 21:59:26,628 - [21:59:26] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:26,631 - [21:59:26] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 21:59:27,764 - [21:59:27] [NUEVO CP] Registro inicial de CP_005.
+2025-11-06 21:59:27,765 - [21:59:27] CP registrado y conectado: CP_005 (C/Mayor, 45)
+2025-11-06 21:59:27,767 - [21:59:27] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 21:59:27,777 - [21:59:27] Telemetría inicial publicada para CP_005
+2025-11-06 21:59:27,787 - [21:59:27] AUTH OK enviado a CP_005
+2025-11-06 21:59:28,642 - [21:59:28] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:28,646 - [21:59:28] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 21:59:30,598 - [21:59:30] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:30,602 - [21:59:30] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 21:59:32,647 - [21:59:32] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:32,651 - [21:59:32] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 21:59:34,575 - [21:59:34] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:34,578 - [21:59:34] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 21:59:36,561 - [21:59:36] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:36,564 - [21:59:36] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 21:59:36,613 - [21:59:36] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:36,617 - [21:59:36] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 21:59:36,623 - [21:59:36] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:36,627 - [21:59:36] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 21:59:36,636 - [21:59:36] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:36,640 - [21:59:36] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 21:59:36,647 - [21:59:36] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:36,651 - [21:59:36] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 21:59:36,658 - [21:59:36] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:36,662 - [21:59:36] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 21:59:38,626 - [21:59:38] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:38,630 - [21:59:38] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 21:59:40,611 - [21:59:40] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:40,615 - [21:59:40] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 21:59:42,637 - [21:59:42] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:42,641 - [21:59:42] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 21:59:44,543 - [21:59:44] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:44,547 - [21:59:44] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 21:59:46,570 - [21:59:46] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:46,574 - [21:59:46] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 21:59:46,628 - [21:59:46] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:46,631 - [21:59:46] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 21:59:46,643 - [21:59:46] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:46,647 - [21:59:46] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 21:59:46,655 - [21:59:46] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:46,659 - [21:59:46] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 21:59:46,665 - [21:59:46] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:46,669 - [21:59:46] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 21:59:46,676 - [21:59:46] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:46,679 - [21:59:46] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 21:59:48,605 - [21:59:48] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:48,608 - [21:59:48] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 21:59:50,612 - [21:59:50] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:50,616 - [21:59:50] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 21:59:52,639 - [21:59:52] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:52,643 - [21:59:52] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 21:59:54,649 - [21:59:54] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:54,653 - [21:59:54] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 21:59:56,644 - [21:59:56] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:56,647 - [21:59:56] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 21:59:56,656 - [21:59:56] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:56,660 - [21:59:56] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 21:59:56,667 - [21:59:56] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:56,670 - [21:59:56] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 21:59:56,678 - [21:59:56] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:56,681 - [21:59:56] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 21:59:56,688 - [21:59:56] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:56,692 - [21:59:56] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 21:59:56,769 - [21:59:56] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:56,773 - [21:59:56] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 21:59:58,606 - [21:59:58] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 21:59:58,609 - [21:59:58] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:00:00,638 - [22:00:00] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:00,642 - [22:00:00] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 22:00:02,649 - [22:00:02] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:02,653 - [22:00:02] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:00:04,568 - [22:00:04] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:04,572 - [22:00:04] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:00:06,588 - [22:00:06] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:06,592 - [22:00:06] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 22:00:06,659 - [22:00:06] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:06,663 - [22:00:06] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 22:00:06,672 - [22:00:06] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:06,675 - [22:00:06] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 22:00:06,682 - [22:00:06] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:06,685 - [22:00:06] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:00:06,692 - [22:00:06] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:06,695 - [22:00:06] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:00:06,702 - [22:00:06] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:06,705 - [22:00:06] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:00:08,618 - [22:00:08] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:08,622 - [22:00:08] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:00:10,630 - [22:00:10] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:10,634 - [22:00:10] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 22:00:12,655 - [22:00:12] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:12,658 - [22:00:12] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:00:14,649 - [22:00:14] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:14,653 - [22:00:14] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:00:16,679 - [22:00:16] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:16,683 - [22:00:16] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 22:00:16,689 - [22:00:16] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:16,693 - [22:00:16] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 22:00:16,701 - [22:00:16] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:16,705 - [22:00:16] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:00:16,712 - [22:00:16] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:16,716 - [22:00:16] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:00:16,722 - [22:00:16] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:16,726 - [22:00:16] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:00:17,025 - [22:00:17] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:17,029 - [22:00:17] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 22:00:18,631 - [22:00:18] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:18,635 - [22:00:18] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:00:20,641 - [22:00:20] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:20,645 - [22:00:20] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 22:00:22,670 - [22:00:22] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:22,674 - [22:00:22] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:00:24,589 - [22:00:24] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:24,593 - [22:00:24] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:00:26,605 - [22:00:26] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:26,609 - [22:00:26] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 22:00:26,694 - [22:00:26] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:26,697 - [22:00:26] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 22:00:26,706 - [22:00:26] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:26,710 - [22:00:26] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 22:00:26,717 - [22:00:26] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:26,720 - [22:00:26] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:00:26,727 - [22:00:26] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:26,730 - [22:00:26] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:00:26,737 - [22:00:26] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:26,741 - [22:00:26] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:00:28,638 - [22:00:28] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:28,642 - [22:00:28] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:00:30,639 - [22:00:30] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:30,643 - [22:00:30] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 22:00:32,668 - [22:00:32] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:32,672 - [22:00:32] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:00:34,596 - [22:00:34] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:34,600 - [22:00:34] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:00:36,616 - [22:00:36] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:36,620 - [22:00:36] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 22:00:36,708 - [22:00:36] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:36,711 - [22:00:36] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 22:00:36,720 - [22:00:36] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:36,724 - [22:00:36] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 22:00:36,731 - [22:00:36] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:36,734 - [22:00:36] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:00:36,741 - [22:00:36] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:36,744 - [22:00:36] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:00:36,751 - [22:00:36] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:36,754 - [22:00:36] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:00:38,650 - [22:00:38] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:38,653 - [22:00:38] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:00:40,669 - [22:00:40] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:40,673 - [22:00:40] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 22:00:42,695 - [22:00:42] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:42,699 - [22:00:42] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:00:44,608 - [22:00:44] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:44,612 - [22:00:44] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:00:46,628 - [22:00:46] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:46,632 - [22:00:46] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 22:00:46,723 - [22:00:46] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:46,727 - [22:00:46] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 22:00:46,736 - [22:00:46] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:46,740 - [22:00:46] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:00:46,747 - [22:00:46] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:46,751 - [22:00:46] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:00:46,757 - [22:00:46] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:46,760 - [22:00:46] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:00:46,767 - [22:00:46] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:46,771 - [22:00:46] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 22:00:48,680 - [22:00:48] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:48,684 - [22:00:48] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:00:50,662 - [22:00:50] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:50,666 - [22:00:50] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 22:00:52,690 - [22:00:52] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:52,694 - [22:00:52] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:00:54,664 - [22:00:54] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:54,668 - [22:00:54] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:00:56,740 - [22:00:56] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:56,744 - [22:00:56] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 22:00:56,753 - [22:00:56] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:56,757 - [22:00:56] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 22:00:56,763 - [22:00:56] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:56,767 - [22:00:56] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:00:56,773 - [22:00:56] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:56,777 - [22:00:56] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:00:56,783 - [22:00:56] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:56,787 - [22:00:56] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:00:56,819 - [22:00:56] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:56,823 - [22:00:56] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 22:00:58,666 - [22:00:58] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:00:58,669 - [22:00:58] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:01:00,672 - [22:01:00] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:00,676 - [22:01:00] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 22:01:02,701 - [22:01:02] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:02,705 - [22:01:02] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:01:04,624 - [22:01:04] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:04,628 - [22:01:04] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:01:06,648 - [22:01:06] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:06,652 - [22:01:06] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 22:01:06,756 - [22:01:06] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:06,762 - [22:01:06] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 22:01:06,770 - [22:01:06] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:06,774 - [22:01:06] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 22:01:06,780 - [22:01:06] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:06,784 - [22:01:06] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:01:06,790 - [22:01:06] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:06,794 - [22:01:06] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:01:06,800 - [22:01:06] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:06,804 - [22:01:06] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:01:08,675 - [22:01:08] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:08,678 - [22:01:08] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:01:10,680 - [22:01:10] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:10,684 - [22:01:10] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 22:01:12,706 - [22:01:12] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:12,709 - [22:01:12] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:01:14,632 - [22:01:14] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:14,636 - [22:01:14] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:01:16,654 - [22:01:16] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:16,658 - [22:01:16] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 22:01:16,777 - [22:01:16] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:16,780 - [22:01:16] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 22:01:16,789 - [22:01:16] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:16,793 - [22:01:16] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 22:01:16,800 - [22:01:16] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:16,804 - [22:01:16] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:01:16,810 - [22:01:16] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:16,814 - [22:01:16] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:01:16,820 - [22:01:16] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:16,823 - [22:01:16] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:01:18,685 - [22:01:18] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:18,689 - [22:01:18] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:01:20,693 - [22:01:20] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:20,697 - [22:01:20] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 22:01:22,718 - [22:01:22] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:22,722 - [22:01:22] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:01:24,646 - [22:01:24] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:24,649 - [22:01:24] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:01:26,661 - [22:01:26] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:26,665 - [22:01:26] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 22:01:26,792 - [22:01:26] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:26,795 - [22:01:26] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 22:01:26,804 - [22:01:26] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:26,807 - [22:01:26] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:01:26,815 - [22:01:26] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:26,818 - [22:01:26] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:01:26,825 - [22:01:26] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:26,828 - [22:01:26] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 22:01:26,834 - [22:01:26] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:26,838 - [22:01:26] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:01:28,698 - [22:01:28] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:28,701 - [22:01:28] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:01:30,699 - [22:01:30] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:30,703 - [22:01:30] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 22:01:32,727 - [22:01:32] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:32,730 - [22:01:32] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:01:34,653 - [22:01:34] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:34,657 - [22:01:34] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:01:36,666 - [22:01:36] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:36,670 - [22:01:36] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 22:01:36,807 - [22:01:36] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:36,811 - [22:01:36] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 22:01:36,820 - [22:01:36] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:36,824 - [22:01:36] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:01:36,830 - [22:01:36] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:36,834 - [22:01:36] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:01:36,840 - [22:01:36] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:36,844 - [22:01:36] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 22:01:36,850 - [22:01:36] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:36,854 - [22:01:36] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:01:38,220 - [22:01:38] Solicitud de recarga recibida
+2025-11-06 22:01:38,230 - Topic driver_status_DRIVER_001 not found in cluster metadata
+2025-11-06 22:01:38,350 - [22:01:38] [ESTADO] CP_002 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-06 22:01:38,369 - [22:01:38] [FLUJO] Solicitud DRIVER_001 \u2192 CP_002 (30.0 kWh). Esperando confirmación de operador Central.
+2025-11-06 22:01:38,371 - [22:01:38] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:01:38,706 - [22:01:38] Telemetría recibida de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:38,710 - [22:01:38] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-06 22:01:39,214 - [22:01:39] Solicitud de recarga recibida
+2025-11-06 22:01:39,225 - Topic driver_status_DRIVER_002 not found in cluster metadata
+2025-11-06 22:01:39,340 - [22:01:39] [ESTADO] CP_001 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-06 22:01:39,358 - [22:01:39] [FLUJO] Solicitud DRIVER_002 \u2192 CP_001 (11.0 kWh). Esperando confirmación de operador Central.
+2025-11-06 22:01:39,360 - [22:01:39] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:01:40,224 - [22:01:40] Solicitud de recarga recibida
+2025-11-06 22:01:40,235 - Topic driver_status_DRIVER_003 not found in cluster metadata
+2025-11-06 22:01:40,345 - [22:01:40] [ESTADO] CP_004 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-06 22:01:40,364 - [22:01:40] [FLUJO] Solicitud DRIVER_003 \u2192 CP_004 (34.0 kWh). Esperando confirmación de operador Central.
+2025-11-06 22:01:40,365 - [22:01:40] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:01:40,711 - [22:01:40] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:01:41,510 - [22:01:41] Solicitud de recarga recibida
+2025-11-06 22:01:41,521 - Topic driver_status_DRIVER_004 not found in cluster metadata
+2025-11-06 22:01:41,635 - [22:01:41] Driver DRIVER_004 en cola para CP_002 (posición 1)
+2025-11-06 22:01:42,312 - [22:01:42] Solicitud de recarga recibida
+2025-11-06 22:01:42,323 - Topic driver_status_DRIVER_005 not found in cluster metadata
+2025-11-06 22:01:42,439 - [22:01:42] Driver DRIVER_005 en cola para CP_002 (posición 2)
+2025-11-06 22:01:42,736 - [22:01:42] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:42,740 - [22:01:42] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:01:43,283 - [22:01:43] Solicitud de recarga recibida
+2025-11-06 22:01:43,295 - Topic driver_status_DRIVER_006 not found in cluster metadata
+2025-11-06 22:01:43,412 - [22:01:43] Driver DRIVER_006 en cola para CP_004 (posición 1)
+2025-11-06 22:01:44,661 - [22:01:44] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:44,665 - [22:01:44] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:01:46,677 - [22:01:46] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:01:46,824 - [22:01:46] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:01:46,839 - [22:01:46] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:01:46,851 - [22:01:46] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:46,855 - [22:01:46] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:01:46,862 - [22:01:46] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:01:46,874 - [22:01:46] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:46,877 - [22:01:46] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:01:48,716 - [22:01:48] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:01:50,717 - [22:01:50] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:01:52,762 - [22:01:52] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:52,765 - [22:01:52] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:01:54,673 - [22:01:54] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:54,677 - [22:01:54] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:01:56,685 - [22:01:56] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:01:56,840 - [22:01:56] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:01:56,856 - [22:01:56] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:01:56,870 - [22:01:56] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:56,874 - [22:01:56] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:01:56,881 - [22:01:56] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:01:56,886 - [22:01:56] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:01:56,894 - [22:01:56] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:01:58,724 - [22:01:58] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:02:00,732 - [22:02:00] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:02:02,754 - [22:02:02] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:02,758 - [22:02:02] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:02:04,681 - [22:02:04] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:04,685 - [22:02:04] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:02:06,697 - [22:02:06] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:02:06,858 - [22:02:06] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:02:06,873 - [22:02:06] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:02:06,889 - [22:02:06] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:06,892 - [22:02:06] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:02:06,900 - [22:02:06] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:02:06,912 - [22:02:06] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:06,916 - [22:02:06] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:02:08,738 - [22:02:08] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:02:10,740 - [22:02:10] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:02:12,765 - [22:02:12] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:12,770 - [22:02:12] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:02:14,683 - [22:02:14] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:14,687 - [22:02:14] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:02:16,876 - [22:02:16] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:02:16,891 - [22:02:16] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:16,895 - [22:02:16] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:02:16,902 - [22:02:16] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:02:16,916 - [22:02:16] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:02:16,929 - [22:02:16] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:16,933 - [22:02:16] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:02:17,139 - [22:02:17] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:02:18,747 - [22:02:18] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:02:20,751 - [22:02:20] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:02:22,772 - [22:02:22] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:22,776 - [22:02:22] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:02:24,697 - [22:02:24] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:24,701 - [22:02:24] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:02:26,712 - [22:02:26] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:02:26,891 - [22:02:26] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:02:26,904 - [22:02:26] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:26,908 - [22:02:26] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:02:26,915 - [22:02:26] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:02:26,926 - [22:02:26] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:26,929 - [22:02:26] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:02:26,937 - [22:02:26] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:02:28,757 - [22:02:28] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:02:30,758 - [22:02:30] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:02:32,784 - [22:02:32] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:32,788 - [22:02:32] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:02:34,738 - [22:02:34] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:34,741 - [22:02:34] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:02:36,722 - [22:02:36] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:02:36,907 - [22:02:36] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:02:36,921 - [22:02:36] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:02:36,932 - [22:02:36] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:36,936 - [22:02:36] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:02:36,942 - [22:02:36] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:36,946 - [22:02:36] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:02:36,952 - [22:02:36] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:02:38,767 - [22:02:38] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:02:40,774 - [22:02:40] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:02:42,796 - [22:02:42] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:42,801 - [22:02:42] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:02:44,715 - [22:02:44] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:44,718 - [22:02:44] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:02:46,735 - [22:02:46] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:02:46,923 - [22:02:46] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:02:46,937 - [22:02:46] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:46,941 - [22:02:46] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:02:46,947 - [22:02:46] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:02:46,959 - [22:02:46] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:46,963 - [22:02:46] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:02:46,972 - [22:02:46] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:02:48,778 - [22:02:48] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:02:50,783 - [22:02:50] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:02:52,803 - [22:02:52] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:52,807 - [22:02:52] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:02:54,721 - [22:02:54] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:54,725 - [22:02:54] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:02:56,748 - [22:02:56] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:02:56,937 - [22:02:56] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:02:56,953 - [22:02:56] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:02:56,965 - [22:02:56] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:56,968 - [22:02:56] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:02:56,975 - [22:02:56] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:02:56,987 - [22:02:56] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:02:56,991 - [22:02:56] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:02:58,788 - [22:02:58] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:03:00,783 - [22:03:00] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:03:02,822 - [22:03:02] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:02,825 - [22:03:02] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:03:04,731 - [22:03:04] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:04,735 - [22:03:04] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:03:06,753 - [22:03:06] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:03:06,958 - [22:03:06] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:03:06,970 - [22:03:06] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:06,974 - [22:03:06] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:03:06,981 - [22:03:06] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:03:06,992 - [22:03:06] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:03:07,004 - [22:03:07] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:07,008 - [22:03:07] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:03:08,798 - [22:03:08] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:03:10,794 - [22:03:10] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:03:12,862 - [22:03:12] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:12,866 - [22:03:12] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:03:14,742 - [22:03:14] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:14,745 - [22:03:14] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:03:16,762 - [22:03:16] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:03:16,974 - [22:03:16] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:03:16,988 - [22:03:16] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:03:16,999 - [22:03:16] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:17,003 - [22:03:17] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:03:17,009 - [22:03:17] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:17,013 - [22:03:17] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:03:17,020 - [22:03:17] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:03:18,806 - [22:03:18] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:03:20,803 - [22:03:20] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:03:22,836 - [22:03:22] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:22,840 - [22:03:22] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:03:24,753 - [22:03:24] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:24,757 - [22:03:24] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:03:26,772 - [22:03:26] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:03:26,992 - [22:03:26] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:03:27,005 - [22:03:27] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:03:27,016 - [22:03:27] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:27,020 - [22:03:27] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:03:27,026 - [22:03:27] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:03:27,038 - [22:03:27] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:27,042 - [22:03:27] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:03:28,814 - [22:03:28] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:03:30,812 - [22:03:30] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:03:32,848 - [22:03:32] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:32,852 - [22:03:32] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:03:34,760 - [22:03:34] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:34,764 - [22:03:34] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:03:36,780 - [22:03:36] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:03:37,008 - [22:03:37] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:03:37,022 - [22:03:37] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:37,026 - [22:03:37] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:03:37,033 - [22:03:37] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:03:37,044 - [22:03:37] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:37,048 - [22:03:37] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:03:37,055 - [22:03:37] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:03:38,851 - [22:03:38] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:03:40,825 - [22:03:40] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:03:42,851 - [22:03:42] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:42,855 - [22:03:42] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:03:44,769 - [22:03:44] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:44,773 - [22:03:44] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:03:46,791 - [22:03:46] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:03:47,023 - [22:03:47] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:03:47,037 - [22:03:47] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:03:47,048 - [22:03:47] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:47,051 - [22:03:47] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:03:47,059 - [22:03:47] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:47,063 - [22:03:47] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:03:47,070 - [22:03:47] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:03:48,834 - [22:03:48] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:03:50,831 - [22:03:50] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:03:52,862 - [22:03:52] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:52,865 - [22:03:52] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:03:54,778 - [22:03:54] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:54,782 - [22:03:54] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:03:56,800 - [22:03:56] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:03:57,042 - [22:03:57] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:03:57,057 - [22:03:57] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:57,060 - [22:03:57] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:03:57,067 - [22:03:57] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:03:57,078 - [22:03:57] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:03:57,089 - [22:03:57] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:03:57,092 - [22:03:57] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:03:58,841 - [22:03:58] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:04:00,841 - [22:04:00] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:04:02,870 - [22:04:02] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:02,874 - [22:04:02] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:04:04,791 - [22:04:04] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:04,795 - [22:04:04] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:04:06,804 - [22:04:06] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:04:07,057 - [22:04:07] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:04:07,069 - [22:04:07] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:04:07,081 - [22:04:07] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:07,084 - [22:04:07] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:04:07,091 - [22:04:07] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:04:07,102 - [22:04:07] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:07,105 - [22:04:07] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:04:08,851 - [22:04:08] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:04:10,852 - [22:04:10] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:04:12,881 - [22:04:12] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:12,885 - [22:04:12] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:04:14,800 - [22:04:14] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:14,804 - [22:04:14] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:04:16,821 - [22:04:16] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:04:17,073 - [22:04:17] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:04:17,087 - [22:04:17] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:04:17,098 - [22:04:17] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:04:17,109 - [22:04:17] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:17,113 - [22:04:17] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:04:17,120 - [22:04:17] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:17,124 - [22:04:17] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:04:18,869 - [22:04:18] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:04:20,861 - [22:04:20] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:04:22,889 - [22:04:22] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:22,893 - [22:04:22] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:04:24,806 - [22:04:24] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:24,811 - [22:04:24] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:04:26,824 - [22:04:26] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:04:27,088 - [22:04:27] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:04:27,101 - [22:04:27] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:27,105 - [22:04:27] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:04:27,111 - [22:04:27] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:04:27,122 - [22:04:27] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:04:27,133 - [22:04:27] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:27,137 - [22:04:27] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:04:28,871 - [22:04:28] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:04:30,870 - [22:04:30] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:04:32,896 - [22:04:32] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:32,900 - [22:04:32] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:04:34,819 - [22:04:34] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:34,823 - [22:04:34] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:04:36,832 - [22:04:36] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:04:37,108 - [22:04:37] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:04:37,121 - [22:04:37] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:37,125 - [22:04:37] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:04:37,132 - [22:04:37] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:37,136 - [22:04:37] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:04:37,144 - [22:04:37] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:04:37,155 - [22:04:37] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:04:38,884 - [22:04:38] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:04:40,888 - [22:04:40] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:04:42,911 - [22:04:42] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:42,914 - [22:04:42] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:04:44,859 - [22:04:44] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:44,863 - [22:04:44] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:04:46,852 - [22:04:46] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:04:47,121 - [22:04:47] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:04:47,134 - [22:04:47] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:47,138 - [22:04:47] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:04:47,145 - [22:04:47] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:04:47,155 - [22:04:47] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:47,159 - [22:04:47] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:04:47,165 - [22:04:47] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:04:48,912 - [22:04:48] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:04:50,891 - [22:04:50] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:04:52,916 - [22:04:52] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:52,920 - [22:04:52] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:04:54,839 - [22:04:54] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:54,843 - [22:04:54] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:04:56,853 - [22:04:56] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:04:57,138 - [22:04:57] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:04:57,152 - [22:04:57] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:57,156 - [22:04:57] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:04:57,162 - [22:04:57] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:04:57,173 - [22:04:57] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:04:57,177 - [22:04:57] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:04:57,183 - [22:04:57] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:04:58,904 - [22:04:58] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:05:00,896 - [22:05:00] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:05:02,922 - [22:05:02] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:02,925 - [22:05:02] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:05:04,856 - [22:05:04] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:04,860 - [22:05:04] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:05:06,866 - [22:05:06] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:05:07,153 - [22:05:07] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:05:07,167 - [22:05:07] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:07,170 - [22:05:07] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:05:07,177 - [22:05:07] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:05:07,188 - [22:05:07] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:05:07,200 - [22:05:07] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:07,204 - [22:05:07] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:05:08,911 - [22:05:08] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:05:10,910 - [22:05:10] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:05:12,926 - [22:05:12] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:12,930 - [22:05:12] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:05:14,855 - [22:05:14] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:14,858 - [22:05:14] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:05:16,876 - [22:05:16] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:05:17,172 - [22:05:17] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:05:17,186 - [22:05:17] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:05:17,198 - [22:05:17] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:17,201 - [22:05:17] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:05:17,207 - [22:05:17] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:17,211 - [22:05:17] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:05:17,217 - [22:05:17] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:05:18,913 - [22:05:18] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:05:20,916 - [22:05:20] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:05:22,943 - [22:05:22] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:22,947 - [22:05:22] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:05:24,867 - [22:05:24] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:24,870 - [22:05:24] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:05:26,885 - [22:05:26] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:05:27,181 - [22:05:27] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:05:27,196 - [22:05:27] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:05:27,207 - [22:05:27] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:27,210 - [22:05:27] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:05:27,217 - [22:05:27] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:05:27,228 - [22:05:27] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:27,231 - [22:05:27] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:05:28,923 - [22:05:28] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:05:30,926 - [22:05:30] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:05:32,948 - [22:05:32] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:32,952 - [22:05:32] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:05:34,880 - [22:05:34] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:34,883 - [22:05:34] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:05:36,893 - [22:05:36] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:05:37,203 - [22:05:37] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:05:37,216 - [22:05:37] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:37,220 - [22:05:37] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:05:37,226 - [22:05:37] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:37,230 - [22:05:37] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:05:37,236 - [22:05:37] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:05:37,248 - [22:05:37] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:05:38,934 - [22:05:38] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:05:40,939 - [22:05:40] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:05:42,958 - [22:05:42] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:42,962 - [22:05:42] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:05:44,886 - [22:05:44] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:44,890 - [22:05:44] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:05:46,907 - [22:05:46] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:05:47,218 - [22:05:47] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:05:47,231 - [22:05:47] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:05:47,242 - [22:05:47] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:47,246 - [22:05:47] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:05:47,252 - [22:05:47] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:05:47,263 - [22:05:47] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:47,268 - [22:05:47] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:05:48,139 - [22:05:48] [CONTROL WEB] Comando PREPARE_SUPPLY para CP_002 desde web_dashboard_paso1
+2025-11-06 22:05:48,145 - [22:05:48] [FLUJO] AUTH_REQ enviado a CP_002. Esperando acción del operador del Engine.
+2025-11-06 22:05:48,147 - [22:05:48] [ESTADO] CP_002 -> ESPERANDO_OPERADOR_ENGINE (antes: PENDIENTE_CONFIRMACION_CENTRAL).
+2025-11-06 22:05:48,156 - [22:05:48] Telemetría recibida de CP_002: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:05:48,166 - [22:05:48] [CONTROL] Confirmación síncrona de CP_002: AUTH_ACK#OK.
+2025-11-06 22:05:48,943 - [22:05:48] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:05:50,950 - [22:05:50] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:05:52,970 - [22:05:52] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:52,974 - [22:05:52] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:05:54,896 - [22:05:54] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:54,900 - [22:05:54] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:05:56,921 - [22:05:56] Telemetría recibida de CP_002: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:05:57,241 - [22:05:57] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:05:57,257 - [22:05:57] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:57,260 - [22:05:57] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:05:57,269 - [22:05:57] Telemetría recibida de CP_002: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:05:57,282 - [22:05:57] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:05:57,286 - [22:05:57] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:05:57,294 - [22:05:57] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:05:58,975 - [22:05:58] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:06:00,957 - [22:06:00] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:06:02,980 - [22:06:02] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:02,984 - [22:06:02] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:06:04,908 - [22:06:04] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:04,914 - [22:06:04] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:06:06,925 - [22:06:06] Telemetría recibida de CP_002: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:06:07,255 - [22:06:07] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:06:07,269 - [22:06:07] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:06:07,281 - [22:06:07] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:07,284 - [22:06:07] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:06:07,291 - [22:06:07] Telemetría recibida de CP_002: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:06:07,302 - [22:06:07] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:07,306 - [22:06:07] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:06:08,965 - [22:06:08] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:06:10,960 - [22:06:10] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:06:12,990 - [22:06:12] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:12,994 - [22:06:12] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:06:14,921 - [22:06:14] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:14,926 - [22:06:14] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:06:16,937 - [22:06:16] Telemetría recibida de CP_002: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:06:17,270 - [22:06:17] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:06:17,284 - [22:06:17] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:17,287 - [22:06:17] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:06:17,294 - [22:06:17] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:17,297 - [22:06:17] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:06:17,304 - [22:06:17] Telemetría recibida de CP_002: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:06:17,315 - [22:06:17] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:06:18,974 - [22:06:18] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:06:20,974 - [22:06:20] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:06:23,006 - [22:06:23] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:23,010 - [22:06:23] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:06:24,929 - [22:06:24] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:24,933 - [22:06:24] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:06:26,942 - [22:06:26] Telemetría recibida de CP_002: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:06:27,284 - [22:06:27] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:06:27,298 - [22:06:27] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:06:27,310 - [22:06:27] Telemetría recibida de CP_002: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:06:27,321 - [22:06:27] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:27,325 - [22:06:27] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:06:27,331 - [22:06:27] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:27,335 - [22:06:27] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:06:28,983 - [22:06:28] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:06:30,980 - [22:06:30] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:06:33,013 - [22:06:33] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:33,017 - [22:06:33] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:06:34,938 - [22:06:34] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:34,942 - [22:06:34] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:06:36,952 - [22:06:36] Telemetría recibida de CP_002: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:06:37,304 - [22:06:37] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:06:37,317 - [22:06:37] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:37,321 - [22:06:37] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:06:37,328 - [22:06:37] Telemetría recibida de CP_002: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:06:37,339 - [22:06:37] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:37,342 - [22:06:37] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:06:37,349 - [22:06:37] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:06:38,996 - [22:06:38] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:06:40,985 - [22:06:40] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:06:43,026 - [22:06:43] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:43,029 - [22:06:43] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:06:44,950 - [22:06:44] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:44,954 - [22:06:44] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:06:45,105 - [22:06:45] [FLUJO] CP_002 listo para iniciar. Driver: DRIVER_001. Esperando confirmación del operador de Central.
+2025-11-06 22:06:45,111 - [22:06:45] [ESTADO] CP_002 -> LISTO_PARA_INICIAR (antes: ESPERANDO_OPERADOR_ENGINE).
+2025-11-06 22:06:45,126 - [22:06:45] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:06:46,965 - [22:06:46] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:06:47,321 - [22:06:47] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:06:47,334 - [22:06:47] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:47,338 - [22:06:47] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:06:47,344 - [22:06:47] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:06:47,355 - [22:06:47] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:06:47,366 - [22:06:47] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:47,370 - [22:06:47] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:06:49,004 - [22:06:49] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:06:50,991 - [22:06:50] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:06:53,033 - [22:06:53] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:53,037 - [22:06:53] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:06:54,953 - [22:06:54] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:54,957 - [22:06:54] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:06:56,975 - [22:06:56] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:06:57,337 - [22:06:57] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:06:57,352 - [22:06:57] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:57,356 - [22:06:57] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:06:57,363 - [22:06:57] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:06:57,374 - [22:06:57] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:06:57,387 - [22:06:57] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:06:57,391 - [22:06:57] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:06:59,018 - [22:06:59] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:07:00,999 - [22:07:00] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:07:03,035 - [22:07:03] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:03,039 - [22:07:03] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:07:04,960 - [22:07:04] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:04,964 - [22:07:04] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:07:06,983 - [22:07:06] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:07,353 - [22:07:07] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:07:07,367 - [22:07:07] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:07,378 - [22:07:07] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:07,382 - [22:07:07] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:07:07,389 - [22:07:07] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:07:07,401 - [22:07:07] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:07,404 - [22:07:07] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:07:09,039 - [22:07:09] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:07:11,001 - [22:07:10] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:07:13,044 - [22:07:13] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:13,048 - [22:07:13] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:07:14,972 - [22:07:14] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:14,976 - [22:07:14] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:07:16,187 - [22:07:16] [CONTROL WEB] Comando START para CP_002 desde web_dashboard_confirmacion_final
+2025-11-06 22:07:16,191 - [22:07:16] Iniciando carga en CP_002 (Driver: DRIVER_001, kW: 30.0)
+2025-11-06 22:07:16,203 - [22:07:16] Comando START enviado a CP_002
+2025-11-06 22:07:16,209 - [22:07:16] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:16,228 - [22:07:16] [CONTROL] Estado reportado por CP_002: ACTIVADO
+2025-11-06 22:07:16,230 - [22:07:16] [IGNORADO] STATE CP_002: LISTO_PARA_INICIAR mantiene prioridad sobre ACTIVADO
+2025-11-06 22:07:17,370 - [22:07:17] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:07:17,383 - [22:07:17] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.00, P=0.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:17,394 - [22:07:17] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:17,398 - [22:07:17] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:07:17,404 - [22:07:17] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:07:17,415 - [22:07:17] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:17,419 - [22:07:17] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:07:17,509 - [22:07:17] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.05, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:18,512 - [22:07:18] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.10, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:19,033 - [22:07:19] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:07:19,515 - [22:07:19] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.15, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:20,516 - [22:07:20] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.20, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:21,013 - [22:07:21] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:07:21,518 - [22:07:21] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.25, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:22,518 - [22:07:22] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.30, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:23,059 - [22:07:23] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:23,064 - [22:07:23] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:07:23,526 - [22:07:23] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.35, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:24,525 - [22:07:24] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.40, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:24,982 - [22:07:24] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:24,986 - [22:07:24] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:07:25,522 - [22:07:25] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.45, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:26,524 - [22:07:26] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.50, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:27,389 - [22:07:27] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:07:27,403 - [22:07:27] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:07:27,415 - [22:07:27] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:27,419 - [22:07:27] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:07:27,426 - [22:07:27] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.50, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:27,438 - [22:07:27] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:27,442 - [22:07:27] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:07:27,525 - [22:07:27] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.55, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:28,540 - [22:07:28] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.60, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:29,044 - [22:07:29] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:07:29,529 - [22:07:29] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.65, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:30,534 - [22:07:30] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.70, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:31,025 - [22:07:31] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:07:31,534 - [22:07:31] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.75, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:32,535 - [22:07:32] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.80, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:33,066 - [22:07:33] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:33,070 - [22:07:33] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:07:33,541 - [22:07:33] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.85, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:34,540 - [22:07:34] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.90, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:35,015 - [22:07:35] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:35,019 - [22:07:35] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:07:35,539 - [22:07:35] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.95, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:36,548 - [22:07:36] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.00, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:37,405 - [22:07:37] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:07:37,420 - [22:07:37] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:37,423 - [22:07:37] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:07:37,430 - [22:07:37] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.00, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:37,441 - [22:07:37] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:37,446 - [22:07:37] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:07:37,452 - [22:07:37] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:07:37,546 - [22:07:37] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.05, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:38,546 - [22:07:38] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.10, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:39,053 - [22:07:39] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:07:39,546 - [22:07:39] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.15, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:40,543 - [22:07:40] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.20, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:41,035 - [22:07:41] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:07:41,546 - [22:07:41] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.25, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:42,549 - [22:07:42] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.30, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:43,082 - [22:07:43] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:43,086 - [22:07:43] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:07:43,557 - [22:07:43] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.35, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:44,550 - [22:07:44] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.40, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:45,000 - [22:07:44] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:45,004 - [22:07:45] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:07:45,553 - [22:07:45] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.45, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:46,557 - [22:07:46] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.50, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:47,422 - [22:07:47] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:07:47,435 - [22:07:47] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.50, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:47,447 - [22:07:47] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:47,451 - [22:07:47] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:07:47,458 - [22:07:47] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:07:47,470 - [22:07:47] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:47,473 - [22:07:47] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:07:47,561 - [22:07:47] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.55, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:48,561 - [22:07:48] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.60, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:49,066 - [22:07:49] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:07:49,560 - [22:07:49] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.65, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:50,561 - [22:07:50] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.70, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:51,036 - [22:07:51] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:07:51,564 - [22:07:51] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.75, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:52,568 - [22:07:52] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.80, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:53,081 - [22:07:53] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:53,085 - [22:07:53] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:07:53,570 - [22:07:53] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.85, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:54,571 - [22:07:54] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.90, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:55,011 - [22:07:55] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:55,014 - [22:07:55] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:07:55,567 - [22:07:55] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.95, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:56,572 - [22:07:56] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=2.00, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:57,438 - [22:07:57] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:07:57,451 - [22:07:57] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:57,455 - [22:07:57] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:07:57,463 - [22:07:57] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=2.00, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:57,474 - [22:07:57] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:07:57,477 - [22:07:57] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:07:57,484 - [22:07:57] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:07:57,571 - [22:07:57] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=2.05, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:58,573 - [22:07:58] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=2.10, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:07:59,075 - [22:07:59] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:07:59,576 - [22:07:59] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=2.15, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:00,578 - [22:08:00] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=2.20, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:01,042 - [22:08:01] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:08:01,583 - [22:08:01] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=2.25, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:02,579 - [22:08:02] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=2.30, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:03,050 - [22:08:03] [FLUJO] CP_002 solicita fin. Driver: DRIVER_001, 2.3 kWh. Esperando confirmación del operador de Central.
+2025-11-06 22:08:03,052 - [22:08:03] [ESTADO] CP_002 -> ESPERANDO_CONFIRMACION_FIN (antes: LISTO_PARA_INICIAR).
+2025-11-06 22:08:03,068 - [22:08:03] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=2.30, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:03,088 - [22:08:03] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:03,092 - [22:08:03] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:08:03,585 - [22:08:03] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=2.35, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:04,585 - [22:08:04] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=2.40, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:05,020 - [22:08:05] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:05,023 - [22:08:05] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:08:05,588 - [22:08:05] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=2.45, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:06,588 - [22:08:06] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=2.50, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:07,456 - [22:08:07] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:08:07,467 - [22:08:07] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=2.50, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:07,480 - [22:08:07] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:07,484 - [22:08:07] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:08:07,490 - [22:08:07] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:07,494 - [22:08:07] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:08:07,500 - [22:08:07] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:08:07,586 - [22:08:07] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=2.55, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:08,587 - [22:08:08] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=2.60, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:09,084 - [22:08:09] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:08:09,590 - [22:08:09] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=2.65, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:10,591 - [22:08:10] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=2.70, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:11,069 - [22:08:11] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:08:11,593 - [22:08:11] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=2.75, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:12,592 - [22:08:12] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=2.80, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:13,100 - [22:08:13] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:13,104 - [22:08:13] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:08:13,595 - [22:08:13] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=2.85, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:14,601 - [22:08:14] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=2.90, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:15,028 - [22:08:15] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:15,032 - [22:08:15] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:08:15,597 - [22:08:15] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=2.95, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:16,605 - [22:08:16] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.00, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:17,470 - [22:08:17] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:08:17,483 - [22:08:17] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.00, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:17,494 - [22:08:17] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:17,498 - [22:08:17] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:08:17,504 - [22:08:17] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:08:17,515 - [22:08:17] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:17,519 - [22:08:17] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:08:17,601 - [22:08:17] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.05, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:18,605 - [22:08:18] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.10, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:19,097 - [22:08:19] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:08:19,602 - [22:08:19] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.15, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:20,604 - [22:08:20] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.20, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:21,075 - [22:08:21] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:08:21,608 - [22:08:21] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.25, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:22,612 - [22:08:22] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.30, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:23,100 - [22:08:23] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:23,104 - [22:08:23] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:08:23,612 - [22:08:23] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.35, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:24,613 - [22:08:24] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.40, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:25,031 - [22:08:25] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:25,036 - [22:08:25] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:08:25,613 - [22:08:25] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.45, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:26,615 - [22:08:26] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.50, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:27,486 - [22:08:27] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:08:27,499 - [22:08:27] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:08:27,510 - [22:08:27] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:27,514 - [22:08:27] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:08:27,522 - [22:08:27] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.50, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:27,533 - [22:08:27] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:27,537 - [22:08:27] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:08:27,616 - [22:08:27] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.55, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:28,627 - [22:08:28] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.60, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:29,104 - [22:08:29] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:08:29,619 - [22:08:29] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.65, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:30,620 - [22:08:30] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.70, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:31,078 - [22:08:31] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:08:31,628 - [22:08:31] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.75, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:32,624 - [22:08:32] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.80, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:33,113 - [22:08:33] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:33,117 - [22:08:33] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:08:33,624 - [22:08:33] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.85, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:34,626 - [22:08:34] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.90, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:35,043 - [22:08:35] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:35,047 - [22:08:35] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:08:35,626 - [22:08:35] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=3.95, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:36,629 - [22:08:36] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.00, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:37,502 - [22:08:37] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:08:37,517 - [22:08:37] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.00, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:37,528 - [22:08:37] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:37,532 - [22:08:37] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:08:37,538 - [22:08:37] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:08:37,550 - [22:08:37] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:37,554 - [22:08:37] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:08:37,632 - [22:08:37] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.05, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:38,634 - [22:08:38] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.10, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:39,115 - [22:08:39] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:08:39,632 - [22:08:39] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.15, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:40,640 - [22:08:40] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.20, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:41,080 - [22:08:41] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:08:41,639 - [22:08:41] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.25, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:42,637 - [22:08:42] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.30, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:43,120 - [22:08:43] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:43,124 - [22:08:43] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:08:43,649 - [22:08:43] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.35, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:44,644 - [22:08:44] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.40, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:45,052 - [22:08:45] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:45,056 - [22:08:45] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:08:45,640 - [22:08:45] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.45, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:46,644 - [22:08:46] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.50, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:47,519 - [22:08:47] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:08:47,533 - [22:08:47] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.50, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:47,545 - [22:08:47] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:47,549 - [22:08:47] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:08:47,556 - [22:08:47] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:08:47,568 - [22:08:47] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:47,572 - [22:08:47] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:08:47,649 - [22:08:47] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.55, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:48,646 - [22:08:48] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.60, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:49,124 - [22:08:49] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:08:49,666 - [22:08:49] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.65, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:50,650 - [22:08:50] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.70, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:51,095 - [22:08:51] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:08:51,654 - [22:08:51] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.75, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:52,655 - [22:08:52] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.80, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:53,131 - [22:08:53] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:53,135 - [22:08:53] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:08:53,656 - [22:08:53] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.85, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:54,685 - [22:08:54] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.90, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:55,076 - [22:08:55] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:55,080 - [22:08:55] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:08:55,658 - [22:08:55] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=4.95, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:56,659 - [22:08:56] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=5.00, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:57,534 - [22:08:57] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:08:57,548 - [22:08:57] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=5.00, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:57,560 - [22:08:57] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:08:57,571 - [22:08:57] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:57,575 - [22:08:57] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:08:57,581 - [22:08:57] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:08:57,585 - [22:08:57] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:08:57,658 - [22:08:57] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=5.05, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:58,664 - [22:08:58] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=5.10, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:08:59,144 - [22:08:59] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:08:59,661 - [22:08:59] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=5.15, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:09:00,664 - [22:09:00] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=5.20, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:09:01,105 - [22:09:01] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:09:01,673 - [22:09:01] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=5.25, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:09:02,669 - [22:09:02] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=5.30, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:09:03,141 - [22:09:03] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:09:03,146 - [22:09:03] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:09:03,669 - [22:09:03] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=5.35, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:09:04,668 - [22:09:04] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=5.40, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:09:05,072 - [22:09:05] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:09:05,076 - [22:09:05] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:09:05,685 - [22:09:05] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=5.45, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:09:06,673 - [22:09:06] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=5.50, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:09:07,549 - [22:09:07] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:09:07,563 - [22:09:07] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:09:07,566 - [22:09:07] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 22:09:07,573 - [22:09:07] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=5.50, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:09:07,584 - [22:09:07] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:09:07,595 - [22:09:07] Telemetría recibida de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 22:09:07,599 - [22:09:07] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-06 22:09:07,674 - [22:09:07] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=5.55, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:09:08,676 - [22:09:08] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=5.60, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:09:09,152 - [22:09:09] Telemetría recibida de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=34.00 kWh
+2025-11-06 22:09:09,677 - [22:09:09] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=5.65, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:09:10,679 - [22:09:10] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=5.70, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:09:11,106 - [22:09:11] [CONTROL WEB] Comando STOP para CP_002 desde web_dashboard_confirmacion
+2025-11-06 22:09:11,111 - [22:09:11] Enviando STOP a CP_002. Esperando FIN con datos finales...
+2025-11-06 22:09:11,114 - [22:09:11] Comando STOP enviado a CP_002
+2025-11-06 22:09:11,118 - [22:09:11] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 22:09:11,163 - [22:09:11] [CONTROL] Estado reportado por CP_002: PARADO
+2025-11-06 22:09:11,165 - [22:09:11] [IGNORADO] STATE CP_002: ESPERANDO_CONFIRMACION_FIN mantiene prioridad sobre PARADO
+2025-11-06 22:09:11,685 - [22:09:11] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=5.75, P=3.0 | Solicitado=30.00 kWh
+2025-11-06 22:09:11,851 - [22:09:11] [CONTROL] Fin de carga recibido de CP_002: 5.75 kWh, 2.76 €
+2025-11-06 22:09:11,854 - [22:09:11] [WARN] No se pudo registrar telemetría: MySQL Connection not available.
+2025-11-06 22:09:11,857 - [22:09:11] Telemetría recibida de CP_002: est=ESPERANDO_CONFIRMACION_FIN, E=5.75, P=0.0 | Solicitado=30.00 kWh

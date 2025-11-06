@@ -432,7 +432,12 @@ def consumir_telemetria_kafka(broker_list: str):
                     try:
                         # Intentar usar variable cerrada sobre db_connection si existe en enclosing scope
                         db_conn = globals().get('_DB_CONN_FOR_CONSUMER')
-                        if db_conn and db_conn.is_connected():
+                        # Verificar conexión de forma segura
+                        if not _verificar_conexion_segura(db_conn):
+                            # Intentar reconectar
+                            db_conn = _asegurar_conexion_bd(db_conn)
+                        
+                        if _verificar_conexion_segura(db_conn) and db_conn:
                             cursor = db_conn.cursor()
                             cursor.execute("""
                                 INSERT INTO telemetria_log (cp_id, timestamp, estado_carga, kw_entregados, tiempo_carga_s)
@@ -802,7 +807,7 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                         })
 
                         # Paso 2: Validar contra BD
-                        if not (db_connection and db_connection.is_connected()):
+                        if not _verificar_conexion_segura(db_connection):
                             print("[CENTRAL] BD no disponible; denegando solicitud.")
                             notificar_driver(id_driver, 'DENEGADA', {
                                 'motivo': 'BD no disponible; no es posible validar CP'
@@ -1075,7 +1080,15 @@ def conectar_bd(db_config: str) -> mysql.connector.connection.MySQLConnection:
             database=database,
             autocommit=True,
             charset='utf8mb4',
-            collation='utf8mb4_general_ci'
+            collation='utf8mb4_general_ci',
+            # Configuración de timeouts para evitar desconexiones inesperadas
+            connect_timeout=10,  # Timeout para establecer conexión (segundos)
+            connection_timeout=10,  # Alias de connect_timeout
+            # Configuración adicional para conexiones de larga duración
+            pool_reset_session=False,  # No resetear sesión al reutilizar conexión
+            # Opciones de conexión para mantenerla viva
+            sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO',
+            init_command="SET SESSION wait_timeout=28800, interactive_timeout=28800"  # 8 horas
         )
         
         if connection.is_connected():
@@ -1126,23 +1139,40 @@ def registrar_cp_en_bd(connection: mysql.connector.connection.MySQLConnection,
         print(f"[CENTRAL] Error inesperado al registrar CP {cp_id}: {e}")
         return False
 
+def _verificar_conexion_segura(connection: mysql.connector.connection.MySQLConnection | None) -> bool:
+    """Verifica si una conexión MySQL está activa de forma segura, sin lanzar excepciones."""
+    if not connection:
+        return False
+    try:
+        return connection.is_connected()
+    except Exception:
+        return False
+
 def _asegurar_conexion_bd(connection: mysql.connector.connection.MySQLConnection | None) -> mysql.connector.connection.MySQLConnection | None:
     """Verifica y, si es necesario, reestablece la conexión a BD usando DB_CONFIG_STR."""
     try:
-        if connection and connection.is_connected():
-            return connection
+        if connection:
+            if _verificar_conexion_segura(connection):
+                return connection
+            else:
+                # La conexión está en un estado inválido, intentar cerrarla
+                try:
+                    connection.close()
+                except Exception:
+                    pass
     except Exception:
         pass
     try:
         cfg = globals().get('DB_CONFIG_STR')
         if not cfg:
-            return connection
+            return None
         nuevo = conectar_bd(cfg)
         # Actualizar referencia global usada por consumidores
         globals()['_DB_CONN_FOR_CONSUMER'] = nuevo
         return nuevo
-    except Exception as _:
-        return connection
+    except Exception as e:
+        print(f"[CENTRAL] Error reconectando a BD: {e}")
+        return None
 
 
 def actualizar_estado_cp(connection: mysql.connector.connection.MySQLConnection | None, 
@@ -1284,7 +1314,7 @@ def persistir_servicio_activo(db_connection: mysql.connector.connection.MySQLCon
                               driver_id: str, cp_id: str, estado: str, kw_objetivo: float | None = None,
                               kw_actual: float = 0.0, tx_id: str | None = None) -> bool:
     """Crea o actualiza un servicio activo en la BD."""
-    if not db_connection or not db_connection.is_connected():
+    if not _verificar_conexion_segura(db_connection):
         db_connection = _asegurar_conexion_bd(db_connection)
         if not db_connection:
             return False
@@ -1330,7 +1360,7 @@ def persistir_servicio_activo(db_connection: mysql.connector.connection.MySQLCon
 def actualizar_servicio_activo(db_connection: mysql.connector.connection.MySQLConnection | None,
                                driver_id: str, kw_actual: float | None = None, estado: str | None = None) -> bool:
     """Actualiza el estado o kw_actual de un servicio activo."""
-    if not db_connection or not db_connection.is_connected():
+    if not _verificar_conexion_segura(db_connection):
         db_connection = _asegurar_conexion_bd(db_connection)
         if not db_connection:
             return False
@@ -1375,7 +1405,7 @@ def actualizar_servicio_activo(db_connection: mysql.connector.connection.MySQLCo
 def finalizar_servicio_activo(db_connection: mysql.connector.connection.MySQLConnection | None,
                               driver_id: str, estado_final: str = 'FINALIZADO') -> bool:
     """Marca un servicio como finalizado en la BD."""
-    if not db_connection or not db_connection.is_connected():
+    if not _verificar_conexion_segura(db_connection):
         db_connection = _asegurar_conexion_bd(db_connection)
         if not db_connection:
             return False
@@ -1404,7 +1434,7 @@ def almacenar_ticket_pendiente(db_connection: mysql.connector.connection.MySQLCo
                               duracion_seg: int | None = None, motivo: str | None = None,
                               tx_id: str | None = None) -> bool:
     """Almacena un ticket pendiente en la BD para que el driver lo recupere al reconectar."""
-    if not db_connection or not db_connection.is_connected():
+    if not _verificar_conexion_segura(db_connection):
         db_connection = _asegurar_conexion_bd(db_connection)
         if not db_connection:
             return False
@@ -1431,7 +1461,7 @@ def almacenar_ticket_pendiente(db_connection: mysql.connector.connection.MySQLCo
 def obtener_servicios_pendientes_driver(db_connection: mysql.connector.connection.MySQLConnection | None,
                                         driver_id: str) -> list:
     """Obtiene servicios activos pendientes para un driver."""
-    if not db_connection or not db_connection.is_connected():
+    if not _verificar_conexion_segura(db_connection):
         db_connection = _asegurar_conexion_bd(db_connection)
         if not db_connection:
             return []
@@ -1453,7 +1483,7 @@ def obtener_servicios_pendientes_driver(db_connection: mysql.connector.connectio
 def obtener_tickets_pendientes_driver(db_connection: mysql.connector.connection.MySQLConnection | None,
                                       driver_id: str) -> list:
     """Obtiene tickets pendientes no entregados para un driver."""
-    if not db_connection or not db_connection.is_connected():
+    if not _verificar_conexion_segura(db_connection):
         db_connection = _asegurar_conexion_bd(db_connection)
         if not db_connection:
             return []
@@ -1475,7 +1505,7 @@ def obtener_tickets_pendientes_driver(db_connection: mysql.connector.connection.
 def marcar_ticket_entregado(db_connection: mysql.connector.connection.MySQLConnection | None,
                             ticket_id: int) -> bool:
     """Marca un ticket como entregado."""
-    if not db_connection or not db_connection.is_connected():
+    if not _verificar_conexion_segura(db_connection):
         db_connection = _asegurar_conexion_bd(db_connection)
         if not db_connection:
             return False
@@ -1786,7 +1816,7 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                 traceback.print_exc()
             
             # --- LÓGICA BD: Insertar/Actualizar CP y marcar como ACTIVADO ---
-            if db_connection and db_connection.is_connected():
+            if _verificar_conexion_segura(db_connection):
                 if registrar_cp_en_bd(db_connection, cp_id, ubicacion, precio_kwh):
                     respuesta_trama = construir_trama('AUTH', ['OK', 'Autenticacion exitosa'])
                     conn.sendall(respuesta_trama)
@@ -2357,7 +2387,7 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
         if cp_id != "Desconocido":
             registrar_evento(f"Monitor desconectado: {cp_id}")
         # --- LÓGICA DB: Marcar el CP como AVERÍA ante desconexión inesperada ---
-        if cp_id != "Desconocido" and db_connection and db_connection.is_connected():
+        if cp_id != "Desconocido" and _verificar_conexion_segura(db_connection):
             actualizar_estado_cp(db_connection, cp_id, "Averiado")
         try:
             if cp_id != "Desconocido":
@@ -2612,7 +2642,7 @@ def main():
                     print(f"[EV_Central] Error cerrando servidor socket: {e}")
             
             # Cerrar conexión a BD
-            if db_connection and db_connection.is_connected():
+            if _verificar_conexion_segura(db_connection):
                 try:
                     db_connection.close()
                     print("[EV_Central] Conexión a BD cerrada.")
