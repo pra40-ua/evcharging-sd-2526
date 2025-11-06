@@ -1,0 +1,189 @@
+============================================================ 
+ LOG DE EJECUCION - PC_B_RUN.bat 
+ Fecha/Hora: 06/11/2025  8:09:08,81 
+============================================================ 
+ 
+Docker version 28.4.0, build d8eb465
+ 
+============================================================ 
+[MODO] MULTIPLES CPS SELECCIONADO 
+============================================================ 
+[INPUT] Usuario ingreso: NUM_CPS=1 
+[VALIDADO] NUM_CPS final: 1 
+[BUILD] Iniciando construccion de imagenes 
+[BUILD] Fecha/Hora: 06/11/2025  8:09:23,19 
+ 
+[BUILD] Ejecutando: docker build -t ev_engine:local -f ev_cp_engine/Dockerfile . 
+[BUILD] ---- INICIO OUTPUT DOCKER BUILD ENGINE ---- 
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 580B 0.0s done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 1.4s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
+#3 resolve docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6 0.0s done
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/python:3.10-slim
+#4 DONE 0.8s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 275B done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 101.23kB 0.0s done
+#6 DONE 0.0s
+
+#7 [1/6] FROM docker.io/library/python:3.10-slim@sha256:2a8c7d9efdae9b636de80a187a4ce31374ffb3883a7be06232d25a96e8538bf4
+#7 resolve docker.io/library/python:3.10-slim@sha256:2a8c7d9efdae9b636de80a187a4ce31374ffb3883a7be06232d25a96e8538bf4 0.0s done
+#7 DONE 0.0s
+
+#8 [2/6] WORKDIR /app
+#8 CACHED
+
+#9 [3/6] COPY requirements.txt ./
+#9 CACHED
+
+#10 [4/6] RUN pip install --no-cache-dir -r requirements.txt
+#10 CACHED
+
+#11 [5/6] COPY ev_cp_engine/ ev_cp_engine/
+#11 CACHED
+
+#12 [6/6] COPY ev_common/ ev_common/
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 exporting manifest sha256:1961fc0b736196d5e759e31973351f3cc939a3c56e23d71f52687d7042481404 done
+#13 exporting config sha256:0d3e5d6017e43e8d19694ca1cb512e3f1bdf4cb78053248cbc03c817f3b5ff0b done
+#13 exporting attestation manifest sha256:23b1dfe7d8f6885daca16a0aa533998c8c809ead5143474c84a000bbf546e957 0.0s done
+#13 exporting manifest list sha256:ffcadf5168958cb498a5b0774439c7cbfaef39b1fa7d6823c7808c29acd34ce4 0.0s done
+#13 naming to docker.io/library/ev_engine:local done
+#13 unpacking to docker.io/library/ev_engine:local 0.0s done
+#13 DONE 0.1s
+[BUILD] ---- FIN OUTPUT DOCKER BUILD ENGINE ---- 
+[BUILD] Resultado (errorlevel): 0 
+[BUILD OK] ev_engine construido exitosamente 
+[BUILD] Ejecutando: docker build -t ev_monitor:local -f ev_cp_monitor/Dockerfile . 
+[BUILD] ---- INICIO OUTPUT DOCKER BUILD MONITOR ---- 
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 615B done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 0.2s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
+#3 resolve docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6 0.0s done
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/python:3.10-slim
+#4 DONE 0.2s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 275B done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 26.11kB 0.0s done
+#6 DONE 0.0s
+
+#7 [1/6] FROM docker.io/library/python:3.10-slim@sha256:2a8c7d9efdae9b636de80a187a4ce31374ffb3883a7be06232d25a96e8538bf4
+#7 resolve docker.io/library/python:3.10-slim@sha256:2a8c7d9efdae9b636de80a187a4ce31374ffb3883a7be06232d25a96e8538bf4 0.0s done
+#7 DONE 0.0s
+
+#8 [2/6] WORKDIR /app
+#8 CACHED
+
+#9 [3/6] COPY requirements.txt ./
+#9 CACHED
+
+#10 [4/6] RUN pip install --no-cache-dir -r requirements.txt
+#10 CACHED
+
+#11 [5/6] COPY ev_cp_monitor/ ev_cp_monitor/
+#11 CACHED
+
+#12 [6/6] COPY ev_common/ ev_common/
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 exporting manifest sha256:c5128f17d03120a29abf699142c33e14b8514d8ce1893532f6d7fa26d86dbcf7 done
+#13 exporting config sha256:aea119ec23d2d0133833e59ae430e4d084a89713cadba581f4d15b1c3511c526 done
+#13 exporting attestation manifest sha256:ae574b7da644200f3916164dd6f6561c5bea18a94665232a511b7442f0b4367b 0.0s done
+#13 exporting manifest list sha256:7a8f04a6e827dd50e971528ca222772f32cf594d6e71bfaef8ac3ab1412c5919 0.0s done
+#13 naming to docker.io/library/ev_monitor:local done
+#13 unpacking to docker.io/library/ev_monitor:local 0.0s done
+#13 DONE 0.1s
+[BUILD] ---- FIN OUTPUT DOCKER BUILD MONITOR ---- 
+[BUILD] Resultado (errorlevel): 0 
+[BUILD OK] ev_monitor construido exitosamente 
+[DEBUG] Ejecutando: docker ps -q --filter "label=component=engine" 
+[DEBUG] CP_OFFSET detectado: 0 
+[LOG] CPs existentes: 0 
+[DEBUG] Antes de mostrar mensaje... 
+[DEBUG] Mensaje mostrado 
+[DEBUG] Iniciando timeout de 2 segundos... 
+[DEBUG] Timeout completado, continuando... 
+ 
+============================================================ 
+[MAIN] INICIANDO LANZAMIENTO DE 1 CPs 
+============================================================ 
+[DEBUG] BASE_PORT=5000 
+[DEBUG] KAFKA_SERVER=192.168.1.43:9092 
+[DEBUG] CENTRAL_IP=192.168.1.43 
+[DEBUG] CP_OFFSET=0 
+[DEBUG] NUM_CPS=1 
+ 
+[DEBUG] Antes de iniciar bucle FOR 
+[DEBUG] Rango del bucle: 1 a 1 
+ 
+[MAIN] ================================================ 
+[MAIN] Iteracion 1 de 1 
+[MAIN] CP_NUM calculado: 1 
+[MAIN] ================================================ 
+[DEBUG] A punto de llamar a LANZAR_CP con CP_NUM=1 
+ 
+============================================================ 
+[FUNCION] LANZAR_CP INICIADA 
+============================================================ 
+[DEBUG] LANZAR_CP llamado con CP_NUM=1 
+[DEBUG] BASE_PORT=5000 
+[DEBUG] KAFKA_SERVER=192.168.1.43:9092 
+[DEBUG] CENTRAL_IP=192.168.1.43 
+[DEBUG] CP_ID calculado: CP_001 
+[DEBUG] ENGINE_PORT calculado: 5001 
+ 
+[DEBUG] ---- COMANDO ENGINE ---- 
+docker run --rm -p 5001:5001 -p 9001:9001 --name engine_CP_001 --label project=evcharging-pc-b --label component=engine --label cp_id=CP_001 -e ENGINE_PORT=5001 -e CP_ID=CP_001 -e KAFKA_SERVER=192.168.1.43:9092 -e WEB_PORT=9001 ev_engine:local 
+ 
+[DEBUG] ---- COMANDO MONITOR ---- 
+docker run --rm --network host --name monitor_CP_001 --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 -e CP_ID=CP_001 -e CENTRAL_IP=192.168.1.43 -e CENTRAL_PORT=5000 -e ENGINE_IP=localhost -e ENGINE_PORT=5001 ev_monitor:local 
+ 
+[DEBUG] ---- COMANDO POWERSHELL ENGINE ---- 
+Write-Host 'Iniciando Engine (CP_001) en puerto 5001...' -ForegroundColor Cyan; Write-Host ''; docker run --rm -p 5001:5001 -p 9001:9001 --name engine_CP_001 --label project=evcharging-pc-b --label component=engine --label cp_id=CP_001 -e ENGINE_PORT=5001 -e CP_ID=CP_001 -e KAFKA_SERVER=192.168.1.43:9092 -e WEB_PORT=9001 ev_engine:local 
+ 
+[DEBUG] ---- COMANDO POWERSHELL MONITOR ---- 
+Write-Host 'Iniciando Monitor (CP_001)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --network host --name monitor_CP_001 --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 -e CP_ID=CP_001 -e CENTRAL_IP=192.168.1.43 -e CENTRAL_PORT=5000 -e ENGINE_IP=localhost -e ENGINE_PORT=5001 ev_monitor:local 
+ 
+[DEBUG] Ejecutando START PowerShell para Engine... 
+[DEBUG] START ejecutado para Engine (errorlevel: 0) 
+[DEBUG] Esperando 3 segundos... 
+[DEBUG] Abriendo navegador en http://localhost:9001 
+[DEBUG] Navegador abierto (errorlevel: 0) 
+[DEBUG] Ejecutando START PowerShell para Monitor... 
+[DEBUG] START ejecutado para Monitor (errorlevel: 0) 
+[DEBUG] CP_001 completado 
+============================================================ 
+[DEBUG] Retorno de LANZAR_CP completado 
+[MAIN] Esperando 2 segundos antes del siguiente CP... 
+[DEBUG] Bucle FOR completado 

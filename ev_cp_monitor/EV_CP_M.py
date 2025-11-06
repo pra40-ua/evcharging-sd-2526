@@ -21,6 +21,26 @@ def calcular_lrc(data_bytes: bytes) -> bytes:
         lrc ^= byte
     return bytes([lrc])
 
+def es_trama_fin(trama_bytes: bytes) -> bool:
+    """Verifica rápidamente si una trama es FIN sin descomponerla completamente."""
+    if len(trama_bytes) < 5:  # Mínimo: STX + "FIN" + ETX + LRC
+        return False
+    if not trama_bytes.startswith(STX):
+        return False
+    try:
+        # Extraer el código de operación (después de STX hasta el primer # o ETX)
+        data_start = 1  # Después de STX
+        data_end = trama_bytes.find(ETX, data_start)
+        if data_end == -1:
+            return False
+        data_part = trama_bytes[data_start:data_end]
+        # Verificar si empieza con "FIN#"
+        if data_part.startswith(b'FIN#'):
+            return True
+    except Exception:
+        pass
+    return False
+
 def descomponer_trama(trama_bytes: bytes) -> tuple:
     # ... [Tu lógica robusta de descomponer_trama] ...
     if len(trama_bytes) < 4:
@@ -330,6 +350,25 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                     trama_cmd = construir_trama('CMD', campos_cmd)
                     engine_socket.sendall(trama_cmd)
                     resp_cmd = engine_socket.recv(1024)
+                    
+                    # Verificar si la respuesta es FIN antes de descomponerla
+                    if es_trama_fin(resp_cmd):
+                        print(f"[{cp_id}] 📩 Trama FIN recibida del Engine (respuesta a CMD '{orden}'). Reenviando a Central...")
+                        try:
+                            # Reenviar la trama completa original (con STX, ETX y LRC)
+                            central_socket.sendall(resp_cmd)
+                            print(f"[{cp_id}] 📤 Trama FIN reenviada a Central con éxito.")
+                        except Exception as e:
+                            print(f"[{cp_id}] ❌ ERROR al reenviar FIN a Central: {e}")
+                            import traceback
+                            traceback.print_exc()
+                        # También descomponer para logging opcional
+                        cod_cmd, campos_cmd = descomponer_trama(resp_cmd)
+                        if cod_cmd == 'FIN':
+                            print(f"[{cp_id}]   Campos FIN: {campos_cmd}")
+                        # No procesar más, el FIN ya fue reenviado
+                        continue
+                    
                     cod_cmd, campos_cmd = descomponer_trama(resp_cmd)
                     if cod_cmd == 'ACK':
                         detalle = campos_cmd[0] if campos_cmd else ''
@@ -350,7 +389,7 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
             engine_socket.sendall(trama_hck)
             
             # 4. Recibir y procesar todas las respuestas disponibles (puede llegar más de una trama)
-            def _procesar_trama_engine(cod: str, args: list):
+            def _procesar_trama_engine(cod: str, args: list, trama_completa: bytes = None):
                 if cod == 'HCK_RESP' and args:
                     status = args[0]
                     if status == 'OK':
@@ -363,13 +402,20 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                     return
                 if cod == 'FIN':
                     try:
-                        print(f"[{cp_id}] ✅ FIN recibido del Engine. Reenviando a Central.")
-                        print(f"[{cp_id}]   Campos FIN: {args}")
-                        trama_fin = construir_trama('FIN', args)
-                        central_socket.sendall(trama_fin)
-                        print(f"[{cp_id}] ✅ FIN enviado exitosamente a Central")
+                        print(f"[{cp_id}] 📩 Trama FIN recibida del Engine. Reenviando a Central...")
+                        if trama_completa is not None:
+                            # Reenviar la trama completa original (con STX, ETX y LRC)
+                            central_socket.sendall(trama_completa)
+                            print(f"[{cp_id}] 📤 Trama FIN reenviada a Central con éxito.")
+                        else:
+                            # Fallback: reconstruir si no tenemos la trama original
+                            print(f"[{cp_id}] ⚠️ Advertencia: Reconstruyendo FIN (trama original no disponible)")
+                            print(f"[{cp_id}]   Campos FIN: {args}")
+                            trama_fin = construir_trama('FIN', args)
+                            central_socket.sendall(trama_fin)
+                            print(f"[{cp_id}] ✅ FIN enviado exitosamente a Central")
                     except Exception as e:
-                        print(f"[{cp_id}] ❌ Error reenviando FIN a Central: {e}")
+                        print(f"[{cp_id}] ❌ ERROR al reenviar FIN a Central: {e}")
                         import traceback
                         traceback.print_exc()
                     return
@@ -417,8 +463,27 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
             respuesta_bytes = engine_socket.recv(1024)
             if not respuesta_bytes:
                 raise ConnectionResetError("Engine cerró la conexión o respondió vacío.")
+            
+            # Verificar si es FIN antes de descomponerla para reenviarla completa
+            if es_trama_fin(respuesta_bytes):
+                print(f"[{cp_id}] 📩 Trama FIN recibida del Engine. Reenviando a Central...")
+                try:
+                    # Reenviar la trama completa original (con STX, ETX y LRC)
+                    central_socket.sendall(respuesta_bytes)
+                    print(f"[{cp_id}] 📤 Trama FIN reenviada a Central con éxito.")
+                except Exception as e:
+                    print(f"[{cp_id}] ❌ ERROR al reenviar FIN a Central: {e}")
+                    import traceback
+                    traceback.print_exc()
+                # También descomponer para logging opcional
+                cod_op, campos = descomponer_trama(respuesta_bytes)
+                if cod_op == 'FIN':
+                    print(f"[{cp_id}]   Campos FIN: {campos}")
+                # No procesar más, el FIN ya fue reenviado
+                continue
+            
             cod_op, campos = descomponer_trama(respuesta_bytes)
-            _procesar_trama_engine(cod_op, campos)
+            _procesar_trama_engine(cod_op, campos, respuesta_bytes if cod_op == 'FIN' else None)
 
             # Drenar frames adicionales que pudieran haber llegado encadenados (no bloquear)
             try:
@@ -427,8 +492,25 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                     extra = engine_socket.recv(1024)
                     if not extra:
                         break
+                    # Verificar si es FIN antes de descomponerla para reenviarla completa
+                    if es_trama_fin(extra):
+                        print(f"[{cp_id}] 📩 Trama FIN recibida del Engine (frame adicional). Reenviando a Central...")
+                        try:
+                            # Reenviar la trama completa original (con STX, ETX y LRC)
+                            central_socket.sendall(extra)
+                            print(f"[{cp_id}] 📤 Trama FIN reenviada a Central con éxito.")
+                        except Exception as e:
+                            print(f"[{cp_id}] ❌ ERROR al reenviar FIN a Central: {e}")
+                            import traceback
+                            traceback.print_exc()
+                        # También descomponer para logging opcional
+                        cod_extra, campos_extra = descomponer_trama(extra)
+                        if cod_extra == 'FIN':
+                            print(f"[{cp_id}]   Campos FIN: {campos_extra}")
+                        # No procesar más, el FIN ya fue reenviado
+                        continue
                     cod_extra, campos_extra = descomponer_trama(extra)
-                    _procesar_trama_engine(cod_extra, campos_extra)
+                    _procesar_trama_engine(cod_extra, campos_extra, extra if cod_extra == 'FIN' else None)
             except (socket.timeout, BlockingIOError):
                 pass
             finally:
