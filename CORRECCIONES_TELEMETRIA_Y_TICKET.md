@@ -287,3 +287,4 @@ Si la telemetría sigue sin actualizarse después de reiniciar, **proporciona:**
 - Respuesta del endpoint `/api/debug`
 
 
+
