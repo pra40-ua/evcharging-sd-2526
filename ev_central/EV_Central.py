@@ -95,13 +95,22 @@ def registrar_evento(mensaje: str, tipo="info") -> None:
     color = {"info": "cyan", "warn": "yellow", "error": "red", "ok": "green"}.get(tipo, "white")
     with EVENT_LOG_LOCK:
         EVENT_LOG.append(linea)
+    # Mostrar siempre en la terminal (tanto con Rich como sin Rich)
     try:
+        # Intentar con Rich primero
         console.print(f"[{color}]{linea}[/{color}]")
     except Exception:
         try:
+            # Fallback a print estándar
             print(linea)
         except Exception:
             pass
+    # También usar print estándar para asegurar visibilidad
+    try:
+        print(linea)
+    except Exception:
+        pass
+    # Logging a archivo
     try:
         logging.info(linea)
     except Exception:
@@ -459,11 +468,17 @@ def consumir_telemetria_kafka(broker_list: str):
                             obj = CP_SESION_OBJETIVO_KWH.get(cp_id)
                         if obj is not None:
                             objetivo_kwh = float(obj)
-                            objetivo_txt = f" | Solicitado={objetivo_kwh:.2f} kWh"
+                            objetivo_txt = f" | Objetivo={objetivo_kwh:.2f} kWh"
                     except Exception:
                         objetivo_txt = ''
-                    registrar_evento(f"Telemetría recibida de {cp_id}: {resumen_telemetria(telemetria)}{objetivo_txt}")
-                    print(f"[KAFKA CONSUMER] -> Telemetría de {cp_id} recibida: {telemetria}{objetivo_txt}")
+                    
+                    # Mostrar telemetría de forma más visible
+                    estado_tel = telemetria.get('estado_carga') or telemetria.get('estado', 'N/D')
+                    energia = telemetria.get('kw_entregados') or telemetria.get('energia_total', 0.0)
+                    potencia = telemetria.get('potencia_actual', 0.0)
+                    
+                    registrar_evento(f"📊 TELEMETRÍA [{cp_id}] - Estado: {estado_tel} | Energía: {energia:.2f} kWh | Potencia: {potencia:.2f} kW{objetivo_txt}", "info")
+                    print(f"[TELEMETRÍA] {cp_id} → Estado: {estado_tel} | E: {energia:.2f} kWh | P: {potencia:.2f} kW{objetivo_txt}")
 
                     # Promover estados por telemetría (respetando PARADO manual y evitando regresiones)
                     est_raw = telemetria.get('estado') or telemetria.get('estado_carga')
@@ -778,12 +793,19 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
             for _tp, batch in records.items():
                 for message in batch:
                     solicitud = message.value
-                    registrar_evento("Solicitud de recarga recibida")
-                    print("--- NUEVA SOLICITUD RECIBIDA ---")
-                    print(f"\tDriver ID: {solicitud.get('id_driver')}")
-                    print(f"\tCP ID:     {solicitud.get('id_charging_point')}")
-                    print(f"\tMatrícula: {solicitud.get('matricula')}")
-                    print(f"\tkW Deseados: {solicitud.get('kw_deseados')} kW")
+                    id_driver = solicitud.get('id_driver')
+                    cp_id_solicitado = solicitud.get('id_charging_point')
+                    matricula = solicitud.get('matricula')
+                    kw_deseados = solicitud.get('kw_deseados')
+                    
+                    registrar_evento(f"📥 SOLICITUD RECIBIDA - Driver: {id_driver} → CP: {cp_id_solicitado} | Matrícula: {matricula} | kW: {kw_deseados}", "info")
+                    print("="*70)
+                    print(f"📥 NUEVA SOLICITUD DE RECARGA")
+                    print(f"   Driver ID:      {id_driver}")
+                    print(f"   CP Solicitado:  {cp_id_solicitado}")
+                    print(f"   Matrícula:      {matricula}")
+                    print(f"   kW Deseados:    {kw_deseados} kW")
+                    print("="*70)
                     # Lógica de autorización: validación BD, socket al CP, notificaciones a Driver
                     try:
                         id_driver = solicitud.get('id_driver')
@@ -1802,15 +1824,22 @@ def render_panel():
     return table
 
 def iniciar_interfaz_visual():
-    with Live(render_panel(), refresh_per_second=1, console=console) as live:
-        while not SHUTDOWN_REQUESTED:
-            live.update(render_panel())
-            time.sleep(2)
+    """Interfaz visual con Rich - se ejecuta en segundo plano, no bloquea los logs"""
+    try:
+        with Live(render_panel(), refresh_per_second=1, console=console, screen=False) as live:
+            while not SHUTDOWN_REQUESTED:
+                live.update(render_panel())
+                time.sleep(2)
+    except Exception as e:
+        # Si falla la TUI, continuar sin ella
+        print(f"[WARN] TUI deshabilitada: {e}")
+        pass
             
 def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.connector.connection.MySQLConnection):
     """Función ejecutada por un hilo para manejar la conexión de un CP."""
     
-    print(f"[CENTRAL] Conexión establecida con {addr[0]}:{addr[1]}")
+    registrar_evento(f"🔌 NUEVA CONEXIÓN TCP desde {addr[0]}:{addr[1]}", "info")
+    print(f"[CONEXIÓN] Nueva conexión TCP desde {addr[0]}:{addr[1]}")
     cp_id = "Desconocido"
     
     try:
@@ -1902,8 +1931,8 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                 if registrar_cp_en_bd(db_connection, cp_id, ubicacion, precio_kwh):
                     respuesta_trama = construir_trama('AUTH', ['OK', 'Autenticacion exitosa'])
                     conn.sendall(respuesta_trama)
-                    print(f"[CENTRAL] <- Enviada respuesta AUTH: OK a {cp_id}")
-                    registrar_evento(f"AUTH OK enviado a {cp_id}")
+                    registrar_evento(f"✅ CP {cp_id} AUTENTICADO correctamente", "ok")
+                    print(f"[AUTENTICACIÓN] ✅ CP {cp_id} autenticado correctamente")
                 else:
                     # Error en BD, rechazar conexión
                     respuesta_trama = construir_trama('AUTH', ['FAIL', 'Error en base de datos'])
@@ -1915,13 +1944,14 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                 print(f"[CENTRAL] ADVERTENCIA: Sin conexión a BD, aceptando {cp_id} sin persistencia")
                 respuesta_trama = construir_trama('AUTH', ['OK', 'Autenticacion exitosa (sin BD)'])
                 conn.sendall(respuesta_trama)
-                print(f"[CENTRAL] <- Enviada respuesta AUTH: OK a {cp_id} (sin BD)")
-                registrar_evento(f"AUTH OK enviado a {cp_id} (sin BD)")
+                registrar_evento(f"✅ CP {cp_id} AUTENTICADO (sin BD)", "ok")
+                print(f"[AUTENTICACIÓN] ✅ CP {cp_id} autenticado (sin BD)")
             
             # --- ALMACENAR CONEXIÓN SOLO DESPUÉS DE COMPLETAR AUTENTICACIÓN ---
             with CONEXIONES_ACTIVAS_LOCK:
                 CONEXIONES_ACTIVAS[cp_id] = conn
-                print(f"[CENTRAL] Socket de {cp_id} guardado. Total: {len(CONEXIONES_ACTIVAS)}")
+                registrar_evento(f"🔗 CP {cp_id} CONECTADO y registrado. Total CPs activos: {len(CONEXIONES_ACTIVAS)}", "ok")
+                print(f"[CONEXIÓN] 🔗 CP {cp_id} conectado y registrado. Total CPs activos: {len(CONEXIONES_ACTIVAS)}")
             
             # --- CP reconectado - no hay colas, solo cambiar estado si no tiene sesión activa ---
             try:
