@@ -94940,3 +94940,649 @@ nnection. KafkaConnectionError: socket disconnected
 2025-11-06 19:52:02,796 - [19:52:02] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.65, P=3.0 | Solicitado=27.00 kWh
 2025-11-06 19:52:03,794 - [19:52:03] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.70, P=3.0 | Solicitado=27.00 kWh
 2025-11-06 19:52:04,794 - [19:52:04] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.75, P=3.0 | Solicitado=27.00 kWh
+2025-11-06 23:08:12,182 - [23:08:12] Modo consola simple activado
+2025-11-06 23:08:12,186 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-06 23:08:12,188 - Updating subscribed topics to: ('driver_requests',)
+2025-11-06 23:08:12,188 - Updating subscribed topics to: ('central_commands',)
+2025-11-06 23:08:12,190 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:08:12,190 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:08:12,191 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:08:12,191 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:08:12,191 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:08:12,191 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:08:12,228 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:08:12,229 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:08:12,400 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:08:12,401 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 23:08:12,401 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:08:12,401 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 23:08:12,401 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:08:12,401 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 23:08:12,401 - Starting new heartbeat thread
+2025-11-06 23:08:12,401 - Starting new heartbeat thread
+2025-11-06 23:08:12,401 - Starting new heartbeat thread
+2025-11-06 23:08:12,401 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-11-06 23:08:12,402 - Revoking previously assigned partitions set() for group central-control-group
+2025-11-06 23:08:12,402 - Revoking previously assigned partitions set() for group central_processing_group
+2025-11-06 23:08:12,402 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:08:12,402 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:08:12,402 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:08:12,402 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:08:12,402 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 23:08:12,403 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:08:12,403 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 23:08:12,403 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:08:12,403 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 23:08:12,503 - (Re-)joining group central-control-group
+2025-11-06 23:08:12,503 - (Re-)joining group central-telemetry-group
+2025-11-06 23:08:12,504 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:08:12,504 - (Re-)joining group central_processing_group
+2025-11-06 23:08:12,504 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:08:12,504 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:08:12,505 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:08:12,505 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:08:12,505 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:08:12,508 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 23:08:12,508 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 23:08:12,508 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 23:08:12,611 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:08:12,611 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 23:08:12,611 - (Re-)joining group central_processing_group
+2025-11-06 23:08:12,611 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:08:12,612 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 23:08:12,612 - (Re-)joining group central-telemetry-group
+2025-11-06 23:08:12,611 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:08:12,612 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 23:08:12,612 - (Re-)joining group central-control-group
+2025-11-06 23:08:12,613 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 23:08:12,613 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 23:08:12,614 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 23:08:12,715 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:08:12,716 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 23:08:12,716 - (Re-)joining group central_processing_group
+2025-11-06 23:08:12,716 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:08:12,716 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 23:08:12,716 - (Re-)joining group central-telemetry-group
+2025-11-06 23:08:12,717 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:08:12,717 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 23:08:12,717 - (Re-)joining group central-control-group
+2025-11-06 23:08:12,717 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 23:08:12,718 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 23:08:12,718 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 23:08:12,820 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:08:12,820 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 23:08:12,820 - (Re-)joining group central_processing_group
+2025-11-06 23:08:12,820 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:08:12,820 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 23:08:12,820 - (Re-)joining group central-telemetry-group
+2025-11-06 23:08:12,820 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:08:12,820 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 23:08:12,821 - (Re-)joining group central-control-group
+2025-11-06 23:08:15,835 - Elected group leader -- performing partition assignments using range
+2025-11-06 23:08:15,835 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:08:15,836 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:08:15,836 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 23:08:15,836 - Elected group leader -- performing partition assignments using range
+2025-11-06 23:08:15,837 - Elected group leader -- performing partition assignments using range
+2025-11-06 23:08:15,837 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:08:15,837 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:08:15,838 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 23:08:15,837 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:08:15,838 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:08:15,838 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 23:08:15,853 - Successfully joined group central-telemetry-group with generation 1
+2025-11-06 23:08:15,853 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0)]
+2025-11-06 23:08:15,853 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0)} for group central-telemetry-group
+2025-11-06 23:08:15,853 - Successfully joined group central-control-group with generation 1
+2025-11-06 23:08:15,854 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-11-06 23:08:15,854 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-06 23:08:15,853 - Successfully joined group central_processing_group with generation 1
+2025-11-06 23:08:15,854 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0)]
+2025-11-06 23:08:15,854 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=0)} for group central_processing_group
+2025-11-06 23:10:09,863 - [23:10:09] [NUEVO CP] Registro inicial de CP_001.
+2025-11-06 23:10:09,864 - [23:10:09] CP registrado y conectado: CP_001 (C/Mayor, 45)
+2025-11-06 23:10:09,865 - [23:10:09] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 23:10:09,929 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:10:09,929 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:10:09,930 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 23:10:09,939 - [23:10:09] Telemetría inicial publicada para CP_001
+2025-11-06 23:10:09,948 - [23:10:09] AUTH OK enviado a CP_001
+2025-11-06 23:10:15,921 - [23:10:15] [NUEVO CP] Registro inicial de CP_002.
+2025-11-06 23:10:15,923 - [23:10:15] CP registrado y conectado: CP_002 (C/Mayor, 45)
+2025-11-06 23:10:15,924 - [23:10:15] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 23:10:15,934 - [23:10:15] Telemetría inicial publicada para CP_002
+2025-11-06 23:10:15,944 - [23:10:15] AUTH OK enviado a CP_002
+2025-11-06 23:10:17,125 - [23:10:17] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:10:17,128 - [23:10:17] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 23:10:17,204 - [23:10:17] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:10:17,207 - [23:10:17] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 23:10:17,215 - [23:10:17] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:10:17,218 - [23:10:17] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 23:10:21,858 - [23:10:21] [NUEVO CP] Registro inicial de CP_003.
+2025-11-06 23:10:21,859 - [23:10:21] CP registrado y conectado: CP_003 (C/Mayor, 45)
+2025-11-06 23:10:21,861 - [23:10:21] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:10:21,870 - [23:10:21] Telemetría inicial publicada para CP_003
+2025-11-06 23:10:21,879 - [23:10:21] AUTH OK enviado a CP_003
+2025-11-06 23:10:22,727 - [23:10:22] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:10:22,730 - [23:10:22] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 23:10:27,080 - [23:10:27] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:10:27,083 - [23:10:27] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 23:10:27,214 - [23:10:27] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:10:27,217 - [23:10:27] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 23:10:27,226 - [23:10:27] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:10:27,229 - [23:10:27] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 23:10:27,235 - [23:10:27] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:10:27,238 - [23:10:27] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:10:28,820 - [23:10:28] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:10:28,823 - [23:10:28] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:10:32,696 - [23:10:32] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:10:32,699 - [23:10:32] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 23:10:37,081 - [23:10:37] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:10:37,084 - [23:10:37] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 23:10:37,222 - [23:10:37] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:10:37,225 - [23:10:37] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 23:10:37,233 - [23:10:37] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:10:37,236 - [23:10:37] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 23:10:37,242 - [23:10:37] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:10:37,245 - [23:10:37] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:10:38,757 - [23:10:38] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:10:38,760 - [23:10:38] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:10:42,625 - [23:10:42] Solicitud de recarga recibida
+2025-11-06 23:10:42,634 - Topic driver_status_DRIVER_001 not found in cluster metadata
+2025-11-06 23:10:42,697 - [23:10:42] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:10:42,700 - [23:10:42] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 23:10:42,743 - [23:10:42] [ESTADO] CP_001 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-06 23:10:42,760 - [23:10:42] [FLUJO] Solicitud DRIVER_001 \u2192 CP_001 (36.0 kWh). Esperando confirmación de operador Central.
+2025-11-06 23:10:42,762 - [23:10:42] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:10:43,149 - [23:10:43] Solicitud de recarga recibida
+2025-11-06 23:10:43,158 - Topic driver_status_DRIVER_002 not found in cluster metadata
+2025-11-06 23:10:43,280 - [23:10:43] Driver DRIVER_002 en cola para CP_001 (posición 1)
+2025-11-06 23:10:43,752 - [23:10:43] Solicitud de recarga recibida
+2025-11-06 23:10:43,761 - Topic driver_status_DRIVER_003 not found in cluster metadata
+2025-11-06 23:10:43,878 - [23:10:43] [ESTADO] CP_002 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-06 23:10:43,894 - [23:10:43] [FLUJO] Solicitud DRIVER_003 \u2192 CP_002 (11.0 kWh). Esperando confirmación de operador Central.
+2025-11-06 23:10:43,896 - [23:10:43] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:10:47,090 - [23:10:47] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:10:47,234 - [23:10:47] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:10:47,246 - [23:10:47] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:10:47,256 - [23:10:47] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:10:47,259 - [23:10:47] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:10:48,765 - [23:10:48] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:10:48,768 - [23:10:48] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:10:52,708 - [23:10:52] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:10:57,101 - [23:10:57] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:10:57,245 - [23:10:57] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:10:57,257 - [23:10:57] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:10:57,269 - [23:10:57] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:10:57,272 - [23:10:57] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:10:58,773 - [23:10:58] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:10:58,776 - [23:10:58] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:11:02,715 - [23:11:02] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:11:07,111 - [23:11:07] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:11:07,254 - [23:11:07] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:11:07,267 - [23:11:07] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:11:07,278 - [23:11:07] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:11:07,281 - [23:11:07] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:11:08,784 - [23:11:08] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:11:08,787 - [23:11:08] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:11:12,726 - [23:11:12] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:11:17,121 - [23:11:17] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:11:17,268 - [23:11:17] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:11:17,282 - [23:11:17] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:11:17,292 - [23:11:17] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:11:17,295 - [23:11:17] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:11:18,791 - [23:11:18] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:11:18,794 - [23:11:18] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:11:22,737 - [23:11:22] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:11:27,135 - [23:11:27] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:11:27,277 - [23:11:27] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:11:27,289 - [23:11:27] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:11:27,299 - [23:11:27] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:11:27,301 - [23:11:27] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:11:28,807 - [23:11:28] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:11:28,810 - [23:11:28] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:11:32,748 - [23:11:32] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:11:37,138 - [23:11:37] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:11:37,289 - [23:11:37] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:11:37,300 - [23:11:37] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:11:37,310 - [23:11:37] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:11:37,313 - [23:11:37] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:11:38,808 - [23:11:38] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:11:38,811 - [23:11:38] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:11:42,755 - [23:11:42] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:11:47,153 - [23:11:47] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:11:47,299 - [23:11:47] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:11:47,311 - [23:11:47] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:11:47,321 - [23:11:47] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:11:47,324 - [23:11:47] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:11:48,816 - [23:11:48] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:11:48,819 - [23:11:48] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:11:52,768 - [23:11:52] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:11:57,158 - [23:11:57] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:11:57,307 - [23:11:57] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:11:57,320 - [23:11:57] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:11:57,330 - [23:11:57] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:11:57,333 - [23:11:57] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:11:58,826 - [23:11:58] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:11:58,829 - [23:11:58] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:12:02,774 - [23:12:02] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:12:07,168 - [23:12:07] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:12:07,317 - [23:12:07] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:12:07,329 - [23:12:07] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:12:07,339 - [23:12:07] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:12:07,342 - [23:12:07] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:12:08,838 - [23:12:08] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:12:08,841 - [23:12:08] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:12:12,786 - [23:12:12] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:12:17,175 - [23:12:17] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:12:17,327 - [23:12:17] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:12:17,340 - [23:12:17] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:12:17,351 - [23:12:17] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:12:17,354 - [23:12:17] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:12:18,850 - [23:12:18] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:12:18,854 - [23:12:18] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:12:22,795 - [23:12:22] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:12:27,188 - [23:12:27] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:12:27,337 - [23:12:27] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=36.00 kWh
+2025-11-06 23:12:27,349 - [23:12:27] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-06 23:12:27,360 - [23:12:27] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:12:27,362 - [23:12:27] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:12:27,758 - [23:12:27] Monitor desconectado: CP_001
+2025-11-06 23:12:27,762 - [23:12:27] Monitor desconectado: CP_002
+2025-11-06 23:12:27,764 - [23:12:27] Monitor desconectado: CP_003
+2025-11-06 23:13:23,206 - [23:13:23] [INICIO] 3 CP(s) marcados como Desconectado. Esperando conexiones...
+2025-11-06 23:13:23,210 - [23:13:23] Modo consola simple activado
+2025-11-06 23:13:23,216 - Updating subscribed topics to: ('central_commands',)
+2025-11-06 23:13:23,217 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-06 23:13:23,217 - Updating subscribed topics to: ('driver_requests',)
+2025-11-06 23:13:23,220 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:13:23,220 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:13:23,220 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:13:23,220 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:13:23,220 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:13:23,220 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:13:23,268 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:13:23,269 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:13:23,429 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:13:23,429 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 23:13:23,429 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:13:23,429 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 23:13:23,429 - Starting new heartbeat thread
+2025-11-06 23:13:23,429 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:13:23,429 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 23:13:23,429 - Starting new heartbeat thread
+2025-11-06 23:13:23,429 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-11-06 23:13:23,430 - Revoking previously assigned partitions set() for group central-control-group
+2025-11-06 23:13:23,429 - Starting new heartbeat thread
+2025-11-06 23:13:23,430 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:13:23,430 - Revoking previously assigned partitions set() for group central_processing_group
+2025-11-06 23:13:23,430 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:13:23,430 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:13:23,431 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 23:13:23,431 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:13:23,431 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 23:13:23,431 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:13:23,431 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:13:23,431 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 23:13:23,531 - (Re-)joining group central-control-group
+2025-11-06 23:13:23,532 - (Re-)joining group central-telemetry-group
+2025-11-06 23:13:23,532 - (Re-)joining group central_processing_group
+2025-11-06 23:13:23,532 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:13:23,532 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:13:23,533 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:13:23,533 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:13:23,533 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:13:23,533 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:13:23,535 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 23:13:23,535 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 23:13:23,536 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 23:13:23,638 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:13:23,638 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 23:13:23,638 - (Re-)joining group central-telemetry-group
+2025-11-06 23:13:23,638 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:13:23,639 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 23:13:23,639 - (Re-)joining group central_processing_group
+2025-11-06 23:13:23,638 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:13:23,639 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 23:13:23,639 - (Re-)joining group central-control-group
+2025-11-06 23:13:23,640 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 23:13:23,640 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 23:13:23,640 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 23:13:23,742 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:13:23,742 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 23:13:23,742 - (Re-)joining group central-control-group
+2025-11-06 23:13:23,743 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:13:23,743 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 23:13:23,744 - (Re-)joining group central_processing_group
+2025-11-06 23:13:23,743 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:13:23,744 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 23:13:23,744 - (Re-)joining group central-telemetry-group
+2025-11-06 23:13:23,744 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 23:13:23,745 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 23:13:23,745 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-06 23:13:23,847 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:13:23,847 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 23:13:23,847 - (Re-)joining group central-control-group
+2025-11-06 23:13:23,847 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:13:23,847 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 23:13:23,848 - (Re-)joining group central_processing_group
+2025-11-06 23:13:23,847 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 23:13:23,848 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 23:13:23,848 - (Re-)joining group central-telemetry-group
+2025-11-06 23:13:26,862 - Elected group leader -- performing partition assignments using range
+2025-11-06 23:13:26,863 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:13:26,863 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:13:26,863 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 23:13:26,864 - Elected group leader -- performing partition assignments using range
+2025-11-06 23:13:26,865 - Elected group leader -- performing partition assignments using range
+2025-11-06 23:13:26,865 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:13:26,865 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:13:26,865 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:13:26,865 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 23:13:26,865 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:13:26,866 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 23:13:26,878 - Successfully joined group central-control-group with generation 1
+2025-11-06 23:13:26,879 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-11-06 23:13:26,879 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-06 23:13:26,878 - Successfully joined group central_processing_group with generation 1
+2025-11-06 23:13:26,879 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0)]
+2025-11-06 23:13:26,879 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=0)} for group central_processing_group
+2025-11-06 23:13:26,879 - Successfully joined group central-telemetry-group with generation 1
+2025-11-06 23:13:26,879 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0)]
+2025-11-06 23:13:26,879 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0)} for group central-telemetry-group
+2025-11-06 23:13:46,855 - [23:13:46] [NUEVO CP] Registro inicial de CP_001.
+2025-11-06 23:13:46,856 - [23:13:46] CP registrado y conectado: CP_001 (C/Mayor, 45)
+2025-11-06 23:13:46,857 - [23:13:46] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 23:13:46,919 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 23:13:46,920 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 23:13:46,920 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 23:13:46,929 - [23:13:46] Telemetría inicial publicada para CP_001
+2025-11-06 23:13:46,934 - [23:13:46] AUTH OK enviado a CP_001
+2025-11-06 23:13:48,228 - [23:13:48] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:13:48,230 - [23:13:48] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 23:13:52,931 - [23:13:52] [NUEVO CP] Registro inicial de CP_002.
+2025-11-06 23:13:52,932 - [23:13:52] CP registrado y conectado: CP_002 (C/Mayor, 45)
+2025-11-06 23:13:52,933 - [23:13:52] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 23:13:52,944 - [23:13:52] Telemetría inicial publicada para CP_002
+2025-11-06 23:13:52,950 - [23:13:52] AUTH OK enviado a CP_002
+2025-11-06 23:13:54,274 - [23:13:54] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:13:54,277 - [23:13:54] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 23:13:58,233 - [23:13:58] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:13:58,236 - [23:13:58] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 23:13:58,244 - [23:13:58] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:13:58,247 - [23:13:58] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 23:13:58,884 - [23:13:58] [NUEVO CP] Registro inicial de CP_003.
+2025-11-06 23:13:58,885 - [23:13:58] CP registrado y conectado: CP_003 (C/Mayor, 45)
+2025-11-06 23:13:58,886 - [23:13:58] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:13:58,898 - [23:13:58] Telemetría inicial publicada para CP_003
+2025-11-06 23:13:58,904 - [23:13:58] AUTH OK enviado a CP_003
+2025-11-06 23:13:59,761 - [23:13:59] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:13:59,764 - [23:13:59] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 23:14:04,240 - [23:14:04] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:14:04,243 - [23:14:04] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 23:14:05,850 - [23:14:05] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:14:05,853 - [23:14:05] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:14:08,242 - [23:14:08] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:14:08,244 - [23:14:08] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 23:14:08,253 - [23:14:08] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:14:08,256 - [23:14:08] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 23:14:08,262 - [23:14:08] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:14:08,265 - [23:14:08] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:14:09,733 - [23:14:09] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:14:09,736 - [23:14:09] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 23:14:14,257 - [23:14:14] Telemetría recibida de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:14:14,260 - [23:14:14] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 23:14:15,806 - [23:14:15] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:14:15,808 - [23:14:15] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:14:17,285 - [23:14:17] Solicitud de recarga recibida
+2025-11-06 23:14:17,294 - Topic driver_status_DRIVER_001 not found in cluster metadata
+2025-11-06 23:14:17,411 - [23:14:17] [ESTADO] CP_001 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-06 23:14:17,428 - [23:14:17] [FLUJO] Solicitud DRIVER_001 \u2192 CP_001 (29.0 kWh). Esperando confirmación de operador Central.
+2025-11-06 23:14:17,429 - [23:14:17] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:18,252 - [23:14:18] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:18,264 - [23:14:18] Telemetría recibida de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:14:18,267 - [23:14:18] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-06 23:14:18,272 - [23:14:18] Telemetría recibida de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-06 23:14:18,275 - [23:14:18] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-06 23:14:18,479 - [23:14:18] Solicitud de recarga recibida
+2025-11-06 23:14:18,487 - Topic driver_status_DRIVER_002 not found in cluster metadata
+2025-11-06 23:14:18,598 - [23:14:18] [ESTADO] CP_002 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-06 23:14:18,614 - [23:14:18] [FLUJO] Solicitud DRIVER_002 \u2192 CP_002 (48.0 kWh). Esperando confirmación de operador Central.
+2025-11-06 23:14:18,615 - [23:14:18] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=48.00 kWh
+2025-11-06 23:14:19,508 - [23:14:19] Solicitud de recarga recibida
+2025-11-06 23:14:19,516 - Topic driver_status_DRIVER_003 not found in cluster metadata
+2025-11-06 23:14:19,632 - [23:14:19] [ESTADO] CP_003 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-06 23:14:19,649 - [23:14:19] [FLUJO] Solicitud DRIVER_003 \u2192 CP_003 (32.0 kWh). Esperando confirmación de operador Central.
+2025-11-06 23:14:19,650 - [23:14:19] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:14:19,736 - [23:14:19] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=48.00 kWh
+2025-11-06 23:14:24,258 - [23:14:24] Telemetría recibida de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:24,790 - [23:14:24] [CONTROL WEB] Comando PREPARE_SUPPLY para CP_001 desde web_dashboard_paso1
+2025-11-06 23:14:24,794 - [23:14:24] [FLUJO] AUTH_REQ enviado a CP_001. Esperando acción del operador del Engine.
+2025-11-06 23:14:24,796 - [23:14:24] [ESTADO] CP_001 -> ESPERANDO_OPERADOR_ENGINE (antes: PENDIENTE_CONFIRMACION_CENTRAL).
+2025-11-06 23:14:24,805 - [23:14:24] Telemetría recibida de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:24,883 - [23:14:24] [CONTROL] Confirmación síncrona de CP_001: AUTH_ACK#OK.
+2025-11-06 23:14:25,825 - [23:14:25] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:14:28,263 - [23:14:28] Telemetría recibida de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:28,276 - [23:14:28] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=48.00 kWh
+2025-11-06 23:14:28,287 - [23:14:28] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:14:29,751 - [23:14:29] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=48.00 kWh
+2025-11-06 23:14:34,266 - [23:14:34] Telemetría recibida de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:35,832 - [23:14:35] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:14:38,273 - [23:14:38] Telemetría recibida de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:38,287 - [23:14:38] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=48.00 kWh
+2025-11-06 23:14:38,300 - [23:14:38] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:14:39,758 - [23:14:39] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=48.00 kWh
+2025-11-06 23:14:41,615 - [23:14:41] [FLUJO] CP_001 listo para iniciar. Driver: DRIVER_001. Esperando confirmación del operador de Central.
+2025-11-06 23:14:41,620 - [23:14:41] [ESTADO] CP_001 -> LISTO_PARA_INICIAR (antes: ESPERANDO_OPERADOR_ENGINE).
+2025-11-06 23:14:41,634 - [23:14:41] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.00, P=0.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:44,279 - [23:14:44] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.00, P=0.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:45,374 - [23:14:45] [CONTROL WEB] Comando START para CP_001 desde web_dashboard_confirmacion_final
+2025-11-06 23:14:45,377 - [23:14:45] Iniciando carga en CP_001 (Driver: DRIVER_001, kW: 29.0)
+2025-11-06 23:14:45,381 - [23:14:45] Comando START enviado a CP_001
+2025-11-06 23:14:45,387 - [23:14:45] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.00, P=0.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:45,466 - [23:14:45] [CONTROL] Estado reportado por CP_001: ACTIVADO
+2025-11-06 23:14:45,468 - [23:14:45] [IGNORADO] STATE CP_001: LISTO_PARA_INICIAR mantiene prioridad sobre ACTIVADO
+2025-11-06 23:14:45,841 - [23:14:45] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:14:46,663 - [23:14:46] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.05, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:47,668 - [23:14:47] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.10, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:48,281 - [23:14:48] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.10, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:48,293 - [23:14:48] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=48.00 kWh
+2025-11-06 23:14:48,303 - [23:14:48] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:14:48,672 - [23:14:48] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.15, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:49,668 - [23:14:49] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.20, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:49,766 - [23:14:49] Telemetría recibida de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=48.00 kWh
+2025-11-06 23:14:50,680 - [23:14:50] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.25, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:51,671 - [23:14:51] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.30, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:52,673 - [23:14:52] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.35, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:53,676 - [23:14:53] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.40, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:54,682 - [23:14:54] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.45, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:55,684 - [23:14:55] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.50, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:55,845 - [23:14:55] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:14:55,859 - [23:14:55] [CONTROL WEB] Comando PREPARE_SUPPLY para CP_002 desde web_dashboard_paso1
+2025-11-06 23:14:55,863 - [23:14:55] [FLUJO] AUTH_REQ enviado a CP_002. Esperando acción del operador del Engine.
+2025-11-06 23:14:55,865 - [23:14:55] [ESTADO] CP_002 -> ESPERANDO_OPERADOR_ENGINE (antes: PENDIENTE_CONFIRMACION_CENTRAL).
+2025-11-06 23:14:55,873 - [23:14:55] Telemetría recibida de CP_002: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=48.00 kWh
+2025-11-06 23:14:55,890 - [23:14:55] [CONTROL] Confirmación síncrona de CP_002: AUTH_ACK#OK.
+2025-11-06 23:14:56,679 - [23:14:56] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.55, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:57,682 - [23:14:57] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.60, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:58,293 - [23:14:58] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.60, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:58,306 - [23:14:58] Telemetría recibida de CP_002: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=48.00 kWh
+2025-11-06 23:14:58,318 - [23:14:58] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:14:58,690 - [23:14:58] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.65, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:59,682 - [23:14:59] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.70, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:14:59,776 - [23:14:59] Telemetría recibida de CP_002: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:00,686 - [23:15:00] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.75, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:01,686 - [23:15:01] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.80, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:02,689 - [23:15:02] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.85, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:03,689 - [23:15:03] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.90, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:04,691 - [23:15:04] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=0.95, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:05,696 - [23:15:05] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.00, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:05,859 - [23:15:05] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:15:06,695 - [23:15:06] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.05, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:07,696 - [23:15:07] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.10, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:08,302 - [23:15:08] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.10, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:08,315 - [23:15:08] Telemetría recibida de CP_002: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:08,325 - [23:15:08] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:15:08,709 - [23:15:08] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.15, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:09,699 - [23:15:09] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.20, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:09,784 - [23:15:09] Telemetría recibida de CP_002: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:10,709 - [23:15:10] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.25, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:11,708 - [23:15:11] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.30, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:12,709 - [23:15:12] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.35, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:13,709 - [23:15:13] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.40, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:14,713 - [23:15:14] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.45, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:15,709 - [23:15:15] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.50, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:15,866 - [23:15:15] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:15:16,715 - [23:15:16] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.55, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:17,711 - [23:15:17] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.60, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:18,314 - [23:15:18] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.60, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:18,326 - [23:15:18] Telemetría recibida de CP_002: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:18,337 - [23:15:18] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:15:18,713 - [23:15:18] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.65, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:18,995 - [23:15:18] [FLUJO] CP_002 listo para iniciar. Driver: DRIVER_002. Esperando confirmación del operador de Central.
+2025-11-06 23:15:18,999 - [23:15:18] [ESTADO] CP_002 -> LISTO_PARA_INICIAR (antes: ESPERANDO_OPERADOR_ENGINE).
+2025-11-06 23:15:19,014 - [23:15:19] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.00, P=0.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:19,717 - [23:15:19] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.70, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:19,795 - [23:15:19] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.00, P=0.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:20,717 - [23:15:20] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.75, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:21,720 - [23:15:21] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.80, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:22,716 - [23:15:22] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.85, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:23,726 - [23:15:23] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.90, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:24,722 - [23:15:24] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=1.95, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:25,725 - [23:15:25] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.00, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:25,876 - [23:15:25] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:15:26,725 - [23:15:26] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.05, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:27,725 - [23:15:27] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.10, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:28,324 - [23:15:28] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.10, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:28,337 - [23:15:28] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.00, P=0.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:28,347 - [23:15:28] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:15:28,727 - [23:15:28] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.15, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:29,731 - [23:15:29] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.20, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:29,805 - [23:15:29] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.00, P=0.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:30,731 - [23:15:30] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.25, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:31,730 - [23:15:31] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.30, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:32,730 - [23:15:32] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.35, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:33,733 - [23:15:33] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.40, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:34,735 - [23:15:34] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.45, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:35,740 - [23:15:35] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.50, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:35,889 - [23:15:35] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:15:36,738 - [23:15:36] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.55, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:36,853 - [23:15:36] [CONTROL WEB] Comando START para CP_002 desde web_dashboard_confirmacion_final
+2025-11-06 23:15:36,856 - [23:15:36] Iniciando carga en CP_002 (Driver: DRIVER_002, kW: 48.0)
+2025-11-06 23:15:36,861 - [23:15:36] Comando START enviado a CP_002
+2025-11-06 23:15:36,867 - [23:15:36] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.00, P=0.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:36,888 - [23:15:36] [CONTROL] Estado reportado por CP_002: ACTIVADO
+2025-11-06 23:15:36,889 - [23:15:36] [IGNORADO] STATE CP_002: LISTO_PARA_INICIAR mantiene prioridad sobre ACTIVADO
+2025-11-06 23:15:37,743 - [23:15:37] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.60, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:38,215 - [23:15:38] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.05, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:38,335 - [23:15:38] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.60, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:38,347 - [23:15:38] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.05, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:38,357 - [23:15:38] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:15:38,751 - [23:15:38] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.65, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:39,219 - [23:15:39] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.10, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:39,743 - [23:15:39] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.70, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:40,219 - [23:15:40] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.15, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:40,746 - [23:15:40] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.75, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:41,222 - [23:15:41] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.20, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:41,747 - [23:15:41] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.80, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:42,224 - [23:15:42] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.25, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:42,746 - [23:15:42] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.85, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:43,229 - [23:15:43] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.30, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:43,752 - [23:15:43] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.90, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:44,224 - [23:15:44] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.35, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:44,750 - [23:15:44] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=2.95, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:45,224 - [23:15:45] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.40, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:45,760 - [23:15:45] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.00, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:45,897 - [23:15:45] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:15:46,228 - [23:15:46] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.45, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:46,761 - [23:15:46] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.05, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:47,231 - [23:15:47] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.50, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:47,752 - [23:15:47] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.10, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:48,231 - [23:15:48] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.55, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:48,345 - [23:15:48] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.10, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:48,357 - [23:15:48] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.55, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:48,367 - [23:15:48] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:15:48,761 - [23:15:48] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.15, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:49,230 - [23:15:49] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.60, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:49,760 - [23:15:49] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.20, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:50,237 - [23:15:50] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.65, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:50,760 - [23:15:50] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.25, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:51,234 - [23:15:51] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.70, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:51,760 - [23:15:51] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.30, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:52,236 - [23:15:52] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.75, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:52,761 - [23:15:52] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.35, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:53,238 - [23:15:53] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.80, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:53,763 - [23:15:53] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.40, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:54,239 - [23:15:54] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.85, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:54,764 - [23:15:54] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.45, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:55,245 - [23:15:55] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.90, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:55,774 - [23:15:55] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.50, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:55,911 - [23:15:55] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:15:56,239 - [23:15:56] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=0.95, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:56,767 - [23:15:56] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.55, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:57,244 - [23:15:57] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.00, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:57,768 - [23:15:57] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.60, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:58,241 - [23:15:58] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.05, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:58,356 - [23:15:58] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.60, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:58,369 - [23:15:58] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.05, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:58,379 - [23:15:58] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:15:58,777 - [23:15:58] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.65, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:15:59,246 - [23:15:59] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.10, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:15:59,771 - [23:15:59] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.70, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:00,247 - [23:16:00] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.15, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:00,773 - [23:16:00] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.75, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:01,253 - [23:16:01] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.20, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:01,781 - [23:16:01] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.80, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:02,249 - [23:16:02] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.25, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:02,774 - [23:16:02] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.85, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:03,251 - [23:16:03] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.30, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:03,778 - [23:16:03] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.90, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:04,251 - [23:16:04] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.35, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:04,781 - [23:16:04] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=3.95, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:05,262 - [23:16:05] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.40, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:05,784 - [23:16:05] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.00, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:05,947 - [23:16:05] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:16:06,255 - [23:16:06] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.45, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:06,779 - [23:16:06] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.05, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:07,256 - [23:16:07] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.50, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:07,789 - [23:16:07] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.10, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:08,257 - [23:16:08] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.55, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:08,368 - [23:16:08] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.10, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:08,382 - [23:16:08] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.55, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:08,393 - [23:16:08] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:16:08,789 - [23:16:08] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.15, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:09,263 - [23:16:09] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.60, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:09,785 - [23:16:09] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.20, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:10,261 - [23:16:10] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.65, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:10,783 - [23:16:10] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.25, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:11,263 - [23:16:11] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.70, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:11,792 - [23:16:11] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.30, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:12,265 - [23:16:12] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.75, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:12,789 - [23:16:12] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.35, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:13,266 - [23:16:13] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.80, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:13,794 - [23:16:13] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.40, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:14,278 - [23:16:14] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.85, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:14,793 - [23:16:14] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.45, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:15,273 - [23:16:15] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.90, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:15,794 - [23:16:15] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.50, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:15,918 - [23:16:15] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:16:16,271 - [23:16:16] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=1.95, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:16,798 - [23:16:16] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.55, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:17,281 - [23:16:17] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=2.00, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:17,796 - [23:16:17] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.60, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:18,273 - [23:16:18] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=2.05, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:18,375 - [23:16:18] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.60, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:18,388 - [23:16:18] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=2.05, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:18,399 - [23:16:18] Telemetría recibida de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=32.00 kWh
+2025-11-06 23:16:18,802 - [23:16:18] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.65, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:19,275 - [23:16:19] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=2.10, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:19,804 - [23:16:19] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.70, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:20,282 - [23:16:20] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=2.15, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:20,801 - [23:16:20] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.75, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:21,278 - [23:16:21] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=2.20, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:21,806 - [23:16:21] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.80, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:22,280 - [23:16:22] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=2.25, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:22,804 - [23:16:22] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.85, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:23,285 - [23:16:23] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=2.30, P=3.0 | Solicitado=48.00 kWh
+2025-11-06 23:16:23,808 - [23:16:23] Telemetría recibida de CP_001: est=LISTO_PARA_INICIAR, E=4.90, P=3.0 | Solicitado=29.00 kWh
+2025-11-06 23:16:24,284 - [23:16:24] Telemetría recibida de CP_002: est=LISTO_PARA_INICIAR, E=2.35, P=3.0 | Solicitado=48.00 kWh
