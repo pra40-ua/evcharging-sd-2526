@@ -429,13 +429,28 @@ def consumir_telemetria_kafka(broker_list: str):
                     registrar_evento(f"Telemetría recibida de {cp_id}: {resumen_telemetria(telemetria)}{objetivo_txt}")
                     print(f"[KAFKA CONSUMER] -> Telemetría de {cp_id} recibida: {telemetria}{objetivo_txt}")
 
-                    # Promover estados por telemetría (respetando PARADO manual)
+                    # Promover estados por telemetría (respetando PARADO manual y estados interactivos)
                     est_raw = telemetria.get('estado') or telemetria.get('estado_carga')
                     est = str(est_raw or '').strip().lower()
                     try:
+                        # Verificar estado actual para no sobrescribir estados interactivos
+                        with CP_ESTADO_LOCK:
+                            estado_actual = CP_ESTADO.get(cp_id, '')
+                        
+                        estados_interactivos = {
+                            'PENDIENTE_CONFIRMACION_CENTRAL',
+                            'ESPERANDO_OPERADOR_ENGINE',
+                            'LISTO_PARA_INICIAR',
+                            'ESPERANDO_CONFIRMACION_FIN'
+                        }
+                        
+                        # No sobrescribir si está en un estado interactivo (excepto si viene SUMINISTRANDO)
+                        en_estado_interactivo = estado_actual.upper() in estados_interactivos
+                        
                         manual_parado = False
                         with CP_ESTADO_MANUAL_LOCK:
                             manual_parado = CP_ESTADO_MANUAL.get(cp_id) == 'PARADO'
+                        
                         if est in ("cargando", "suministrando", "charging", "en_carga"):
                             if not manual_parado:
                                 # Mostrar objetivo en el mensaje de cambio de estado
@@ -448,10 +463,13 @@ def consumir_telemetria_kafka(broker_list: str):
                                         print(f"[{cp_id}] Progreso: {energia_actual:.2f}/{objetivo_kwh:.2f} kWh ({progreso:.1f}%)")
                                     except Exception:
                                         pass
-                        elif est in ("finalizado", "reposo", "idle", "ready"):
-                            # Solo volver a ACTIVADO si no está PARADO manualmente
-                            if not manual_parado:
+                        elif est in ("finalizado", "reposo", "idle", "ready", "activado"):
+                            # Solo volver a ACTIVADO si no está PARADO manualmente Y no está en estado interactivo
+                            if not manual_parado and not en_estado_interactivo:
                                 cambiar_estado_cp(cp_id, 'ACTIVADO')
+                            elif en_estado_interactivo:
+                                # Preservar estado interactivo, solo actualizar telemetría
+                                print(f"[KAFKA CONSUMER] Preservando estado interactivo {estado_actual} para {cp_id} (telemetría reporta {est})")
                     except Exception:
                         pass
 
@@ -1095,17 +1113,34 @@ def publicar_heartbeat_cps():
                 with TELEMETRIA_ACTUAL_LOCK:
                     telemetria = TELEMETRIA_ACTUAL.get(cp_id, {})
                 
+                # Obtener estado autoritativo desde CP_ESTADO (prioridad sobre telemetría)
+                with CP_ESTADO_LOCK:
+                    estado_autoritativo = CP_ESTADO.get(cp_id, 'ACTIVADO')
+                
+                # Estados interactivos que deben preservarse (no sobrescribir con ACTIVADO)
+                estados_interactivos = {
+                    'PENDIENTE_CONFIRMACION_CENTRAL',
+                    'ESPERANDO_OPERADOR_ENGINE',
+                    'LISTO_PARA_INICIAR',
+                    'ESPERANDO_CONFIRMACION_FIN'
+                }
+                
+                # Si el estado autoritativo es interactivo, usarlo; si no, usar el de telemetría si existe
+                if estado_autoritativo.upper() in estados_interactivos:
+                    estado_a_publicar = estado_autoritativo
+                else:
+                    # Usar estado de telemetría si existe, sino el autoritativo
+                    estado_a_publicar = telemetria.get('estado', telemetria.get('estado_carga', estado_autoritativo))
+                
                 # Asegurar que tenga los campos mínimos
                 if not telemetria or 'timestamp' not in telemetria:
-                    with CP_ESTADO_LOCK:
-                        estado = CP_ESTADO.get(cp_id, 'ACTIVADO')
                     with CP_PRECIO_KWH_LOCK:
                         precio = CP_PRECIO_KWH.get(cp_id, 0.0)
                     
                     telemetria = {
                         'cp_id': cp_id,
-                        'estado_carga': estado,
-                        'estado': estado,
+                        'estado_carga': estado_a_publicar,
+                        'estado': estado_a_publicar,
                         'potencia_actual': 0.0,
                         'energia_total': 0.0,
                         'kw_entregados': 0.0,
@@ -1116,8 +1151,13 @@ def publicar_heartbeat_cps():
                         'driver_id_sesion': None
                     }
                 else:
-                    # Actualizar timestamp del heartbeat
-                    telemetria = {**telemetria, 'timestamp': time.time()}
+                    # Actualizar timestamp y estado del heartbeat (preservar estado interactivo)
+                    telemetria = {
+                        **telemetria,
+                        'timestamp': time.time(),
+                        'estado_carga': estado_a_publicar,
+                        'estado': estado_a_publicar
+                    }
                 
                 # Enriquecer con información de sesión
                 with CP_SESION_DRIVER_ID_LOCK:
