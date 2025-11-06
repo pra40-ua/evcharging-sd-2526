@@ -545,11 +545,24 @@ def consumir_telemetria_kafka(broker_list: str):
                                 'ESPERANDO_CONFIRMACION_FIN'
                             }
                             
-                            # Si está en estado interactivo, usar el autoritativo; si no, usar el de telemetría
-                            if estado_autoritativo.upper() in estados_interactivos:
-                                estado_para_driver = estado_autoritativo
+                            # Determinar estado a enviar al driver
+                            estado_tel = (telemetria.get('estado') or telemetria.get('estado_carga') or '').upper()
+                            potencia_act = telemetria.get('potencia_actual', 0.0)
+
+                            # Regla anti-bloqueo: si hay potencia>0 o energía>0, priorizar estado de suministro
+                            if energia_val > 0.0 or (isinstance(potencia_act, (int, float)) and float(potencia_act) > 0.0):
+                                # Preferir SUMINISTRANDO si lo reporta la telemetría; caer a CARGANDO si aplica
+                                if estado_tel in ['SUMINISTRANDO', 'CARGANDO']:
+                                    estado_para_driver = 'SUMINISTRANDO'
+                                else:
+                                    # Si la Central está en estado interactivo pero ya hay entrega, forzar SUMINISTRANDO
+                                    estado_para_driver = 'SUMINISTRANDO'
                             else:
-                                estado_para_driver = telemetria.get('estado') or telemetria.get('estado_carga') or estado_autoritativo
+                                # Sin entrega detectada, aplicar política previa: autoritativo si interactivo, si no telemetría
+                                if estado_autoritativo.upper() in estados_interactivos:
+                                    estado_para_driver = estado_autoritativo
+                                else:
+                                    estado_para_driver = telemetria.get('estado') or telemetria.get('estado_carga') or estado_autoritativo
                             
                             notificar_driver(driver_id, 'TELEMETRIA', {
                                 'cp_id': cp_id,
