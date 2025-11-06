@@ -175,7 +175,7 @@ REM Lanzar Central en nueva ventana de PowerShell
 echo.
 echo Lanzando EV_Central en nueva ventana...
 echo.
-start "EV_Central-PC_A" powershell -NoLogo -NoExit -ExecutionPolicy Bypass -File "%~dp0commands_PC_A.ps1"
+start "EV_Central-PC_A" powershell -NoLogo -NoExit -ExecutionPolicy Bypass -File "%~dp0comandos\commands_PC_A.ps1"
 
 REM Esperar un poco para que la Central arranque
 timeout /t 3 /nobreak >nul
