@@ -1333,6 +1333,62 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
             with CONEXIONES_ACTIVAS_LOCK:
                 CONEXIONES_ACTIVAS[cp_id] = conn
                 print(f"[CENTRAL] Socket de {cp_id} guardado. Total: {len(CONEXIONES_ACTIVAS)}")
+            
+            # --- PROCESAR COLA SI HAY DRIVERS ESPERANDO ---
+            try:
+                with CP_COLA_ESPERA_LOCK:
+                    if cp_id in CP_COLA_ESPERA and not CP_COLA_ESPERA[cp_id].empty():
+                        from queue import Empty
+                        try:
+                            next_driver, next_kw, timestamp_cola = CP_COLA_ESPERA[cp_id].get_nowait()
+                            print(f"[CENTRAL] 🔄 CP {cp_id} reconectado. Procesando primer driver en cola: {next_driver}")
+                            
+                            # Registrar sesión
+                            with CP_SESION_DRIVER_ID_LOCK:
+                                CP_SESION_DRIVER_ID[cp_id] = next_driver
+                            with CP_SESION_OBJETIVO_KWH_LOCK:
+                                CP_SESION_OBJETIVO_KWH[cp_id] = next_kw
+                            
+                            # Estado: PENDIENTE_CONFIRMACION_CENTRAL
+                            try:
+                                cambiar_estado_cp(cp_id, 'PENDIENTE_CONFIRMACION_CENTRAL', db_connection)
+                            except Exception:
+                                pass
+                            
+                            # Publicar telemetría para que aparezca el botón en el dashboard
+                            try:
+                                with TELEMETRIA_ACTUAL_LOCK:
+                                    telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                                telemetria_actualizada = {
+                                    **telemetria_actual,
+                                    'cp_id': cp_id,
+                                    'estado_carga': 'PENDIENTE_CONFIRMACION_CENTRAL',
+                                    'estado': 'PENDIENTE_CONFIRMACION_CENTRAL',
+                                    'timestamp': time.time(),
+                                    'tiene_sesion_activa': True,
+                                    'driver_id_sesion': next_driver,
+                                    'objetivo_kwh': next_kw
+                                }
+                                with TELEMETRIA_ACTUAL_LOCK:
+                                    TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
+                                if KAFKA_PRODUCER:
+                                    KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                                    KAFKA_PRODUCER.flush(timeout=1)
+                                    print(f"[CENTRAL] ✓ Telemetría PENDIENTE_CONFIRMACION_CENTRAL publicada para {cp_id} (driver: {next_driver})")
+                            except Exception as e:
+                                print(f"[CENTRAL] Error publicando telemetría (reconexión→cola): {e}")
+                            
+                            # Notificar al driver
+                            notificar_driver(next_driver, 'EN_ESPERA_CONFIRMACION', {
+                                'mensaje': f'CP {cp_id} reconectado. Solicitud pendiente de confirmación del operador de Central.',
+                                'cp_id': cp_id,
+                                'kw_disponibles': next_kw
+                            })
+                            registrar_evento(f"✅ Driver {next_driver} pasado de cola a pendiente tras reconexión de {cp_id}", "ok")
+                        except Empty:
+                            pass
+            except Exception as e:
+                print(f"[CENTRAL] Error procesando cola tras reconexión de {cp_id}: {e}")
 
         else:
             print(f"[CENTRAL] Error: Mensaje inicial no válido ({cod_op}). Cerrando conexión.")
