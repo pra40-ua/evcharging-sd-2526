@@ -83112,3 +83112,872 @@ nnection. KafkaConnectionError: socket disconnected
 2025-11-06 00:44:58,467 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
 2025-11-06 00:44:58,467 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
 2025-11-06 00:44:58,637 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:33:46,164 - [09:33:46] Modo consola simple activado
+2025-11-06 09:33:46,168 - Updating subscribed topics to: ('driver_requests',)
+2025-11-06 09:33:46,169 - Updating subscribed topics to: ('central_commands',)
+2025-11-06 09:33:46,170 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-06 09:33:46,172 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:33:46,172 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:33:46,172 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:33:46,173 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:33:46,173 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:33:46,172 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:33:46,219 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:33:46,220 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:33:46,275 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 09:33:46,276 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-06 09:33:46,276 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 09:33:46,276 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-06 09:33:46,275 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-06 09:33:46,276 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-06 09:33:46,276 - Starting new heartbeat thread
+2025-11-06 09:33:46,276 - Starting new heartbeat thread
+2025-11-06 09:33:46,276 - Starting new heartbeat thread
+2025-11-06 09:33:46,276 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-11-06 09:33:46,276 - Revoking previously assigned partitions set() for group central-control-group
+2025-11-06 09:33:46,276 - Revoking previously assigned partitions set() for group central_processing_group
+2025-11-06 09:33:46,277 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:33:46,277 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:33:46,277 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:33:46,277 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:33:46,278 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 09:33:46,278 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:33:46,278 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:33:46,279 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 09:33:46,279 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 09:33:46,279 - Stopping heartbeat thread
+2025-11-06 09:33:46,279 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 09:33:46,380 - (Re-)joining group central_processing_group
+2025-11-06 09:33:46,380 - (Re-)joining group central-control-group
+2025-11-06 09:33:49,399 - Elected group leader -- performing partition assignments using range
+2025-11-06 09:33:49,400 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:33:49,400 - Elected group leader -- performing partition assignments using range
+2025-11-06 09:33:49,400 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:33:49,401 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:33:49,401 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:33:49,415 - Successfully joined group central_processing_group with generation 1
+2025-11-06 09:33:49,415 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)]
+2025-11-06 09:33:49,415 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)} for group central_processing_group
+2025-11-06 09:33:49,415 - Successfully joined group central-control-group with generation 1
+2025-11-06 09:33:49,415 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-11-06 09:33:49,415 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-06 09:34:09,409 - [09:34:09] [NUEVO CP] Registro inicial de CP_001.
+2025-11-06 09:34:09,410 - [09:34:09] CP registrado y conectado: CP_001 (C/Mayor, 45)
+2025-11-06 09:34:09,410 - [09:34:09] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-06 09:34:09,415 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-06 09:34:09,415 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-06 09:34:09,415 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-06 09:34:09,424 - [09:34:09] Telemetría inicial publicada para CP_001
+2025-11-06 09:34:09,434 - [09:34:09] AUTH OK enviado a CP_001
+2025-11-06 09:34:26,181 - [09:34:26] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:34:26,182 - [09:34:26] [ESTADO] CP_001 -> DESCONECTADO (antes: ACTIVADO).
+2025-11-06 09:34:41,855 - [09:34:41] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:41,856 - [09:34:41] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:42,866 - [09:34:42] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:42,867 - [09:34:42] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:43,880 - [09:34:43] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:43,881 - [09:34:43] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:44,891 - [09:34:44] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:44,892 - [09:34:44] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:45,904 - [09:34:45] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:45,905 - [09:34:45] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:46,202 - [09:34:46] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:34:46,203 - [09:34:46] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:34:46,915 - [09:34:46] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:46,916 - [09:34:46] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:47,933 - [09:34:47] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:47,934 - [09:34:47] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:48,948 - [09:34:48] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:48,949 - [09:34:48] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:49,978 - [09:34:49] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:49,979 - [09:34:49] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:50,964 - [09:34:50] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:50,965 - [09:34:50] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:51,211 - [09:34:51] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:34:51,212 - [09:34:51] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:34:51,975 - [09:34:51] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:51,976 - [09:34:51] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:52,988 - [09:34:52] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:52,989 - [09:34:52] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:53,998 - [09:34:53] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:54,000 - [09:34:53] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:55,010 - [09:34:55] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:55,011 - [09:34:55] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:56,023 - [09:34:56] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:56,024 - [09:34:56] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:56,224 - [09:34:56] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:34:56,225 - [09:34:56] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:34:57,034 - [09:34:57] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:57,035 - [09:34:57] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:58,046 - [09:34:58] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:58,047 - [09:34:58] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:59,059 - [09:34:59] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:34:59,060 - [09:34:59] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:00,071 - [09:35:00] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:00,072 - [09:35:00] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:01,086 - [09:35:01] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:01,087 - [09:35:01] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:01,232 - [09:35:01] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:35:01,233 - [09:35:01] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:35:02,094 - [09:35:02] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:02,096 - [09:35:02] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:03,153 - [09:35:03] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:03,154 - [09:35:03] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:04,119 - [09:35:04] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:04,120 - [09:35:04] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:05,131 - [09:35:05] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:05,132 - [09:35:05] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:06,143 - [09:35:06] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:06,144 - [09:35:06] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:06,244 - [09:35:06] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:35:06,245 - [09:35:06] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:35:07,156 - [09:35:07] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:07,157 - [09:35:07] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:08,169 - [09:35:08] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:08,170 - [09:35:08] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:09,180 - [09:35:09] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:09,181 - [09:35:09] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:10,192 - [09:35:10] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:10,193 - [09:35:10] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:11,204 - [09:35:11] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:11,205 - [09:35:11] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:11,252 - [09:35:11] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:35:11,254 - [09:35:11] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:35:12,216 - [09:35:12] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:12,217 - [09:35:12] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:13,253 - [09:35:13] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:13,254 - [09:35:13] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:14,270 - [09:35:14] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:14,271 - [09:35:14] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:15,252 - [09:35:15] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:15,254 - [09:35:15] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:16,266 - [09:35:16] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:16,267 - [09:35:16] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:16,272 - [09:35:16] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:35:16,273 - [09:35:16] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:35:17,276 - [09:35:17] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:17,278 - [09:35:17] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:18,288 - [09:35:18] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:18,289 - [09:35:18] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:19,300 - [09:35:19] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:19,301 - [09:35:19] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:20,316 - [09:35:20] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:20,317 - [09:35:20] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:21,282 - [09:35:21] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:35:21,283 - [09:35:21] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:35:21,324 - [09:35:21] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:21,325 - [09:35:21] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:22,337 - [09:35:22] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:22,338 - [09:35:22] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:23,350 - [09:35:23] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:23,351 - [09:35:23] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:24,360 - [09:35:24] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:24,361 - [09:35:24] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:25,372 - [09:35:25] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:25,373 - [09:35:25] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:26,295 - [09:35:26] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:35:26,296 - [09:35:26] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:35:26,393 - [09:35:26] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:26,394 - [09:35:26] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:27,396 - [09:35:27] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:27,397 - [09:35:27] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:28,410 - [09:35:28] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:28,411 - [09:35:28] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:29,422 - [09:35:29] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:29,422 - [09:35:29] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:30,433 - [09:35:30] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:30,434 - [09:35:30] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:31,303 - [09:35:31] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:35:31,304 - [09:35:31] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:35:31,444 - [09:35:31] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:31,445 - [09:35:31] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:32,458 - [09:35:32] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:32,459 - [09:35:32] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:33,470 - [09:35:33] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:33,471 - [09:35:33] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:34,497 - [09:35:34] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:34,498 - [09:35:34] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:35,493 - [09:35:35] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:35,494 - [09:35:35] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:36,316 - [09:35:36] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:35:36,317 - [09:35:36] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:35:36,506 - [09:35:36] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:36,508 - [09:35:36] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:37,518 - [09:35:37] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:37,519 - [09:35:37] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:38,531 - [09:35:38] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:38,532 - [09:35:38] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:39,542 - [09:35:39] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:39,544 - [09:35:39] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:40,554 - [09:35:40] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:40,555 - [09:35:40] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:41,324 - [09:35:41] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:35:41,326 - [09:35:41] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:35:41,568 - [09:35:41] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:41,569 - [09:35:41] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:42,580 - [09:35:42] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:42,581 - [09:35:42] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:43,598 - [09:35:43] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:43,599 - [09:35:43] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:44,605 - [09:35:44] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:44,606 - [09:35:44] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:45,616 - [09:35:45] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:45,617 - [09:35:45] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:46,338 - [09:35:46] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:35:46,339 - [09:35:46] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:35:46,629 - [09:35:46] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:46,630 - [09:35:46] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:47,640 - [09:35:47] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:47,641 - [09:35:47] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:48,652 - [09:35:48] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:48,653 - [09:35:48] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:49,667 - [09:35:49] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:49,668 - [09:35:49] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:50,677 - [09:35:50] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:50,679 - [09:35:50] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:51,346 - [09:35:51] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:35:51,348 - [09:35:51] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:35:51,689 - [09:35:51] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:51,690 - [09:35:51] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:52,701 - [09:35:52] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:52,702 - [09:35:52] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:53,718 - [09:35:53] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:53,720 - [09:35:53] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:54,725 - [09:35:54] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:54,726 - [09:35:54] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:55,737 - [09:35:55] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:55,738 - [09:35:55] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:56,359 - [09:35:56] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:35:56,360 - [09:35:56] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:35:56,750 - [09:35:56] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:56,751 - [09:35:56] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:57,774 - [09:35:57] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:57,775 - [09:35:57] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:58,790 - [09:35:58] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:58,791 - [09:35:58] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:59,786 - [09:35:59] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:35:59,787 - [09:35:59] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:00,798 - [09:36:00] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:00,799 - [09:36:00] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:01,367 - [09:36:01] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:36:01,368 - [09:36:01] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:36:01,813 - [09:36:01] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:01,814 - [09:36:01] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:02,822 - [09:36:02] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:02,823 - [09:36:02] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:03,835 - [09:36:03] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:03,836 - [09:36:03] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:04,846 - [09:36:04] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:04,847 - [09:36:04] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:05,858 - [09:36:05] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:05,859 - [09:36:05] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:06,380 - [09:36:06] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:36:06,381 - [09:36:06] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:36:06,870 - [09:36:06] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:06,871 - [09:36:06] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:07,883 - [09:36:07] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:07,884 - [09:36:07] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:08,893 - [09:36:08] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:08,894 - [09:36:08] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:09,906 - [09:36:09] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:09,907 - [09:36:09] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:10,918 - [09:36:10] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:10,919 - [09:36:10] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:11,388 - [09:36:11] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:36:11,389 - [09:36:11] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:36:11,930 - [09:36:11] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:11,931 - [09:36:11] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:12,941 - [09:36:12] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:12,942 - [09:36:12] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:13,955 - [09:36:13] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:13,956 - [09:36:13] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:14,968 - [09:36:14] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:14,969 - [09:36:14] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:15,977 - [09:36:15] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:15,978 - [09:36:15] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:16,400 - [09:36:16] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:36:16,401 - [09:36:16] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:36:16,989 - [09:36:16] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:16,990 - [09:36:16] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:18,001 - [09:36:18] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:18,002 - [09:36:18] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:19,014 - [09:36:19] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:19,015 - [09:36:19] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:20,026 - [09:36:20] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:20,027 - [09:36:20] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:21,039 - [09:36:21] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:21,040 - [09:36:21] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:21,408 - [09:36:21] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:36:21,410 - [09:36:21] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:36:22,050 - [09:36:22] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:22,052 - [09:36:22] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:23,062 - [09:36:23] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:23,063 - [09:36:23] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:24,079 - [09:36:24] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:24,080 - [09:36:24] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:25,087 - [09:36:25] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:25,088 - [09:36:25] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:26,098 - [09:36:26] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:26,099 - [09:36:26] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:26,422 - [09:36:26] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:36:26,423 - [09:36:26] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:36:27,111 - [09:36:27] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:27,112 - [09:36:27] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:28,122 - [09:36:28] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:28,123 - [09:36:28] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:29,135 - [09:36:29] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:29,136 - [09:36:29] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:30,190 - [09:36:30] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:30,191 - [09:36:30] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:31,159 - [09:36:31] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:31,160 - [09:36:31] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:31,430 - [09:36:31] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:36:31,431 - [09:36:31] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:36:32,171 - [09:36:32] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:32,172 - [09:36:32] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:33,182 - [09:36:33] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:33,183 - [09:36:33] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:34,194 - [09:36:34] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:34,195 - [09:36:34] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:35,211 - [09:36:35] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:35,212 - [09:36:35] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:36,220 - [09:36:36] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:36,221 - [09:36:36] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:36,443 - [09:36:36] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:36:36,444 - [09:36:36] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:36:37,232 - [09:36:37] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:37,233 - [09:36:37] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:38,244 - [09:36:38] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:38,245 - [09:36:38] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:39,255 - [09:36:39] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:39,256 - [09:36:39] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:40,281 - [09:36:40] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:40,282 - [09:36:40] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:41,280 - [09:36:41] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:41,281 - [09:36:41] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:41,453 - [09:36:41] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:36:41,454 - [09:36:41] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:36:42,292 - [09:36:42] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:42,293 - [09:36:42] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:43,307 - [09:36:43] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:43,308 - [09:36:43] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:44,340 - [09:36:44] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:44,341 - [09:36:44] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:45,327 - [09:36:45] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:45,328 - [09:36:45] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:46,340 - [09:36:46] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:46,341 - [09:36:46] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:46,465 - [09:36:46] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:36:46,466 - [09:36:46] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:36:47,352 - [09:36:47] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:47,353 - [09:36:47] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:48,363 - [09:36:48] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:48,364 - [09:36:48] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:49,376 - [09:36:49] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:49,377 - [09:36:49] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:50,387 - [09:36:50] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:50,388 - [09:36:50] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:51,400 - [09:36:51] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:51,401 - [09:36:51] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:51,475 - [09:36:51] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:36:51,476 - [09:36:51] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:36:52,412 - [09:36:52] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:52,413 - [09:36:52] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:53,440 - [09:36:53] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:53,441 - [09:36:53] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:54,453 - [09:36:54] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:54,454 - [09:36:54] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:55,449 - [09:36:55] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:55,450 - [09:36:55] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:56,464 - [09:36:56] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:56,465 - [09:36:56] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:56,488 - [09:36:56] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:36:56,489 - [09:36:56] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:36:57,473 - [09:36:57] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:57,474 - [09:36:57] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:58,485 - [09:36:58] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:58,486 - [09:36:58] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:59,499 - [09:36:59] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:36:59,500 - [09:36:59] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:00,509 - [09:37:00] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:00,510 - [09:37:00] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:01,495 - [09:37:01] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:37:01,497 - [09:37:01] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:37:01,521 - [09:37:01] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:01,522 - [09:37:01] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:02,535 - [09:37:02] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:02,536 - [09:37:02] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:03,562 - [09:37:03] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:03,563 - [09:37:03] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:04,558 - [09:37:04] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:04,559 - [09:37:04] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:05,571 - [09:37:05] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:05,572 - [09:37:05] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:06,508 - [09:37:06] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:37:06,509 - [09:37:06] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:37:06,583 - [09:37:06] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:06,584 - [09:37:06] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:07,595 - [09:37:07] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:07,596 - [09:37:07] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:08,630 - [09:37:08] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:08,631 - [09:37:08] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:09,620 - [09:37:09] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:09,621 - [09:37:09] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:10,630 - [09:37:10] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:10,631 - [09:37:10] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:11,516 - [09:37:11] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:37:11,517 - [09:37:11] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:37:11,643 - [09:37:11] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:11,644 - [09:37:11] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:12,653 - [09:37:12] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:12,654 - [09:37:12] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:13,666 - [09:37:13] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:13,667 - [09:37:13] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:14,679 - [09:37:14] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:14,680 - [09:37:14] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:15,689 - [09:37:15] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:15,690 - [09:37:15] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:16,528 - [09:37:16] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:37:16,529 - [09:37:16] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:37:16,701 - [09:37:16] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:16,702 - [09:37:16] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:17,713 - [09:37:17] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:17,714 - [09:37:17] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:18,725 - [09:37:18] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:18,726 - [09:37:18] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:19,738 - [09:37:19] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:19,739 - [09:37:19] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:20,749 - [09:37:20] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:20,750 - [09:37:20] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:21,536 - [09:37:21] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:37:21,537 - [09:37:21] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:37:21,762 - [09:37:21] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:21,763 - [09:37:21] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:22,773 - [09:37:22] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:22,774 - [09:37:22] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:23,785 - [09:37:23] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:23,786 - [09:37:23] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:24,797 - [09:37:24] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:24,798 - [09:37:24] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:25,809 - [09:37:25] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:25,810 - [09:37:25] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:26,549 - [09:37:26] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:37:26,550 - [09:37:26] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:37:26,822 - [09:37:26] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:26,823 - [09:37:26] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:27,832 - [09:37:27] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:27,833 - [09:37:27] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:28,844 - [09:37:28] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:28,845 - [09:37:28] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:29,857 - [09:37:29] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:29,858 - [09:37:29] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:30,871 - [09:37:30] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:30,872 - [09:37:30] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:31,557 - [09:37:31] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:37:31,558 - [09:37:31] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:37:31,881 - [09:37:31] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:31,882 - [09:37:31] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:32,893 - [09:37:32] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:32,894 - [09:37:32] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:33,906 - [09:37:33] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:33,907 - [09:37:33] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:34,917 - [09:37:34] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:34,918 - [09:37:34] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:35,930 - [09:37:35] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:35,931 - [09:37:35] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:36,570 - [09:37:36] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:37:36,571 - [09:37:36] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:37:36,942 - [09:37:36] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:36,943 - [09:37:36] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:37,957 - [09:37:37] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:37,958 - [09:37:37] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:38,976 - [09:37:38] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:38,977 - [09:37:38] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:40,003 - [09:37:40] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:40,004 - [09:37:40] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:40,990 - [09:37:40] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:40,991 - [09:37:40] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:41,581 - [09:37:41] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:37:41,582 - [09:37:41] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:37:42,003 - [09:37:42] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:42,004 - [09:37:42] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:43,014 - [09:37:43] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:43,015 - [09:37:43] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:44,026 - [09:37:44] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:44,027 - [09:37:44] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:45,042 - [09:37:45] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:45,043 - [09:37:45] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:46,051 - [09:37:46] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:46,052 - [09:37:46] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:46,593 - [09:37:46] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:37:46,594 - [09:37:46] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:37:47,062 - [09:37:47] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:47,063 - [09:37:47] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:48,074 - [09:37:48] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:48,075 - [09:37:48] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:49,105 - [09:37:49] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:49,106 - [09:37:49] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:50,099 - [09:37:50] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:50,100 - [09:37:50] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:51,110 - [09:37:51] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:51,111 - [09:37:51] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:51,602 - [09:37:51] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:37:51,603 - [09:37:51] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:37:52,123 - [09:37:52] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:52,124 - [09:37:52] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:53,134 - [09:37:53] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:53,135 - [09:37:53] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:54,148 - [09:37:54] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:54,149 - [09:37:54] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:55,161 - [09:37:55] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:55,162 - [09:37:55] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:56,174 - [09:37:56] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:56,175 - [09:37:56] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:56,614 - [09:37:56] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:37:56,615 - [09:37:56] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:37:57,182 - [09:37:57] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:57,184 - [09:37:57] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:58,195 - [09:37:58] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:58,196 - [09:37:58] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:59,208 - [09:37:59] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:37:59,209 - [09:37:59] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:00,219 - [09:38:00] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:00,220 - [09:38:00] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:01,231 - [09:38:01] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:01,232 - [09:38:01] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:01,623 - [09:38:01] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:38:01,624 - [09:38:01] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:38:02,243 - [09:38:02] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:02,244 - [09:38:02] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:03,284 - [09:38:03] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:03,285 - [09:38:03] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:04,294 - [09:38:04] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:04,295 - [09:38:04] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:05,281 - [09:38:05] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:05,282 - [09:38:05] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:06,317 - [09:38:06] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:06,318 - [09:38:06] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:06,635 - [09:38:06] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:38:06,636 - [09:38:06] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:38:07,304 - [09:38:07] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:07,305 - [09:38:07] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:08,324 - [09:38:08] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:08,325 - [09:38:08] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:09,328 - [09:38:09] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:09,329 - [09:38:09] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:10,345 - [09:38:10] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:10,346 - [09:38:10] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:11,352 - [09:38:11] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:11,353 - [09:38:11] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:11,643 - [09:38:11] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:38:11,644 - [09:38:11] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:38:12,365 - [09:38:12] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:12,366 - [09:38:12] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:13,376 - [09:38:13] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:13,377 - [09:38:13] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:14,388 - [09:38:14] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:14,389 - [09:38:14] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:15,402 - [09:38:15] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:15,403 - [09:38:15] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:16,413 - [09:38:16] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:16,414 - [09:38:16] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:16,657 - [09:38:16] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:38:16,658 - [09:38:16] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:38:17,424 - [09:38:17] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:17,425 - [09:38:17] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:18,435 - [09:38:18] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:18,436 - [09:38:18] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:19,448 - [09:38:19] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:19,449 - [09:38:19] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:20,460 - [09:38:20] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:20,461 - [09:38:20] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:21,474 - [09:38:21] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:21,475 - [09:38:21] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:21,665 - [09:38:21] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:38:21,666 - [09:38:21] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:38:22,484 - [09:38:22] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:22,485 - [09:38:22] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:23,499 - [09:38:23] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:23,500 - [09:38:23] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:24,509 - [09:38:24] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:24,510 - [09:38:24] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:25,521 - [09:38:25] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:25,522 - [09:38:25] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:26,534 - [09:38:26] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:26,535 - [09:38:26] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:26,678 - [09:38:26] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:38:26,679 - [09:38:26] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:38:27,545 - [09:38:27] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:27,546 - [09:38:27] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:28,559 - [09:38:28] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:28,560 - [09:38:28] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:29,570 - [09:38:29] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:29,571 - [09:38:29] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:30,581 - [09:38:30] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:30,582 - [09:38:30] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:31,596 - [09:38:31] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:31,597 - [09:38:31] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:31,686 - [09:38:31] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:38:31,687 - [09:38:31] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:38:32,607 - [09:38:32] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:32,608 - [09:38:32] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:33,625 - [09:38:33] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:33,626 - [09:38:33] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:34,640 - [09:38:34] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:34,641 - [09:38:34] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:35,666 - [09:38:35] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:35,667 - [09:38:35] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:36,656 - [09:38:36] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:36,657 - [09:38:36] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:36,699 - [09:38:36] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:38:36,700 - [09:38:36] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:38:37,667 - [09:38:37] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:37,668 - [09:38:37] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:38,681 - [09:38:38] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:38,682 - [09:38:38] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:39,713 - [09:38:39] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:39,714 - [09:38:39] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:40,705 - [09:38:40] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:40,706 - [09:38:40] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:41,707 - [09:38:41] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:38:41,708 - [09:38:41] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:38:41,718 - [09:38:41] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:41,719 - [09:38:41] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:42,729 - [09:38:42] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:42,730 - [09:38:42] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:43,742 - [09:38:43] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:43,742 - [09:38:43] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:44,753 - [09:38:44] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:44,754 - [09:38:44] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:45,765 - [09:38:45] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:45,766 - [09:38:45] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:46,721 - [09:38:46] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:38:46,722 - [09:38:46] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:38:46,778 - [09:38:46] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:46,779 - [09:38:46] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:47,791 - [09:38:47] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:47,792 - [09:38:47] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:48,803 - [09:38:48] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:48,804 - [09:38:48] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:49,875 - [09:38:49] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:49,876 - [09:38:49] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:50,826 - [09:38:50] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:50,827 - [09:38:50] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:51,730 - [09:38:51] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:38:51,731 - [09:38:51] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:38:51,838 - [09:38:51] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:51,839 - [09:38:51] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:52,850 - [09:38:52] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:52,851 - [09:38:52] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:53,863 - [09:38:53] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:53,864 - [09:38:53] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:54,876 - [09:38:54] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:54,877 - [09:38:54] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:55,887 - [09:38:55] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:55,888 - [09:38:55] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:56,744 - [09:38:56] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:38:56,745 - [09:38:56] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:38:56,898 - [09:38:56] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:56,900 - [09:38:56] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:57,910 - [09:38:57] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:57,911 - [09:38:57] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:58,946 - [09:38:58] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:58,947 - [09:38:58] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:59,958 - [09:38:59] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:38:59,959 - [09:38:59] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:00,946 - [09:39:00] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:00,947 - [09:39:00] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:01,753 - [09:39:01] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:39:01,755 - [09:39:01] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:39:01,959 - [09:39:01] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:01,960 - [09:39:01] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:02,970 - [09:39:02] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:02,971 - [09:39:02] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:03,983 - [09:39:03] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:03,984 - [09:39:03] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:04,995 - [09:39:04] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:04,996 - [09:39:04] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:06,042 - [09:39:06] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:06,043 - [09:39:06] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:06,768 - [09:39:06] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:39:06,769 - [09:39:06] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:39:07,019 - [09:39:07] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:07,020 - [09:39:07] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:08,031 - [09:39:08] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:08,032 - [09:39:08] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:09,043 - [09:39:09] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:09,044 - [09:39:09] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:10,057 - [09:39:10] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:10,058 - [09:39:10] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:11,067 - [09:39:11] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:11,068 - [09:39:11] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:11,776 - [09:39:11] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:39:11,777 - [09:39:11] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:39:12,080 - [09:39:12] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:12,081 - [09:39:12] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:13,092 - [09:39:13] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:13,093 - [09:39:13] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:14,103 - [09:39:14] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:14,104 - [09:39:14] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:15,116 - [09:39:15] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:15,117 - [09:39:15] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:16,128 - [09:39:16] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:16,129 - [09:39:16] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:16,789 - [09:39:16] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:39:16,790 - [09:39:16] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:39:17,139 - [09:39:17] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:17,140 - [09:39:17] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:18,151 - [09:39:18] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:18,153 - [09:39:18] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:19,163 - [09:39:19] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:19,164 - [09:39:19] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:20,186 - [09:39:20] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:20,187 - [09:39:20] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:21,188 - [09:39:21] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:21,189 - [09:39:21] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:21,798 - [09:39:21] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:39:21,799 - [09:39:21] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:39:22,201 - [09:39:22] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:22,202 - [09:39:22] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:23,212 - [09:39:23] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:23,213 - [09:39:23] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:24,227 - [09:39:24] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:24,228 - [09:39:24] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:25,240 - [09:39:25] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:25,241 - [09:39:25] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:26,248 - [09:39:26] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:26,249 - [09:39:26] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:26,811 - [09:39:26] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:39:26,812 - [09:39:26] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:39:27,260 - [09:39:27] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:27,261 - [09:39:27] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:28,273 - [09:39:28] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:28,274 - [09:39:28] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:29,289 - [09:39:29] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:29,290 - [09:39:29] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:30,303 - [09:39:30] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:30,304 - [09:39:30] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:31,310 - [09:39:31] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:31,311 - [09:39:31] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:31,819 - [09:39:31] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:39:31,820 - [09:39:31] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:39:32,322 - [09:39:32] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:32,323 - [09:39:32] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:33,333 - [09:39:33] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:33,334 - [09:39:33] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:34,346 - [09:39:34] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:34,347 - [09:39:34] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:35,360 - [09:39:35] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:35,361 - [09:39:35] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:36,369 - [09:39:36] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:36,370 - [09:39:36] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:36,833 - [09:39:36] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:39:36,834 - [09:39:36] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:39:37,382 - [09:39:37] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:37,383 - [09:39:37] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:38,395 - [09:39:38] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:38,395 - [09:39:38] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:39,407 - [09:39:39] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:39,408 - [09:39:39] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:40,420 - [09:39:40] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:40,421 - [09:39:40] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:41,461 - [09:39:41] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:41,462 - [09:39:41] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:41,841 - [09:39:41] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:39:41,842 - [09:39:41] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:39:42,444 - [09:39:42] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:42,445 - [09:39:42] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:43,497 - [09:39:43] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:43,498 - [09:39:43] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:44,482 - [09:39:44] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:44,483 - [09:39:44] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:45,508 - [09:39:45] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:45,509 - [09:39:45] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:46,493 - [09:39:46] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:46,494 - [09:39:46] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:46,853 - [09:39:46] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:39:46,854 - [09:39:46] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:39:47,504 - [09:39:47] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:47,505 - [09:39:47] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:48,516 - [09:39:48] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:48,517 - [09:39:48] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:49,529 - [09:39:49] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:49,530 - [09:39:49] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:50,544 - [09:39:50] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:50,545 - [09:39:50] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:51,553 - [09:39:51] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:51,554 - [09:39:51] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:51,861 - [09:39:51] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:39:51,862 - [09:39:51] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:39:52,565 - [09:39:52] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:52,566 - [09:39:52] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:53,579 - [09:39:53] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:53,580 - [09:39:53] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:54,611 - [09:39:54] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:54,612 - [09:39:54] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:55,603 - [09:39:55] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:55,604 - [09:39:55] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:56,623 - [09:39:56] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:56,624 - [09:39:56] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:56,873 - [09:39:56] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:39:56,875 - [09:39:56] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:39:57,629 - [09:39:57] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:57,630 - [09:39:57] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:58,640 - [09:39:58] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:58,641 - [09:39:58] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:59,651 - [09:39:59] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:39:59,652 - [09:39:59] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:00,666 - [09:40:00] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:00,667 - [09:40:00] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:01,679 - [09:40:01] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:01,680 - [09:40:01] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:01,881 - [09:40:01] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:40:01,882 - [09:40:01] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:40:02,688 - [09:40:02] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:02,689 - [09:40:02] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:03,702 - [09:40:03] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:03,703 - [09:40:03] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:04,712 - [09:40:04] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:04,713 - [09:40:04] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:05,726 - [09:40:05] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:05,727 - [09:40:05] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:06,743 - [09:40:06] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:06,744 - [09:40:06] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:06,893 - [09:40:06] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:40:06,895 - [09:40:06] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:40:07,749 - [09:40:07] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:07,750 - [09:40:07] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:08,786 - [09:40:08] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:08,787 - [09:40:08] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:09,800 - [09:40:09] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:09,801 - [09:40:09] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:10,786 - [09:40:10] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:10,787 - [09:40:10] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:11,800 - [09:40:11] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:11,801 - [09:40:11] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:11,901 - [09:40:11] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:40:11,903 - [09:40:11] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:40:12,811 - [09:40:12] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:12,812 - [09:40:12] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:13,825 - [09:40:13] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:13,826 - [09:40:13] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:14,852 - [09:40:14] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:14,853 - [09:40:14] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:15,851 - [09:40:15] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:15,852 - [09:40:15] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:16,859 - [09:40:16] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:16,860 - [09:40:16] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:16,913 - [09:40:16] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:40:16,914 - [09:40:16] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-06 09:40:17,872 - [09:40:17] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:17,873 - [09:40:17] [ESTADO] CP_001 -> AVERÍA (antes: DESCONECTADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:18,885 - [09:40:18] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:18,886 - [09:40:18] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:19,895 - [09:40:19] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:19,896 - [09:40:19] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:20,907 - [09:40:20] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:20,908 - [09:40:20] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:21,919 - [09:40:21] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:21,920 - [09:40:21] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-06 09:40:21,921 - [09:40:21] [\u26a0\ufe0f] CP CP_001 sin actividad \u2192 DESCONECTADO
+2025-11-06 09:40:21,922 - [09:40:21] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).

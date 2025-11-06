@@ -363,7 +363,9 @@
             html += '</tr></thead><tbody>';
             
             cps.forEach(cp => {
-                const estado = (cp.estado || 'DESCONOCIDO').toUpperCase();
+                const estadoRaw = (cp.estado || 'DESCONOCIDO').toUpperCase();
+                // Regla UX: mostrar REPOSO como ACTIVADO (conectado y disponible)
+                const estado = (estadoRaw === 'REPOSO') ? 'ACTIVADO' : estadoRaw;
                 const estadoClass = 'status-' + estado.toLowerCase().replace('í', 'i').replace('-', '-');
                 const tieneSesion = cp.tiene_sesion_activa || false;
                 
