@@ -744,7 +744,7 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                             })
                             continue
 
-                        estado_inferior = estado_cp.strip().lower()
+                        estado_inferior = estado_cp.strip().lower() if estado_cp else ''
                         
                         # Verificar si el CP ya tiene una sesión activa
                         with CP_SESION_DRIVER_ID_LOCK:
@@ -773,23 +773,68 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                             registrar_evento(f"Driver {id_driver} en cola para {cp_id} (posición {posicion})", "info")
                             continue
                         
-                        if estado_inferior in ('activado',):
+                        # Estados válidos para aceptar solicitudes (case-insensitive)
+                        estados_validos = {
+                            'activado', 'reposo', 'ready', 'idle',
+                            'pendiente confirmacion central',
+                            'pendiente_confirmacion_central',
+                            'esperando operador engine',
+                            'esperando_operador_engine',
+                            'listo para iniciar',
+                            'listo_para_iniciar'
+                        }
+                        
+                        # Estados que indican ocupación (añadir a cola)
+                        estados_ocupados = {
+                            'suministrando', 'cargando', 'charging', 'en_carga'
+                        }
+                        
+                        # Estados que indican no disponible (denegar)
+                        estados_no_disponibles = {
+                            'parado', 'averiado', 'avería', 'desconectado', 'desconectada'
+                        }
+                        
+                        if estado_inferior in estados_validos:
+                            # Estado válido, continuar con el proceso
                             pass
-                        elif estado_inferior in ('suministrando',):
-                            notificar_driver(id_driver, 'DENEGADA', {
-                                'motivo': f'CP {cp_id} ocupado (Suministrando)'
+                        elif estado_inferior in estados_ocupados:
+                            # CP ocupado - añadir a cola
+                            print(f"[CENTRAL] CP {cp_id} ocupado ({estado_cp}). Añadiendo {id_driver} a cola de espera...")
+                            
+                            with CP_COLA_ESPERA_LOCK:
+                                if cp_id not in CP_COLA_ESPERA:
+                                    from queue import Queue
+                                    CP_COLA_ESPERA[cp_id] = Queue()
+                                CP_COLA_ESPERA[cp_id].put((id_driver, kw_deseados, time.time()))
+                            
+                            with CP_COLA_ESPERA_LOCK:
+                                posicion = CP_COLA_ESPERA[cp_id].qsize()
+                            
+                            notificar_driver(id_driver, 'EN_COLA', {
+                                'mensaje': f'CP {cp_id} ocupado ({estado_cp}). Posición en cola: {posicion}',
+                                'posicion': posicion,
+                                'cp_id': cp_id
                             })
+                            registrar_evento(f"Driver {id_driver} en cola para {cp_id} (posición {posicion})", "info")
                             continue
-                        elif estado_inferior in ('parado', 'averiado', 'desconectado'):
+                        elif estado_inferior in estados_no_disponibles:
                             notificar_driver(id_driver, 'DENEGADA', {
                                 'motivo': f'CP {cp_id} no disponible: {estado_cp}'
                             })
                             continue
                         else:
-                            notificar_driver(id_driver, 'DENEGADA', {
-                                'motivo': f'Estado de CP desconocido: {estado_cp}'
-                            })
-                            continue
+                            # Estado desconocido - intentar permitir si el CP está conectado
+                            print(f"[CENTRAL] Estado desconocido '{estado_cp}' para {cp_id}. Verificando conexión...")
+                            with CONEXIONES_ACTIVAS_LOCK:
+                                if cp_id in CONEXIONES_ACTIVAS:
+                                    # CP conectado pero estado desconocido - permitir (puede ser un estado nuevo)
+                                    print(f"[CENTRAL] CP {cp_id} conectado. Permitiendo solicitud a pesar de estado desconocido.")
+                                    pass
+                                else:
+                                    notificar_driver(id_driver, 'DENEGADA', {
+                                        'motivo': f'Estado de CP desconocido y no conectado: {estado_cp}'
+                                    })
+                                    continue
 
                         # Paso 3: Verificar conexión TCP con el Monitor (persistente)
                         with CONEXIONES_ACTIVAS_LOCK:
