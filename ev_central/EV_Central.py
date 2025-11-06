@@ -309,6 +309,9 @@ CENTRAL_COMMANDS_TOPIC = 'central_commands'
 KAFKA_PRODUCER = None
 KAFKA_PRODUCER_LOCK = threading.Lock()
 
+# Configuración de BD global para reconexión
+DB_CONFIG_STR = None
+
 def publicar_telemetria_kafka(cp_id: str, telemetria_data: dict):
     """
     Publica telemetría actualizada a Kafka para que el dashboard la vea.
@@ -401,6 +404,11 @@ def consumir_telemetria_kafka(broker_list: str):
                         telemetria['estado'] = estado_autoritativo
                         telemetria['estado_carga'] = estado_autoritativo
                     
+                    # Mapear ESPERANDO_DRIVER a ESPERANDO_OPERADOR_ENGINE si viene del Engine
+                    if telemetria.get('estado', '').upper() == 'ESPERANDO_DRIVER' or telemetria.get('estado_carga', '').upper() == 'ESPERANDO_DRIVER':
+                        telemetria['estado'] = 'ESPERANDO_OPERADOR_ENGINE'
+                        telemetria['estado_carga'] = 'ESPERANDO_OPERADOR_ENGINE'
+                    
                     # Enriquecer telemetría con información de sesión activa
                     with CP_SESION_DRIVER_ID_LOCK:
                         telemetria['tiene_sesion_activa'] = cp_id in CP_SESION_DRIVER_ID
@@ -445,10 +453,15 @@ def consumir_telemetria_kafka(broker_list: str):
                     registrar_evento(f"Telemetría recibida de {cp_id}: {resumen_telemetria(telemetria)}{objetivo_txt}")
                     print(f"[KAFKA CONSUMER] -> Telemetría de {cp_id} recibida: {telemetria}{objetivo_txt}")
 
-                    # Promover estados por telemetría (respetando PARADO manual y estados interactivos)
+                    # Promover estados por telemetría (respetando PARADO manual y evitando regresiones)
                     est_raw = telemetria.get('estado') or telemetria.get('estado_carga')
                     est = str(est_raw or '').strip().lower()
                     try:
+                        # Mapear ESPERANDO_DRIVER del Engine a ESPERANDO_OPERADOR_ENGINE en Central
+                        if est in ("esperando_driver", "esperando driver"):
+                            est = "esperando_operador_engine"
+                            est_raw = "ESPERANDO_OPERADOR_ENGINE"
+                        
                         # Verificar estado actual para no sobrescribir estados interactivos
                         with CP_ESTADO_LOCK:
                             estado_actual = CP_ESTADO.get(cp_id, '')
@@ -467,6 +480,11 @@ def consumir_telemetria_kafka(broker_list: str):
                         with CP_ESTADO_MANUAL_LOCK:
                             manual_parado = CP_ESTADO_MANUAL.get(cp_id) == 'PARADO'
                         
+                        # Evitar regresión: si ya está CARGANDO/SUMINISTRANDO, ignorar LISTO_PARA_INICIAR
+                        if str(estado_actual).upper() in ("CARGANDO", "SUMINISTRANDO") and est in ("listo_para_iniciar", "listo para iniciar"):
+                            print(f"[KAFKA CONSUMER] Ignorando regresión de {cp_id}: {estado_actual} -> {est_raw}")
+                            pass
+                        
                         if est in ("cargando", "suministrando", "charging", "en_carga"):
                             if not manual_parado:
                                 # Mostrar objetivo en el mensaje de cambio de estado
@@ -479,6 +497,10 @@ def consumir_telemetria_kafka(broker_list: str):
                                         print(f"[{cp_id}] Progreso: {energia_actual:.2f}/{objetivo_kwh:.2f} kWh ({progreso:.1f}%)")
                                     except Exception:
                                         pass
+                        elif est == "esperando_operador_engine":
+                            # Mapear ESPERANDO_DRIVER a ESPERANDO_OPERADOR_ENGINE
+                            if not en_estado_interactivo or estado_actual.upper() != 'ESPERANDO_OPERADOR_ENGINE':
+                                cambiar_estado_cp(cp_id, 'ESPERANDO_OPERADOR_ENGINE')
                         elif est in ("finalizado", "reposo", "idle", "ready", "activado"):
                             # Solo volver a ACTIVADO si no está PARADO manualmente Y no está en estado interactivo
                             if not manual_parado and not en_estado_interactivo:
@@ -602,55 +624,69 @@ def consumir_comandos_control_kafka(broker_list: str):
                     
                     # Manejar comando especial PREPARE_SUPPLY
                     if command == 'PREPARE_SUPPLY':
-                        # Obtener datos de sesión y enviar AUTH_REQ
-                        with CP_SESION_DRIVER_ID_LOCK:
-                            driver_id = CP_SESION_DRIVER_ID.get(cp_id)
-                        with CP_SESION_OBJETIVO_KWH_LOCK:
-                            kw_objetivo = CP_SESION_OBJETIVO_KWH.get(cp_id)
-                        
-                        if not driver_id or not kw_objetivo:
-                            print(f"[CENTRAL] No hay sesión activa para {cp_id}")
-                            registrar_evento(f"[ERROR] No hay sesión activa para {cp_id}", "error")
-                            continue
-                        
-                        # Enviar AUTH_REQ al CP
-                        with CONEXIONES_ACTIVAS_LOCK:
-                            cp_socket = CONEXIONES_ACTIVAS.get(cp_id)
-                        
-                        if not cp_socket:
-                            print(f"[CENTRAL] CP {cp_id} no está conectado")
-                            registrar_evento(f"[ERROR] CP {cp_id} no está conectado", "error")
-                            continue
-                        
                         try:
-                            trama_auth = construir_trama('AUTH_REQ', [driver_id, str(kw_objetivo)])
-                            cp_socket.sendall(trama_auth)
-                            print(f"[CENTRAL] ✓ AUTH_REQ enviado a {cp_id} (Driver: {driver_id}, kW: {kw_objetivo})")
-                            registrar_evento(f"[FLUJO] AUTH_REQ enviado a {cp_id}. Esperando acción del operador del Engine.", "info")
+                            # Obtener datos de sesión y enviar AUTH_REQ
+                            with CP_SESION_DRIVER_ID_LOCK:
+                                driver_id = CP_SESION_DRIVER_ID.get(cp_id)
+                            with CP_SESION_OBJETIVO_KWH_LOCK:
+                                kw_objetivo = CP_SESION_OBJETIVO_KWH.get(cp_id)
                             
-                            # Cambiar estado
-                            cambiar_estado_cp(cp_id, 'ESPERANDO_OPERADOR_ENGINE')
+                            if not driver_id or not kw_objetivo:
+                                print(f"[CENTRAL] No hay sesión activa para {cp_id}")
+                                registrar_evento(f"[ERROR] No hay sesión activa para {cp_id}", "error")
+                                continue
                             
-                            # Publicar telemetría actualizada
-                            with TELEMETRIA_ACTUAL_LOCK:
-                                telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
-                            telemetria_actualizada = {
-                                **telemetria_actual,
-                                'cp_id': cp_id,
-                                'estado_carga': 'ESPERANDO_OPERADOR_ENGINE',
-                                'estado': 'ESPERANDO_OPERADOR_ENGINE',
-                                'timestamp': time.time(),
-                                'tiene_sesion_activa': True,
-                                'driver_id_sesion': driver_id
-                            }
-                            with TELEMETRIA_ACTUAL_LOCK:
-                                TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
-                            if KAFKA_PRODUCER:
-                                KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
-                                KAFKA_PRODUCER.flush(timeout=1)
+                            # Enviar AUTH_REQ al CP
+                            with CONEXIONES_ACTIVAS_LOCK:
+                                cp_socket = CONEXIONES_ACTIVAS.get(cp_id)
+                            
+                            if not cp_socket:
+                                print(f"[CENTRAL] CP {cp_id} no está conectado")
+                                registrar_evento(f"[ERROR] CP {cp_id} no está conectado", "error")
+                                continue
+                            
+                            try:
+                                trama_auth = construir_trama('AUTH_REQ', [driver_id, str(kw_objetivo)])
+                                cp_socket.sendall(trama_auth)
+                                print(f"[CENTRAL] ✓ AUTH_REQ enviado a {cp_id} (Driver: {driver_id}, kW: {kw_objetivo})")
+                                registrar_evento(f"[FLUJO] AUTH_REQ enviado a {cp_id}. Esperando acción del operador del Engine.", "info")
+                                
+                                # Cambiar estado (sin db_connection, se obtendrá si es necesario)
+                                try:
+                                    cambiar_estado_cp(cp_id, 'ESPERANDO_OPERADOR_ENGINE', None)
+                                except Exception as e_estado:
+                                    print(f"[CENTRAL] Error cambiando estado de {cp_id}: {e_estado}")
+                                    # Continuar aunque falle el cambio de estado en BD
+                                
+                                # Publicar telemetría actualizada
+                                with TELEMETRIA_ACTUAL_LOCK:
+                                    telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                                telemetria_actualizada = {
+                                    **telemetria_actual,
+                                    'cp_id': cp_id,
+                                    'estado_carga': 'ESPERANDO_OPERADOR_ENGINE',
+                                    'estado': 'ESPERANDO_OPERADOR_ENGINE',
+                                    'timestamp': time.time(),
+                                    'tiene_sesion_activa': True,
+                                    'driver_id_sesion': driver_id
+                                }
+                                with TELEMETRIA_ACTUAL_LOCK:
+                                    TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
+                                if KAFKA_PRODUCER:
+                                    KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                                    KAFKA_PRODUCER.flush(timeout=1)
+                            except Exception as e:
+                                print(f"[CENTRAL] Error enviando AUTH_REQ a {cp_id}: {e}")
+                                registrar_evento(f"[ERROR] Error enviando AUTH_REQ a {cp_id}: {e}", "error")
+                                import traceback
+                                traceback.print_exc()
                         except Exception as e:
-                            print(f"[CENTRAL] Error enviando AUTH_REQ a {cp_id}: {e}")
-                            registrar_evento(f"[ERROR] Error enviando AUTH_REQ a {cp_id}: {e}", "error")
+                            print(f"[CENTRAL] Error crítico procesando PREPARE_SUPPLY para {cp_id}: {e}")
+                            registrar_evento(f"[ERROR] Error crítico procesando PREPARE_SUPPLY para {cp_id}: {e}", "error")
+                            import traceback
+                            traceback.print_exc()
+                            # Continuar procesando otros comandos
+                            continue
                     
                     elif command in ['START', 'STOP']:
                         # Comandos normales START/STOP
@@ -1053,10 +1089,46 @@ def registrar_cp_en_bd(connection: mysql.connector.connection.MySQLConnection,
         print(f"[CENTRAL] Error inesperado al registrar CP {cp_id}: {e}")
         return False
 
-def actualizar_estado_cp(connection: mysql.connector.connection.MySQLConnection, 
+def _asegurar_conexion_bd(connection: mysql.connector.connection.MySQLConnection | None) -> mysql.connector.connection.MySQLConnection | None:
+    """Verifica y, si es necesario, reestablece la conexión a BD usando DB_CONFIG_STR."""
+    try:
+        if connection and connection.is_connected():
+            return connection
+    except Exception:
+        pass
+    try:
+        cfg = globals().get('DB_CONFIG_STR')
+        if not cfg:
+            return connection
+        nuevo = conectar_bd(cfg)
+        # Actualizar referencia global usada por consumidores
+        globals()['_DB_CONN_FOR_CONSUMER'] = nuevo
+        return nuevo
+    except Exception as _:
+        return connection
+
+
+def actualizar_estado_cp(connection: mysql.connector.connection.MySQLConnection | None, 
                          cp_id: str, nuevo_estado: str) -> bool:
     """Actualiza el estado de un CP en la base de datos."""
+    if connection is None:
+        # Intentar obtener conexión si no se proporciona
+        try:
+            connection = _asegurar_conexion_bd(connection)
+        except Exception:
+            pass
+    
+    if connection is None:
+        # Sin conexión disponible, no es crítico, solo log
+        return False
+    
     try:
+        # Verificar conexión antes de usar
+        if not connection.is_connected():
+            connection = _asegurar_conexion_bd(connection)
+            if connection is None:
+                return False
+        
         cursor = connection.cursor()
         cursor.execute("""
             UPDATE charging_points 
@@ -1074,10 +1146,37 @@ def actualizar_estado_cp(connection: mysql.connector.connection.MySQLConnection,
             return False
             
     except Error as e:
+        try:
+            # Intento de reconexión para errores típicos de desconexión
+            if getattr(e, 'errno', None) in (2006, 2013) or 'Lost connection' in str(e):
+                print(f"[CENTRAL] Aviso: {e}. Reintentando actualización tras reconexión...")
+                connection = _asegurar_conexion_bd(connection)
+                if connection is None:
+                    return False
+                try:
+                    cursor = connection.cursor()
+                    cursor.execute("""
+                        UPDATE charging_points 
+                        SET estado = %s, fecha_ultima_conexion = %s 
+                        WHERE cp_id = %s
+                    """, (nuevo_estado, datetime.now(), cp_id))
+                    ok = cursor.rowcount > 0
+                    connection.commit()
+                    cursor.close()
+                    if ok:
+                        print(f"[CENTRAL] Estado de CP {cp_id} actualizado tras reconexión: {nuevo_estado}")
+                    return ok
+                except Exception as e2:
+                    print(f"[CENTRAL] Error tras reintento de actualización de CP {cp_id}: {e2}")
+                    return False
+        except Exception:
+            pass
         print(f"[CENTRAL] Error actualizando estado de CP {cp_id}: {e}")
         return False
     except Exception as e:
         print(f"[CENTRAL] Error inesperado actualizando estado de CP {cp_id}: {e}")
+        import traceback
+        traceback.print_exc()
         return False
 
 def obtener_estado_cp(connection: mysql.connector.connection.MySQLConnection, cp_id: str):
@@ -1726,6 +1825,21 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                         print(f"[CENTRAL] 📩 READY_TO_START recibido de {engine_cp_id} (Driver: {driver_id})")
                         registrar_evento(f"[FLUJO] {engine_cp_id} listo para iniciar. Driver: {driver_id}. Esperando confirmación del operador de Central.", "info")
                         
+                        # No degradar si ya está CARGANDO/SUMINISTRANDO
+                        try:
+                            with CP_ESTADO_LOCK:
+                                estado_actual = CP_ESTADO.get(engine_cp_id, '')
+                            if str(estado_actual).upper() in ("CARGANDO", "SUMINISTRANDO"):
+                                print(f"[CENTRAL] Ignorando READY_TO_START para {engine_cp_id}: ya está {estado_actual}")
+                                # Aun así, notificar al driver como autorizado si hiciera falta
+                                notificar_driver(driver_id, 'AUTORIZADO', {
+                                    'cp_id': engine_cp_id,
+                                    'mensaje': 'CP en carga; READY_TO_START ignorado'
+                                })
+                                break
+                        except Exception:
+                            pass
+
                         # AHORA SÍ notificar al driver como AUTORIZADO (el Engine está listo)
                         notificar_driver(driver_id, 'AUTORIZADO', {
                             'cp_id': engine_cp_id,
@@ -1966,8 +2080,9 @@ def main():
         print("[EV_Central] ADVERTENCIA: No se proporcionó configuración de BD")
         print("[EV_Central] Continuando sin persistencia de datos...")
 
-    # Hacer accesible la conexión BD para el consumidor de telemetría (histórico)
+    # Hacer accesible la conexión BD y configuración para el consumidor de telemetría (histórico)
     globals()['_DB_CONN_FOR_CONSUMER'] = db_connection
+    globals()['DB_CONFIG_STR'] = args.db
 
     # Al iniciar, marcar todos los CPs en BD como Desconectado
     # Solo se marcarán como activos cuando se reconecten
@@ -2032,29 +2147,60 @@ def main():
         threading.Thread(target=monitorizar_actividad_cps, args=(db_connection,), daemon=True).start()
         print(f"[EV_Central] Servidor escuchando en TCP (:{args.port})...")
 
+        # Bucle principal con manejo robusto de errores
         while True:
-            # Verificar si se solicita el apagado
-            with SHUTDOWN_LOCK:
-                if SHUTDOWN_REQUESTED:
-                    print("[EV_Central] Apagado solicitado, cerrando servidor...")
-                    break
-            
-            # Bloqueante: Espera una conexión
             try:
-                conn, addr = server_socket.accept()
-            except socket.timeout:
+                # Verificar si se solicita el apagado
+                with SHUTDOWN_LOCK:
+                    if SHUTDOWN_REQUESTED:
+                        print("[EV_Central] Apagado solicitado, cerrando servidor...")
+                        break
+                
+                # Bloqueante: Espera una conexión
+                try:
+                    conn, addr = server_socket.accept()
+                except socket.timeout:
+                    continue
+                except Exception as e:
+                    print(f"[EV_Central] Error aceptando conexión: {e}")
+                    import traceback
+                    traceback.print_exc()
+                    time.sleep(1)  # Esperar un poco antes de reintentar
+                    continue
+                
+                # Iniciar un nuevo hilo para manejar la conexión de forma concurrente
+                try:
+                    client_thread = threading.Thread(target=manejar_cliente, args=(conn, addr, db_connection))
+                    client_thread.start()
+                    with CLIENT_THREADS_LOCK:
+                        CLIENT_THREADS.append(client_thread)
+                except Exception as e:
+                    print(f"[EV_Central] Error iniciando hilo de cliente: {e}")
+                    import traceback
+                    traceback.print_exc()
+                    try:
+                        conn.close()
+                    except:
+                        pass
+                    continue
+            except KeyboardInterrupt:
+                print("\n[EV_Central] Apagando por interrupción de usuario...")
+                break
+            except Exception as e:
+                print(f"[EV_Central] Error en bucle principal: {e}")
+                import traceback
+                traceback.print_exc()
+                # Continuar el bucle en lugar de terminar
+                time.sleep(1)  # Esperar un poco antes de reintentar
                 continue
-            # Iniciar un nuevo hilo para manejar la conexión de forma concurrente
-            client_thread = threading.Thread(target=manejar_cliente, args=(conn, addr, db_connection))
-            client_thread.start()
-            with CLIENT_THREADS_LOCK:
-                CLIENT_THREADS.append(client_thread)
 
     
     except KeyboardInterrupt:
         print("\n[EV_Central] Apagando por interrupción de usuario...")
     except Exception as e:
-        print(f"[EV_Central] Error principal: {e}")
+        print(f"[EV_Central] Error crítico: {e}")
+        import traceback
+        traceback.print_exc()
     finally:
         # Cerrar todas las conexiones activas
         print("[EV_Central] Cerrando todas las conexiones activas...")

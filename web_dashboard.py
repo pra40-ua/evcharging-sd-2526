@@ -228,8 +228,38 @@ def consumir_telemetria(broker: str):
                                     registrar_evento(f"Nuevo CP detectado: {cp_id}", 'info')
                                     print(f"[DASHBOARD] ✓ Nuevo CP añadido al estado: {cp_id}")
                                 
-                                estado_carga = telemetria.get('estado_carga', telemetria.get('estado', 'DESCONOCIDO'))
+                                estado_carga_recibido = telemetria.get('estado_carga', telemetria.get('estado', 'DESCONOCIDO'))
+                                
+                                # Mapear ESPERANDO_DRIVER a ESPERANDO_OPERADOR_ENGINE
+                                if estado_carga_recibido.upper() in ('ESPERANDO_DRIVER', 'ESPERANDO DRIVER'):
+                                    estado_carga_recibido = 'ESPERANDO_OPERADOR_ENGINE'
+                                
                                 estado_anterior = CPS_STATE[cp_id].get('estado', 'DESCONOCIDO')
+                                
+                                # Estados interactivos que deben preservarse (no degradar a ACTIVADO)
+                                estados_interactivos = {
+                                    'PENDIENTE_CONFIRMACION_CENTRAL',
+                                    'ESPERANDO_OPERADOR_ENGINE',
+                                    'LISTO_PARA_INICIAR',
+                                    'ESPERANDO_CONFIRMACION_FIN'
+                                }
+                                
+                                # Determinar qué estado usar
+                                estado_anterior_upper = estado_anterior.upper()
+                                estado_recibido_upper = estado_carga_recibido.upper()
+                                
+                                # Si el estado anterior es interactivo y el recibido es ACTIVADO/REPOSO, preservar el interactivo
+                                if estado_anterior_upper in estados_interactivos:
+                                    if estado_recibido_upper in ('ACTIVADO', 'REPOSO', 'IDLE', 'READY'):
+                                        # Preservar estado interactivo, no degradar
+                                        estado_carga = estado_anterior
+                                        print(f"[DASHBOARD] Preservando estado interactivo {estado_anterior} para {cp_id} (telemetría reporta {estado_carga_recibido})")
+                                    else:
+                                        # El nuevo estado es más avanzado (ej: SUMINISTRANDO, LISTO_PARA_INICIAR), usarlo
+                                        estado_carga = estado_carga_recibido
+                                else:
+                                    # Estado anterior no es interactivo, usar el recibido
+                                    estado_carga = estado_carga_recibido
                                 
                                 # Extraer datos clave de telemetría para debug
                                 kw_entregados = telemetria.get('kw_entregados', 0)
