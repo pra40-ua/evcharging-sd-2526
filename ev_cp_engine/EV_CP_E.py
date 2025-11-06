@@ -1783,27 +1783,36 @@ def api_recuperar_averia():
         print(f"[{cp_id}] ✓ Avería desactivada localmente (estado anterior: {averia_anterior})")
     
     # Notificar a Central a través del Monitor
+    notificacion_enviada = False
     try:
         if ACTIVE_MONITOR_CONN is None:
-            print(f"[{cp_id}] ❌ No hay conexión con el Monitor")
-            return jsonify({
-                'status': 'error',
-                'mensaje': 'No hay conexión con el Monitor para notificar la recuperación'
-            }), 400
+            print(f"[{cp_id}] ⚠️ No hay conexión con el Monitor para notificar la recuperación")
+            print(f"[{cp_id}] ✅ Avería desactivada localmente. El CP volverá a responder OK a los chequeos de salud")
+            print(f"{'='*70}\n")
+            # Aunque no haya conexión con el Monitor, la avería se desactivó correctamente
+            respuesta = jsonify({
+                'status': 'ok',
+                'mensaje': 'Recuperación completada. Avería desactivada localmente. No se pudo notificar a Central (sin conexión con Monitor)',
+                'averia_anterior': averia_anterior,
+                'averia_actual': False,
+                'notificacion_central': False
+            })
+        else:
+            # AVR_CLR#<cp_id>#<motivo>#<codigo>
+            trama = construir_trama('AVR_CLR', [cp_id, 'RECUPERADA', 'OK'])
+            ACTIVE_MONITOR_CONN.sendall(trama)
+            print(f"[{cp_id}] 📤 AVR_CLR enviado a Central a través del Monitor")
+            print(f"[{cp_id}] ✅ Recuperación completada. El CP volverá a estado ACTIVADO")
+            print(f"{'='*70}\n")
+            notificacion_enviada = True
+            respuesta = jsonify({
+                'status': 'ok',
+                'mensaje': 'Recuperación completada. Avería desactivada y notificada a Central. Estado volverá a ACTIVADO',
+                'averia_anterior': averia_anterior,
+                'averia_actual': False,
+                'notificacion_central': True
+            })
         
-        # AVR_CLR#<cp_id>#<motivo>#<codigo>
-        trama = construir_trama('AVR_CLR', [cp_id, 'RECUPERADA', 'OK'])
-        ACTIVE_MONITOR_CONN.sendall(trama)
-        print(f"[{cp_id}] 📤 AVR_CLR enviado a Central a través del Monitor")
-        print(f"[{cp_id}] ✅ Recuperación completada. El CP volverá a estado ACTIVADO")
-        print(f"{'='*70}\n")
-        
-        respuesta = jsonify({
-            'status': 'ok',
-            'mensaje': 'Recuperación completada. Avería desactivada y notificada a Central. Estado volverá a ACTIVADO',
-            'averia_anterior': averia_anterior,
-            'averia_actual': False
-        })
         # Evitar cacheo de la respuesta
         respuesta.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
         respuesta.headers['Pragma'] = 'no-cache'
