@@ -173,10 +173,16 @@ def bucle_telemetria_periodica(cp_id: str, stop_event: threading.Event):
         if cargando:
             continue
         
+        # Verificar estado de avería
+        with SIMULAR_AVERIA_LOCK:
+            averia_activa = SIMULAR_AVERIA
+        
         # Determinar estado a reportar
         # NOTA: Si está cargando, el bucle_telemetria ya está enviando con estado SUMINISTRANDO
         # Aquí solo manejamos estados cuando NO está cargando
-        if estado_flujo == 'CARGANDO':
+        if averia_activa:
+            estado = 'AVERIADO'
+        elif estado_flujo == 'CARGANDO':
             # Si el flujo dice CARGANDO pero no está cargando (caso raro), reportar como ACTIVADO
             estado = 'ACTIVADO'
         elif estado_flujo == 'ESPERANDO_DRIVER':
@@ -1651,26 +1657,48 @@ def api_recuperar_averia():
     global SIMULAR_AVERIA, ACTIVE_MONITOR_CONN, ENGINE_CP_ID
     cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
     
-    # Desactivar avería local
+    print(f"\n{'='*70}")
+    print(f"  [{cp_id}] 🔧 RECUPERACIÓN DE AVERÍA SOLICITADA")
+    print(f"{'='*70}\n")
+    
+    # Verificar estado actual de avería
+    averia_anterior = False
     with SIMULAR_AVERIA_LOCK:
+        averia_anterior = SIMULAR_AVERIA
         SIMULAR_AVERIA = False
+        print(f"[{cp_id}] ✓ Avería desactivada localmente (estado anterior: {averia_anterior})")
     
     # Notificar a Central a través del Monitor
     try:
         if ACTIVE_MONITOR_CONN is None:
+            print(f"[{cp_id}] ❌ No hay conexión con el Monitor")
             return jsonify({
                 'status': 'error',
                 'mensaje': 'No hay conexión con el Monitor para notificar la recuperación'
             }), 400
+        
         # AVR_CLR#<cp_id>#<motivo>#<codigo>
         trama = construir_trama('AVR_CLR', [cp_id, 'RECUPERADA', 'OK'])
         ACTIVE_MONITOR_CONN.sendall(trama)
         print(f"[{cp_id}] 📤 AVR_CLR enviado a Central a través del Monitor")
-        return jsonify({
+        print(f"[{cp_id}] ✅ Recuperación completada. El CP volverá a estado ACTIVADO")
+        print(f"{'='*70}\n")
+        
+        respuesta = jsonify({
             'status': 'ok',
-            'mensaje': 'Recuperación notificada a Central. Estado volverá a ACTIVADO'
+            'mensaje': 'Recuperación completada. Avería desactivada y notificada a Central. Estado volverá a ACTIVADO',
+            'averia_anterior': averia_anterior,
+            'averia_actual': False
         })
+        # Evitar cacheo de la respuesta
+        respuesta.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+        respuesta.headers['Pragma'] = 'no-cache'
+        respuesta.headers['Expires'] = '0'
+        return respuesta
     except Exception as e:
+        print(f"[{cp_id}] ❌ Error notificando recuperación: {e}")
+        import traceback
+        traceback.print_exc()
         return jsonify({
             'status': 'error',
             'mensaje': f'Error notificando recuperación: {str(e)}'

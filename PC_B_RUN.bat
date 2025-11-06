@@ -695,6 +695,8 @@ echo echo   [4] - Recuperar Avería
 echo echo   [0] - SALIR
 echo echo.
 echo echo ============================================================
+echo REM Limpiar variables de opciones especiales
+echo set "OPCION_ESPECIAL="
 echo set "OPCION="
 echo set /p OPCION="Selecciona opcion: "
 echo.
@@ -708,6 +710,11 @@ echo.
 echo REM ============================================================
 echo REM  EJECUCION DE COMANDOS
 echo REM ============================================================
+echo.
+echo REM Limpiar variables antes de establecer nuevas
+echo set "DESCRIPCION="
+echo set "COMANDO_PS="
+echo set "OPCION_ESPECIAL="
 echo.
 echo if "%%OPCION%%"=="1" ^(
 echo     set "DESCRIPCION=Iniciar Suministro"
@@ -723,13 +730,13 @@ echo ^)
 echo.
 echo if "%%OPCION%%"=="3" ^(
 echo     set "DESCRIPCION=Simular Avería"
-echo     set "BODY=$body = @{activar=$true;motivo='Avería simulada'} | ConvertTo-Json"
-echo     set "COMANDO_PS=%%BODY%%; Invoke-WebRequest -Method POST -Uri %%API_BASE_URL%%/simular_averia -ContentType ""application/json"" -Body $body"
+echo     set "OPCION_ESPECIAL=3"
 echo     goto EJECUTAR
 echo ^)
 echo.
 echo if "%%OPCION%%"=="4" ^(
 echo     set "DESCRIPCION=Recuperar Avería"
+echo     set "OPCION_ESPECIAL="
 echo     set "COMANDO_PS=Invoke-WebRequest -Method POST -Uri %%API_BASE_URL%%/recuperar_averia"
 echo     goto EJECUTAR
 echo ^)
@@ -749,12 +756,22 @@ echo.
 echo :EJECUTAR
 echo echo [INFO] Ejecutando: %%DESCRIPCION%%
 echo echo ------------------------------------------------------------
-echo echo Comando: %%COMANDO_PS%%
+echo if "%%OPCION%%"=="3" ^(
+echo     echo Comando: Simular Avería ^(comando especial^)
+echo ^) else ^(
+echo     echo Comando: %%COMANDO_PS%%
+echo ^)
 echo echo ------------------------------------------------------------
 echo echo.
-echo.
+echo echo.
 echo REM Ejecutar el comando de PowerShell
-echo powershell -Command "try { %%COMANDO_PS%%; Write-Host '[ÉXITO] Operación completada correctamente' -ForegroundColor Green } catch { Write-Host '[ERROR] Error al ejecutar la operación:' -ForegroundColor Red; Write-Host $_.Exception.Message -ForegroundColor Red }"
+echo if defined OPCION_ESPECIAL ^(
+echo     if "%%OPCION_ESPECIAL%%"=="3" ^(
+echo         powershell -NoProfile -ExecutionPolicy Bypass -Command "$body = @{activar=$true;motivo='Avería simulada'} | ConvertTo-Json; try { $response = Invoke-WebRequest -Method POST -Uri '%%API_BASE_URL%%/simular_averia' -ContentType 'application/json' -Body $body; $result = $response.Content | ConvertFrom-Json; Write-Host '[ÉXITO]' $result.mensaje -ForegroundColor Green } catch { Write-Host '[ERROR] Error al ejecutar la operación:' -ForegroundColor Red; Write-Host $_.Exception.Message -ForegroundColor Red }"
+echo     ^)
+echo ^) else ^(
+echo     powershell -NoProfile -ExecutionPolicy Bypass -Command "try { $response = %%COMANDO_PS%%; if ($response.StatusCode -eq 200) { $result = $response.Content | ConvertFrom-Json; if ($result.status -eq 'ok') { Write-Host '[ÉXITO]' $result.mensaje -ForegroundColor Green } else { Write-Host '[ADVERTENCIA]' $result.mensaje -ForegroundColor Yellow } } else { Write-Host '[ERROR] Código de respuesta:' $response.StatusCode -ForegroundColor Red } } catch { Write-Host '[ERROR] Error al ejecutar la operación:' -ForegroundColor Red; Write-Host $_.Exception.Message -ForegroundColor Red; if ($_.Exception.Response) { try { $errorBody = $_.Exception.Response.GetResponseStream(); $reader = New-Object System.IO.StreamReader($errorBody); $errorContent = $reader.ReadToEnd() | ConvertFrom-Json; Write-Host 'Detalle:' $errorContent.mensaje -ForegroundColor Red } catch {} } }"
+echo ^)
 echo.
 echo echo.
 echo echo Presiona cualquier tecla para volver al menú principal...
