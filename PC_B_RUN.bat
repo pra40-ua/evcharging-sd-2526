@@ -255,8 +255,9 @@ echo      !NUM_CPS! CHARGING POINT(S) INICIADO(S) CORRECTAMENTE
 echo ============================================================
 echo.
 echo Ventanas abiertas:
-echo   - PowerShell: !NUM_CPS! CPs
+echo   - PowerShell: !NUM_CPS! CPs (Engine + Monitor)
 echo   - Navegador: !NUM_CPS! interfaces web
+echo   - Menú Control: !NUM_CPS! menús de control de suministro
 echo.
 echo Interfaces web disponibles:
 for /L %%i in (1,1,!NUM_CPS!) do (
@@ -495,6 +496,9 @@ echo Abriendo interfaz web en http://localhost:9001...
 start "" "http://localhost:9001"
 timeout /t 1 /nobreak >nul
 
+REM Lanzar Menu de Control de Suministro para CP_001
+call :LANZAR_MENU_CONTROL CP_001 9001
+
 REM LANZAR DRIVER
 echo ============================================================
 echo [3/4] LANZANDO DRIVER
@@ -532,6 +536,7 @@ echo.
 echo Ventanas abiertas:
 echo   - PowerShell: Engine, Driver, Monitor
 echo   - Navegador: Interfaz web del Engine
+echo   - Menú Control: Menú de control de suministro (CP_001)
 echo.
 echo Interfaz web disponible:
 echo   - CP_001: http://localhost:9001
@@ -631,7 +636,140 @@ echo [DEBUG] Ejecutando START PowerShell para Monitor... >> "%LOG_FILE%"
 start "Monitor_!CP_ID!" powershell -NoExit -Command "!PS_MONITOR_CMD!"
 echo [DEBUG] START ejecutado para Monitor (errorlevel: !errorlevel!) >> "%LOG_FILE%"
 
+REM Lanzar Menu de Control de Suministro
+echo [DEBUG] Lanzando Menu de Control para !CP_ID!... >> "%LOG_FILE%"
+call :LANZAR_MENU_CONTROL !CP_ID! !WEB_PORT_ENGINE!
+echo [DEBUG] Menu de Control lanzado >> "%LOG_FILE%"
+
 echo [DEBUG] !CP_ID! completado >> "%LOG_FILE%"
+echo ============================================================ >> "%LOG_FILE%"
+
+endlocal
+goto :eof
+
+REM ============================================================
+REM  FUNCION PARA LANZAR MENU DE CONTROL DE SUMINISTRO
+REM ============================================================
+:LANZAR_MENU_CONTROL
+setlocal EnableDelayedExpansion
+set CP_ID_PARAM=%1
+set WEB_PORT_PARAM=%2
+
+echo. >> "%LOG_FILE%"
+echo ============================================================ >> "%LOG_FILE%"
+echo [FUNCION] LANZAR_MENU_CONTROL INICIADA >> "%LOG_FILE%"
+echo ============================================================ >> "%LOG_FILE%"
+echo [DEBUG] LANZAR_MENU_CONTROL llamado con CP_ID=%1, WEB_PORT=%2 >> "%LOG_FILE%"
+
+REM Construir URL de la API
+set API_BASE_URL=http://127.0.0.1:%WEB_PORT_PARAM%/api
+
+echo [DEBUG] API_BASE_URL: !API_BASE_URL! >> "%LOG_FILE%"
+
+REM Crear script .bat temporal con el menu
+set TEMP_SCRIPT=%TEMP%\menu_control_!CP_ID_PARAM!.bat
+
+(
+echo @echo off
+echo setlocal EnableDelayedExpansion
+echo title Menú de Control de Suministro ^(!CP_ID_PARAM!^) - API: !API_BASE_URL!
+echo.
+echo REM ============================================================
+echo REM  CONFIGURACION
+echo REM ============================================================
+echo set API_BASE_URL=!API_BASE_URL!
+echo.
+echo :MENU
+echo cls
+echo echo ============================================================
+echo echo   MENÚ DE CONTROL DE SUMINISTRO ^(!CP_ID_PARAM!^)
+echo echo   Engine: %%API_BASE_URL%%
+echo echo ============================================================
+echo echo.
+echo echo Selecciona la operacion a ejecutar:
+echo echo.
+echo echo   [1] - Iniciar Suministro
+echo echo   [2] - Solicitar Fin del Suministro
+echo echo   [3] - Simular Avería
+echo echo   [4] - Recuperar Avería
+echo echo   [0] - SALIR
+echo echo.
+echo echo ============================================================
+echo set "OPCION="
+echo set /p OPCION="Selecciona opcion: "
+echo.
+echo REM Validar que se ingreso algo
+echo if not defined OPCION ^(
+echo     goto ERROR_OPCION
+echo ^)
+echo.
+echo echo.
+echo.
+echo REM ============================================================
+echo REM  EJECUCION DE COMANDOS
+echo REM ============================================================
+echo.
+echo if "%%OPCION%%"=="1" ^(
+echo     set "DESCRIPCION=Iniciar Suministro"
+echo     set "COMANDO_PS=Invoke-WebRequest -Method POST -Uri %%API_BASE_URL%%/iniciar_suministro"
+echo     goto EJECUTAR
+echo ^)
+echo.
+echo if "%%OPCION%%"=="2" ^(
+echo     set "DESCRIPCION=Solicitar Fin del Suministro"
+echo     set "COMANDO_PS=Invoke-WebRequest -Method POST -Uri %%API_BASE_URL%%/solicitar_fin"
+echo     goto EJECUTAR
+echo ^)
+echo.
+echo if "%%OPCION%%"=="3" ^(
+echo     set "DESCRIPCION=Simular Avería"
+echo     set "BODY=$body = @{activar=$true;motivo='Avería simulada'} | ConvertTo-Json"
+echo     set "COMANDO_PS=%%BODY%%; Invoke-WebRequest -Method POST -Uri %%API_BASE_URL%%/simular_averia -ContentType ""application/json"" -Body $body"
+echo     goto EJECUTAR
+echo ^)
+echo.
+echo if "%%OPCION%%"=="4" ^(
+echo     set "DESCRIPCION=Recuperar Avería"
+echo     set "COMANDO_PS=Invoke-WebRequest -Method POST -Uri %%API_BASE_URL%%/recuperar_averia"
+echo     goto EJECUTAR
+echo ^)
+echo.
+echo if "%%OPCION%%"=="0" ^(
+echo     echo Saliendo...
+echo     timeout /t 1 /nobreak ^>nul
+echo     exit /b 0
+echo ^)
+echo.
+echo :ERROR_OPCION
+echo echo [ERROR] Opción no válida: %%OPCION%%
+echo echo Presiona cualquier tecla para continuar...
+echo pause ^>nul
+echo goto MENU
+echo.
+echo :EJECUTAR
+echo echo [INFO] Ejecutando: %%DESCRIPCION%%
+echo echo ------------------------------------------------------------
+echo echo Comando: %%COMANDO_PS%%
+echo echo ------------------------------------------------------------
+echo echo.
+echo.
+echo REM Ejecutar el comando de PowerShell
+echo powershell -Command "try { %%COMANDO_PS%%; Write-Host '[ÉXITO] Operación completada correctamente' -ForegroundColor Green } catch { Write-Host '[ERROR] Error al ejecutar la operación:' -ForegroundColor Red; Write-Host $_.Exception.Message -ForegroundColor Red }"
+echo.
+echo echo.
+echo echo Presiona cualquier tecla para volver al menú principal...
+echo pause ^>nul
+echo goto MENU
+echo.
+echo endlocal
+) > "%TEMP_SCRIPT%"
+
+echo [DEBUG] Script temporal creado: %TEMP_SCRIPT% >> "%LOG_FILE%"
+
+REM Lanzar el menu en una ventana cmd separada
+start "Menu_Control_!CP_ID_PARAM!" cmd /k "%TEMP_SCRIPT%"
+
+echo [DEBUG] Menu de Control lanzado para !CP_ID_PARAM! >> "%LOG_FILE%"
 echo ============================================================ >> "%LOG_FILE%"
 
 endlocal
