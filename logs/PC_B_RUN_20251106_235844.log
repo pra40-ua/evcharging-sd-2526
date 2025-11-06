@@ -1,6 +1,6 @@
 ============================================================ 
  LOG DE EJECUCION - PC_B_RUN.bat 
- Fecha/Hora: 06/11/2025 23:38:01,84 
+ Fecha/Hora: 06/11/2025 23:58:44,78 
 ============================================================ 
  
 Docker version 28.4.0, build d8eb465
@@ -11,7 +11,7 @@ Docker version 28.4.0, build d8eb465
 [INPUT] Usuario ingreso: NUM_CPS=1 
 [VALIDADO] NUM_CPS final: 1 
 [BUILD] Iniciando construccion de imagenes 
-[BUILD] Fecha/Hora: 06/11/2025 23:38:07,20 
+[BUILD] Fecha/Hora: 06/11/2025 23:58:54,16 
  
 [BUILD] Ejecutando: docker build -t ev_engine:local -f ev_cp_engine/Dockerfile . 
 [BUILD] ---- INICIO OUTPUT DOCKER BUILD ENGINE ---- 
@@ -22,14 +22,14 @@ Docker version 28.4.0, build d8eb465
 #1 DONE 0.0s
 
 #2 resolve image config for docker-image://docker.io/docker/dockerfile:1
-#2 DONE 1.2s
+#2 DONE 1.3s
 
 #3 docker-image://docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
 #3 resolve docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6 0.0s done
 #3 CACHED
 
 #4 [internal] load metadata for docker.io/library/python:3.10-slim
-#4 DONE 0.7s
+#4 DONE 1.1s
 
 #5 [internal] load .dockerignore
 #5 transferring context: 275B done
@@ -43,16 +43,16 @@ Docker version 28.4.0, build d8eb465
 #7 resolve docker.io/library/python:3.10-slim@sha256:2a8c7d9efdae9b636de80a187a4ce31374ffb3883a7be06232d25a96e8538bf4 0.0s done
 #7 DONE 0.0s
 
-#8 [2/6] WORKDIR /app
+#8 [5/6] COPY ev_cp_engine/ ev_cp_engine/
 #8 CACHED
 
-#9 [3/6] COPY requirements.txt ./
+#9 [2/6] WORKDIR /app
 #9 CACHED
 
-#10 [4/6] RUN pip install --no-cache-dir -r requirements.txt
+#10 [3/6] COPY requirements.txt ./
 #10 CACHED
 
-#11 [5/6] COPY ev_cp_engine/ ev_cp_engine/
+#11 [4/6] RUN pip install --no-cache-dir -r requirements.txt
 #11 CACHED
 
 #12 [6/6] COPY ev_common/ ev_common/
@@ -61,9 +61,10 @@ Docker version 28.4.0, build d8eb465
 #13 exporting to image
 #13 exporting layers done
 #13 exporting manifest sha256:816bf6b289ace45772ebb0cec3a79ef40769c9f941fb7e4703aaa30a63eb458e done
+#13 exporting config sha256:21899f20854463167554c90d0eced65118481dd3794361e947ba13c05457acd3
 #13 exporting config sha256:21899f20854463167554c90d0eced65118481dd3794361e947ba13c05457acd3 done
-#13 exporting attestation manifest sha256:a17dad13421c421b99ca37dfba600f2ed6eb71a48da5b6c02c8047b906d96d82 0.0s done
-#13 exporting manifest list sha256:86ad8e9ae50d82c82a8df0a64eac5beef08a5c6793d954bf08732659094b5060 0.0s done
+#13 exporting attestation manifest sha256:9c758297b52448c5288729b7174ef835225768ab0a2f0087c430f09e0c749777 0.0s done
+#13 exporting manifest list sha256:b90d3b826ad3e2abe83164466d16e9ed94fe0f12e27c8a847e7f6d2fc1b4dd76 0.0s done
 #13 naming to docker.io/library/ev_engine:local done
 #13 unpacking to docker.io/library/ev_engine:local 0.0s done
 #13 DONE 0.1s
@@ -86,7 +87,7 @@ Docker version 28.4.0, build d8eb465
 #3 CACHED
 
 #4 [internal] load metadata for docker.io/library/python:3.10-slim
-#4 DONE 0.3s
+#4 DONE 0.2s
 
 #5 [internal] load .dockerignore
 #5 transferring context: 275B done
@@ -103,13 +104,13 @@ Docker version 28.4.0, build d8eb465
 #8 [2/6] WORKDIR /app
 #8 CACHED
 
-#9 [3/6] COPY requirements.txt ./
+#9 [4/6] RUN pip install --no-cache-dir -r requirements.txt
 #9 CACHED
 
-#10 [4/6] RUN pip install --no-cache-dir -r requirements.txt
+#10 [5/6] COPY ev_cp_monitor/ ev_cp_monitor/
 #10 CACHED
 
-#11 [5/6] COPY ev_cp_monitor/ ev_cp_monitor/
+#11 [3/6] COPY requirements.txt ./
 #11 CACHED
 
 #12 [6/6] COPY ev_common/ ev_common/
@@ -119,8 +120,8 @@ Docker version 28.4.0, build d8eb465
 #13 exporting layers done
 #13 exporting manifest sha256:1acc6b25733a8907d7d7c3dde5341076d0c7beb4f0e4af2288b4a0e7256b7105 done
 #13 exporting config sha256:e7fc9b59c2ba45b9ed4c57a038e35f2fdce71a99b4cc48108a61ce77ca84a256 done
-#13 exporting attestation manifest sha256:b312defaa5180a38e7af942b483ec3a5eab34678cf450bca958e4009654b0daa 0.0s done
-#13 exporting manifest list sha256:5ad34550e96ca43fedcbd0c94a4b16bd2ca8f30bc07170171da56f2bd411ae9c 0.0s done
+#13 exporting attestation manifest sha256:e02018eeb3d2c05fecee843a3aee96f3e1060e2aeba36d50d10de223967405a4 0.0s done
+#13 exporting manifest list sha256:c3f08864c607f25d51cfa3ba19372c1020a310690cb8e1f35c55ad46cc1baaa4 0.0s done
 #13 naming to docker.io/library/ev_monitor:local done
 #13 unpacking to docker.io/library/ev_monitor:local 0.0s done
 #13 DONE 0.1s
@@ -128,8 +129,8 @@ Docker version 28.4.0, build d8eb465
 [BUILD] Resultado (errorlevel): 0 
 [BUILD OK] ev_monitor construido exitosamente 
 [DEBUG] Ejecutando: docker ps -q --filter "label=component=engine" 
-[DEBUG] CP_OFFSET detectado: 1 
-[LOG] CPs existentes: 1 
+[DEBUG] CP_OFFSET detectado: 0 
+[LOG] CPs existentes: 0 
 [DEBUG] Antes de mostrar mensaje... 
 [DEBUG] Mensaje mostrado 
 [DEBUG] Iniciando timeout de 2 segundos... 
@@ -141,7 +142,7 @@ Docker version 28.4.0, build d8eb465
 [DEBUG] BASE_PORT=5000 
 [DEBUG] KAFKA_SERVER=192.168.1.43:9092 
 [DEBUG] CENTRAL_IP=192.168.1.43 
-[DEBUG] CP_OFFSET=1 
+[DEBUG] CP_OFFSET=0 
 [DEBUG] NUM_CPS=1 
  
 [DEBUG] Antes de iniciar bucle FOR 
@@ -149,51 +150,51 @@ Docker version 28.4.0, build d8eb465
  
 [MAIN] ================================================ 
 [MAIN] Iteracion 1 de 1 
-[MAIN] CP_NUM calculado: 2 
+[MAIN] CP_NUM calculado: 1 
 [MAIN] ================================================ 
-[DEBUG] A punto de llamar a LANZAR_CP con CP_NUM=2 
+[DEBUG] A punto de llamar a LANZAR_CP con CP_NUM=1 
  
 ============================================================ 
 [FUNCION] LANZAR_CP INICIADA 
 ============================================================ 
-[DEBUG] LANZAR_CP llamado con CP_NUM=2 
+[DEBUG] LANZAR_CP llamado con CP_NUM=1 
 [DEBUG] BASE_PORT=5000 
 [DEBUG] KAFKA_SERVER=192.168.1.43:9092 
 [DEBUG] CENTRAL_IP=192.168.1.43 
-[DEBUG] CP_ID calculado: CP_002 
-[DEBUG] ENGINE_PORT calculado: 5002 
+[DEBUG] CP_ID calculado: CP_001 
+[DEBUG] ENGINE_PORT calculado: 5001 
  
 [DEBUG] ---- COMANDO ENGINE ---- 
-docker run --rm -p 5002:5002 -p 9002:9002 --name engine_CP_002 --label project=evcharging-pc-b --label component=engine --label cp_id=CP_002 -e ENGINE_PORT=5002 -e CP_ID=CP_002 -e KAFKA_SERVER=192.168.1.43:9092 -e WEB_PORT=9002 ev_engine:local 
+docker run --rm -p 5001:5001 -p 9001:9001 --name engine_CP_001 --label project=evcharging-pc-b --label component=engine --label cp_id=CP_001 -e ENGINE_PORT=5001 -e CP_ID=CP_001 -e KAFKA_SERVER=192.168.1.43:9092 -e WEB_PORT=9001 ev_engine:local 
  
 [DEBUG] ---- COMANDO MONITOR ---- 
-docker run --rm --network host --name monitor_CP_002 --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_002 -e CP_ID=CP_002 -e CENTRAL_IP=192.168.1.43 -e CENTRAL_PORT=5000 -e ENGINE_IP=localhost -e ENGINE_PORT=5002 ev_monitor:local 
+docker run --rm --network host --name monitor_CP_001 --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 -e CP_ID=CP_001 -e CENTRAL_IP=192.168.1.43 -e CENTRAL_PORT=5000 -e ENGINE_IP=localhost -e ENGINE_PORT=5001 ev_monitor:local 
  
 [DEBUG] ---- COMANDO POWERSHELL ENGINE ---- 
-Write-Host 'Iniciando Engine (CP_002) en puerto 5002...' -ForegroundColor Cyan; Write-Host ''; docker run --rm -p 5002:5002 -p 9002:9002 --name engine_CP_002 --label project=evcharging-pc-b --label component=engine --label cp_id=CP_002 -e ENGINE_PORT=5002 -e CP_ID=CP_002 -e KAFKA_SERVER=192.168.1.43:9092 -e WEB_PORT=9002 ev_engine:local 
+Write-Host 'Iniciando Engine (CP_001) en puerto 5001...' -ForegroundColor Cyan; Write-Host ''; docker run --rm -p 5001:5001 -p 9001:9001 --name engine_CP_001 --label project=evcharging-pc-b --label component=engine --label cp_id=CP_001 -e ENGINE_PORT=5001 -e CP_ID=CP_001 -e KAFKA_SERVER=192.168.1.43:9092 -e WEB_PORT=9001 ev_engine:local 
  
 [DEBUG] ---- COMANDO POWERSHELL MONITOR ---- 
-Write-Host 'Iniciando Monitor (CP_002)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --network host --name monitor_CP_002 --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_002 -e CP_ID=CP_002 -e CENTRAL_IP=192.168.1.43 -e CENTRAL_PORT=5000 -e ENGINE_IP=localhost -e ENGINE_PORT=5002 ev_monitor:local 
+Write-Host 'Iniciando Monitor (CP_001)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --network host --name monitor_CP_001 --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 -e CP_ID=CP_001 -e CENTRAL_IP=192.168.1.43 -e CENTRAL_PORT=5000 -e ENGINE_IP=localhost -e ENGINE_PORT=5001 ev_monitor:local 
  
 [DEBUG] Ejecutando START PowerShell para Engine... 
 [DEBUG] START ejecutado para Engine (errorlevel: 0) 
 [DEBUG] Esperando 3 segundos... 
-[DEBUG] Abriendo navegador en http://localhost:9002 
+[DEBUG] Abriendo navegador en http://localhost:9001 
 [DEBUG] Navegador abierto (errorlevel: 0) 
 [DEBUG] Ejecutando START PowerShell para Monitor... 
 [DEBUG] START ejecutado para Monitor (errorlevel: 0) 
-[DEBUG] Lanzando Menu de Control para CP_002... 
+[DEBUG] Lanzando Menu de Control para CP_001... 
  
 ============================================================ 
 [FUNCION] LANZAR_MENU_CONTROL INICIADA 
 ============================================================ 
-[DEBUG] LANZAR_MENU_CONTROL llamado con CP_ID=CP_002, WEB_PORT=9002 
-[DEBUG] API_BASE_URL: http://127.0.0.1:9002/api 
-[DEBUG] Script temporal creado: C:\Users\PANPAT~1\AppData\Local\Temp\menu_control_CP_002.bat 
-[DEBUG] Menu de Control lanzado para CP_002 
+[DEBUG] LANZAR_MENU_CONTROL llamado con CP_ID=CP_001, WEB_PORT=9001 
+[DEBUG] API_BASE_URL: http://127.0.0.1:9001/api 
+[DEBUG] Script temporal creado: C:\Users\PANPAT~1\AppData\Local\Temp\menu_control_CP_001.bat 
+[DEBUG] Menu de Control lanzado para CP_001 
 ============================================================ 
 [DEBUG] Menu de Control lanzado 
-[DEBUG] CP_002 completado 
+[DEBUG] CP_001 completado 
 ============================================================ 
 [DEBUG] Retorno de LANZAR_CP completado 
 [MAIN] Esperando 2 segundos antes del siguiente CP... 
