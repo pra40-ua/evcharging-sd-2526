@@ -1668,7 +1668,21 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     registrar_evento(f"[CONTROL] Estado reportado por {cp_state}: {nuevo_estado}")
                     
                     try:
-                        cambiar_estado_cp(cp_state, nuevo_estado, db_connection)
+                        # No degradar estados interactivos por STATE "inocuos" del monitor
+                        estado_actual = None
+                        with CP_ESTADO_LOCK:
+                            estado_actual = CP_ESTADO.get(cp_state)
+                        estados_interactivos = {
+                            'PENDIENTE_CONFIRMACION_CENTRAL',
+                            'ESPERANDO_OPERADOR_ENGINE',
+                            'LISTO_PARA_INICIAR',
+                            'ESPERANDO_CONFIRMACION_FIN'
+                        }
+                        degradantes = {'ACTIVADO', 'PARADO', 'PRE-SUMINISTRO'}
+                        if estado_actual and estado_actual.upper() in estados_interactivos and str(nuevo_estado).upper() in degradantes:
+                            registrar_evento(f"[IGNORADO] STATE {cp_state}: {estado_actual} mantiene prioridad sobre {nuevo_estado}")
+                        else:
+                            cambiar_estado_cp(cp_state, nuevo_estado, db_connection)
                     except Exception as e:
                         registrar_evento(f"[ERROR] No se pudo actualizar el estado de {cp_state}: {e}")
 
