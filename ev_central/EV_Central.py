@@ -315,6 +315,7 @@ CENTRAL_COMMANDS_TOPIC = 'central_commands'
 # Productor Kafka global para notificar a Drivers
 KAFKA_PRODUCER = None
 KAFKA_PRODUCER_LOCK = threading.Lock()
+KAFKA_BROKER = None  # Guardar el broker para reinicialización
 
 # Configuración de BD global para reconexión
 DB_CONFIG_STR = None
@@ -750,6 +751,7 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
     Se conecta a Kafka y consume mensajes del tópico de solicitudes de drivers.
     """
     print(f"[KAFKA CONSUMER] EV_Central iniciando consumidor para el topic: {DRIVER_REQUESTS_TOPIC}")
+    print(f"[KAFKA CONSUMER] Broker: {broker_list}")
     consumer = None
     try:
         consumer = KafkaConsumer(
@@ -762,7 +764,8 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
             value_deserializer=lambda x: json.loads(x.decode('utf-8'))
         )
 
-        print(f"[KAFKA CONSUMER] Suscrito a '{DRIVER_REQUESTS_TOPIC}'. Esperando solicitudes de drivers...")
+        print(f"[KAFKA CONSUMER] ✓ Suscrito a '{DRIVER_REQUESTS_TOPIC}'. Esperando solicitudes de drivers...")
+        print(f"[KAFKA CONSUMER] Consumidor activo y escuchando...")
 
         while True:
             # Verificar si se solicita el apagado
@@ -777,13 +780,19 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
 
             for _tp, batch in records.items():
                 for message in batch:
-                    solicitud = message.value
-                    registrar_evento("Solicitud de recarga recibida")
-                    print("--- NUEVA SOLICITUD RECIBIDA ---")
-                    print(f"\tDriver ID: {solicitud.get('id_driver')}")
-                    print(f"\tCP ID:     {solicitud.get('id_charging_point')}")
-                    print(f"\tMatrícula: {solicitud.get('matricula')}")
-                    print(f"\tkW Deseados: {solicitud.get('kw_deseados')} kW")
+                    try:
+                        solicitud = message.value
+                        registrar_evento("Solicitud de recarga recibida")
+                        print("--- NUEVA SOLICITUD RECIBIDA ---")
+                        print(f"\tDriver ID: {solicitud.get('id_driver')}")
+                        print(f"\tCP ID:     {solicitud.get('id_charging_point')}")
+                        print(f"\tMatrícula: {solicitud.get('matricula')}")
+                        print(f"\tkW Deseados: {solicitud.get('kw_deseados')} kW")
+                    except Exception as e:
+                        print(f"[KAFKA CONSUMER] Error deserializando mensaje: {e}")
+                        import traceback
+                        traceback.print_exc()
+                        continue
                     # Lógica de autorización: validación BD, socket al CP, notificaciones a Driver
                     try:
                         id_driver = solicitud.get('id_driver')
@@ -1006,9 +1015,23 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
 
                     except Exception as e:
                         print(f"[CENTRAL] Error procesando solicitud del driver: {e}")
+                        import traceback
+                        traceback.print_exc()
+                        # Intentar notificar al driver del error si tenemos su ID
+                        try:
+                            if 'solicitud' in locals():
+                                id_driver_error = solicitud.get('id_driver')
+                                if id_driver_error:
+                                    notificar_driver(id_driver_error, 'DENEGADA', {
+                                        'motivo': f'Error interno procesando solicitud: {str(e)}'
+                                    })
+                        except Exception:
+                            pass
     except Exception as e:
         print(f"[KAFKA CONSUMER] ERROR al iniciar el consumidor de la Central: {e}")
         print("[KAFKA CONSUMER] Verifica la conexión a Kafka.")
+        import traceback
+        traceback.print_exc()
     finally:
         if consumer:
             consumer.close()
@@ -1350,7 +1373,8 @@ def buscar_cp_disponible(db_connection: mysql.connector.connection.MySQLConnecti
 # =================================================================
 
 def inicializar_kafka_producer(broker_list: str):
-    global KAFKA_PRODUCER
+    global KAFKA_PRODUCER, KAFKA_BROKER
+    KAFKA_BROKER = broker_list  # Guardar el broker
     with KAFKA_PRODUCER_LOCK:
         if KAFKA_PRODUCER is None:
             try:
@@ -1360,15 +1384,18 @@ def inicializar_kafka_producer(broker_list: str):
                     api_version=(2, 5, 0),
                     value_serializer=lambda v: json.dumps(v).encode('utf-8')
                 )
-                print("[KAFKA PRODUCER] Productor inicializado para notificaciones a drivers.")
+                print(f"[KAFKA PRODUCER] ✓ Productor inicializado para notificaciones a drivers (broker: {broker_list})")
             except Exception as e:
-                print(f"[KAFKA PRODUCER] ERROR al inicializar productor: {e}")
+                print(f"[KAFKA PRODUCER] ❌ ERROR al inicializar productor: {e}")
+                import traceback
+                traceback.print_exc()
                 KAFKA_PRODUCER = None
     return KAFKA_PRODUCER
 
 def notificar_driver(id_driver: str, evento: str, detalle=None):
     """Envía un mensaje al tópico específico del driver: driver_status_<ID>."""
     if not id_driver:
+        print(f"[CENTRAL] ⚠️  Intento de notificar sin id_driver (evento: {evento})")
         return
     try:
         payload = {
@@ -1379,14 +1406,31 @@ def notificar_driver(id_driver: str, evento: str, detalle=None):
         }
         topic = f"driver_status_{id_driver}"
         if KAFKA_PRODUCER is None:
-            print("[KAFKA PRODUCER] No disponible. No se puede notificar al driver.")
+            print(f"[KAFKA PRODUCER] ❌ No disponible. No se puede notificar al driver {id_driver} (evento: {evento})")
+            print(f"[KAFKA PRODUCER] Intentando reinicializar productor...")
+            # Intentar reinicializar si tenemos el broker configurado
+            try:
+                if KAFKA_BROKER:
+                    inicializar_kafka_producer(KAFKA_BROKER)
+                    # Reintentar el envío después de reinicializar
+                    if KAFKA_PRODUCER:
+                        KAFKA_PRODUCER.send(topic, value=payload)
+                        KAFKA_PRODUCER.flush(timeout=2)
+                        print(f"[CENTRAL] ✓ Notificación enviada a {topic} (tras reinicialización): {evento}")
+                        return
+            except Exception as e:
+                print(f"[KAFKA PRODUCER] Error al reinicializar: {e}")
             return
         KAFKA_PRODUCER.send(topic, value=payload)
         # Se puede forzar flush si se requiere entrega inmediata
         KAFKA_PRODUCER.flush(timeout=2)
-        print(f"[CENTRAL] Notificación enviada a {topic}: {evento}")
+        print(f"[CENTRAL] ✓ Notificación enviada a {topic}: {evento}")
+        if detalle:
+            print(f"[CENTRAL]   Detalle: {detalle}")
     except Exception as e:
-        print(f"[CENTRAL] Error notificando al driver {id_driver}: {e}")
+        print(f"[CENTRAL] ❌ Error notificando al driver {id_driver} (evento: {evento}): {e}")
+        import traceback
+        traceback.print_exc()
 
 # =================================================================
 #              FUNCIONES DE PERSISTENCIA DE SERVICIOS
