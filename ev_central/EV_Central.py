@@ -746,6 +746,24 @@ def consumir_comandos_control_kafka(broker_list: str):
                             # La sesión se mantiene porque el Engine sigue suministrando
                             cambiar_estado_cp(cp_id, 'DESCONECTADO', None)
                             
+                            # Publicar telemetría actualizada para que el dashboard web refleje el cambio
+                            with TELEMETRIA_ACTUAL_LOCK:
+                                telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                            telemetria_actualizada = {
+                                **telemetria_actual,
+                                'cp_id': cp_id,
+                                'estado': 'DESCONECTADO',
+                                'estado_carga': 'DESCONECTADO',
+                                'timestamp': time.time()
+                                # Mantener energía y otros datos para que la sesión no se pierda
+                            }
+                            with TELEMETRIA_ACTUAL_LOCK:
+                                TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
+                            if KAFKA_PRODUCER:
+                                KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                                KAFKA_PRODUCER.flush(timeout=1)
+                                print(f"[CENTRAL] ✓ Telemetría DESCONECTADO publicada para {cp_id}")
+                            
                             # NO cerrar sesión (mantener driver_id y objetivo_kwh)
                             # NO enviar ticket al driver (el Engine seguirá suministrando)
                             
@@ -780,6 +798,23 @@ def consumir_comandos_control_kafka(broker_list: str):
                                 print(f"[CENTRAL] {cp_id} sin sesión activa. Estado: {nuevo_estado}")
                             
                             cambiar_estado_cp(cp_id, nuevo_estado, None)
+                            
+                            # Publicar telemetría actualizada para que el dashboard web refleje el cambio
+                            with TELEMETRIA_ACTUAL_LOCK:
+                                telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                            telemetria_actualizada = {
+                                **telemetria_actual,
+                                'cp_id': cp_id,
+                                'estado': nuevo_estado,
+                                'estado_carga': nuevo_estado,
+                                'timestamp': time.time()
+                            }
+                            with TELEMETRIA_ACTUAL_LOCK:
+                                TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
+                            if KAFKA_PRODUCER:
+                                KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                                KAFKA_PRODUCER.flush(timeout=1)
+                                print(f"[CENTRAL] ✓ Telemetría {nuevo_estado} publicada para {cp_id}")
                             
                             registrar_evento(f"✓ {cp_id} listo para reconexión. Reinicie el proceso Monitor.", "info")
                             print(f"[CENTRAL] {cp_id} marcado como {nuevo_estado}. El Monitor debe reiniciarse para volver a conectarse.")
