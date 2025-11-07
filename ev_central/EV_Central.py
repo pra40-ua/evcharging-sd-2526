@@ -69,6 +69,10 @@ CP_COLA_ESPERA_LOCK = threading.Lock()
 CP_PENDIENTE_CONFIRMACION = {}
 CP_PENDIENTE_CONFIRMACION_LOCK = threading.Lock()
 
+# CPs con Monitor desconectado manualmente (bloqueados para reconexión automática)
+CP_MONITOR_BLOQUEADO = set()  # Set de cp_ids bloqueados manualmente
+CP_MONITOR_BLOQUEADO_LOCK = threading.Lock()
+
 # Lista de hilos de clientes para cierre ordenado
 CLIENT_THREADS = []
 CLIENT_THREADS_LOCK = threading.Lock()
@@ -767,6 +771,11 @@ def consumir_comandos_control_kafka(broker_list: str):
                             # NO cerrar sesión (mantener driver_id y objetivo_kwh)
                             # NO enviar ticket al driver (el Engine seguirá suministrando)
                             
+                            # BLOQUEAR reconexión automática del Monitor
+                            with CP_MONITOR_BLOQUEADO_LOCK:
+                                CP_MONITOR_BLOQUEADO.add(cp_id)
+                                print(f"[CENTRAL] {cp_id} BLOQUEADO para reconexión automática")
+                            
                             registrar_evento(f"✓ Monitor de {cp_id} desconectado. Engine sigue suministrando.", "info")
                             print(f"[CENTRAL] Monitor de {cp_id} desconectado. La sesión continúa (Engine sigue activo)")
                             
@@ -815,6 +824,11 @@ def consumir_comandos_control_kafka(broker_list: str):
                                 KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
                                 KAFKA_PRODUCER.flush(timeout=1)
                                 print(f"[CENTRAL] ✓ Telemetría {nuevo_estado} publicada para {cp_id}")
+                            
+                            # DESBLOQUEAR reconexión automática del Monitor
+                            with CP_MONITOR_BLOQUEADO_LOCK:
+                                CP_MONITOR_BLOQUEADO.discard(cp_id)
+                                print(f"[CENTRAL] {cp_id} DESBLOQUEADO para reconexión")
                             
                             registrar_evento(f"✓ {cp_id} listo para reconexión. Reinicie el proceso Monitor.", "info")
                             print(f"[CENTRAL] {cp_id} marcado como {nuevo_estado}. El Monitor debe reiniciarse para volver a conectarse.")
@@ -1718,7 +1732,32 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
             ubicacion = campos[1]
             precio_kwh = float(campos[2])
 
-            # ====== NUEVO BLOQUE AÑADIDO: DETECCIÓN DE RECONEXIÓN ======
+            # ====== VERIFICAR SI EL MONITOR ESTÁ BLOQUEADO MANUALMENTE ======
+            with CP_MONITOR_BLOQUEADO_LOCK:
+                esta_bloqueado = cp_id in CP_MONITOR_BLOQUEADO
+            
+            if esta_bloqueado:
+                print(f"\n[CENTRAL] ╔═══════════════════════════════════════════╗")
+                print(f"[CENTRAL] ║  🚫 CONEXIÓN RECHAZADA                    ║")
+                print(f"[CENTRAL] ╚═══════════════════════════════════════════╝")
+                print(f"[CENTRAL]    CP ID: {cp_id}")
+                print(f"[CENTRAL]    Motivo: Monitor desconectado manualmente")
+                print(f"[CENTRAL]    Acción: Use 'Reconectar Monitor' en el dashboard")
+                print(f"[CENTRAL] ═══════════════════════════════════════════\n")
+                registrar_evento(f"🚫 CONEXIÓN RECHAZADA: {cp_id} está bloqueado manualmente", "warn")
+                
+                # Enviar mensaje de rechazo al Monitor (opcional)
+                try:
+                    trama_reject = construir_trama('REJECT', ['Monitor bloqueado manualmente. Use boton Reconectar en dashboard.'])
+                    conn.sendall(trama_reject)
+                except Exception:
+                    pass
+                
+                # Cerrar conexión
+                conn.close()
+                return
+
+            # ====== DETECCIÓN DE RECONEXIÓN ======
             with CONEXIONES_ACTIVAS_LOCK:
                 ya_conectado = cp_id in CONEXIONES_ACTIVAS
 
