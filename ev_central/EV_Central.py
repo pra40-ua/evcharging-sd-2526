@@ -1304,18 +1304,30 @@ def monitorizar_actividad_cps(db_connection):
     while not SHUTDOWN_REQUESTED:
         ahora = time.time()
         try:
-            # Verificar CPs sin actividad
+            # Verificar CPs sin actividad (telemetría)
             with TELEMETRIA_ACTUAL_LOCK:
                 for cp_id, data in list(TELEMETRIA_ACTUAL.items()):
                     ultima = data.get("timestamp", 0)
-                    if ahora - ultima > 15:
+                    tiempo_sin_telemetria = ahora - ultima
+                    if tiempo_sin_telemetria > 15:
+                        # Verificar si el socket TCP está activo
+                        with CONEXIONES_ACTIVAS_LOCK:
+                            tiene_socket_activo = cp_id in CONEXIONES_ACTIVAS
+                        
+                        if tiene_socket_activo:
+                            # ADVERTENCIA: Socket activo pero SIN telemetría - problema en el Engine
+                            if tiempo_sin_telemetria > 30:  # Solo advertir cada 30s para no saturar
+                                registrar_evento(f"[⚠️] CP {cp_id} conectado por socket pero SIN telemetría hace {int(tiempo_sin_telemetria)}s - revisar Engine", "warn")
+                                data['timestamp'] = time.time()  # Reset para no repetir advertencia constantemente
+                            continue
+                        
                         # No desconectar si está en avería activa
                         with CP_ALERTA_LOCK:
                             alerta = CP_ALERTA.get(cp_id, False)
                         if alerta:
                             continue
                         if CP_ESTADO.get(cp_id) != "DESCONECTADO":
-                            registrar_evento(f"[⚠️] CP {cp_id} sin actividad → DESCONECTADO", "warn")
+                            registrar_evento(f"[⚠️] CP {cp_id} sin telemetría hace {int(tiempo_sin_telemetria)}s y socket cerrado → DESCONECTADO", "warn")
                             cambiar_estado_cp(cp_id, "DESCONECTADO", db_connection)
             
             # Publicar heartbeat cada 10 segundos (cada 2 ciclos de 5s)
