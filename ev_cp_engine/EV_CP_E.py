@@ -16,7 +16,7 @@ DELIMITER = '#'
 
 import json
 import time
-from kafka import KafkaProducer
+from kafka import KafkaProducer, KafkaConsumer
 import threading # Necesario si el Engine está corriendo en un bucle principal
 import os
 import subprocess
@@ -118,6 +118,102 @@ def generar_y_enviar_telemetria(cp_id: str, estado_carga: str, kw_entregados: fl
     except Exception as e:
         print(f"[{cp_id}] ERROR al enviar telemetría a Kafka: {e}")
 
+def consumir_mensajes_driver(driver_id: str, broker: str, cp_id: str, stop_event: threading.Event):
+    """Consume mensajes del tópico driver_status_<driver_id> y los imprime en la terminal del engine."""
+    topic = f"driver_status_{driver_id}"
+    consumer = None
+    try:
+        consumer = KafkaConsumer(
+            topic,
+            bootstrap_servers=[broker],
+            auto_offset_reset='latest',
+            enable_auto_commit=True,
+            group_id=f'engine-{cp_id}-driver-{driver_id}',
+            value_deserializer=lambda m: json.loads(m.decode('utf-8')),
+            api_version=(2, 8, 0)
+        )
+        print(f"[{cp_id}] 📡 Engine escuchando mensajes del driver {driver_id} en '{topic}'...")
+        
+        for msg in consumer:
+            if stop_event.is_set():
+                break
+                
+            payload = msg.value
+            evento = payload.get('evento')
+            detalle = payload.get('detalle')
+            ts = payload.get('timestamp')
+            
+            # Imprimir mensaje en la terminal del engine
+            print(f"[{cp_id}] 📨 [DRIVER {driver_id}] Evento={evento} @ {ts} -> {detalle}")
+            
+            # Mensajes específicos con formato mejorado
+            if evento == 'RECIBIDA':
+                print(f"[{cp_id}] 📨 [DRIVER {driver_id}] Solicitud recibida por Central. Validando CP...")
+            elif evento == 'EN_COLA':
+                posicion = detalle.get('posicion', '?') if isinstance(detalle, dict) else '?'
+                cp_id_detalle = detalle.get('cp_id', '?') if isinstance(detalle, dict) else '?'
+                print(f"[{cp_id}] 📨 [DRIVER {driver_id}] 🕐 CP {cp_id_detalle} ocupado. En cola de espera (posición {posicion})...")
+            elif evento == 'AUTORIZADO':
+                cp_id_detalle = detalle.get('cp_id', '?') if isinstance(detalle, dict) else '?'
+                print(f"[{cp_id}] 📨 [DRIVER {driver_id}] ✅ Autorizado por Central para {cp_id_detalle}!")
+            elif evento == 'AUTORIZACION_EN_PROCESO':
+                mensaje = detalle.get('mensaje', '') if isinstance(detalle, dict) else ''
+                print(f"[{cp_id}] 📨 [DRIVER {driver_id}] ⏳ Autorizando... {mensaje}")
+            elif evento == 'DENEGADA':
+                print(f"[{cp_id}] 📨 [DRIVER {driver_id}] ❌ Solicitud denegada: {detalle}")
+            elif evento == 'TICKET_FINAL':
+                if isinstance(detalle, dict):
+                    cp_ticket = detalle.get('cp_id', '?')
+                    energia = detalle.get('energia_kwh', '?')
+                    importe = detalle.get('importe_eur', '?')
+                    duracion = detalle.get('duracion_seg', 'N/D')
+                    tx_id = detalle.get('tx_id', 'N/D')
+                    print(f"\n[{cp_id}] 📨 [DRIVER {driver_id}] 🧾 TICKET FINAL RECIBIDO:")
+                    print(f"[{cp_id}] 📨   Punto de Carga:  {cp_ticket}")
+                    print(f"[{cp_id}] 📨   Energía:         {energia} kWh")
+                    print(f"[{cp_id}] 📨   Importe:         {importe} €")
+                    print(f"[{cp_id}] 📨   Duración:        {duracion} segundos")
+                    print(f"[{cp_id}] 📨   ID Transacción:  {tx_id}")
+                else:
+                    print(f"[{cp_id}] 📨 [DRIVER {driver_id}] ✅ Ticket recibido: {detalle}")
+                    
+    except Exception as e:
+        print(f"[{cp_id}] ❌ Error consumiendo mensajes del driver {driver_id}: {e}")
+    finally:
+        if consumer:
+            consumer.close()
+        print(f"[{cp_id}] 📡 Engine dejó de escuchar mensajes del driver {driver_id}")
+
+def iniciar_consumidor_driver(driver_id: str, cp_id: str, broker: str):
+    """Inicia el consumidor de mensajes del driver en un hilo separado."""
+    global DRIVER_MESSAGES_CONSUMER, DRIVER_MESSAGES_THREAD, DRIVER_MESSAGES_STOP_EVENT
+    
+    with DRIVER_MESSAGES_LOCK:
+        # Detener consumidor anterior si existe
+        if DRIVER_MESSAGES_THREAD and DRIVER_MESSAGES_THREAD.is_alive():
+            DRIVER_MESSAGES_STOP_EVENT.set()
+            DRIVER_MESSAGES_THREAD.join(timeout=2)
+        
+        # Crear nuevo evento de parada
+        DRIVER_MESSAGES_STOP_EVENT = threading.Event()
+        
+        # Iniciar nuevo consumidor
+        DRIVER_MESSAGES_THREAD = threading.Thread(
+            target=consumir_mensajes_driver,
+            args=(driver_id, broker, cp_id, DRIVER_MESSAGES_STOP_EVENT),
+            daemon=True
+        )
+        DRIVER_MESSAGES_THREAD.start()
+
+def detener_consumidor_driver():
+    """Detiene el consumidor de mensajes del driver."""
+    global DRIVER_MESSAGES_CONSUMER, DRIVER_MESSAGES_THREAD, DRIVER_MESSAGES_STOP_EVENT
+    
+    with DRIVER_MESSAGES_LOCK:
+        if DRIVER_MESSAGES_THREAD and DRIVER_MESSAGES_THREAD.is_alive():
+            DRIVER_MESSAGES_STOP_EVENT.set()
+            DRIVER_MESSAGES_THREAD.join(timeout=2)
+
 # --- ESTADO DE CARGA ---
 CHARGING_FLAG = threading.Event()  # START activa, STOP desactiva
 STATE_LOCK = threading.Lock()
@@ -130,6 +226,12 @@ CURRENT_DRIVER_ID = 'UNKNOWN'
 SESSION_START_TS = None
 CURRENT_TX_ID = None
 SESSION_LOCK = threading.Lock()
+
+# Consumidor de Kafka para mensajes del driver
+DRIVER_MESSAGES_CONSUMER = None
+DRIVER_MESSAGES_THREAD = None
+DRIVER_MESSAGES_STOP_EVENT = threading.Event()
+DRIVER_MESSAGES_LOCK = threading.Lock()
 
 # Estados del flujo interactivo
 # REPOSO -> ESPERANDO_DRIVER -> LISTO_PARA_INICIAR -> CARGANDO -> ESPERANDO_CONFIRMACION_FIN -> REPOSO
@@ -400,6 +502,12 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                         TARGET_KWH = kw_float
                     CURRENT_DRIVER_ID = driver_id
 
+                    # Iniciar consumidor de mensajes del driver
+                    try:
+                        iniciar_consumidor_driver(driver_id, cp_id, KAFKA_SERVER)
+                    except Exception as e:
+                        print(f"[{cp_id}] ⚠️ No se pudo iniciar consumidor de mensajes del driver: {e}")
+
                     # Actualizar caché de AUTH para UI robusta
                     with AUTH_CACHE_LOCK:
                         globals()['LAST_AUTH_DRIVER_ID'] = driver_id
@@ -554,6 +662,12 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                         print(f"{'='*70}\n")
                         
                         print(f"[{cp_id}] ✓ Sesión finalizada. Listo para nuevo servicio.")
+                        
+                        # Detener consumidor de mensajes del driver
+                        try:
+                            detener_consumidor_driver()
+                        except Exception as e:
+                            print(f"[{cp_id}] ⚠️ Error deteniendo consumidor de mensajes del driver: {e}")
                         
                         # Resetear variables de sesión
                         TARGET_KWH = None
@@ -1669,27 +1783,36 @@ def api_recuperar_averia():
         print(f"[{cp_id}] ✓ Avería desactivada localmente (estado anterior: {averia_anterior})")
     
     # Notificar a Central a través del Monitor
+    notificacion_enviada = False
     try:
         if ACTIVE_MONITOR_CONN is None:
-            print(f"[{cp_id}] ❌ No hay conexión con el Monitor")
-            return jsonify({
-                'status': 'error',
-                'mensaje': 'No hay conexión con el Monitor para notificar la recuperación'
-            }), 400
+            print(f"[{cp_id}] ⚠️ No hay conexión con el Monitor para notificar la recuperación")
+            print(f"[{cp_id}] ✅ Avería desactivada localmente. El CP volverá a responder OK a los chequeos de salud")
+            print(f"{'='*70}\n")
+            # Aunque no haya conexión con el Monitor, la avería se desactivó correctamente
+            respuesta = jsonify({
+                'status': 'ok',
+                'mensaje': 'Recuperación completada. Avería desactivada localmente. No se pudo notificar a Central (sin conexión con Monitor)',
+                'averia_anterior': averia_anterior,
+                'averia_actual': False,
+                'notificacion_central': False
+            })
+        else:
+            # AVR_CLR#<cp_id>#<motivo>#<codigo>
+            trama = construir_trama('AVR_CLR', [cp_id, 'RECUPERADA', 'OK'])
+            ACTIVE_MONITOR_CONN.sendall(trama)
+            print(f"[{cp_id}] 📤 AVR_CLR enviado a Central a través del Monitor")
+            print(f"[{cp_id}] ✅ Recuperación completada. El CP volverá a estado ACTIVADO")
+            print(f"{'='*70}\n")
+            notificacion_enviada = True
+            respuesta = jsonify({
+                'status': 'ok',
+                'mensaje': 'Recuperación completada. Avería desactivada y notificada a Central. Estado volverá a ACTIVADO',
+                'averia_anterior': averia_anterior,
+                'averia_actual': False,
+                'notificacion_central': True
+            })
         
-        # AVR_CLR#<cp_id>#<motivo>#<codigo>
-        trama = construir_trama('AVR_CLR', [cp_id, 'RECUPERADA', 'OK'])
-        ACTIVE_MONITOR_CONN.sendall(trama)
-        print(f"[{cp_id}] 📤 AVR_CLR enviado a Central a través del Monitor")
-        print(f"[{cp_id}] ✅ Recuperación completada. El CP volverá a estado ACTIVADO")
-        print(f"{'='*70}\n")
-        
-        respuesta = jsonify({
-            'status': 'ok',
-            'mensaje': 'Recuperación completada. Avería desactivada y notificada a Central. Estado volverá a ACTIVADO',
-            'averia_anterior': averia_anterior,
-            'averia_actual': False
-        })
         # Evitar cacheo de la respuesta
         respuesta.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
         respuesta.headers['Pragma'] = 'no-cache'
