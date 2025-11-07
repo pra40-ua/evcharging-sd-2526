@@ -21,11 +21,12 @@ Write-Host ""
 Write-Host "El servidor Central estará escuchando conexiones de monitores..." -ForegroundColor Yellow
 Write-Host ""
 
-# Ejecutar EV_Central con Python
+# Ejecutar EV_Central con Python (modo consola con mensajes visibles)
 py ev_central\EV_Central.py `
   --port 5000 `
   --kafka "${CENTRAL_IP}:9092" `
-  --db "127.0.0.1:3306:root:root:evcharging"
+  --db "127.0.0.1:3306:root:root:evcharging" `
+  --no-tui
 
 Write-Host ""
 Write-Host "EV_Central ha finalizado." -ForegroundColor Red

@@ -171,13 +171,25 @@ echo   New-NetFirewallRule -DisplayName "MySQL" -Direction Inbound -LocalPort 33
 echo.
 pause
 
-REM Lanzar Central en nueva ventana de PowerShell
+REM Lanzar Central en nueva ventana
 echo.
 echo Lanzando EV_Central en nueva ventana...
 echo.
-start "EV_Central-PC_A" powershell -NoLogo -NoExit -ExecutionPolicy Bypass -File "%~dp0commands_PC_A.ps1"
+echo ╔═══════════════════════════════════════════════════════════╗
+echo ║  IMPORTANTE: Se abrirá una NUEVA VENTANA donde verás:    ║
+echo ║  - Todos los mensajes que recibe Central                 ║
+echo ║  - Telemetría en tiempo real de cada CP                  ║
+echo ║  - Solicitudes de Drivers                                ║
+echo ║  - Comandos enviados a CPs                               ║
+echo ║  - Notificaciones a Drivers                              ║
+echo ╚═══════════════════════════════════════════════════════════╝
+echo.
+
+REM Lanzar script dedicado en nueva ventana (permanece abierta)
+start "EV_Central - MENSAJES Y TELEMETRIA" "%~dp0RUN_CENTRAL.bat"
 
 REM Esperar un poco para que la Central arranque
+echo Esperando a que el servidor Central inicie...
 timeout /t 3 /nobreak >nul
 
 REM ============================================================

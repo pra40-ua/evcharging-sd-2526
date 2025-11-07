@@ -206,7 +206,19 @@ def consumir_telemetria(broker: str):
                             potencia = telemetria.get('potencia_actual', 0)
                             tiempo = telemetria.get('tiempo_carga_s', 0)
                             estado = telemetria.get('estado_carga', telemetria.get('estado', 'N/D'))
-                            print(f"[DASHBOARD] ← Mensaje #{mensaje_count} | CP={cp_id} | Estado={estado} | kW={kw} | P={potencia} | t={tiempo}s")
+                            averia_flag = telemetria.get('averia_activa', False)
+                            
+                            # Log especial para averías
+                            if 'AVERI' in str(estado).upper() or averia_flag:
+                                print(f"\n[DASHBOARD] ╔══════════════════════════════════════════")
+                                print(f"[DASHBOARD] ║  ⚠️ AVERÍA DETECTADA EN {cp_id}")
+                                print(f"[DASHBOARD] ╠══════════════════════════════════════════")
+                                print(f"[DASHBOARD] ║  Estado: {estado}")
+                                print(f"[DASHBOARD] ║  Flag avería: {averia_flag}")
+                                print(f"[DASHBOARD] ║  Mensaje #{mensaje_count}")
+                                print(f"[DASHBOARD] ╚══════════════════════════════════════════\n")
+                            else:
+                                print(f"[DASHBOARD] ← Mensaje #{mensaje_count} | CP={cp_id} | Estado={estado} | kW={kw} | P={potencia} | t={tiempo}s")
                             
                             # Actualizar telemetría
                             with TELEMETRIA_LOCK:
@@ -288,7 +300,10 @@ def consumir_telemetria(broker: str):
                                 # Registrar evento solo si el estado cambió
                                 if estado_anterior != estado_carga:
                                     registrar_evento(f"{cp_id}: {estado_anterior} → {estado_carga}", 'info')
-                                    print(f"[DASHBOARD] Estado actualizado: {cp_id} → {estado_carga} (kW={kw_entregados}, P={potencia}, t={tiempo}s)")
+                                    if 'AVERI' in estado_carga.upper():
+                                        print(f"[DASHBOARD] ⚠️⚠️⚠️ CAMBIO A AVERÍA: {cp_id} → {estado_carga} ⚠️⚠️⚠️")
+                                    else:
+                                        print(f"[DASHBOARD] Estado actualizado: {cp_id} → {estado_carga} (kW={kw_entregados}, P={potencia}, t={tiempo}s)")
                             
                             # Actualizar estadísticas
                             actualizar_estadisticas()

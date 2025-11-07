@@ -99111,3 +99111,661 @@ ConnectionResetError: [WinError 10054] Se ha forzado la interrupción de una cone
 2025-11-06 23:34:54,116 - [23:34:54] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
 2025-11-06 23:34:54,117 - [23:34:54] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
 >>>>>>> parent of 2f5e2f0 (cosas)
+2025-11-07 01:29:35,871 - [01:29:35] Modo consola simple activado
+2025-11-07 01:29:35,885 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-07 01:29:35,888 - Updating subscribed topics to: ('driver_requests',)
+2025-11-07 01:29:35,891 - Updating subscribed topics to: ('central_commands',)
+2025-11-07 01:29:35,894 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 01:29:35,894 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 01:29:35,895 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 01:29:35,895 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 01:29:35,895 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 01:29:35,895 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 01:29:35,935 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 01:29:35,935 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 01:29:35,997 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 01:29:35,997 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-07 01:29:35,997 - Starting new heartbeat thread
+2025-11-07 01:29:35,997 - Revoking previously assigned partitions set() for group central-control-group
+2025-11-07 01:29:35,997 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 01:29:35,997 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-07 01:29:35,998 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 01:29:35,998 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-07 01:29:35,998 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 01:29:35,998 - Starting new heartbeat thread
+2025-11-07 01:29:35,998 - Starting new heartbeat thread
+2025-11-07 01:29:35,999 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-11-07 01:29:35,999 - Revoking previously assigned partitions set() for group central_processing_group
+2025-11-07 01:29:35,999 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 01:29:35,999 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 01:29:35,999 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 01:29:35,999 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 01:29:36,002 - Stopping heartbeat thread
+2025-11-07 01:29:36,003 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 01:29:36,003 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 01:29:36,003 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 01:29:36,003 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 01:29:36,003 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 01:29:36,103 - (Re-)joining group central-telemetry-group
+2025-11-07 01:29:36,104 - (Re-)joining group central_processing_group
+2025-11-07 01:29:36,104 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 01:29:36,104 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 01:29:39,105 - Elected group leader -- performing partition assignments using range
+2025-11-07 01:29:39,106 - Elected group leader -- performing partition assignments using range
+2025-11-07 01:29:39,107 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 01:29:39,107 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 01:29:39,107 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 01:29:39,107 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 01:29:39,107 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 01:29:39,108 - Successfully joined group central-telemetry-group with generation 1
+2025-11-07 01:29:39,108 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0)]
+2025-11-07 01:29:39,108 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0)} for group central-telemetry-group
+2025-11-07 01:29:39,108 - Successfully joined group central_processing_group with generation 1
+2025-11-07 01:29:39,109 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0)]
+2025-11-07 01:29:39,109 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=0)} for group central_processing_group
+2025-11-07 01:30:15,889 - [01:30:15] \u2705 NUEVO CP: Registro inicial de CP_001.
+2025-11-07 01:30:15,910 - [01:30:15] \u26a1 CP CP_001 registrado y conectado (C/Mayor, 45)
+2025-11-07 01:30:15,912 - [01:30:15] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 01:30:15,921 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 01:30:15,922 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 01:30:15,922 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 01:30:15,935 - [01:30:15] Telemetría inicial publicada para CP_001
+2025-11-07 01:30:15,950 - [01:30:15] AUTH OK enviado a CP_001
+2025-11-07 01:30:20,935 - [01:30:20] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 01:30:20,941 - [01:30:20] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 01:30:21,045 - [01:30:21] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:21,064 - [01:30:21] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:21,067 - [01:30:21] [ESTADO] CP_001 -> AVERÍA (antes: ACTIVADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:22,053 - [01:30:22] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:22,070 - [01:30:22] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:22,074 - [01:30:22] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:22,952 - [01:30:22] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:30:23,067 - [01:30:23] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:23,086 - [01:30:23] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:23,089 - [01:30:23] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:24,082 - [01:30:24] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:24,103 - [01:30:24] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:24,106 - [01:30:24] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:25,090 - [01:30:25] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:25,110 - [01:30:25] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:25,114 - [01:30:25] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:26,106 - [01:30:26] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:26,125 - [01:30:26] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:26,129 - [01:30:26] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:27,120 - [01:30:27] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:27,140 - [01:30:27] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:27,143 - [01:30:27] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:28,127 - [01:30:28] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:28,148 - [01:30:28] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:28,152 - [01:30:28] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:29,146 - [01:30:29] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:29,165 - [01:30:29] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:29,169 - [01:30:29] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:30,152 - [01:30:30] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:30,173 - [01:30:30] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:30,176 - [01:30:30] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:30,946 - [01:30:30] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:30:31,166 - [01:30:31] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:31,185 - [01:30:31] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:31,188 - [01:30:31] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:32,178 - [01:30:32] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:32,199 - [01:30:32] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:32,203 - [01:30:32] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:32,869 - [01:30:32] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:30:33,190 - [01:30:33] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:33,210 - [01:30:33] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:33,214 - [01:30:33] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:34,200 - [01:30:34] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:34,221 - [01:30:34] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:34,225 - [01:30:34] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:35,210 - [01:30:35] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:35,230 - [01:30:35] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:35,234 - [01:30:35] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:36,227 - [01:30:36] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:36,247 - [01:30:36] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:36,251 - [01:30:36] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:37,234 - [01:30:37] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:37,255 - [01:30:37] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:37,258 - [01:30:37] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:38,251 - [01:30:38] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:38,271 - [01:30:38] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:38,275 - [01:30:38] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:39,260 - [01:30:39] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:39,280 - [01:30:39] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:39,283 - [01:30:39] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:40,277 - [01:30:40] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:40,294 - [01:30:40] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:40,297 - [01:30:40] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:40,954 - [01:30:40] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:30:41,290 - [01:30:41] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:41,307 - [01:30:41] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:41,310 - [01:30:41] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:42,301 - [01:30:42] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:42,320 - [01:30:42] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:42,324 - [01:30:42] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:42,870 - [01:30:42] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:30:43,308 - [01:30:43] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:43,327 - [01:30:43] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:43,330 - [01:30:43] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:44,319 - [01:30:44] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:44,339 - [01:30:44] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:44,342 - [01:30:44] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:45,330 - [01:30:45] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:30:45,350 - [01:30:45] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:45,353 - [01:30:45] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:30:46,347 - [01:30:46] \U0001f4e8 MENSAJE de CP_001: [AVR_CLR] Campos=['CP_001', 'RECUPERADA', 'OK']
+2025-11-07 01:30:46,367 - [01:30:46] [ESTADO] CP_001 -> ACTIVADO (antes: AVERÍA). Motivo: RECUPERADA
+2025-11-07 01:30:46,379 - [01:30:46] \u2705 CP_001 recuperado de avería: RECUPERADA
+2025-11-07 01:30:50,966 - [01:30:50] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:30:52,887 - [01:30:52] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 01:30:52,893 - [01:30:52] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 01:31:00,983 - [01:31:00] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 01:31:00,990 - [01:31:00] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 01:31:02,886 - [01:31:02] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 01:31:02,894 - [01:31:02] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 01:31:03,550 - [01:31:03] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:03,570 - [01:31:03] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:03,573 - [01:31:03] [ESTADO] CP_001 -> AVERÍA (antes: ACTIVADO). Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:04,562 - [01:31:04] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:04,581 - [01:31:04] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:04,585 - [01:31:04] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:05,568 - [01:31:05] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:05,588 - [01:31:05] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:05,591 - [01:31:05] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:06,580 - [01:31:06] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:06,601 - [01:31:06] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:06,604 - [01:31:06] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:07,592 - [01:31:07] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:07,611 - [01:31:07] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:07,615 - [01:31:07] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:08,604 - [01:31:08] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:08,622 - [01:31:08] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:08,625 - [01:31:08] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:09,618 - [01:31:09] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:09,638 - [01:31:09] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:09,641 - [01:31:09] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:10,626 - [01:31:10] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:10,646 - [01:31:10] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:10,650 - [01:31:10] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:11,003 - [01:31:11] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 01:31:11,010 - [01:31:11] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-11-07 01:31:11,640 - [01:31:11] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:11,659 - [01:31:11] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:11,663 - [01:31:11] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:12,659 - [01:31:12] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:12,679 - [01:31:12] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:12,682 - [01:31:12] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:12,917 - [01:31:12] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:31:13,667 - [01:31:13] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:13,688 - [01:31:13] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:13,691 - [01:31:13] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:14,675 - [01:31:14] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:14,695 - [01:31:14] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:14,699 - [01:31:14] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:15,694 - [01:31:15] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:15,714 - [01:31:15] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:15,717 - [01:31:15] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:16,703 - [01:31:16] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:16,721 - [01:31:16] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:16,724 - [01:31:16] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:17,711 - [01:31:17] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:17,730 - [01:31:17] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:17,733 - [01:31:17] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:18,729 - [01:31:18] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:18,748 - [01:31:18] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:18,751 - [01:31:18] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:19,736 - [01:31:19] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:19,755 - [01:31:19] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:19,758 - [01:31:19] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:20,750 - [01:31:20] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:20,770 - [01:31:20] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:20,773 - [01:31:20] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:21,007 - [01:31:21] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:31:21,763 - [01:31:21] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:21,783 - [01:31:21] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:21,787 - [01:31:21] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:22,772 - [01:31:22] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:22,791 - [01:31:22] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:22,795 - [01:31:22] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:22,896 - [01:31:22] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:31:23,798 - [01:31:23] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:23,817 - [01:31:23] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:23,820 - [01:31:23] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:24,799 - [01:31:24] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:24,818 - [01:31:24] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:24,821 - [01:31:24] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:25,809 - [01:31:25] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:25,829 - [01:31:25] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:25,832 - [01:31:25] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:26,822 - [01:31:26] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:26,841 - [01:31:26] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:26,845 - [01:31:26] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:27,832 - [01:31:27] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:27,852 - [01:31:27] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:27,856 - [01:31:27] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:28,844 - [01:31:28] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:28,865 - [01:31:28] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:28,868 - [01:31:28] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:29,856 - [01:31:29] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:29,877 - [01:31:29] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:29,880 - [01:31:29] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:30,870 - [01:31:30] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:30,889 - [01:31:30] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:30,892 - [01:31:30] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:31,020 - [01:31:31] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:31:31,881 - [01:31:31] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:31,900 - [01:31:31] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:31,903 - [01:31:31] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:32,898 - [01:31:32] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:32,915 - [01:31:32] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:31:32,932 - [01:31:32] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:32,935 - [01:31:32] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:33,907 - [01:31:33] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:33,927 - [01:31:33] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:33,930 - [01:31:33] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:34,919 - [01:31:34] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:34,940 - [01:31:34] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:34,943 - [01:31:34] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:35,932 - [01:31:35] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:35,953 - [01:31:35] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:35,956 - [01:31:35] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:36,951 - [01:31:36] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:36,971 - [01:31:36] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:36,974 - [01:31:36] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:37,980 - [01:31:37] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:37,998 - [01:31:37] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:38,001 - [01:31:37] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:38,965 - [01:31:38] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:38,983 - [01:31:38] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:38,986 - [01:31:38] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:39,974 - [01:31:39] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:39,990 - [01:31:39] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:39,993 - [01:31:39] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:40,993 - [01:31:40] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:41,020 - [01:31:41] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:41,032 - [01:31:41] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:41,047 - [01:31:41] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:31:42,008 - [01:31:42] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:42,025 - [01:31:42] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:42,028 - [01:31:42] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:42,905 - [01:31:42] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:31:43,010 - [01:31:43] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:43,027 - [01:31:43] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:43,029 - [01:31:43] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:44,024 - [01:31:44] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:44,041 - [01:31:44] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:44,044 - [01:31:44] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:45,035 - [01:31:45] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:45,052 - [01:31:45] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:45,055 - [01:31:45] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:46,049 - [01:31:46] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:46,067 - [01:31:46] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:46,069 - [01:31:46] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:47,067 - [01:31:47] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:47,085 - [01:31:47] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:47,088 - [01:31:47] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:48,078 - [01:31:48] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:48,096 - [01:31:48] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:48,099 - [01:31:48] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:49,084 - [01:31:49] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:49,102 - [01:31:49] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:49,105 - [01:31:49] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:50,100 - [01:31:50] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:50,117 - [01:31:50] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:50,120 - [01:31:50] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:51,049 - [01:31:51] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:31:51,105 - [01:31:51] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:51,123 - [01:31:51] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:51,126 - [01:31:51] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:52,122 - [01:31:52] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:52,139 - [01:31:52] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:52,142 - [01:31:52] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:52,918 - [01:31:52] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:31:53,135 - [01:31:53] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:53,152 - [01:31:53] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:53,155 - [01:31:53] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:54,146 - [01:31:54] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:54,164 - [01:31:54] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:54,167 - [01:31:54] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:55,156 - [01:31:55] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:55,173 - [01:31:55] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:55,176 - [01:31:55] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:56,168 - [01:31:56] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:56,185 - [01:31:56] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:56,188 - [01:31:56] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:57,180 - [01:31:57] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:57,198 - [01:31:57] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:57,201 - [01:31:57] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:58,195 - [01:31:58] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:58,213 - [01:31:58] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:58,216 - [01:31:58] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:59,204 - [01:31:59] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:31:59,222 - [01:31:59] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:31:59,225 - [01:31:59] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:00,220 - [01:32:00] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:00,238 - [01:32:00] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:00,241 - [01:32:00] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:01,064 - [01:32:01] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:32:01,229 - [01:32:01] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:01,246 - [01:32:01] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:01,249 - [01:32:01] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:02,251 - [01:32:02] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:02,270 - [01:32:02] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:02,274 - [01:32:02] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:02,921 - [01:32:02] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:32:03,253 - [01:32:03] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:03,271 - [01:32:03] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:03,274 - [01:32:03] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:04,268 - [01:32:04] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:04,286 - [01:32:04] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:04,289 - [01:32:04] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:05,279 - [01:32:05] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:05,298 - [01:32:05] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:05,301 - [01:32:05] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:06,289 - [01:32:06] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:06,308 - [01:32:06] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:06,311 - [01:32:06] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:07,301 - [01:32:07] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:07,319 - [01:32:07] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:07,322 - [01:32:07] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:08,313 - [01:32:08] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:08,331 - [01:32:08] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:08,334 - [01:32:08] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:09,323 - [01:32:09] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:09,342 - [01:32:09] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:09,346 - [01:32:09] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:10,340 - [01:32:10] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:10,358 - [01:32:10] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:10,361 - [01:32:10] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:11,074 - [01:32:11] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:32:11,353 - [01:32:11] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:11,372 - [01:32:11] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:11,375 - [01:32:11] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:12,360 - [01:32:12] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:12,378 - [01:32:12] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:12,381 - [01:32:12] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:12,919 - [01:32:12] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:32:13,377 - [01:32:13] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:13,394 - [01:32:13] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:13,397 - [01:32:13] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:14,384 - [01:32:14] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:14,408 - [01:32:14] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:14,411 - [01:32:14] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:15,401 - [01:32:15] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:15,419 - [01:32:15] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:15,422 - [01:32:15] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:16,414 - [01:32:16] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:16,430 - [01:32:16] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:16,433 - [01:32:16] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:17,424 - [01:32:17] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:17,440 - [01:32:17] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:17,443 - [01:32:17] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:18,437 - [01:32:18] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:18,455 - [01:32:18] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:18,458 - [01:32:18] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:19,609 - [01:32:19] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:19,627 - [01:32:19] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:19,630 - [01:32:19] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:20,551 - [01:32:20] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:20,569 - [01:32:20] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:20,572 - [01:32:20] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:21,087 - [01:32:21] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:32:21,473 - [01:32:21] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:21,491 - [01:32:21] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:21,494 - [01:32:21] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:22,479 - [01:32:22] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:22,496 - [01:32:22] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:22,499 - [01:32:22] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:22,926 - [01:32:22] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:32:23,495 - [01:32:23] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:23,512 - [01:32:23] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:23,515 - [01:32:23] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:24,512 - [01:32:24] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:24,528 - [01:32:24] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:24,531 - [01:32:24] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:25,516 - [01:32:25] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:25,534 - [01:32:25] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:25,537 - [01:32:25] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:26,528 - [01:32:26] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:26,546 - [01:32:26] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:26,549 - [01:32:26] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:27,540 - [01:32:27] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:27,558 - [01:32:27] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:27,561 - [01:32:27] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:28,551 - [01:32:28] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:28,569 - [01:32:28] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:28,572 - [01:32:28] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:29,563 - [01:32:29] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:29,581 - [01:32:29] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:29,584 - [01:32:29] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:30,579 - [01:32:30] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:30,596 - [01:32:30] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:30,599 - [01:32:30] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:31,099 - [01:32:31] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:32:31,592 - [01:32:31] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:31,611 - [01:32:31] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:31,614 - [01:32:31] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:32,603 - [01:32:32] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:32,622 - [01:32:32] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:32,625 - [01:32:32] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:32,935 - [01:32:32] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:32:33,640 - [01:32:33] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:33,658 - [01:32:33] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:33,661 - [01:32:33] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:34,624 - [01:32:34] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:34,641 - [01:32:34] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:34,644 - [01:32:34] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:35,638 - [01:32:35] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:35,655 - [01:32:35] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:35,658 - [01:32:35] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:36,652 - [01:32:36] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:36,670 - [01:32:36] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:36,673 - [01:32:36] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:37,662 - [01:32:37] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:37,680 - [01:32:37] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:37,684 - [01:32:37] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:38,674 - [01:32:38] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:38,691 - [01:32:38] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:38,694 - [01:32:38] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:40,002 - [01:32:39] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:40,019 - [01:32:40] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:40,022 - [01:32:40] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:40,802 - [01:32:40] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:40,821 - [01:32:40] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:40,823 - [01:32:40] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:41,113 - [01:32:41] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:32:41,710 - [01:32:41] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:41,729 - [01:32:41] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:41,732 - [01:32:41] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:42,722 - [01:32:42] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:42,739 - [01:32:42] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:42,743 - [01:32:42] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:42,941 - [01:32:42] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:32:43,734 - [01:32:43] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:43,751 - [01:32:43] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:43,754 - [01:32:43] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:44,747 - [01:32:44] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:44,764 - [01:32:44] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:44,768 - [01:32:44] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:45,759 - [01:32:45] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:45,777 - [01:32:45] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:45,780 - [01:32:45] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:46,771 - [01:32:46] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:46,790 - [01:32:46] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:46,794 - [01:32:46] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:47,780 - [01:32:47] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:47,797 - [01:32:47] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:47,800 - [01:32:47] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:48,795 - [01:32:48] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:48,814 - [01:32:48] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:48,817 - [01:32:48] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:49,807 - [01:32:49] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:49,824 - [01:32:49] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:49,827 - [01:32:49] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:50,821 - [01:32:50] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:50,839 - [01:32:50] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:50,842 - [01:32:50] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:51,124 - [01:32:51] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:32:51,830 - [01:32:51] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:51,848 - [01:32:51] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:51,851 - [01:32:51] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:52,841 - [01:32:52] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:52,857 - [01:32:52] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:52,860 - [01:32:52] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:52,939 - [01:32:52] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:32:53,854 - [01:32:53] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:53,871 - [01:32:53] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:53,874 - [01:32:53] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:54,866 - [01:32:54] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:54,884 - [01:32:54] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:54,887 - [01:32:54] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:55,880 - [01:32:55] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:55,896 - [01:32:55] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:55,899 - [01:32:55] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:56,891 - [01:32:56] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:56,908 - [01:32:56] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:56,911 - [01:32:56] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:57,903 - [01:32:57] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:57,920 - [01:32:57] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:57,923 - [01:32:57] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:58,917 - [01:32:58] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:58,935 - [01:32:58] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:58,938 - [01:32:58] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:59,926 - [01:32:59] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:32:59,944 - [01:32:59] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:32:59,947 - [01:32:59] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:00,940 - [01:33:00] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:00,957 - [01:33:00] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:00,959 - [01:33:00] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:01,137 - [01:33:01] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:33:01,953 - [01:33:01] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:01,970 - [01:33:01] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:01,973 - [01:33:01] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:02,950 - [01:33:02] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:33:02,962 - [01:33:02] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:02,979 - [01:33:02] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:02,983 - [01:33:02] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:03,985 - [01:33:03] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:04,003 - [01:33:04] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:04,006 - [01:33:04] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:04,986 - [01:33:04] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:05,003 - [01:33:05] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:05,006 - [01:33:05] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:06,000 - [01:33:05] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:06,017 - [01:33:06] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:06,020 - [01:33:06] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:07,011 - [01:33:07] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:07,029 - [01:33:07] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:07,032 - [01:33:07] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:08,022 - [01:33:08] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:08,039 - [01:33:08] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:08,041 - [01:33:08] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:09,034 - [01:33:09] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:09,051 - [01:33:09] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:09,054 - [01:33:09] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:10,047 - [01:33:10] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:10,066 - [01:33:10] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:10,069 - [01:33:10] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:11,063 - [01:33:11] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:11,080 - [01:33:11] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:11,083 - [01:33:11] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:11,146 - [01:33:11] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:33:12,075 - [01:33:12] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:12,093 - [01:33:12] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:12,096 - [01:33:12] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:12,951 - [01:33:12] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:33:13,083 - [01:33:13] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:13,101 - [01:33:13] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:13,104 - [01:33:13] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:14,104 - [01:33:14] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:14,123 - [01:33:14] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:14,126 - [01:33:14] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:15,109 - [01:33:15] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:15,126 - [01:33:15] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:15,129 - [01:33:15] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:16,121 - [01:33:16] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:16,139 - [01:33:16] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:16,141 - [01:33:16] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:17,136 - [01:33:17] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:17,154 - [01:33:17] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:17,157 - [01:33:17] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:18,145 - [01:33:18] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:18,162 - [01:33:18] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:18,165 - [01:33:18] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:19,157 - [01:33:19] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:19,174 - [01:33:19] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:19,177 - [01:33:19] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:20,171 - [01:33:20] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:20,189 - [01:33:20] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:20,193 - [01:33:20] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:21,160 - [01:33:21] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:33:21,179 - [01:33:21] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:21,197 - [01:33:21] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:21,200 - [01:33:21] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:22,197 - [01:33:22] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:22,215 - [01:33:22] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:22,218 - [01:33:22] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:22,956 - [01:33:22] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:33:23,204 - [01:33:23] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:23,221 - [01:33:23] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:23,224 - [01:33:23] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:24,218 - [01:33:24] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:24,236 - [01:33:24] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:24,239 - [01:33:24] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:25,231 - [01:33:25] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:25,249 - [01:33:25] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:25,252 - [01:33:25] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:26,242 - [01:33:26] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:26,260 - [01:33:26] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:26,263 - [01:33:26] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:27,255 - [01:33:27] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:27,274 - [01:33:27] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:27,277 - [01:33:27] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:28,268 - [01:33:28] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:28,285 - [01:33:28] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:28,288 - [01:33:28] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:29,305 - [01:33:29] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:29,322 - [01:33:29] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:29,325 - [01:33:29] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:30,289 - [01:33:30] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:30,306 - [01:33:30] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:30,309 - [01:33:30] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:31,169 - [01:33:31] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:33:31,305 - [01:33:31] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:31,323 - [01:33:31] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:31,325 - [01:33:31] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:32,315 - [01:33:32] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:32,333 - [01:33:32] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:32,336 - [01:33:32] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:32,964 - [01:33:32] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:33:33,329 - [01:33:33] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:33,347 - [01:33:33] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:33,350 - [01:33:33] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:34,345 - [01:33:34] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:34,362 - [01:33:34] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:34,365 - [01:33:34] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:35,349 - [01:33:35] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:35,367 - [01:33:35] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:35,370 - [01:33:35] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:36,367 - [01:33:36] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:36,384 - [01:33:36] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:36,387 - [01:33:36] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:37,378 - [01:33:37] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:37,396 - [01:33:37] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:37,398 - [01:33:37] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:38,388 - [01:33:38] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:38,406 - [01:33:38] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:38,409 - [01:33:38] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:39,406 - [01:33:39] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:39,428 - [01:33:39] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:39,433 - [01:33:39] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:40,415 - [01:33:40] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:40,433 - [01:33:40] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:40,437 - [01:33:40] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:41,186 - [01:33:41] \U0001f4ca Telemetría de CP_001: est=AVERIADO, E=0.00, P=0.0
+2025-11-07 01:33:41,423 - [01:33:41] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:41,441 - [01:33:41] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:41,444 - [01:33:41] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:42,442 - [01:33:42] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Fallo reportado por Engine']
+2025-11-07 01:33:42,466 - [01:33:42] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Fallo reportado por Engine)
+2025-11-07 01:33:42,470 - [01:33:42] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Fallo reportado por Engine)

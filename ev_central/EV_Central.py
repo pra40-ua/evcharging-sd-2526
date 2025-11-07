@@ -15,6 +15,9 @@ from rich.console import Console
 from rich.table import Table
 from rich.live import Live
 from rich import box
+from rich.panel import Panel
+from rich.layout import Layout
+from rich.text import Text
 import logging
 try:
     import msvcrt as MSVCRT
@@ -450,7 +453,20 @@ def consumir_telemetria_kafka(broker_list: str):
                             objetivo_txt = f" | Solicitado={objetivo_kwh:.2f} kWh"
                     except Exception:
                         objetivo_txt = ''
-                    registrar_evento(f"Telemetría recibida de {cp_id}: {resumen_telemetria(telemetria)}{objetivo_txt}")
+                    
+                    # Mostrar telemetría detallada en consola
+                    resumen = resumen_telemetria(telemetria)
+                    print(f"\n[KAFKA] ═══════════════════════════════════════════")
+                    print(f"[KAFKA] 📊 TELEMETRÍA de {cp_id}")
+                    print(f"[KAFKA]    Estado: {telemetria.get('estado_carga', 'N/D')}")
+                    print(f"[KAFKA]    Potencia: {telemetria.get('potencia_actual', 0.0):.2f} kW")
+                    print(f"[KAFKA]    Energía: {telemetria.get('kw_entregados', telemetria.get('energia_total', 0.0)):.3f} kWh{objetivo_txt}")
+                    print(f"[KAFKA]    Tiempo: {telemetria.get('tiempo_carga_s', 0)} s")
+                    if telemetria.get('driver_id_sesion'):
+                        print(f"[KAFKA]    Driver: {telemetria.get('driver_id_sesion')}")
+                    print(f"[KAFKA] ═══════════════════════════════════════════\n")
+                    
+                    registrar_evento(f"📊 Telemetría de {cp_id}: {resumen}{objetivo_txt}")
                     print(f"[KAFKA CONSUMER] -> Telemetría de {cp_id} recibida: {telemetria}{objetivo_txt}")
 
                     # Promover estados por telemetría (respetando PARADO manual y evitando regresiones)
@@ -661,8 +677,15 @@ def consumir_comandos_control_kafka(broker_list: str):
                             try:
                                 trama_auth = construir_trama('AUTH_REQ', [driver_id, str(kw_objetivo)])
                                 cp_socket.sendall(trama_auth)
-                                print(f"[CENTRAL] ✓ AUTH_REQ enviado a {cp_id} (Driver: {driver_id}, kW: {kw_objetivo})")
-                                registrar_evento(f"[FLUJO] AUTH_REQ enviado a {cp_id}. Esperando acción del operador del Engine.", "info")
+                                print(f"\n[CENTRAL] ╔═══════════════════════════════════════════╗")
+                                print(f"[CENTRAL] ║  📤 ENVIANDO COMANDO AL CP                ║")
+                                print(f"[CENTRAL] ╚═══════════════════════════════════════════╝")
+                                print(f"[CENTRAL]    Comando: AUTH_REQ")
+                                print(f"[CENTRAL]    Destino: {cp_id}")
+                                print(f"[CENTRAL]    Driver: {driver_id}")
+                                print(f"[CENTRAL]    kW Solicitados: {kw_objetivo}")
+                                print(f"[CENTRAL] ═══════════════════════════════════════════\n")
+                                registrar_evento(f"📤 AUTH_REQ enviado a {cp_id} (Driver: {driver_id}, {kw_objetivo} kWh)", "ok")
                                 
                                 # Cambiar estado (sin db_connection, se obtendrá si es necesario)
                                 try:
@@ -753,12 +776,15 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
             for _tp, batch in records.items():
                 for message in batch:
                     solicitud = message.value
-                    registrar_evento("Solicitud de recarga recibida")
-                    print("--- NUEVA SOLICITUD RECIBIDA ---")
-                    print(f"\tDriver ID: {solicitud.get('id_driver')}")
-                    print(f"\tCP ID:     {solicitud.get('id_charging_point')}")
-                    print(f"\tMatrícula: {solicitud.get('matricula')}")
-                    print(f"\tkW Deseados: {solicitud.get('kw_deseados')} kW")
+                    print(f"\n[KAFKA] ╔═══════════════════════════════════════════╗")
+                    print(f"[KAFKA] ║  🚗 SOLICITUD DE DRIVER RECIBIDA         ║")
+                    print(f"[KAFKA] ╚═══════════════════════════════════════════╝")
+                    print(f"[KAFKA]    Driver ID: {solicitud.get('id_driver')}")
+                    print(f"[KAFKA]    CP ID:     {solicitud.get('id_charging_point')}")
+                    print(f"[KAFKA]    Matrícula: {solicitud.get('matricula')}")
+                    print(f"[KAFKA]    kW Deseados: {solicitud.get('kw_deseados')} kW")
+                    print(f"[KAFKA] ═══════════════════════════════════════════\n")
+                    registrar_evento(f"🚗 Solicitud de Driver {solicitud.get('id_driver')} para CP {solicitud.get('id_charging_point')}: {solicitud.get('kw_deseados')} kWh")
                     # Lógica de autorización: validación BD, socket al CP, notificaciones a Driver
                     try:
                         id_driver = solicitud.get('id_driver')
@@ -1248,9 +1274,20 @@ def notificar_driver(id_driver: str, evento: str, detalle=None):
         KAFKA_PRODUCER.send(topic, value=payload)
         # Se puede forzar flush si se requiere entrega inmediata
         KAFKA_PRODUCER.flush(timeout=2)
-        print(f"[CENTRAL] Notificación enviada a {topic}: {evento}")
+        
+        # Logging detallado de notificaciones
+        print(f"\n[KAFKA] ═══════════════════════════════════════════")
+        print(f"[KAFKA] 📢 NOTIFICACIÓN A DRIVER")
+        print(f"[KAFKA]    Driver: {id_driver}")
+        print(f"[KAFKA]    Evento: {evento}")
+        if detalle:
+            print(f"[KAFKA]    Detalle: {detalle}")
+        print(f"[KAFKA]    Topic: {topic}")
+        print(f"[KAFKA] ═══════════════════════════════════════════\n")
+        registrar_evento(f"📢 Notificación a Driver {id_driver}: {evento}", "info")
     except Exception as e:
-        print(f"[CENTRAL] Error notificando al driver {id_driver}: {e}")
+        print(f"[CENTRAL] ❌ Error notificando al driver {id_driver}: {e}")
+        registrar_evento(f"❌ Error notificando a Driver {id_driver}: {e}", "error")
 
 # =================================================================
 #                       LÓGICA DEL SERVIDOR CENTRAL
@@ -1423,25 +1460,104 @@ def interfaz_consola_central():
         time.sleep(0.1)
 
 def render_panel():
-    table = Table(title="🚗 ESTADO CENTRAL DE CARGA", box=box.ROUNDED)
-    table.add_column("CP ID", justify="center", style="bold white")
-    table.add_column("Estado", justify="center")
-    table.add_column("Energía (kWh)", justify="center")
-    table.add_column("Última actualización", justify="center")
-
+    """Renderiza un panel completo con toda la información de telemetría y eventos."""
+    # Layout principal dividido en secciones
+    layout = Layout()
+    layout.split_column(
+        Layout(name="header", size=3),
+        Layout(name="main", ratio=1),
+        Layout(name="events", size=12)
+    )
+    
+    # === HEADER ===
+    header_text = Text()
+    header_text.append("🚗 ", style="bold cyan")
+    header_text.append("SISTEMA CENTRAL DE CARGA EV", style="bold white")
+    header_text.append(f" | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", style="dim")
+    layout["header"].update(Panel(header_text, style="bold cyan"))
+    
+    # === MAIN - TABLA DE CHARGING POINTS ===
+    table = Table(title="📊 TELEMETRÍA EN TIEMPO REAL", box=box.DOUBLE_EDGE, expand=True)
+    table.add_column("CP ID", justify="center", style="bold white", width=10)
+    table.add_column("Estado", justify="center", width=15)
+    table.add_column("Driver", justify="center", width=12)
+    table.add_column("Potencia\n(kW)", justify="right", width=10)
+    table.add_column("Energía\n(kWh)", justify="right", width=10)
+    table.add_column("Precio\n(€/kWh)", justify="right", width=10)
+    table.add_column("Importe\n(€)", justify="right", width=10)
+    table.add_column("Tiempo\n(s)", justify="right", width=10)
+    table.add_column("Última Act.", justify="center", width=12)
+    
     with TELEMETRIA_ACTUAL_LOCK:
-        for cp_id, data in TELEMETRIA_ACTUAL.items():
-            estado = CP_ESTADO.get(cp_id, "N/D")
-            energia = data.get("kw_entregados") or data.get("energia_total") or 0.0
-            t_ago = round(time.time() - data.get("timestamp", 0), 1)
-            color = {
-                "ACTIVADO": "green",
-                "SUMINISTRANDO": "cyan",
-                "DESCONECTADO": "red",
-                "AVERÍA": "magenta"
-            }.get(str(estado).upper(), "white")
-            table.add_row(cp_id, f"[{color}]{estado}[/{color}]", f"{float(energia):.2f}", f"{t_ago}s")
-    return table
+        if not TELEMETRIA_ACTUAL:
+            table.add_row(
+                "[dim]---[/dim]", 
+                "[dim]Sin CPs conectados[/dim]", 
+                "[dim]---[/dim]", "[dim]---[/dim]", "[dim]---[/dim]", 
+                "[dim]---[/dim]", "[dim]---[/dim]", "[dim]---[/dim]", "[dim]---[/dim]"
+            )
+        else:
+            for cp_id in sorted(TELEMETRIA_ACTUAL.keys()):
+                data = TELEMETRIA_ACTUAL[cp_id]
+                estado = CP_ESTADO.get(cp_id, "N/D")
+                
+                # Driver actual
+                driver_id = CP_SESION_DRIVER_ID.get(cp_id, "---")
+                if driver_id == "---" or driver_id is None:
+                    driver_str = "[dim]---[/dim]"
+                else:
+                    driver_str = f"[cyan]{driver_id}[/cyan]"
+                
+                # Telemetría
+                potencia = data.get("potencia_actual", 0.0)
+                energia = data.get("kw_entregados") or data.get("energia_total", 0.0)
+                tiempo_s = data.get("tiempo_carga_s", 0)
+                precio_kwh = CP_PRECIO_KWH.get(cp_id, data.get("precio_kwh", 0.0))
+                
+                # Calcular importe
+                importe = float(energia) * float(precio_kwh) if precio_kwh else 0.0
+                
+                # Tiempo desde última actualización
+                t_ago = round(time.time() - data.get("timestamp", 0), 1)
+                
+                # Color según estado
+                color = {
+                    "ACTIVADO": "green",
+                    "SUMINISTRANDO": "cyan",
+                    "DESCONECTADO": "red",
+                    "AVERÍA": "magenta",
+                    "DESACTIVADO": "yellow"
+                }.get(str(estado).upper(), "white")
+                
+                table.add_row(
+                    f"[bold]{cp_id}[/bold]",
+                    f"[{color}]{estado}[/{color}]",
+                    driver_str,
+                    f"{float(potencia):.2f}",
+                    f"{float(energia):.3f}",
+                    f"{float(precio_kwh):.3f}",
+                    f"{importe:.2f}",
+                    f"{tiempo_s}",
+                    f"{t_ago}s" if t_ago < 10 else f"[yellow]{t_ago}s[/yellow]"
+                )
+    
+    layout["main"].update(Panel(table, title="[bold]Charging Points Activos[/bold]", border_style="cyan"))
+    
+    # === EVENTS - REGISTRO DE EVENTOS RECIENTES ===
+    events_table = Table(title="📝 EVENTOS RECIENTES", box=box.SIMPLE, expand=True, show_header=False)
+    events_table.add_column("Evento", justify="left", style="dim")
+    
+    with EVENT_LOG_LOCK:
+        eventos_recientes = list(EVENT_LOG)[-10:]  # Últimos 10 eventos
+        if not eventos_recientes:
+            events_table.add_row("[dim italic]Sin eventos registrados aún...[/dim italic]")
+        else:
+            for evento in eventos_recientes:
+                events_table.add_row(evento)
+    
+    layout["events"].update(Panel(events_table, title="[bold]Log de Eventos[/bold]", border_style="yellow"))
+    
+    return layout
 
 def iniciar_interfaz_visual():
     with Live(render_panel(), refresh_per_second=1, console=console) as live:
@@ -1486,15 +1602,27 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
             with CONEXIONES_ACTIVAS_LOCK:
                 ya_conectado = cp_id in CONEXIONES_ACTIVAS
 
+            print(f"\n[CENTRAL] ╔═══════════════════════════════════════════╗")
             if ya_conectado:
-                registrar_evento(f"[RECONEXIÓN] CP {cp_id} se ha reconectado correctamente.")
+                print(f"[CENTRAL] ║  🔄 RECONEXIÓN DE CHARGING POINT         ║")
+                registrar_evento(f"🔄 RECONEXIÓN: CP {cp_id} se ha reconectado correctamente.", "ok")
+            else:
+                print(f"[CENTRAL] ║  ✅ NUEVO CHARGING POINT REGISTRADO      ║")
+                registrar_evento(f"✅ NUEVO CP: Registro inicial de {cp_id}.", "ok")
+            print(f"[CENTRAL] ╚═══════════════════════════════════════════╝")
+            print(f"[CENTRAL]    CP ID: {cp_id}")
+            print(f"[CENTRAL]    Ubicación: {ubicacion}")
+            print(f"[CENTRAL]    Precio: {precio_kwh} €/kWh")
+            print(f"[CENTRAL]    Estado: ACTIVADO")
+            print(f"[CENTRAL] ═══════════════════════════════════════════\n")
+            
+            if ya_conectado:
                 try:
                     cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection)
                 except Exception:
                     pass
-            else:
-                registrar_evento(f"[NUEVO CP] Registro inicial de {cp_id}.")
-            registrar_evento(f"CP registrado y conectado: {cp_id} ({ubicacion})")
+            
+            registrar_evento(f"⚡ CP {cp_id} registrado y conectado ({ubicacion})", "ok")
             # Estado: ACTIVADO tras registro exitoso
             try:
                 cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection)
@@ -1647,7 +1775,13 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
             cod_op, campos = descomponer_trama(trama_bytes)
             
             if cod_op:
-                print(f"[CENTRAL] Recibida trama de {cp_id}: Cod={cod_op}, Campos={campos}")
+                # Registrar TODOS los mensajes recibidos con formato claro
+                registrar_evento(f"📨 MENSAJE de {cp_id}: [{cod_op}] Campos={campos}", "info")
+                print(f"[CENTRAL] ========================================")
+                print(f"[CENTRAL] 📨 TRAMA RECIBIDA de {cp_id}")
+                print(f"[CENTRAL]    Código Operación: {cod_op}")
+                print(f"[CENTRAL]    Campos: {campos}")
+                print(f"[CENTRAL] ========================================")
                 # Manejo de tramas específicas desde el CP
                 if cod_op == 'AUTH_RESP' and len(campos) >= 2:
                     # Esperado: AUTH_RESP#<driver_id>#<OK|KO>#<mensaje?>
