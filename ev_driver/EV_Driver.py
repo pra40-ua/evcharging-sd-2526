@@ -51,17 +51,16 @@ def consumir_notificaciones_driver(driver_id: str, broker: str, procesar_ticket_
     """Escucha el tópico driver_status_<driver_id> y muestra mensajes, incluyendo TICKET_FINAL."""
     topic = f"{EVENT_PREFIX}{driver_id}"
     try:
-        # Generar group_id único para cada sesión del driver (no reutilizar offsets de sesiones anteriores)
-        import random
-        session_id = f"{int(time.time())}-{random.randint(1000, 9999)}"
-        group_id_unico = f'driver-{driver_id}-session-{session_id}'
-        
+        # Usar group_id consistente basado en driver_id
+        # Esto permite que el driver se reconecte y retome donde se quedó
+        # Si el driver se desconecta durante el suministro y vuelve a conectarse,
+        # continuará recibiendo actualizaciones de la misma sesión
         consumer = KafkaConsumer(
             topic,
             bootstrap_servers=[broker],
-            auto_offset_reset='latest',
+            auto_offset_reset='latest',  # Solo mensajes nuevos si es primera vez
             enable_auto_commit=True,
-            group_id=group_id_unico,
+            group_id=f'driver-{driver_id}-group',
             value_deserializer=lambda m: json.loads(m.decode('utf-8')),
             api_version=(2, 8, 0)
         )
