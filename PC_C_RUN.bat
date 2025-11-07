@@ -368,8 +368,8 @@ echo [DEBUG] CP_ID asignado: !CP_ID! >> "%LOG_FILE%"
 echo [DEBUG] RANDOM_KW: !RANDOM_KW! >> "%LOG_FILE%"
 echo [DEBUG] MAT: !MAT! >> "%LOG_FILE%"
 
-REM Construir comando PowerShell completo (agregando label cp_id)
-set "PS_DRIVER_CMD=Write-Host 'Iniciando Driver (!DRIVER_ID!) -> !CP_ID! (!RANDOM_KW! kWh)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --name driver_!DRIVER_ID! --label project=evcharging-pc-c --label component=driver --label driver_id=!DRIVER_ID! --label cp_id=!CP_ID! -e KAFKA_BROKER=!KAFKA_SERVER! -e DRIVER_ID=!DRIVER_ID! -e CP_ID=!CP_ID! -e MAT=!MAT! -e KW=!RANDOM_KW! -e LISTEN=true ev_driver:local"
+REM Construir comando PowerShell completo (agregando label cp_id y network)
+set "PS_DRIVER_CMD=Write-Host 'Iniciando Driver (!DRIVER_ID!) -> !CP_ID! (!RANDOM_KW! kWh)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --name driver_!DRIVER_ID! --network evnet --label project=evcharging-pc-c --label component=driver --label driver_id=!DRIVER_ID! --label cp_id=!CP_ID! -e KAFKA_BROKER=!KAFKA_SERVER! -e DRIVER_ID=!DRIVER_ID! -e CP_ID=!CP_ID! -e MAT=!MAT! -e KW=!RANDOM_KW! -e LISTEN=true ev_driver:local"
 
 echo [DEBUG] ---- COMANDO POWERSHELL DRIVER ---- >> "%LOG_FILE%"
 echo !PS_DRIVER_CMD! >> "%LOG_FILE%"
