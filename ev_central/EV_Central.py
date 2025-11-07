@@ -758,6 +758,38 @@ def consumir_comandos_control_kafka(broker_list: str):
                             import traceback
                             traceback.print_exc()
                     
+                    elif command == 'RECONNECT_MONITOR':
+                        # Marcar Monitor como listo para reconexión
+                        # El Monitor debe reiniciarse manualmente para volver a conectarse
+                        try:
+                            print(f"[CENTRAL] ✅ Marcando Monitor de {cp_id} como listo para reconexión")
+                            registrar_evento(f"✅ Monitor de {cp_id} marcado para reconexión", "info")
+                            
+                            # Determinar estado correcto según sesión activa
+                            with CP_SESION_DRIVER_ID_LOCK:
+                                tiene_sesion = cp_id in CP_SESION_DRIVER_ID and CP_SESION_DRIVER_ID[cp_id] is not None
+                            
+                            if tiene_sesion:
+                                # Hay sesión activa - mantener estado pendiente o activado
+                                # (El Monitor al reconectarse continuará con la sesión)
+                                nuevo_estado = 'ACTIVADO'
+                                print(f"[CENTRAL] {cp_id} tiene sesión activa. Estado: {nuevo_estado}")
+                            else:
+                                # Sin sesión - simplemente ACTIVADO
+                                nuevo_estado = 'ACTIVADO'
+                                print(f"[CENTRAL] {cp_id} sin sesión activa. Estado: {nuevo_estado}")
+                            
+                            cambiar_estado_cp(cp_id, nuevo_estado, None)
+                            
+                            registrar_evento(f"✓ {cp_id} listo para reconexión. Reinicie el proceso Monitor.", "info")
+                            print(f"[CENTRAL] {cp_id} marcado como {nuevo_estado}. El Monitor debe reiniciarse para volver a conectarse.")
+                            
+                        except Exception as e:
+                            print(f"[CENTRAL] Error marcando monitor de {cp_id} para reconexión: {e}")
+                            registrar_evento(f"[ERROR] Error marcando monitor de {cp_id} para reconexión: {e}", "error")
+                            import traceback
+                            traceback.print_exc()
+                    
                     elif command in ['START', 'STOP']:
                         # Comandos normales START/STOP
                         _enviar_comando_cp(cp_id, command)

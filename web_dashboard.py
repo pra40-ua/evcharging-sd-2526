@@ -680,6 +680,49 @@ def api_disconnect_monitor(cp_id):
         }), 500
 
 
+@app.route('/api/reconnect_monitor/<cp_id>', methods=['POST'])
+def api_reconnect_monitor(cp_id):
+    """
+    Marca el Monitor como listo para reconexión.
+    Esto simula que el Monitor se ha recuperado y está listo para volver a conectarse.
+    """
+    try:
+        print(f"[DASHBOARD] Solicitud de reconexión de Monitor para {cp_id}")
+        
+        # Enviar comando RECONNECT_MONITOR a través de Kafka
+        with KAFKA_PRODUCER_LOCK:
+            if KAFKA_PRODUCER is None:
+                return jsonify({
+                    'status': 'error',
+                    'message': 'Productor Kafka no disponible'
+                }), 503
+            
+            comando_msg = {
+                'cp_id': cp_id,
+                'command': 'RECONNECT_MONITOR',
+                'timestamp': datetime.now().isoformat(),
+                'source': 'web_dashboard'
+            }
+            
+            KAFKA_PRODUCER.send('central_commands', value=comando_msg)
+            KAFKA_PRODUCER.flush(timeout=2)
+            
+            registrar_evento(f"✅ Solicitud de reconexión de Monitor para {cp_id}", 'command')
+            
+            return jsonify({
+                'status': 'ok',
+                'message': f'Monitor de {cp_id} marcado para reconexión. Reinicie el Monitor para que vuelva a conectarse.',
+                'cp_id': cp_id
+            })
+    
+    except Exception as e:
+        registrar_evento(f"Error reconectando monitor de {cp_id}: {e}", 'error')
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
 @app.route('/api/preparar_suministro/<cp_id>', methods=['POST'])
 def api_preparar_suministro(cp_id):
     """
@@ -1200,8 +1243,11 @@ def crear_templates():
                 html += '<td>';
                 
                 // Botones de control según el NUEVO FLUJO INTERACTIVO (3 PASOS)
-                if (estado === 'DESCONECTADO' || estado === 'AVERIADO' || estado === 'AVERÍA') {
-                    html += '<button class="btn-control" disabled>Sin Conexión</button>';
+                if (estado === 'DESCONECTADO') {
+                    // CP desconectado - ofrecer reconexión de Monitor
+                    html += `<button class="btn-control" onclick="reconectarMonitor('${cp.cp_id}')" style="background: #28a745;">🔌 Reconectar Monitor</button>`;
+                } else if (estado === 'AVERIADO' || estado === 'AVERÍA') {
+                    html += '<button class="btn-control" disabled>❌ Averiado</button>';
                 } else if (estado === 'PENDIENTE_CONFIRMACION_CENTRAL' || estado === 'PENDIENTE CONFIRMACION CENTRAL') {
                     // PASO 1: Driver solicitó, operador de Central debe preparar
                     const driver = cp.driver_id_sesion || 'Driver';
@@ -1362,6 +1408,31 @@ def crear_templates():
             .catch(error => {
                 mostrarNotificacion(`Error: ${error}`, 'error');
                 console.error('Error desconectando monitor:', error);
+            });
+        }
+        
+        // Función para reconectar el Monitor de un CP
+        function reconectarMonitor(cpId) {
+            if (!confirm(`¿Reconectar el Monitor de ${cpId}?\n\nMarca el CP como listo para reconexión. Deberá reiniciar el Monitor.`)) return;
+            
+            fetch(`/api/reconnect_monitor/${cpId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    mostrarNotificacion(`✅ ${data.message}`, 'success');
+                } else {
+                    mostrarNotificacion(`Error: ${data.message}`, 'error');
+                }
+                actualizarDashboard();
+            })
+            .catch(error => {
+                mostrarNotificacion(`Error: ${error}`, 'error');
+                console.error('Error reconectando monitor:', error);
             });
         }
         
