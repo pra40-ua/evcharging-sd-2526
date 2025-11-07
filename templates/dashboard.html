@@ -379,25 +379,33 @@
                 html += '<td>';
                 
                 // Botones de control según el NUEVO FLUJO INTERACTIVO (3 PASOS)
-                if (estado === 'DESCONECTADO' || estado === 'AVERIADO' || estado === 'AVERÍA') {
-                    html += '<button class="btn-control" disabled>Sin Conexión</button>';
+                if (estado === 'DESCONECTADO') {
+                    // CP desconectado - ofrecer reconexión de Monitor
+                    html += `<button class="btn-control" onclick="reconectarMonitor('${cp.cp_id}')" style="background: #28a745;">🔌 Reconectar Monitor</button>`;
+                } else if (estado === 'AVERIADO' || estado === 'AVERÍA') {
+                    html += '<button class="btn-control" disabled>❌ Averiado</button>';
                 } else if (estado === 'PENDIENTE_CONFIRMACION_CENTRAL' || estado === 'PENDIENTE CONFIRMACION CENTRAL') {
                     // PASO 1: Driver solicitó, operador de Central debe preparar
                     const driver = cp.driver_id_sesion || 'Driver';
                     const objetivo = cp.telemetria?.objetivo_kwh || '?';
                     html += `<button class="btn-control btn-start" onclick="prepararSuministro('${cp.cp_id}')" style="background: #007bff; animation: pulse 2s infinite;">🚀 PREPARAR SUMINISTRO (${driver})</button>`;
+                    html += `<br><button class="btn-control" onclick="desconectarMonitor('${cp.cp_id}')" style="background: #6c757d; margin-top: 4px; font-size: 11px;">🔌 Desconectar Monitor</button>`;
                 } else if (estado === 'ESPERANDO_OPERADOR_ENGINE' || estado === 'ESPERANDO OPERADOR ENGINE') {
                     // PASO 2: Central preparó, esperando que Engine confirme
                     html += '<span style="color: #ffc107; font-size: 12px;">⏳ Esperando confirmación de Engine...</span>';
+                    html += `<br><button class="btn-control" onclick="desconectarMonitor('${cp.cp_id}')" style="background: #6c757d; margin-top: 4px; font-size: 11px;">🔌 Desconectar Monitor</button>`;
                 } else if (estado === 'LISTO_PARA_INICIAR' || estado === 'LISTO PARA INICIAR') {
                     // PASO 3: Engine confirmó - Mostrar botón de confirmación FINAL
                     html += `<button class="btn-control btn-start" onclick="confirmarInicio('${cp.cp_id}')" style="background: #28a745; animation: pulse 2s infinite;">✓ CONFIRMAR INICIO</button>`;
+                    html += `<br><button class="btn-control" onclick="desconectarMonitor('${cp.cp_id}')" style="background: #6c757d; margin-top: 4px; font-size: 11px;">🔌 Desconectar Monitor</button>`;
                 } else if (estado === 'ESPERANDO_CONFIRMACION_FIN' || estado === 'ESPERANDO CONFIRMACION FIN') {
                     // Engine envió REQUEST_STOP - Mostrar botón de confirmación
                     html += `<button class="btn-control btn-stop" onclick="confirmarFin('${cp.cp_id}')" style="background: #dc3545; animation: pulse 2s infinite;">✓ CONFIRMAR FIN</button>`;
+                    html += `<br><button class="btn-control" onclick="desconectarMonitor('${cp.cp_id}')" style="background: #6c757d; margin-top: 4px; font-size: 11px;">🔌 Desconectar Monitor</button>`;
                 } else if (estado === 'SUMINISTRANDO' || estado === 'CARGANDO') {
-                    // Durante carga: NO permitir detener (debe ser desde Engine)
+                    // Durante carga: NO permitir detener (debe ser desde Engine) pero SÍ permitir desconectar monitor
                     html += '<span style="color: #17a2b8; font-size: 12px;">⚡ Suministrando...</span>';
+                    html += `<br><button class="btn-control" onclick="desconectarMonitor('${cp.cp_id}')" style="background: #6c757d; margin-top: 4px; font-size: 11px;">🔌 Desconectar Monitor</button>`;
                 } else if (estado === 'ACTIVADO') {
                     // Si hay una sesión marcada pero el estado figura como ACTIVADO (p.ej. por telemetría/heartbeat),
                     // ofrecer la acción de PREPARAR SUMINISTRO igualmente
@@ -408,6 +416,7 @@
                         // CP disponible
                         html += '<span style="color: #999; font-size: 12px;">💤 Disponible</span>';
                     }
+                    html += `<br><button class="btn-control" onclick="desconectarMonitor('${cp.cp_id}')" style="background: #6c757d; margin-top: 4px; font-size: 11px;">🔌 Desconectar Monitor</button>`;
                 } else {
                     html += '<span style="color: #999; font-size: 12px;">-</span>';
                 }
@@ -514,6 +523,60 @@ El suministro comenzará inmediatamente.`)) return;
             .catch(error => {
                 mostrarNotificacion(`Error: ${error}`, 'error');
                 console.error('Error confirmando fin:', error);
+            });
+        }
+        
+        // Función para desconectar el Monitor de un CP (simular caída)
+        function desconectarMonitor(cpId) {
+            if (!confirm(`¿Desconectar el Monitor de ${cpId}?
+
+El Engine seguirá suministrando pero la Central no recibirá telemetría.`)) return;
+            
+            fetch(`/api/disconnect_monitor/${cpId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    mostrarNotificacion(`🔌 Monitor desconectado: ${cpId}`, 'success');
+                } else {
+                    mostrarNotificacion(`Error: ${data.message}`, 'error');
+                }
+                actualizarDashboard();
+            })
+            .catch(error => {
+                mostrarNotificacion(`Error: ${error}`, 'error');
+                console.error('Error desconectando monitor:', error);
+            });
+        }
+        
+        // Función para reconectar el Monitor de un CP
+        function reconectarMonitor(cpId) {
+            if (!confirm(`¿Reconectar el Monitor de ${cpId}?
+
+Marca el CP como listo para reconexión. Deberá reiniciar el Monitor.`)) return;
+            
+            fetch(`/api/reconnect_monitor/${cpId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    mostrarNotificacion(`✅ ${data.message}`, 'success');
+                } else {
+                    mostrarNotificacion(`Error: ${data.message}`, 'error');
+                }
+                actualizarDashboard();
+            })
+            .catch(error => {
+                mostrarNotificacion(`Error: ${error}`, 'error');
+                console.error('Error reconectando monitor:', error);
             });
         }
         

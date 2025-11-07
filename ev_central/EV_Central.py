@@ -162,13 +162,14 @@ def bucle_entrada_comandos_windows() -> None:
                 elif ch in ('\x08', '\x7f'):  # Backspace
                     if buffer_chars:
                         buffer_chars.pop()
-                elif not buffer_chars and ch in ('1', '3'):
-                    # Atajos rápidos cuando no hay texto previo
+                elif not buffer_chars and ch == '1':
+                    # Atajo rápido para refrescar estado
                     COMMAND_QUEUE.put(ch)
                     registrar_evento(f"Entrada rápida: {ch}")
                 elif ch == '\x03':  # Ctrl+C
-                    COMMAND_QUEUE.put('3')
-                    registrar_evento("Entrada Ctrl+C -> 3 (Salir)")
+                    # No cerrar inmediatamente, requerir confirmación
+                    COMMAND_QUEUE.put('EXIT')
+                    registrar_evento("Entrada Ctrl+C -> Requiere confirmación para salir")
                 else:
                     # Acumular caracteres para comandos largos (ej.: 2 START CP001)
                     # Filtrar caracteres no imprimibles básicos
@@ -265,7 +266,20 @@ def bucle_procesador_comandos() -> None:
                 registrar_evento("Error mostrando estado de la red")
             continue
         if up == '3' or up == 'EXIT' or up == 'QUIT':
-            registrar_evento("Apagado solicitado por operador")
+            # Requerir confirmación para evitar cierres accidentales
+            registrar_evento("⚠️ Comando de SALIDA recibido. Se requiere confirmación: escribe 'EXIT CONFIRM' para salir", "warn")
+            print("\n" + "="*70)
+            print("  ⚠️⚠️⚠️  ADVERTENCIA: COMANDO DE SALIDA DETECTADO  ⚠️⚠️⚠️")
+            print("="*70)
+            print("  Para CONFIRMAR el cierre del sistema, escribe:")
+            print("  EXIT CONFIRM")
+            print("="*70 + "\n")
+            continue
+        if up == 'EXIT CONFIRM':
+            registrar_evento("✓ Apagado CONFIRMADO por operador", "warn")
+            print("\n" + "="*70)
+            print("  🛑 CERRANDO SISTEMA CENTRAL...")
+            print("="*70 + "\n")
             with SHUTDOWN_LOCK:
                 SHUTDOWN_REQUESTED = True
             continue
@@ -2506,9 +2520,9 @@ def main():
     print(f"Base de datos: {args.db if args.db else 'Ninguna'}")
     print("="*40)
     print("Comandos disponibles:")
-    print("  1 -> Refrescar")
+    print("  1 -> Refrescar estado")
     print("  2 START CP001  o  2 STOP CP001 -> Enviar orden al CP")
-    print("  3 -> Salir")
+    print("  EXIT CONFIRM -> Cerrar el sistema (requiere confirmación)")
 
     # Inicialización de la base de datos
     db_connection = None

@@ -223,8 +223,8 @@ for /L %%i in (1,1,!NUM_DRIVERS!) do (
     )
     
     echo [DEBUG] Retorno de LANZAR_DRIVER completado >> "%LOG_FILE%"
-    echo [MAIN] Esperando 2 segundos antes del siguiente driver para que Docker registre el contenedor... >> "%LOG_FILE%"
-    timeout /t 2 /nobreak >nul
+    echo [MAIN] Esperando 5 segundos antes del siguiente driver para que Docker registre el contenedor... >> "%LOG_FILE%"
+    timeout /t 5 /nobreak >nul
 )
 
 echo [DEBUG] Bucle FOR completado >> "%LOG_FILE%"
@@ -277,8 +277,8 @@ if %DRIVER_NUM% LSS 10 (
     set DRIVER_ID=DRIVER_%DRIVER_NUM%
 )
 
-REM Esperar un momento para que los drivers anteriores se registren
-timeout /t 1 /nobreak >nul
+REM Esperar un momento adicional para que los drivers anteriores se registren completamente en Docker
+timeout /t 2 /nobreak >nul
 
 REM Detectar CPs ocupados nuevamente para esta iteración
 REM Buscar TODOS los drivers (no solo los de PC_C) para detectar CPs ocupados
