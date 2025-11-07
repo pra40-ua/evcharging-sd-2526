@@ -637,6 +637,49 @@ def api_command():
         }), 500
 
 
+@app.route('/api/disconnect_monitor/<cp_id>', methods=['POST'])
+def api_disconnect_monitor(cp_id):
+    """
+    Simula la caída del Monitor de un CP.
+    El Engine seguirá funcionando pero la Central no recibirá telemetría.
+    """
+    try:
+        print(f"[DASHBOARD] Solicitud de desconexión de Monitor para {cp_id}")
+        
+        # Enviar comando DISCONNECT_MONITOR a través de Kafka
+        with KAFKA_PRODUCER_LOCK:
+            if KAFKA_PRODUCER is None:
+                return jsonify({
+                    'status': 'error',
+                    'message': 'Productor Kafka no disponible'
+                }), 503
+            
+            comando_msg = {
+                'cp_id': cp_id,
+                'command': 'DISCONNECT_MONITOR',
+                'timestamp': datetime.now().isoformat(),
+                'source': 'web_dashboard'
+            }
+            
+            KAFKA_PRODUCER.send('central_commands', value=comando_msg)
+            KAFKA_PRODUCER.flush(timeout=2)
+            
+            registrar_evento(f"🔌 Solicitud de desconexión de Monitor para {cp_id}", 'command')
+            
+            return jsonify({
+                'status': 'ok',
+                'message': f'Monitor de {cp_id} desconectado. El Engine seguirá suministrando.',
+                'cp_id': cp_id
+            })
+    
+    except Exception as e:
+        registrar_evento(f"Error desconectando monitor de {cp_id}: {e}", 'error')
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
 @app.route('/api/preparar_suministro/<cp_id>', methods=['POST'])
 def api_preparar_suministro(cp_id):
     """
@@ -1164,18 +1207,23 @@ def crear_templates():
                     const driver = cp.driver_id_sesion || 'Driver';
                     const objetivo = cp.telemetria?.objetivo_kwh || '?';
                     html += `<button class="btn-control btn-start" onclick="prepararSuministro('${cp.cp_id}')" style="background: #007bff; animation: pulse 2s infinite;">🚀 PREPARAR SUMINISTRO (${driver})</button>`;
+                    html += `<br><button class="btn-control" onclick="desconectarMonitor('${cp.cp_id}')" style="background: #6c757d; margin-top: 4px; font-size: 11px;">🔌 Desconectar Monitor</button>`;
                 } else if (estado === 'ESPERANDO_OPERADOR_ENGINE' || estado === 'ESPERANDO OPERADOR ENGINE') {
                     // PASO 2: Central preparó, esperando que Engine confirme
                     html += '<span style="color: #ffc107; font-size: 12px;">⏳ Esperando confirmación de Engine...</span>';
+                    html += `<br><button class="btn-control" onclick="desconectarMonitor('${cp.cp_id}')" style="background: #6c757d; margin-top: 4px; font-size: 11px;">🔌 Desconectar Monitor</button>`;
                 } else if (estado === 'LISTO_PARA_INICIAR' || estado === 'LISTO PARA INICIAR') {
                     // PASO 3: Engine confirmó - Mostrar botón de confirmación FINAL
                     html += `<button class="btn-control btn-start" onclick="confirmarInicio('${cp.cp_id}')" style="background: #28a745; animation: pulse 2s infinite;">✓ CONFIRMAR INICIO</button>`;
+                    html += `<br><button class="btn-control" onclick="desconectarMonitor('${cp.cp_id}')" style="background: #6c757d; margin-top: 4px; font-size: 11px;">🔌 Desconectar Monitor</button>`;
                 } else if (estado === 'ESPERANDO_CONFIRMACION_FIN' || estado === 'ESPERANDO CONFIRMACION FIN') {
                     // Engine envió REQUEST_STOP - Mostrar botón de confirmación
                     html += `<button class="btn-control btn-stop" onclick="confirmarFin('${cp.cp_id}')" style="background: #dc3545; animation: pulse 2s infinite;">✓ CONFIRMAR FIN</button>`;
+                    html += `<br><button class="btn-control" onclick="desconectarMonitor('${cp.cp_id}')" style="background: #6c757d; margin-top: 4px; font-size: 11px;">🔌 Desconectar Monitor</button>`;
                 } else if (estado === 'SUMINISTRANDO' || estado === 'CARGANDO') {
-                    // Durante carga: NO permitir detener (debe ser desde Engine)
+                    // Durante carga: NO permitir detener (debe ser desde Engine) pero SÍ permitir desconectar monitor
                     html += '<span style="color: #17a2b8; font-size: 12px;">⚡ Suministrando...</span>';
+                    html += `<br><button class="btn-control" onclick="desconectarMonitor('${cp.cp_id}')" style="background: #6c757d; margin-top: 4px; font-size: 11px;">🔌 Desconectar Monitor</button>`;
                 } else if (estado === 'ACTIVADO') {
                     // Si hay una sesión marcada pero el estado figura como ACTIVADO (p.ej. por telemetría/heartbeat),
                     // ofrecer la acción de PREPARAR SUMINISTRO igualmente
@@ -1186,6 +1234,7 @@ def crear_templates():
                         // CP disponible
                         html += '<span style="color: #999; font-size: 12px;">💤 Disponible</span>';
                     }
+                    html += `<br><button class="btn-control" onclick="desconectarMonitor('${cp.cp_id}')" style="background: #6c757d; margin-top: 4px; font-size: 11px;">🔌 Desconectar Monitor</button>`;
                 } else {
                     html += '<span style="color: #999; font-size: 12px;">-</span>';
                 }
@@ -1288,6 +1337,31 @@ def crear_templates():
             .catch(error => {
                 mostrarNotificacion(`Error: ${error}`, 'error');
                 console.error('Error confirmando fin:', error);
+            });
+        }
+        
+        // Función para desconectar el Monitor de un CP (simular caída)
+        function desconectarMonitor(cpId) {
+            if (!confirm(`¿Desconectar el Monitor de ${cpId}?\n\nEl Engine seguirá suministrando pero la Central no recibirá telemetría.`)) return;
+            
+            fetch(`/api/disconnect_monitor/${cpId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    mostrarNotificacion(`🔌 Monitor desconectado: ${cpId}`, 'success');
+                } else {
+                    mostrarNotificacion(`Error: ${data.message}`, 'error');
+                }
+                actualizarDashboard();
+            })
+            .catch(error => {
+                mostrarNotificacion(`Error: ${error}`, 'error');
+                console.error('Error desconectando monitor:', error);
             });
         }
         

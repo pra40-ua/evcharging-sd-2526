@@ -722,6 +722,42 @@ def consumir_comandos_control_kafka(broker_list: str):
                             # Continuar procesando otros comandos
                             continue
                     
+                    elif command == 'DISCONNECT_MONITOR':
+                        # Simular caída del Monitor (cerrar socket TCP)
+                        # El Engine seguirá suministrando pero la Central no recibirá telemetría
+                        try:
+                            print(f"[CENTRAL] ⚠️ Desconectando Monitor de {cp_id} (simulación de caída)")
+                            registrar_evento(f"🔌 Desconectando Monitor de {cp_id}", "warn")
+                            
+                            # Cerrar socket TCP del monitor
+                            with CONEXIONES_ACTIVAS_LOCK:
+                                if cp_id in CONEXIONES_ACTIVAS:
+                                    try:
+                                        socket_monitor = CONEXIONES_ACTIVAS[cp_id]
+                                        socket_monitor.close()
+                                        del CONEXIONES_ACTIVAS[cp_id]
+                                        print(f"[CENTRAL] Socket de {cp_id} cerrado. Conexiones activas: {len(CONEXIONES_ACTIVAS)}")
+                                    except Exception as e_socket:
+                                        print(f"[CENTRAL] Error cerrando socket de {cp_id}: {e_socket}")
+                                else:
+                                    print(f"[CENTRAL] {cp_id} no tiene socket activo")
+                            
+                            # Marcar CP como DESCONECTADO (sin cerrar sesión)
+                            # La sesión se mantiene porque el Engine sigue suministrando
+                            cambiar_estado_cp(cp_id, 'DESCONECTADO', None)
+                            
+                            # NO cerrar sesión (mantener driver_id y objetivo_kwh)
+                            # NO enviar ticket al driver (el Engine seguirá suministrando)
+                            
+                            registrar_evento(f"✓ Monitor de {cp_id} desconectado. Engine sigue suministrando.", "info")
+                            print(f"[CENTRAL] Monitor de {cp_id} desconectado. La sesión continúa (Engine sigue activo)")
+                            
+                        except Exception as e:
+                            print(f"[CENTRAL] Error desconectando monitor de {cp_id}: {e}")
+                            registrar_evento(f"[ERROR] Error desconectando monitor de {cp_id}: {e}", "error")
+                            import traceback
+                            traceback.print_exc()
+                    
                     elif command in ['START', 'STOP']:
                         # Comandos normales START/STOP
                         _enviar_comando_cp(cp_id, command)
