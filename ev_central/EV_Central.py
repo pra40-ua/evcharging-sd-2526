@@ -565,20 +565,18 @@ def consumir_telemetria_kafka(broker_list: str):
                             estado_tel = (telemetria.get('estado') or telemetria.get('estado_carga') or '').upper()
                             potencia_act = telemetria.get('potencia_actual', 0.0)
 
-                            # Regla anti-bloqueo: si hay potencia>0 o energía>0, priorizar estado de suministro
-                            if energia_val > 0.0 or (isinstance(potencia_act, (int, float)) and float(potencia_act) > 0.0):
-                                # Preferir SUMINISTRANDO si lo reporta la telemetría; caer a CARGANDO si aplica
-                                if estado_tel in ['SUMINISTRANDO', 'CARGANDO']:
-                                    estado_para_driver = 'SUMINISTRANDO'
-                                else:
-                                    # Si la Central está en estado interactivo pero ya hay entrega, forzar SUMINISTRANDO
-                                    estado_para_driver = 'SUMINISTRANDO'
+                            # PRIORIDAD 1: Respetar estados interactivos (no sobrescribir por energía residual)
+                            if estado_autoritativo.upper() in estados_interactivos:
+                                estado_para_driver = estado_autoritativo
+                            # PRIORIDAD 2: Si hay POTENCIA ACTIVA (carga en progreso), es SUMINISTRANDO
+                            elif isinstance(potencia_act, (int, float)) and float(potencia_act) > 0.0:
+                                estado_para_driver = 'SUMINISTRANDO'
+                            # PRIORIDAD 3: Si telemetría reporta SUMINISTRANDO/CARGANDO activamente
+                            elif estado_tel in ['SUMINISTRANDO', 'CARGANDO']:
+                                estado_para_driver = 'SUMINISTRANDO'
+                            # PRIORIDAD 4: Usar estado autoritativo o telemetría
                             else:
-                                # Sin entrega detectada, aplicar política previa: autoritativo si interactivo, si no telemetría
-                                if estado_autoritativo.upper() in estados_interactivos:
-                                    estado_para_driver = estado_autoritativo
-                                else:
-                                    estado_para_driver = telemetria.get('estado') or telemetria.get('estado_carga') or estado_autoritativo
+                                estado_para_driver = telemetria.get('estado') or telemetria.get('estado_carga') or estado_autoritativo
                             
                             notificar_driver(driver_id, 'TELEMETRIA', {
                                 'cp_id': cp_id,
@@ -944,9 +942,11 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                             pass
                         
                         # Publicar telemetría para que aparezca botón en dashboard de Central
+                        # RESETEAR contadores de sesión anterior (si existían)
                         try:
                             with TELEMETRIA_ACTUAL_LOCK:
                                 telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                            # Resetear contadores para nueva sesión (evitar energía residual)
                             telemetria_actualizada = {
                                 **telemetria_actual,
                                 'cp_id': cp_id,
@@ -955,14 +955,19 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                                 'timestamp': time.time(),
                                 'tiene_sesion_activa': True,
                                 'driver_id_sesion': id_driver,
-                                'objetivo_kwh': kw_deseados
+                                'objetivo_kwh': kw_deseados,
+                                # Resetear contadores para nueva sesión
+                                'kw_entregados': 0.0,
+                                'energia_total': 0.0,
+                                'potencia_actual': 0.0,
+                                'tiempo_carga_s': 0
                             }
                             with TELEMETRIA_ACTUAL_LOCK:
                                 TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
                             if KAFKA_PRODUCER:
                                 KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
                                 KAFKA_PRODUCER.flush(timeout=1)
-                                print(f"[CENTRAL] Telemetría publicada para {cp_id}: PENDIENTE_CONFIRMACION_CENTRAL")
+                                print(f"[CENTRAL] Telemetría publicada para {cp_id}: PENDIENTE_CONFIRMACION_CENTRAL (contadores reseteados)")
                         except Exception as e:
                             print(f"[CENTRAL] No se pudo publicar telemetría: {e}")
                         
@@ -1718,6 +1723,7 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                             try:
                                 with TELEMETRIA_ACTUAL_LOCK:
                                     telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                                # Resetear contadores para nueva sesión
                                 telemetria_actualizada = {
                                     **telemetria_actual,
                                     'cp_id': cp_id,
@@ -1726,14 +1732,19 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                                     'timestamp': time.time(),
                                     'tiene_sesion_activa': True,
                                     'driver_id_sesion': next_driver,
-                                    'objetivo_kwh': next_kw
+                                    'objetivo_kwh': next_kw,
+                                    # Resetear contadores
+                                    'kw_entregados': 0.0,
+                                    'energia_total': 0.0,
+                                    'potencia_actual': 0.0,
+                                    'tiempo_carga_s': 0
                                 }
                                 with TELEMETRIA_ACTUAL_LOCK:
                                     TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
                                 if KAFKA_PRODUCER:
                                     KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
                                     KAFKA_PRODUCER.flush(timeout=1)
-                                    print(f"[CENTRAL] ✓ Telemetría PENDIENTE_CONFIRMACION_CENTRAL publicada para {cp_id} (driver: {next_driver})")
+                                    print(f"[CENTRAL] ✓ Telemetría PENDIENTE_CONFIRMACION_CENTRAL publicada para {cp_id} (driver: {next_driver}, contadores reseteados)")
                             except Exception as e:
                                 print(f"[CENTRAL] Error publicando telemetría (reconexión→cola): {e}")
                             
@@ -1877,6 +1888,7 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                                     try:
                                         with TELEMETRIA_ACTUAL_LOCK:
                                             telemetria_actual = TELEMETRIA_ACTUAL.get(cp_fin, {})
+                                        # Resetear contadores para nueva sesión
                                         telemetria_actualizada = {
                                             **telemetria_actual,
                                             'cp_id': cp_fin,
@@ -1885,13 +1897,19 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                                             'timestamp': time.time(),
                                             'tiene_sesion_activa': True,
                                             'driver_id_sesion': next_driver,
-                                            'objetivo_kwh': next_kw
+                                            'objetivo_kwh': next_kw,
+                                            # Resetear contadores
+                                            'kw_entregados': 0.0,
+                                            'energia_total': 0.0,
+                                            'potencia_actual': 0.0,
+                                            'tiempo_carga_s': 0
                                         }
                                         with TELEMETRIA_ACTUAL_LOCK:
                                             TELEMETRIA_ACTUAL[cp_fin] = telemetria_actualizada
                                         if KAFKA_PRODUCER:
                                             KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
                                             KAFKA_PRODUCER.flush(timeout=1)
+                                            print(f"[CENTRAL] ✓ Telemetría PENDIENTE_CONFIRMACION_CENTRAL publicada para {cp_fin} (driver: {next_driver}, contadores reseteados)")
                                     except Exception as e:
                                         print(f"[CENTRAL] No se pudo publicar telemetría (cola→pendiente): {e}")
 
@@ -2187,6 +2205,34 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                         with CP_ALERTA_LOCK:
                             CP_ALERTA[cp_id] = False
                         cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection, motivo=motivo)
+                        
+                        # IMPORTANTE: Resetear contadores de telemetría tras recuperación de avería
+                        # Esto evita que energía residual de la sesión anterior aparezca en nuevas sesiones
+                        with TELEMETRIA_ACTUAL_LOCK:
+                            telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                            TELEMETRIA_ACTUAL[cp_id] = {
+                                **telemetria_actual,
+                                'cp_id': cp_id,
+                                'estado': 'ACTIVADO',
+                                'estado_carga': 'ACTIVADO',
+                                'kw_entregados': 0.0,
+                                'energia_total': 0.0,
+                                'potencia_actual': 0.0,
+                                'tiempo_carga_s': 0,
+                                'tiene_sesion_activa': False,
+                                'driver_id_sesion': None,
+                                'timestamp': time.time()
+                            }
+                        
+                        # Publicar telemetría reseteada a Kafka
+                        if KAFKA_PRODUCER:
+                            try:
+                                KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=TELEMETRIA_ACTUAL[cp_id])
+                                KAFKA_PRODUCER.flush(timeout=1)
+                                print(f"[CENTRAL] ✓ Telemetría reseteada para {cp_id} tras recuperación de avería")
+                            except Exception as e_kafka:
+                                print(f"[CENTRAL] ⚠️ Error publicando telemetría reseteada: {e_kafka}")
+                        
                         registrar_evento(f"✅ {cp_id} recuperado de avería: {motivo}")
                         print(f"[CENTRAL] {cp_id} marcado como ACTIVADO tras AVR_CLR")
                     except Exception as e:
