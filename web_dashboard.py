@@ -231,16 +231,25 @@ def consumir_telemetria(broker: str):
                             # Actualizar estado del CP
                             with CPS_STATE_LOCK:
                                 if cp_id not in CPS_STATE:
+                                    # Inicializar CP nuevo con TODOS los campos desde la telemetría
                                     CPS_STATE[cp_id] = {
                                         'cp_id': cp_id,
-                                        'estado': 'DESCONOCIDO',
+                                        'estado': telemetria.get('estado_carga', telemetria.get('estado', 'DESCONOCIDO')),
                                         'ultima_actualizacion': time.time(),
-                                        'tiene_sesion_activa': False,
-                                        'driver_id_sesion': None
+                                        'ubicacion': telemetria.get('ubicacion', 'Sin ubicación'),
+                                        'precio_kwh': telemetria.get('precio_kwh', 0.0),
+                                        'tiene_sesion_activa': telemetria.get('tiene_sesion_activa', False),
+                                        'driver_id_sesion': telemetria.get('driver_id_sesion', None)
                                     }
                                     # Registrar evento solo si es un CP nuevo
-                                    registrar_evento(f"Nuevo CP detectado: {cp_id}", 'info')
+                                    estado_inicial = CPS_STATE[cp_id]['estado']
+                                    registrar_evento(f"Nuevo CP detectado: {cp_id} (Estado: {estado_inicial})", 'info')
                                     print(f"[DASHBOARD] ✓ Nuevo CP añadido al estado: {cp_id}")
+                                    print(f"[DASHBOARD]    Estado inicial: {estado_inicial}")
+                                    print(f"[DASHBOARD]    Ubicación: {CPS_STATE[cp_id]['ubicacion']}")
+                                    print(f"[DASHBOARD]    Precio: {CPS_STATE[cp_id]['precio_kwh']} €/kWh")
+                                    print(f"[DASHBOARD]    Sesión activa: {CPS_STATE[cp_id]['tiene_sesion_activa']}")
+                                    print(f"[DASHBOARD]    Driver: {CPS_STATE[cp_id]['driver_id_sesion']}")
                                 
                                 estado_carga_recibido = telemetria.get('estado_carga', telemetria.get('estado', 'DESCONOCIDO'))
                                 
@@ -302,6 +311,16 @@ def consumir_telemetria(broker: str):
                                     registrar_evento(f"{cp_id}: {estado_anterior} → {estado_carga}", 'info')
                                     if 'AVERI' in estado_carga.upper():
                                         print(f"[DASHBOARD] ⚠️⚠️⚠️ CAMBIO A AVERÍA: {cp_id} → {estado_carga} ⚠️⚠️⚠️")
+                                    elif 'PENDIENTE_CONFIRMACION_CENTRAL' in estado_carga.upper():
+                                        print(f"\n[DASHBOARD] ╔══════════════════════════════════════════")
+                                        print(f"[DASHBOARD] ║  🚀 SOLICITUD PENDIENTE")
+                                        print(f"[DASHBOARD] ╠══════════════════════════════════════════")
+                                        print(f"[DASHBOARD] ║  CP: {cp_id}")
+                                        print(f"[DASHBOARD] ║  Estado: {estado_anterior} → {estado_carga}")
+                                        print(f"[DASHBOARD] ║  Driver: {driver_id}")
+                                        print(f"[DASHBOARD] ║  Sesión activa: {tiene_sesion}")
+                                        print(f"[DASHBOARD] ║  Este CP debería mostrar botón en web")
+                                        print(f"[DASHBOARD] ╚══════════════════════════════════════════\n")
                                     else:
                                         print(f"[DASHBOARD] Estado actualizado: {cp_id} → {estado_carga} (kW={kw_entregados}, P={potencia}, t={tiempo}s)")
                             
@@ -418,6 +437,10 @@ def api_status():
                 cp['timestamp_telemetria'] = tel.get('timestamp_str', '-')
                 cp['tiene_sesion_activa'] = tel.get('tiene_sesion_activa', False)
                 cp['driver_id_sesion'] = tel.get('driver_id_sesion', None)
+                
+                # Log especial para estados pendientes
+                if 'PENDIENTE_CONFIRMACION_CENTRAL' in str(cp.get('estado', '')).upper():
+                    print(f"[API /api/status] 🚀 CP {cp_id} → Frontend: Estado={cp['estado']}, Driver={cp['driver_id_sesion']}, Sesión={cp['tiene_sesion_activa']}")
             else:
                 # Sin telemetría, valores por defecto
                 cp['energia_kwh'] = 0

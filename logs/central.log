@@ -103080,3 +103080,1504 @@ ConnectionAbortedError: [WinError 10053] Se ha anulado una conexión establecida 
 2025-11-07 03:17:45,453 - [03:17:45] [ESTADO] CP_005 -> ACTIVADO.
 2025-11-07 03:17:46,096 - [03:17:46] \U0001f4ca Telemetría de CP_005: est=ACTIVADO, E=0.00, P=0.0
 2025-11-07 03:17:46,105 - [03:17:46] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:17:47,939 - [03:17:47] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=24.00 kWh
+2025-11-07 03:17:47,986 - [03:17:47] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:17:50,079 - [03:17:50] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:17:50,089 - [03:17:50] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:17:51,999 - [03:17:51] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=46.00 kWh
+2025-11-07 03:17:52,048 - [03:17:52] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:17:54,200 - [03:17:54] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:17:54,208 - [03:17:54] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:17:55,200 - [03:17:55] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=46.00 kWh
+2025-11-07 03:17:55,251 - [03:17:55] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:17:55,311 - [03:17:55] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=24.00 kWh
+2025-11-07 03:17:55,362 - [03:17:55] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:17:55,414 - [03:17:55] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:17:55,423 - [03:17:55] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:17:55,474 - [03:17:55] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:17:55,482 - [03:17:55] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:17:55,533 - [03:17:55] \U0001f4ca Telemetría de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:17:55,541 - [03:17:55] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:17:56,110 - [03:17:56] \U0001f4ca Telemetría de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:17:56,118 - [03:17:56] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:17:57,948 - [03:17:57] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=24.00 kWh
+2025-11-07 03:17:57,998 - [03:17:57] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:18:00,071 - [03:18:00] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:18:00,079 - [03:18:00] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:18:02,013 - [03:18:02] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=46.00 kWh
+2025-11-07 03:18:02,059 - [03:18:02] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:18:04,214 - [03:18:04] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:18:04,223 - [03:18:04] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:18:05,253 - [03:18:05] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=46.00 kWh
+2025-11-07 03:18:05,303 - [03:18:05] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:18:05,359 - [03:18:05] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=24.00 kWh
+2025-11-07 03:18:05,408 - [03:18:05] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:18:05,457 - [03:18:05] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:18:05,465 - [03:18:05] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:18:05,512 - [03:18:05] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:18:05,520 - [03:18:05] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:18:05,567 - [03:18:05] \U0001f4ca Telemetría de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:18:05,575 - [03:18:05] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:18:06,118 - [03:18:06] \U0001f4ca Telemetría de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:18:06,126 - [03:18:06] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:18:07,957 - [03:18:07] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=24.00 kWh
+2025-11-07 03:18:08,007 - [03:18:08] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:18:10,096 - [03:18:10] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:18:10,108 - [03:18:10] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:18:11,754 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-07 03:18:11,754 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:11,754 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-07 03:18:11,754 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:11,754 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-07 03:18:11,755 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-07 03:18:11,754 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-07 03:18:11,755 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-07 03:18:11,755 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-07 03:18:11,755 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-07 03:18:11,755 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: Node Disconnected.
+2025-11-07 03:18:11,755 - Marking the coordinator dead (node coordinator-1) for group central-control-group: Node Disconnected.
+2025-11-07 03:18:11,754 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-07 03:18:11,755 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:11,755 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:11,755 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:11,755 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: Node Disconnected.
+2025-11-07 03:18:11,756 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:11,756 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:11,756 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:11,756 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:11,756 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:11,756 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-07 03:18:11,810 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:11,811 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:11,811 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:11,812 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:11,812 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:11,857 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:11,857 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:11,857 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:11,857 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:11,857 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:11,857 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:11,857 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:11,857 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:11,857 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-07 03:18:11,858 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-07 03:18:11,858 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:11,858 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:11,858 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:11,982 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:11,982 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:11,982 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:11,982 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:11,982 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:12,028 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:12,028 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:12,028 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:12,028 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:12,028 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:12,028 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:12,029 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:12,029 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:12,029 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:12,029 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:12,029 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:12,029 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:12,029 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:12,029 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:12,029 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:12,152 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:12,153 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:12,153 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:12,153 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:12,153 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:12,199 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:12,199 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:12,199 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:12,199 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:12,199 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:12,199 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:12,199 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:12,199 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:12,200 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:12,200 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:12,200 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:12,200 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:12,199 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:12,200 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:12,200 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:12,324 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:12,324 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:12,325 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:12,325 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:12,325 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:12,371 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:12,371 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:12,371 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:12,371 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:12,372 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:12,371 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:12,372 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:12,372 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:12,372 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:12,372 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:12,373 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:12,373 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:12,372 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:12,373 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:12,373 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:12,496 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:12,496 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:12,497 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:12,497 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:12,497 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:12,542 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:12,543 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:12,543 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:12,543 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:12,543 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:12,543 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:12,647 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:12,647 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:12,647 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:12,647 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:12,648 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:12,648 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:12,647 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:18:12,648 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:18:12,648 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:18:12,648 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:12,648 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:12,649 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:12,666 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:17,207 - [03:18:17] Monitor desconectado: CP_004
+2025-11-07 03:18:17,216 - [03:18:17] Monitor desconectado: CP_002
+2025-11-07 03:18:17,221 - [03:18:17] [ESTADO] CP_004 -> AVERÍA (antes: ACTIVADO). Motivo: Desconexión inesperada del CP
+2025-11-07 03:18:17,234 - [03:18:17] [ESTADO] CP_002 -> AVERÍA (antes: PENDIENTE_CONFIRMACION_CENTRAL). Motivo: Desconexión inesperada del CP
+2025-11-07 03:18:17,234 - [03:18:17] [INFO] CP_004 podrá reconectarse automáticamente al reiniciar su Monitor.
+2025-11-07 03:18:17,243 - [03:18:17] [INFO] CP_002 podrá reconectarse automáticamente al reiniciar su Monitor.
+2025-11-07 03:18:17,325 - [03:18:17] Monitor desconectado: CP_003
+2025-11-07 03:18:17,335 - [03:18:17] Monitor desconectado: CP_001
+2025-11-07 03:18:17,343 - [03:18:17] [ESTADO] CP_003 -> AVERÍA (antes: ACTIVADO). Motivo: Desconexión inesperada del CP
+2025-11-07 03:18:17,344 - [03:18:17] [ESTADO] CP_001 -> AVERÍA (antes: PENDIENTE_CONFIRMACION_CENTRAL). Motivo: Desconexión inesperada del CP
+2025-11-07 03:18:17,352 - [03:18:17] [INFO] CP_003 podrá reconectarse automáticamente al reiniciar su Monitor.
+2025-11-07 03:18:17,370 - [03:18:17] [INFO] CP_001 podrá reconectarse automáticamente al reiniciar su Monitor.
+2025-11-07 03:18:17,379 - [03:18:17] Monitor desconectado: CP_005
+2025-11-07 03:18:17,388 - [03:18:17] [ESTADO] CP_005 -> AVERÍA (antes: ACTIVADO). Motivo: Desconexión inesperada del CP
+2025-11-07 03:18:17,397 - [03:18:17] [INFO] CP_005 podrá reconectarse automáticamente al reiniciar su Monitor.
+2025-11-07 03:18:21,287 - [03:18:21] [\u26a0\ufe0f] CP CP_001 sin telemetría hace 16s y socket cerrado \u2192 DESCONECTADO
+2025-11-07 03:18:21,292 - [03:18:21] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-07 03:18:21,296 - [03:18:21] [\u26a0\ufe0f] CP CP_003 sin telemetría hace 16s y socket cerrado \u2192 DESCONECTADO
+2025-11-07 03:18:21,301 - [03:18:21] [ESTADO] CP_003 -> DESCONECTADO (antes: AVERÍA).
+2025-11-07 03:18:26,307 - [03:18:26] [\u26a0\ufe0f] CP CP_002 sin telemetría hace 17s y socket cerrado \u2192 DESCONECTADO
+2025-11-07 03:18:26,312 - [03:18:26] [ESTADO] CP_002 -> DESCONECTADO (antes: AVERÍA).
+2025-11-07 03:18:26,317 - [03:18:26] [\u26a0\ufe0f] CP CP_004 sin telemetría hace 15s y socket cerrado \u2192 DESCONECTADO
+2025-11-07 03:18:26,321 - [03:18:26] [ESTADO] CP_004 -> DESCONECTADO (antes: AVERÍA).
+2025-11-07 03:18:26,326 - [03:18:26] [\u26a0\ufe0f] CP CP_005 sin telemetría hace 19s y socket cerrado \u2192 DESCONECTADO
+2025-11-07 03:18:26,330 - [03:18:26] [ESTADO] CP_005 -> DESCONECTADO (antes: AVERÍA).
+2025-11-07 03:18:54,208 - [03:18:54] Modo consola simple activado
+2025-11-07 03:18:54,222 - Updating subscribed topics to: ('driver_requests',)
+2025-11-07 03:18:54,225 - Updating subscribed topics to: ('central_commands',)
+2025-11-07 03:18:54,228 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-07 03:18:54,231 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:54,231 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:54,232 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:54,232 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:54,232 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:54,232 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:54,263 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:54,263 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:54,439 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:18:54,440 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-07 03:18:54,440 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:18:54,440 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-07 03:18:54,440 - Starting new heartbeat thread
+2025-11-07 03:18:54,440 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:18:54,440 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-07 03:18:54,440 - Starting new heartbeat thread
+2025-11-07 03:18:54,440 - Revoking previously assigned partitions set() for group central_processing_group
+2025-11-07 03:18:54,440 - Revoking previously assigned partitions set() for group central-control-group
+2025-11-07 03:18:54,440 - Starting new heartbeat thread
+2025-11-07 03:18:54,441 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:54,441 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-11-07 03:18:54,441 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:54,441 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:54,441 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:54,442 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 03:18:54,442 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:54,442 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 03:18:54,442 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:54,442 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 03:18:54,542 - (Re-)joining group central_processing_group
+2025-11-07 03:18:54,543 - (Re-)joining group central-control-group
+2025-11-07 03:18:54,543 - (Re-)joining group central-telemetry-group
+2025-11-07 03:18:54,546 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:18:54,546 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:18:54,546 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:18:54,648 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:54,648 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:54,648 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:18:54,648 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:54,648 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:54,648 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:18:54,750 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:18:54,750 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-07 03:18:54,750 - (Re-)joining group central_processing_group
+2025-11-07 03:18:54,750 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:18:54,751 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-07 03:18:54,751 - (Re-)joining group central-control-group
+2025-11-07 03:18:54,751 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:18:54,751 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-07 03:18:54,751 - (Re-)joining group central-telemetry-group
+2025-11-07 03:18:54,752 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:18:54,752 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:18:54,752 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:18:54,855 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:18:54,855 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-07 03:18:54,855 - (Re-)joining group central-telemetry-group
+2025-11-07 03:18:54,855 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:18:54,855 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-07 03:18:54,856 - (Re-)joining group central_processing_group
+2025-11-07 03:18:54,855 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:18:54,856 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-07 03:18:54,856 - (Re-)joining group central-control-group
+2025-11-07 03:18:57,869 - Elected group leader -- performing partition assignments using range
+2025-11-07 03:18:57,869 - Elected group leader -- performing partition assignments using range
+2025-11-07 03:18:57,870 - Elected group leader -- performing partition assignments using range
+2025-11-07 03:18:57,885 - Successfully joined group central_processing_group with generation 1
+2025-11-07 03:18:57,885 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0)]
+2025-11-07 03:18:57,885 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=0)} for group central_processing_group
+2025-11-07 03:18:57,885 - Successfully joined group central-control-group with generation 1
+2025-11-07 03:18:57,885 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-11-07 03:18:57,885 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-07 03:18:57,885 - Successfully joined group central-telemetry-group with generation 1
+2025-11-07 03:18:57,886 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0)]
+2025-11-07 03:18:57,886 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0)} for group central-telemetry-group
+2025-11-07 03:19:16,878 - [03:19:16] \u2705 NUEVO CP: Registro inicial de CP_001.
+2025-11-07 03:19:16,899 - [03:19:16] \u26a1 CP CP_001 registrado y conectado (C/Mayor, 45)
+2025-11-07 03:19:16,902 - [03:19:16] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:19:16,910 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:19:16,910 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:19:16,910 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 03:19:16,923 - [03:19:16] Telemetría inicial publicada para CP_001
+2025-11-07 03:19:16,942 - [03:19:16] AUTH OK enviado a CP_001
+2025-11-07 03:19:19,271 - [03:19:19] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:19,278 - [03:19:19] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:19:22,905 - [03:19:22] \u2705 NUEVO CP: Registro inicial de CP_002.
+2025-11-07 03:19:22,935 - [03:19:22] \u26a1 CP CP_002 registrado y conectado (C/Mayor, 45)
+2025-11-07 03:19:22,940 - [03:19:22] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:19:22,963 - [03:19:22] Telemetría inicial publicada para CP_002
+2025-11-07 03:19:22,989 - [03:19:22] AUTH OK enviado a CP_002
+2025-11-07 03:19:23,781 - [03:19:23] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:23,787 - [03:19:23] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:19:28,945 - [03:19:28] \u2705 NUEVO CP: Registro inicial de CP_003.
+2025-11-07 03:19:28,976 - [03:19:28] \u26a1 CP CP_003 registrado y conectado (C/Mayor, 45)
+2025-11-07 03:19:28,980 - [03:19:28] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:19:28,998 - [03:19:28] Telemetría inicial publicada para CP_003
+2025-11-07 03:19:29,014 - [03:19:29] AUTH OK enviado a CP_003
+2025-11-07 03:19:29,284 - [03:19:29] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:29,292 - [03:19:29] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:19:29,337 - [03:19:29] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:29,344 - [03:19:29] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:19:29,387 - [03:19:29] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:29,395 - [03:19:29] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:19:29,708 - [03:19:29] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:29,716 - [03:19:29] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:19:33,776 - [03:19:33] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:33,784 - [03:19:33] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:19:35,113 - [03:19:35] \u2705 NUEVO CP: Registro inicial de CP_004.
+2025-11-07 03:19:35,145 - [03:19:35] \u26a1 CP CP_004 registrado y conectado (C/Mayor, 45)
+2025-11-07 03:19:35,149 - [03:19:35] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:19:35,169 - [03:19:35] Telemetría inicial publicada para CP_004
+2025-11-07 03:19:35,187 - [03:19:35] AUTH OK enviado a CP_004
+2025-11-07 03:19:35,937 - [03:19:35] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:35,945 - [03:19:35] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:19:39,325 - [03:19:39] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:39,334 - [03:19:39] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:19:39,388 - [03:19:39] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:39,397 - [03:19:39] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:19:39,447 - [03:19:39] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:39,456 - [03:19:39] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:19:39,506 - [03:19:39] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:39,515 - [03:19:39] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:19:39,700 - [03:19:39] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:39,709 - [03:19:39] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:19:40,946 - [03:19:40] \u2705 NUEVO CP: Registro inicial de CP_005.
+2025-11-07 03:19:40,983 - [03:19:40] \u26a1 CP CP_005 registrado y conectado (C/Mayor, 45)
+2025-11-07 03:19:40,988 - [03:19:40] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:19:41,010 - [03:19:41] Telemetría inicial publicada para CP_005
+2025-11-07 03:19:41,029 - [03:19:41] AUTH OK enviado a CP_005
+2025-11-07 03:19:41,758 - [03:19:41] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:41,772 - [03:19:41] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:19:43,799 - [03:19:43] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:43,808 - [03:19:43] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:19:45,936 - [03:19:45] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:45,946 - [03:19:45] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:19:47,758 - [03:19:47] \U0001f4ca Telemetría de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:47,768 - [03:19:47] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:19:49,364 - [03:19:49] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:49,374 - [03:19:49] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:19:49,432 - [03:19:49] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:49,442 - [03:19:49] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:19:49,496 - [03:19:49] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:49,506 - [03:19:49] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:19:49,561 - [03:19:49] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:49,571 - [03:19:49] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:19:49,625 - [03:19:49] \U0001f4ca Telemetría de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:49,635 - [03:19:49] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:19:49,714 - [03:19:49] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:49,724 - [03:19:49] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:19:51,762 - [03:19:51] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:51,772 - [03:19:51] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:19:53,804 - [03:19:53] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:53,814 - [03:19:53] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:19:55,950 - [03:19:55] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:55,961 - [03:19:55] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:19:57,751 - [03:19:57] \U0001f4ca Telemetría de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:57,761 - [03:19:57] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:19:59,399 - [03:19:59] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:59,409 - [03:19:59] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:19:59,464 - [03:19:59] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:59,474 - [03:19:59] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:19:59,530 - [03:19:59] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:59,540 - [03:19:59] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:19:59,594 - [03:19:59] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:59,604 - [03:19:59] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:19:59,658 - [03:19:59] \U0001f4ca Telemetría de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:59,668 - [03:19:59] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:19:59,724 - [03:19:59] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:19:59,734 - [03:19:59] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:20:01,772 - [03:20:01] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:20:01,782 - [03:20:01] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:20:03,819 - [03:20:03] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:20:03,829 - [03:20:03] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:20:05,956 - [03:20:05] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:20:05,966 - [03:20:05] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:20:07,397 - [03:20:07] \U0001f697 Solicitud de Driver DRIVER_001 para CP CP_001: 46.0 kWh
+2025-11-07 03:20:07,399 - Topic driver_status_DRIVER_001 not found in cluster metadata
+2025-11-07 03:20:07,562 - [03:20:07] \U0001f4e2 Notificación a Driver DRIVER_001: RECIBIDA
+2025-11-07 03:20:07,568 - [03:20:07] [ESTADO] CP_001 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-07 03:20:07,669 - [03:20:07] \U0001f4e2 Notificación a Driver DRIVER_001: EN_ESPERA_CONFIRMACION
+2025-11-07 03:20:07,694 - [03:20:07] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=46.00 kWh
+2025-11-07 03:20:07,699 - [03:20:07] [FLUJO] Solicitud DRIVER_001 \u2192 CP_001 (46.0 kWh). Esperando confirmación de operador Central.
+2025-11-07 03:20:07,753 - [03:20:07] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:20:07,810 - [03:20:07] \U0001f4ca Telemetría de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:20:07,820 - [03:20:07] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:20:09,456 - [03:20:09] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=46.00 kWh
+2025-11-07 03:20:09,551 - [03:20:09] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:20:09,565 - [03:20:09] \U0001f697 Solicitud de Driver DRIVER_002 para CP CP_002: 18.0 kWh
+2025-11-07 03:20:09,567 - Topic driver_status_DRIVER_002 not found in cluster metadata
+2025-11-07 03:20:09,622 - [03:20:09] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:20:09,632 - [03:20:09] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:20:09,687 - [03:20:09] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:20:09,697 - [03:20:09] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:20:09,766 - [03:20:09] \U0001f4e2 Notificación a Driver DRIVER_002: RECIBIDA
+2025-11-07 03:20:09,799 - [03:20:09] [ESTADO] CP_002 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-07 03:20:09,800 - [03:20:09] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:20:09,810 - [03:20:09] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:20:09,865 - [03:20:09] \U0001f4ca Telemetría de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:20:09,879 - [03:20:09] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:24:10,216 - [03:24:10] [INICIO] 5 CP(s) marcados como Desconectado. Esperando conexiones...
+2025-11-07 03:24:10,220 - [03:24:10] Modo consola simple activado
+2025-11-07 03:24:10,234 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-07 03:24:10,238 - Updating subscribed topics to: ('central_commands',)
+2025-11-07 03:24:10,238 - Updating subscribed topics to: ('driver_requests',)
+2025-11-07 03:24:10,244 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:24:10,244 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:24:10,244 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:24:10,244 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:24:10,244 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:24:10,245 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:24:10,281 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:24:10,282 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:24:10,453 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:24:10,453 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-07 03:24:10,453 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:24:10,453 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-07 03:24:10,453 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:24:10,453 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-07 03:24:10,453 - Starting new heartbeat thread
+2025-11-07 03:24:10,453 - Starting new heartbeat thread
+2025-11-07 03:24:10,453 - Starting new heartbeat thread
+2025-11-07 03:24:10,454 - Revoking previously assigned partitions set() for group central-control-group
+2025-11-07 03:24:10,454 - Revoking previously assigned partitions set() for group central_processing_group
+2025-11-07 03:24:10,454 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-11-07 03:24:10,454 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:24:10,454 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:24:10,454 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:24:10,455 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:24:10,455 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 03:24:10,455 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:24:10,455 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 03:24:10,455 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:24:10,455 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 03:24:10,556 - (Re-)joining group central_processing_group
+2025-11-07 03:24:10,556 - (Re-)joining group central-control-group
+2025-11-07 03:24:10,556 - (Re-)joining group central-telemetry-group
+2025-11-07 03:24:10,557 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:24:10,557 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:24:10,557 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:24:10,557 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:24:10,557 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:24:10,557 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:24:10,560 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:24:10,560 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:24:10,560 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:24:10,663 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:24:10,663 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-07 03:24:10,663 - (Re-)joining group central-control-group
+2025-11-07 03:24:10,663 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:24:10,663 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-07 03:24:10,663 - (Re-)joining group central_processing_group
+2025-11-07 03:24:10,663 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:24:10,664 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-07 03:24:10,664 - (Re-)joining group central-telemetry-group
+2025-11-07 03:24:10,664 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:24:10,665 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:24:10,665 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:24:10,766 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:24:10,766 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-07 03:24:10,766 - (Re-)joining group central-control-group
+2025-11-07 03:24:10,768 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:24:10,768 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:24:10,768 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-07 03:24:10,768 - (Re-)joining group central_processing_group
+2025-11-07 03:24:10,768 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:24:10,768 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-07 03:24:10,769 - (Re-)joining group central-telemetry-group
+2025-11-07 03:24:10,770 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:24:10,770 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:24:10,871 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:24:10,871 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-07 03:24:10,871 - (Re-)joining group central-control-group
+2025-11-07 03:24:10,872 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:24:10,872 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-07 03:24:10,872 - (Re-)joining group central-telemetry-group
+2025-11-07 03:24:10,872 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:24:10,872 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-07 03:24:10,873 - (Re-)joining group central_processing_group
+2025-11-07 03:24:13,886 - Elected group leader -- performing partition assignments using range
+2025-11-07 03:24:13,886 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:24:13,886 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:24:13,886 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 03:24:13,887 - Elected group leader -- performing partition assignments using range
+2025-11-07 03:24:13,887 - Elected group leader -- performing partition assignments using range
+2025-11-07 03:24:13,888 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:24:13,888 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:24:13,888 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:24:13,888 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 03:24:13,888 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:24:13,889 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 03:24:13,901 - Successfully joined group central-control-group with generation 1
+2025-11-07 03:24:13,902 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-11-07 03:24:13,902 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-07 03:24:13,902 - Successfully joined group central_processing_group with generation 1
+2025-11-07 03:24:13,902 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0)]
+2025-11-07 03:24:13,902 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=0)} for group central_processing_group
+2025-11-07 03:24:13,902 - Successfully joined group central-telemetry-group with generation 1
+2025-11-07 03:24:13,902 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0)]
+2025-11-07 03:24:13,903 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0)} for group central-telemetry-group
+2025-11-07 03:24:38,857 - [03:24:38] \u2705 NUEVO CP: Registro inicial de CP_001.
+2025-11-07 03:24:38,880 - [03:24:38] \u26a1 CP CP_001 registrado y conectado (C/Mayor, 45)
+2025-11-07 03:24:38,883 - [03:24:38] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:24:38,894 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:24:38,895 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:24:38,895 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 03:24:38,908 - [03:24:38] Telemetría inicial publicada para CP_001
+2025-11-07 03:24:38,919 - [03:24:38] AUTH OK enviado a CP_001
+2025-11-07 03:24:44,934 - [03:24:44] \u2705 NUEVO CP: Registro inicial de CP_002.
+2025-11-07 03:24:44,958 - [03:24:44] \u26a1 CP CP_002 registrado y conectado (C/Mayor, 45)
+2025-11-07 03:24:44,961 - [03:24:44] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:24:44,982 - [03:24:44] Telemetría inicial publicada para CP_002
+2025-11-07 03:24:44,994 - [03:24:44] AUTH OK enviado a CP_002
+2025-11-07 03:24:45,279 - [03:24:45] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:24:45,285 - [03:24:45] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:24:45,324 - [03:24:45] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:24:45,330 - [03:24:45] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:24:45,830 - [03:24:45] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:24:45,836 - [03:24:45] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:24:50,826 - [03:24:50] \u2705 NUEVO CP: Registro inicial de CP_003.
+2025-11-07 03:24:50,855 - [03:24:50] \u26a1 CP CP_003 registrado y conectado (C/Mayor, 45)
+2025-11-07 03:24:50,859 - [03:24:50] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:24:50,883 - [03:24:50] Telemetría inicial publicada para CP_003
+2025-11-07 03:24:50,897 - [03:24:50] AUTH OK enviado a CP_003
+2025-11-07 03:24:51,776 - [03:24:51] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:24:51,783 - [03:24:51] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:24:55,311 - [03:24:55] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:24:55,319 - [03:24:55] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:24:55,367 - [03:24:55] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:24:55,376 - [03:24:55] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:24:55,420 - [03:24:55] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:24:55,429 - [03:24:55] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:24:55,817 - [03:24:55] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:24:55,826 - [03:24:55] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:24:57,134 - [03:24:57] \u2705 NUEVO CP: Registro inicial de CP_004.
+2025-11-07 03:24:57,167 - [03:24:57] \u26a1 CP CP_004 registrado y conectado (C/Mayor, 45)
+2025-11-07 03:24:57,172 - [03:24:57] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:24:57,195 - [03:24:57] Telemetría inicial publicada para CP_004
+2025-11-07 03:24:57,209 - [03:24:57] AUTH OK enviado a CP_004
+2025-11-07 03:24:57,983 - [03:24:57] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:24:57,991 - [03:24:57] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:25:01,779 - [03:25:01] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:25:01,788 - [03:25:01] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:25:03,725 - [03:25:03] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:25:03,734 - [03:25:03] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:25:05,342 - [03:25:05] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:25:05,352 - [03:25:05] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:25:05,405 - [03:25:05] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:25:05,414 - [03:25:05] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:25:05,464 - [03:25:05] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:25:05,473 - [03:25:05] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:25:05,523 - [03:25:05] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:25:05,532 - [03:25:05] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:25:05,829 - [03:25:05] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:25:05,838 - [03:25:05] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:25:07,980 - [03:25:07] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:25:07,989 - [03:25:07] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:25:11,785 - [03:25:11] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:25:11,794 - [03:25:11] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:25:13,720 - [03:25:13] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:25:13,729 - [03:25:13] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:25:15,372 - [03:25:15] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:25:15,381 - [03:25:15] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:25:15,433 - [03:25:15] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:25:15,441 - [03:25:15] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:25:15,492 - [03:25:15] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:25:15,502 - [03:25:15] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:25:15,552 - [03:25:15] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:25:15,561 - [03:25:15] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:25:15,840 - [03:25:15] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:25:15,849 - [03:25:15] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:25:16,509 - [03:25:16] \U0001f697 Solicitud de Driver DRIVER_001 para CP CP_001: 12.0 kWh
+2025-11-07 03:25:16,511 - Topic driver_status_DRIVER_001 not found in cluster metadata
+2025-11-07 03:25:16,670 - [03:25:16] \U0001f4e2 Notificación a Driver DRIVER_001: RECIBIDA
+2025-11-07 03:25:16,676 - [03:25:16] [ESTADO] CP_001 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-07 03:25:16,770 - [03:25:16] \U0001f4e2 Notificación a Driver DRIVER_001: EN_ESPERA_CONFIRMACION
+2025-11-07 03:25:16,792 - [03:25:16] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=12.00 kWh
+2025-11-07 03:25:16,797 - [03:25:16] [FLUJO] Solicitud DRIVER_001 \u2192 CP_001 (12.0 kWh). Esperando confirmación de operador Central.
+2025-11-07 03:25:16,846 - [03:25:16] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:25:18,000 - [03:25:17] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:25:18,009 - [03:25:18] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:25:18,617 - [03:25:18] \U0001f697 Solicitud de Driver DRIVER_002 para CP CP_002: 41.0 kWh
+2025-11-07 03:25:18,619 - Topic driver_status_DRIVER_002 not found in cluster metadata
+2025-11-07 03:25:18,772 - [03:25:18] \U0001f4e2 Notificación a Driver DRIVER_002: RECIBIDA
+2025-11-07 03:25:18,778 - [03:25:18] [ESTADO] CP_002 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-07 03:25:18,876 - [03:25:18] \U0001f4e2 Notificación a Driver DRIVER_002: EN_ESPERA_CONFIRMACION
+2025-11-07 03:25:18,910 - [03:25:18] [FLUJO] Solicitud DRIVER_002 \u2192 CP_002 (41.0 kWh). Esperando confirmación de operador Central.
+2025-11-07 03:25:18,911 - [03:25:18] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=41.00 kWh
+2025-11-07 03:25:18,961 - [03:25:18] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:25:20,450 - [03:25:20] \U0001f697 Solicitud de Driver DRIVER_003 para CP CP_003: 20.0 kWh
+2025-11-07 03:25:20,452 - Topic driver_status_DRIVER_003 not found in cluster metadata
+2025-11-07 03:25:20,610 - [03:25:20] \U0001f4e2 Notificación a Driver DRIVER_003: RECIBIDA
+2025-11-07 03:25:20,616 - [03:25:20] [ESTADO] CP_003 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-07 03:25:20,704 - [03:25:20] \U0001f4e2 Notificación a Driver DRIVER_003: EN_ESPERA_CONFIRMACION
+2025-11-07 03:25:20,738 - [03:25:20] [FLUJO] Solicitud DRIVER_003 \u2192 CP_003 (20.0 kWh). Esperando confirmación de operador Central.
+2025-11-07 03:25:20,739 - [03:25:20] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=20.00 kWh
+2025-11-07 03:25:20,789 - [03:25:20] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:25:21,814 - [03:25:21] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=41.00 kWh
+2025-11-07 03:25:21,867 - [03:25:21] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:25:22,543 - [03:25:22] \U0001f697 Solicitud de Driver DRIVER_004 para CP CP_004: 28.0 kWh
+2025-11-07 03:25:22,546 - Topic driver_status_DRIVER_004 not found in cluster metadata
+2025-11-07 03:25:22,708 - [03:25:22] \U0001f4e2 Notificación a Driver DRIVER_004: RECIBIDA
+2025-11-07 03:25:22,714 - [03:25:22] [ESTADO] CP_004 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-07 03:25:22,804 - [03:25:22] \U0001f4e2 Notificación a Driver DRIVER_004: EN_ESPERA_CONFIRMACION
+2025-11-07 03:25:22,838 - [03:25:22] [FLUJO] Solicitud DRIVER_004 \u2192 CP_004 (28.0 kWh). Esperando confirmación de operador Central.
+2025-11-07 03:25:22,839 - [03:25:22] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=28.00 kWh
+2025-11-07 03:25:22,889 - [03:25:22] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:25:23,732 - [03:25:23] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=28.00 kWh
+2025-11-07 03:25:23,786 - [03:25:23] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:25:25,406 - [03:25:25] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=12.00 kWh
+2025-11-07 03:25:25,456 - [03:25:25] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:25:25,516 - [03:25:25] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=41.00 kWh
+2025-11-07 03:25:25,568 - [03:25:25] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:25:25,628 - [03:25:25] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=20.00 kWh
+2025-11-07 03:25:25,681 - [03:25:25] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:25:25,742 - [03:25:25] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=28.00 kWh
+2025-11-07 03:25:25,793 - [03:25:25] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:25:25,857 - [03:25:25] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=12.00 kWh
+2025-11-07 03:25:25,908 - [03:25:25] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:25:28,002 - [03:25:27] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=20.00 kWh
+2025-11-07 03:25:28,053 - [03:25:28] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:25:31,811 - [03:25:31] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=41.00 kWh
+2025-11-07 03:25:31,863 - [03:25:31] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:25:33,737 - [03:25:33] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=28.00 kWh
+2025-11-07 03:25:33,790 - [03:25:33] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:25:35,435 - [03:25:35] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=12.00 kWh
+2025-11-07 03:25:35,486 - [03:25:35] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:25:35,544 - [03:25:35] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=41.00 kWh
+2025-11-07 03:25:35,596 - [03:25:35] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:25:35,651 - [03:25:35] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=20.00 kWh
+2025-11-07 03:25:35,703 - [03:25:35] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:25:35,758 - [03:25:35] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=28.00 kWh
+2025-11-07 03:25:35,811 - [03:25:35] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:25:35,871 - [03:25:35] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=12.00 kWh
+2025-11-07 03:25:35,925 - [03:25:35] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:25:38,013 - [03:25:38] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=20.00 kWh
+2025-11-07 03:25:38,066 - [03:25:38] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:25:41,823 - [03:25:41] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=41.00 kWh
+2025-11-07 03:25:41,873 - [03:25:41] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:25:43,468 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-07 03:25:43,469 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-07 03:25:43,469 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-07 03:25:43,469 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:43,469 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-07 03:25:43,469 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:43,469 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-07 03:25:43,470 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:43,469 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-07 03:25:43,470 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-07 03:25:43,469 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-07 03:25:43,470 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:43,470 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: Node Disconnected.
+2025-11-07 03:25:43,470 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: Socket EVENT_READ without in-flight-requests
+2025-11-07 03:25:43,470 - Node coordinator-1 connection failed -- refreshing metadata
+2025-11-07 03:25:43,470 - Marking the coordinator dead (node coordinator-1) for group central-control-group: Node Disconnected.
+2025-11-07 03:25:43,470 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: Node Disconnected.
+2025-11-07 03:25:43,471 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:43,471 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:43,471 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:43,471 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:43,471 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:43,471 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:43,532 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:43,532 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:43,533 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:43,533 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:43,533 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:43,572 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:43,572 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:43,573 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:43,572 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:43,573 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:43,573 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:43,573 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-07 03:25:43,573 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-07 03:25:43,572 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:43,573 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:43,573 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:43,573 - Error sending GroupCoordinatorRequest_v0 to node 1 [KafkaConnectionError: socket disconnected]
+2025-11-07 03:25:43,703 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:43,703 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:43,704 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:43,704 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:43,704 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:43,749 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:43,749 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:43,749 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:43,750 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:43,750 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:43,750 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:43,750 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:43,750 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:43,751 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:43,751 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:43,751 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:43,751 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:43,750 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:43,751 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:43,751 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:43,874 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:43,874 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:43,875 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:43,875 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:43,875 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:43,920 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:43,920 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:43,920 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:43,920 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:43,920 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:43,920 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:43,921 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:43,921 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:43,921 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:43,921 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:43,921 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:43,921 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:43,921 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:43,921 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:43,921 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:44,044 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:44,045 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:44,045 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:44,045 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:44,045 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:44,091 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:44,091 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:44,092 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:44,092 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:44,092 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:44,092 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:44,093 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:44,093 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:44,093 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:44,093 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:44,093 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:44,093 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:44,093 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:44,093 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:44,093 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:44,214 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:44,215 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:44,215 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:44,215 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:44,215 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:44,260 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:44,260 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:44,260 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:44,261 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:44,261 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:44,261 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:44,261 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:44,261 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:44,261 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:44,262 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:44,262 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:44,262 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:44,261 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:44,262 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:44,262 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:44,383 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:44,383 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:44,384 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:44,384 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:44,384 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:44,430 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:44,430 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:44,430 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:44,430 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:44,430 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:44,430 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:44,552 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:44,553 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:25:44,566 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:44,567 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:44,567 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:44,567 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:44,567 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:44,567 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:44,567 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:44,567 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:44,568 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:44,567 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: socket disconnected
+2025-11-07 03:25:44,568 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. KafkaConnectionError: socket disconnected
+2025-11-07 03:25:44,568 - Node 1 connection failed -- refreshing metadata
+2025-11-07 03:25:44,567 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:44,568 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:44,568 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:44,737 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:25:58,330 - [03:25:58] Monitor desconectado: CP_003
+2025-11-07 03:25:58,335 - [03:25:58] [ESTADO] CP_003 -> AVERÍA (antes: PENDIENTE_CONFIRMACION_CENTRAL). Motivo: Desconexión inesperada del CP
+2025-11-07 03:25:58,344 - [03:25:58] [INFO] CP_003 podrá reconectarse automáticamente al reiniciar su Monitor.
+2025-11-07 03:25:58,441 - [03:25:58] Monitor desconectado: CP_001
+2025-11-07 03:25:58,446 - [03:25:58] [ESTADO] CP_001 -> AVERÍA (antes: PENDIENTE_CONFIRMACION_CENTRAL). Motivo: Desconexión inesperada del CP
+2025-11-07 03:25:58,455 - [03:25:58] [INFO] CP_001 podrá reconectarse automáticamente al reiniciar su Monitor.
+2025-11-07 03:25:58,477 - [03:25:58] Monitor desconectado: CP_002
+2025-11-07 03:25:58,487 - [03:25:58] Monitor desconectado: CP_004
+2025-11-07 03:25:58,491 - [03:25:58] [ESTADO] CP_002 -> AVERÍA (antes: PENDIENTE_CONFIRMACION_CENTRAL). Motivo: Desconexión inesperada del CP
+2025-11-07 03:25:58,496 - [03:25:58] [ESTADO] CP_004 -> AVERÍA (antes: PENDIENTE_CONFIRMACION_CENTRAL). Motivo: Desconexión inesperada del CP
+2025-11-07 03:25:58,504 - [03:25:58] [INFO] CP_002 podrá reconectarse automáticamente al reiniciar su Monitor.
+2025-11-07 03:25:58,513 - [03:25:58] [INFO] CP_004 podrá reconectarse automáticamente al reiniciar su Monitor.
+2025-11-07 03:26:02,506 - [03:26:02] [\u26a0\ufe0f] CP CP_001 sin telemetría hace 26s y socket cerrado \u2192 DESCONECTADO
+2025-11-07 03:26:02,510 - [03:26:02] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-11-07 03:26:02,515 - [03:26:02] [\u26a0\ufe0f] CP CP_002 sin telemetría hace 20s y socket cerrado \u2192 DESCONECTADO
+2025-11-07 03:26:02,519 - [03:26:02] [ESTADO] CP_002 -> DESCONECTADO (antes: AVERÍA).
+2025-11-07 03:26:02,524 - [03:26:02] [\u26a0\ufe0f] CP CP_003 sin telemetría hace 23s y socket cerrado \u2192 DESCONECTADO
+2025-11-07 03:26:02,529 - [03:26:02] [ESTADO] CP_003 -> DESCONECTADO (antes: AVERÍA).
+2025-11-07 03:26:02,533 - [03:26:02] [\u26a0\ufe0f] CP CP_004 sin telemetría hace 27s y socket cerrado \u2192 DESCONECTADO
+2025-11-07 03:26:02,538 - [03:26:02] [ESTADO] CP_004 -> DESCONECTADO (antes: AVERÍA).
+2025-11-07 03:26:33,926 - [03:26:33] [INICIO] 4 CP(s) marcados como Desconectado. Esperando conexiones...
+2025-11-07 03:26:33,930 - [03:26:33] Modo consola simple activado
+2025-11-07 03:26:33,944 - Updating subscribed topics to: ('telemetria_cp',)
+2025-11-07 03:26:33,947 - Updating subscribed topics to: ('driver_requests',)
+2025-11-07 03:26:33,945 - Updating subscribed topics to: ('central_commands',)
+2025-11-07 03:26:33,953 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:26:33,954 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:26:33,954 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:26:33,954 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:26:33,954 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:26:33,954 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:26:33,984 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:26:33,985 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:26:34,160 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:26:34,161 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-07 03:26:34,161 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:26:34,161 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-07 03:26:34,161 - Starting new heartbeat thread
+2025-11-07 03:26:34,161 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:26:34,161 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-07 03:26:34,161 - Starting new heartbeat thread
+2025-11-07 03:26:34,161 - Revoking previously assigned partitions set() for group central_processing_group
+2025-11-07 03:26:34,162 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-11-07 03:26:34,161 - Starting new heartbeat thread
+2025-11-07 03:26:34,162 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:26:34,162 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:26:34,162 - Revoking previously assigned partitions set() for group central-control-group
+2025-11-07 03:26:34,162 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:26:34,163 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:26:34,163 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 03:26:34,163 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:26:34,163 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 03:26:34,163 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:26:34,163 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 03:26:34,263 - (Re-)joining group central-telemetry-group
+2025-11-07 03:26:34,264 - (Re-)joining group central-control-group
+2025-11-07 03:26:34,264 - (Re-)joining group central_processing_group
+2025-11-07 03:26:34,267 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:26:34,267 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:26:34,267 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:26:34,368 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:26:34,368 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:26:34,368 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:26:34,368 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:26:34,368 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:26:34,369 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:26:34,470 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:26:34,471 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-07 03:26:34,471 - (Re-)joining group central-control-group
+2025-11-07 03:26:34,471 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:26:34,471 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-07 03:26:34,471 - (Re-)joining group central_processing_group
+2025-11-07 03:26:34,471 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:26:34,471 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-07 03:26:34,471 - (Re-)joining group central-telemetry-group
+2025-11-07 03:26:34,472 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:26:34,472 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:26:34,473 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-11-07 03:26:34,575 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:26:34,575 - Discovered coordinator coordinator-1 for group central-control-group
+2025-11-07 03:26:34,575 - (Re-)joining group central-control-group
+2025-11-07 03:26:34,575 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:26:34,575 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-11-07 03:26:34,575 - (Re-)joining group central-telemetry-group
+2025-11-07 03:26:34,575 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-11-07 03:26:34,576 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-11-07 03:26:34,576 - (Re-)joining group central_processing_group
+2025-11-07 03:26:37,590 - Elected group leader -- performing partition assignments using range
+2025-11-07 03:26:37,591 - Elected group leader -- performing partition assignments using range
+2025-11-07 03:26:37,592 - Elected group leader -- performing partition assignments using range
+2025-11-07 03:26:37,604 - Successfully joined group central-control-group with generation 1
+2025-11-07 03:26:37,604 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-11-07 03:26:37,605 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-11-07 03:26:37,604 - Successfully joined group central_processing_group with generation 1
+2025-11-07 03:26:37,605 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0)]
+2025-11-07 03:26:37,605 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=0)} for group central_processing_group
+2025-11-07 03:26:37,605 - Successfully joined group central-telemetry-group with generation 1
+2025-11-07 03:26:37,605 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0)]
+2025-11-07 03:26:37,605 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0)} for group central-telemetry-group
+2025-11-07 03:27:00,903 - [03:27:00] \u2705 NUEVO CP: Registro inicial de CP_001.
+2025-11-07 03:27:00,925 - [03:27:00] \u26a1 CP CP_001 registrado y conectado (C/Mayor, 45)
+2025-11-07 03:27:00,928 - [03:27:00] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:27:00,939 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-11-07 03:27:00,939 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-11-07 03:27:00,939 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-11-07 03:27:00,952 - [03:27:00] Telemetría inicial publicada para CP_001
+2025-11-07 03:27:00,963 - [03:27:00] AUTH OK enviado a CP_001
+2025-11-07 03:27:06,900 - [03:27:06] \u2705 NUEVO CP: Registro inicial de CP_002.
+2025-11-07 03:27:06,924 - [03:27:06] \u26a1 CP CP_002 registrado y conectado (C/Mayor, 45)
+2025-11-07 03:27:06,927 - [03:27:06] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:27:06,947 - [03:27:06] Telemetría inicial publicada para CP_002
+2025-11-07 03:27:06,959 - [03:27:06] AUTH OK enviado a CP_002
+2025-11-07 03:27:07,739 - [03:27:07] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:07,746 - [03:27:07] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:27:08,997 - [03:27:08] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:09,004 - [03:27:09] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:27:09,047 - [03:27:09] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:09,054 - [03:27:09] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:27:12,912 - [03:27:12] \u2705 NUEVO CP: Registro inicial de CP_003.
+2025-11-07 03:27:12,943 - [03:27:12] \u26a1 CP CP_003 registrado y conectado (C/Mayor, 45)
+2025-11-07 03:27:12,947 - [03:27:12] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:27:12,968 - [03:27:12] Telemetría inicial publicada para CP_003
+2025-11-07 03:27:12,981 - [03:27:12] AUTH OK enviado a CP_003
+2025-11-07 03:27:13,733 - [03:27:13] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:13,741 - [03:27:13] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:27:17,746 - [03:27:17] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:17,755 - [03:27:17] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:27:19,025 - [03:27:19] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:19,033 - [03:27:19] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:27:19,079 - [03:27:19] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:19,088 - [03:27:19] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:27:19,117 - [03:27:19] \u2705 NUEVO CP: Registro inicial de CP_004.
+2025-11-07 03:27:19,170 - [03:27:19] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:19,178 - [03:27:19] \u26a1 CP CP_004 registrado y conectado (C/Mayor, 45)
+2025-11-07 03:27:19,186 - [03:27:19] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:27:19,189 - [03:27:19] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:27:19,212 - [03:27:19] Telemetría inicial publicada para CP_004
+2025-11-07 03:27:19,226 - [03:27:19] AUTH OK enviado a CP_004
+2025-11-07 03:27:19,887 - [03:27:19] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:19,896 - [03:27:19] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:27:23,748 - [03:27:23] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:23,758 - [03:27:23] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:27:24,896 - [03:27:24] \u2705 NUEVO CP: Registro inicial de CP_005.
+2025-11-07 03:27:24,931 - [03:27:24] \u26a1 CP CP_005 registrado y conectado (C/Mayor, 45)
+2025-11-07 03:27:24,936 - [03:27:24] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:27:24,965 - [03:27:24] Telemetría inicial publicada para CP_005
+2025-11-07 03:27:24,981 - [03:27:24] AUTH OK enviado a CP_005
+2025-11-07 03:27:25,731 - [03:27:25] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:25,739 - [03:27:25] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:27:27,776 - [03:27:27] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:27,786 - [03:27:27] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:27:29,065 - [03:27:29] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:29,075 - [03:27:29] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:27:29,132 - [03:27:29] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:29,142 - [03:27:29] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:27:29,201 - [03:27:29] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:29,211 - [03:27:29] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:27:29,267 - [03:27:29] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:29,276 - [03:27:29] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:27:29,332 - [03:27:29] \U0001f4ca Telemetría de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:29,341 - [03:27:29] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:27:29,894 - [03:27:29] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:29,904 - [03:27:29] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:27:30,988 - [03:27:30] \u2705 NUEVO CP: Registro inicial de CP_006.
+2025-11-07 03:27:31,027 - [03:27:31] \u26a1 CP CP_006 registrado y conectado (C/Mayor, 45)
+2025-11-07 03:27:31,032 - [03:27:31] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:27:31,056 - [03:27:31] Telemetría inicial publicada para CP_006
+2025-11-07 03:27:31,084 - [03:27:31] AUTH OK enviado a CP_006
+2025-11-07 03:27:31,849 - [03:27:31] \U0001f4ca Telemetría de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:31,859 - [03:27:31] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:27:33,753 - [03:27:33] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:33,763 - [03:27:33] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:27:35,729 - [03:27:35] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:35,740 - [03:27:35] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:27:37,784 - [03:27:37] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:37,794 - [03:27:37] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:27:37,937 - [03:27:37] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:37,948 - [03:27:37] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:27:39,114 - [03:27:39] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:39,124 - [03:27:39] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:27:39,185 - [03:27:39] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:39,196 - [03:27:39] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:27:39,255 - [03:27:39] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:39,265 - [03:27:39] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:27:39,323 - [03:27:39] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:39,333 - [03:27:39] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:27:39,390 - [03:27:39] \U0001f4ca Telemetría de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:39,401 - [03:27:39] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:27:39,457 - [03:27:39] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:39,468 - [03:27:39] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:27:39,896 - [03:27:39] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:39,908 - [03:27:39] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:27:41,845 - [03:27:41] \U0001f4ca Telemetría de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:41,856 - [03:27:41] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:27:43,759 - [03:27:43] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:43,770 - [03:27:43] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:27:45,741 - [03:27:45] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:45,753 - [03:27:45] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:27:47,789 - [03:27:47] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:47,800 - [03:27:47] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:27:47,932 - [03:27:47] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:47,944 - [03:27:47] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:27:49,174 - [03:27:49] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:49,185 - [03:27:49] [ESTADO] CP_001 -> ACTIVADO.
+2025-11-07 03:27:49,243 - [03:27:49] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:49,254 - [03:27:49] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:27:49,310 - [03:27:49] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:49,321 - [03:27:49] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:27:49,378 - [03:27:49] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:49,389 - [03:27:49] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:27:49,446 - [03:27:49] \U0001f4ca Telemetría de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:49,456 - [03:27:49] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:27:49,513 - [03:27:49] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:49,524 - [03:27:49] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:27:49,903 - [03:27:49] \U0001f4ca Telemetría de CP_003: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:49,914 - [03:27:49] [ESTADO] CP_003 -> ACTIVADO.
+2025-11-07 03:27:51,849 - [03:27:51] \U0001f4ca Telemetría de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:51,860 - [03:27:51] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:27:52,331 - [03:27:52] \U0001f697 Solicitud de Driver DRIVER_001 para CP CP_001: 26.0 kWh
+2025-11-07 03:27:52,387 - [03:27:52] \U0001f4e2 Notificación a Driver DRIVER_001: RECIBIDA
+2025-11-07 03:27:52,395 - [03:27:52] [ESTADO] CP_001 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-07 03:27:52,509 - [03:27:52] \U0001f4e2 Notificación a Driver DRIVER_001: EN_ESPERA_CONFIRMACION
+2025-11-07 03:27:52,535 - [03:27:52] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:27:52,540 - [03:27:52] [FLUJO] Solicitud DRIVER_001 \u2192 CP_001 (26.0 kWh). Esperando confirmación de operador Central.
+2025-11-07 03:27:52,598 - [03:27:52] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:27:53,769 - [03:27:53] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:53,779 - [03:27:53] [ESTADO] CP_002 -> ACTIVADO.
+2025-11-07 03:27:54,461 - [03:27:54] \U0001f697 Solicitud de Driver DRIVER_002 para CP CP_002: 23.0 kWh
+2025-11-07 03:27:54,515 - [03:27:54] \U0001f4e2 Notificación a Driver DRIVER_002: RECIBIDA
+2025-11-07 03:27:54,521 - [03:27:54] [ESTADO] CP_002 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-07 03:27:54,626 - [03:27:54] \U0001f4e2 Notificación a Driver DRIVER_002: EN_ESPERA_CONFIRMACION
+2025-11-07 03:27:54,652 - [03:27:54] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:27:54,657 - [03:27:54] [FLUJO] Solicitud DRIVER_002 \u2192 CP_002 (23.0 kWh). Esperando confirmación de operador Central.
+2025-11-07 03:27:54,713 - [03:27:54] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:27:55,748 - [03:27:55] \U0001f4ca Telemetría de CP_004: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:55,759 - [03:27:55] [ESTADO] CP_004 -> ACTIVADO.
+2025-11-07 03:27:56,607 - [03:27:56] \U0001f697 Solicitud de Driver DRIVER_003 para CP CP_003: 39.0 kWh
+2025-11-07 03:27:56,664 - [03:27:56] \U0001f4e2 Notificación a Driver DRIVER_003: RECIBIDA
+2025-11-07 03:27:56,670 - [03:27:56] [ESTADO] CP_003 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-07 03:27:56,773 - [03:27:56] \U0001f4e2 Notificación a Driver DRIVER_003: EN_ESPERA_CONFIRMACION
+2025-11-07 03:27:56,815 - [03:27:56] [FLUJO] Solicitud DRIVER_003 \u2192 CP_003 (39.0 kWh). Esperando confirmación de operador Central.
+2025-11-07 03:27:56,815 - [03:27:56] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:27:56,878 - [03:27:56] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:27:57,801 - [03:27:57] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:27:57,865 - [03:27:57] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:27:57,940 - [03:27:57] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:57,951 - [03:27:57] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:27:58,902 - [03:27:58] \U0001f697 Solicitud de Driver DRIVER_004 para CP CP_004: 11.0 kWh
+2025-11-07 03:27:58,958 - [03:27:58] \U0001f4e2 Notificación a Driver DRIVER_004: RECIBIDA
+2025-11-07 03:27:58,965 - [03:27:58] [ESTADO] CP_004 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-07 03:27:59,076 - [03:27:59] \U0001f4e2 Notificación a Driver DRIVER_004: EN_ESPERA_CONFIRMACION
+2025-11-07 03:27:59,103 - [03:27:59] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:27:59,109 - [03:27:59] [FLUJO] Solicitud DRIVER_004 \u2192 CP_004 (11.0 kWh). Esperando confirmación de operador Central.
+2025-11-07 03:27:59,178 - [03:27:59] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:27:59,270 - [03:27:59] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:27:59,332 - [03:27:59] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:27:59,395 - [03:27:59] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:27:59,451 - [03:27:59] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:27:59,514 - [03:27:59] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:27:59,572 - [03:27:59] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:27:59,635 - [03:27:59] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:27:59,692 - [03:27:59] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:27:59,747 - [03:27:59] \U0001f4ca Telemetría de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:59,758 - [03:27:59] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:27:59,814 - [03:27:59] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:27:59,824 - [03:27:59] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:27:59,922 - [03:27:59] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:27:59,978 - [03:27:59] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:28:00,659 - [03:28:00] \U0001f697 Solicitud de Driver DRIVER_005 para CP CP_004: 17.0 kWh
+2025-11-07 03:28:00,661 - Topic driver_status_DRIVER_005 not found in cluster metadata
+2025-11-07 03:28:00,825 - [03:28:00] \U0001f4e2 Notificación a Driver DRIVER_005: RECIBIDA
+2025-11-07 03:28:00,900 - [03:28:00] \U0001f4e2 Notificación a Driver DRIVER_005: EN_COLA
+2025-11-07 03:28:00,906 - [03:28:00] Driver DRIVER_005 en cola para CP_004 (posición 1)
+2025-11-07 03:28:01,854 - [03:28:01] \U0001f4ca Telemetría de CP_005: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:28:01,865 - [03:28:01] [ESTADO] CP_005 -> ACTIVADO.
+2025-11-07 03:28:02,773 - [03:28:02] \U0001f697 Solicitud de Driver DRIVER_006 para CP CP_005: 23.0 kWh
+2025-11-07 03:28:02,775 - Topic driver_status_DRIVER_006 not found in cluster metadata
+2025-11-07 03:28:02,937 - [03:28:02] \U0001f4e2 Notificación a Driver DRIVER_006: RECIBIDA
+2025-11-07 03:28:02,944 - [03:28:02] [ESTADO] CP_005 -> PENDIENTE_CONFIRMACION_CENTRAL (antes: ACTIVADO).
+2025-11-07 03:28:03,056 - [03:28:03] \U0001f4e2 Notificación a Driver DRIVER_006: EN_ESPERA_CONFIRMACION
+2025-11-07 03:28:03,082 - [03:28:03] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:03,087 - [03:28:03] [FLUJO] Solicitud DRIVER_006 \u2192 CP_005 (23.0 kWh). Esperando confirmación de operador Central.
+2025-11-07 03:28:03,145 - [03:28:03] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:28:03,782 - [03:28:03] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:03,842 - [03:28:03] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:28:05,754 - [03:28:05] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:28:05,810 - [03:28:05] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:28:07,810 - [03:28:07] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:28:07,869 - [03:28:07] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:28:07,946 - [03:28:07] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:28:07,962 - [03:28:07] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:28:09,320 - [03:28:09] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:28:09,381 - [03:28:09] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:28:09,447 - [03:28:09] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:09,510 - [03:28:09] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:28:09,574 - [03:28:09] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:28:09,637 - [03:28:09] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:28:09,706 - [03:28:09] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:28:09,770 - [03:28:09] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:28:09,833 - [03:28:09] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:09,897 - [03:28:09] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:28:09,958 - [03:28:09] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:28:09,969 - [03:28:09] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:28:10,038 - [03:28:10] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:28:10,095 - [03:28:10] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:28:11,896 - [03:28:11] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:11,958 - [03:28:11] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:28:13,798 - [03:28:13] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:13,857 - [03:28:13] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:28:15,765 - [03:28:15] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:28:15,825 - [03:28:15] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:28:17,825 - [03:28:17] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:28:17,938 - [03:28:17] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:28:18,008 - [03:28:18] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:28:18,019 - [03:28:18] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:28:19,364 - [03:28:19] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:28:19,415 - [03:28:19] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:28:19,469 - [03:28:19] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:19,518 - [03:28:19] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:28:19,570 - [03:28:19] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:28:19,620 - [03:28:19] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:28:19,672 - [03:28:19] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:28:19,720 - [03:28:19] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:28:19,772 - [03:28:19] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:19,820 - [03:28:19] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:28:19,869 - [03:28:19] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:28:19,878 - [03:28:19] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:28:19,933 - [03:28:19] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:28:19,981 - [03:28:19] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:28:21,876 - [03:28:21] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:21,929 - [03:28:21] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:28:23,799 - [03:28:23] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:23,853 - [03:28:23] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:28:25,775 - [03:28:25] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:28:25,828 - [03:28:25] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:28:27,823 - [03:28:27] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:28:27,872 - [03:28:27] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:28:27,943 - [03:28:27] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:28:27,952 - [03:28:27] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:28:29,423 - [03:28:29] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:28:29,476 - [03:28:29] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:28:29,541 - [03:28:29] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:29,594 - [03:28:29] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:28:29,655 - [03:28:29] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:28:29,707 - [03:28:29] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:28:29,764 - [03:28:29] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:28:29,814 - [03:28:29] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:28:29,868 - [03:28:29] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:29,917 - [03:28:29] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:28:29,968 - [03:28:29] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:28:29,977 - [03:28:29] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:28:30,033 - [03:28:30] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:28:30,081 - [03:28:30] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:28:31,898 - [03:28:31] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:31,952 - [03:28:31] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:28:33,810 - [03:28:33] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:33,862 - [03:28:33] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:28:35,770 - [03:28:35] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:28:35,822 - [03:28:35] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:28:37,835 - [03:28:37] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:28:37,888 - [03:28:37] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:28:37,954 - [03:28:37] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:28:37,963 - [03:28:37] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:28:39,480 - [03:28:39] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:28:39,533 - [03:28:39] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:28:39,591 - [03:28:39] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:39,645 - [03:28:39] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:28:39,702 - [03:28:39] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:28:39,756 - [03:28:39] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:28:39,811 - [03:28:39] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:28:39,862 - [03:28:39] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:28:39,914 - [03:28:39] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:39,962 - [03:28:39] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:28:40,010 - [03:28:40] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:28:40,019 - [03:28:40] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:28:40,074 - [03:28:40] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:28:40,123 - [03:28:40] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:28:41,894 - [03:28:41] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:41,947 - [03:28:41] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:28:43,815 - [03:28:43] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:43,867 - [03:28:43] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:28:45,782 - [03:28:45] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:28:45,834 - [03:28:45] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:28:47,848 - [03:28:47] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:28:47,901 - [03:28:47] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:28:47,960 - [03:28:47] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:28:47,970 - [03:28:47] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:28:49,529 - [03:28:49] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:28:49,577 - [03:28:49] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:28:49,630 - [03:28:49] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:49,678 - [03:28:49] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:28:49,729 - [03:28:49] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:28:49,777 - [03:28:49] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:28:49,830 - [03:28:49] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:28:49,880 - [03:28:49] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:28:49,932 - [03:28:49] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:49,980 - [03:28:49] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:28:50,028 - [03:28:50] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:28:50,037 - [03:28:50] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:28:50,091 - [03:28:50] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:28:50,138 - [03:28:50] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:28:51,902 - [03:28:51] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:51,955 - [03:28:51] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:28:53,831 - [03:28:53] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:53,884 - [03:28:53] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:28:55,796 - [03:28:55] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:28:55,849 - [03:28:55] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:28:57,853 - [03:28:57] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:28:57,905 - [03:28:57] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:28:57,969 - [03:28:57] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:28:57,979 - [03:28:57] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:28:59,597 - [03:28:59] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:28:59,649 - [03:28:59] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:28:59,709 - [03:28:59] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:28:59,762 - [03:28:59] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:28:59,820 - [03:28:59] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:28:59,874 - [03:28:59] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:28:59,934 - [03:28:59] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:28:59,987 - [03:28:59] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:29:00,044 - [03:29:00] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:00,093 - [03:29:00] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:29:00,144 - [03:29:00] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:29:00,152 - [03:29:00] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:29:00,210 - [03:29:00] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:29:00,259 - [03:29:00] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:29:01,916 - [03:29:01] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:01,968 - [03:29:01] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:29:03,840 - [03:29:03] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:03,892 - [03:29:03] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:29:05,801 - [03:29:05] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:29:05,855 - [03:29:05] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:29:07,865 - [03:29:07] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:29:07,918 - [03:29:07] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:29:07,977 - [03:29:07] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:29:07,986 - [03:29:07] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:29:09,669 - [03:29:09] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:29:09,723 - [03:29:09] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:29:09,780 - [03:29:09] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:09,833 - [03:29:09] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:29:09,889 - [03:29:09] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:29:09,942 - [03:29:09] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:29:09,998 - [03:29:09] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:29:10,052 - [03:29:10] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:29:10,106 - [03:29:10] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:10,155 - [03:29:10] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:29:10,204 - [03:29:10] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:29:10,213 - [03:29:10] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:29:10,268 - [03:29:10] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:29:10,317 - [03:29:10] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:29:11,912 - [03:29:11] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:11,960 - [03:29:11] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:29:13,848 - [03:29:13] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:13,900 - [03:29:13] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:29:15,807 - [03:29:15] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:29:15,859 - [03:29:15] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:29:17,880 - [03:29:17] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:29:17,942 - [03:29:17] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:29:18,002 - [03:29:17] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:29:18,013 - [03:29:18] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:29:19,723 - [03:29:19] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:29:19,783 - [03:29:19] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:29:19,846 - [03:29:19] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:19,903 - [03:29:19] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:29:19,963 - [03:29:19] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:29:20,021 - [03:29:20] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:29:20,081 - [03:29:20] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:29:20,137 - [03:29:20] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:29:20,198 - [03:29:20] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:20,255 - [03:29:20] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:29:20,312 - [03:29:20] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:29:20,322 - [03:29:20] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:29:20,386 - [03:29:20] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:29:20,442 - [03:29:20] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:29:21,959 - [03:29:21] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:22,018 - [03:29:22] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:29:23,867 - [03:29:23] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:23,924 - [03:29:23] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:29:25,831 - [03:29:25] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:29:25,890 - [03:29:25] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:29:27,909 - [03:29:27] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:29:27,968 - [03:29:27] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:29:28,026 - [03:29:28] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:29:28,036 - [03:29:28] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:29:29,781 - [03:29:29] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:29:29,837 - [03:29:29] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:29:29,904 - [03:29:29] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:29,960 - [03:29:29] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:29:30,022 - [03:29:30] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:29:30,079 - [03:29:30] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:29:30,141 - [03:29:30] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:29:30,198 - [03:29:30] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:29:30,259 - [03:29:30] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:30,317 - [03:29:30] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:29:30,374 - [03:29:30] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:29:30,384 - [03:29:30] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:29:30,446 - [03:29:30] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:29:30,502 - [03:29:30] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:29:31,947 - [03:29:31] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:32,006 - [03:29:32] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:29:33,880 - [03:29:33] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:33,943 - [03:29:33] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:29:35,835 - [03:29:35] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:29:35,894 - [03:29:35] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:29:37,906 - [03:29:37] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:29:37,970 - [03:29:37] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:29:38,031 - [03:29:38] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:29:38,041 - [03:29:38] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:29:39,843 - [03:29:39] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:29:39,901 - [03:29:39] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:29:39,966 - [03:29:39] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:40,031 - [03:29:40] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:29:40,095 - [03:29:40] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:29:40,154 - [03:29:40] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:29:40,221 - [03:29:40] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:29:40,280 - [03:29:40] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:29:40,340 - [03:29:40] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:40,396 - [03:29:40] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:29:40,455 - [03:29:40] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:29:40,466 - [03:29:40] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:29:40,531 - [03:29:40] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:29:40,588 - [03:29:40] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:29:41,961 - [03:29:41] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:42,026 - [03:29:42] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:29:43,891 - [03:29:43] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:43,950 - [03:29:43] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:29:45,844 - [03:29:45] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:29:45,904 - [03:29:45] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:29:47,910 - [03:29:47] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:29:47,969 - [03:29:47] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:29:48,029 - [03:29:48] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:29:48,040 - [03:29:48] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:29:49,903 - [03:29:49] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:29:49,961 - [03:29:49] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:29:50,024 - [03:29:50] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:50,088 - [03:29:50] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:29:50,152 - [03:29:50] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:29:50,212 - [03:29:50] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:29:50,283 - [03:29:50] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:29:50,350 - [03:29:50] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:29:50,411 - [03:29:50] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:50,467 - [03:29:50] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:29:50,524 - [03:29:50] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:29:50,534 - [03:29:50] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:29:50,594 - [03:29:50] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:29:50,651 - [03:29:50] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:29:51,962 - [03:29:51] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:52,020 - [03:29:52] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:29:53,890 - [03:29:53] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:29:53,948 - [03:29:53] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:29:55,853 - [03:29:55] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:29:55,910 - [03:29:55] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:29:57,921 - [03:29:57] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:29:57,979 - [03:29:57] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:29:58,040 - [03:29:58] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:29:58,051 - [03:29:58] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:29:59,972 - [03:29:59] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:30:00,032 - [03:30:00] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:30:00,099 - [03:30:00] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:00,159 - [03:30:00] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:30:00,228 - [03:30:00] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:30:00,287 - [03:30:00] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:30:00,350 - [03:30:00] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:30:00,408 - [03:30:00] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:30:00,469 - [03:30:00] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:00,527 - [03:30:00] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:30:00,582 - [03:30:00] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:30:00,593 - [03:30:00] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:30:00,654 - [03:30:00] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:30:00,710 - [03:30:00] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:30:01,966 - [03:30:01] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:02,026 - [03:30:02] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:30:03,906 - [03:30:03] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:03,965 - [03:30:03] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:30:05,863 - [03:30:05] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:30:05,922 - [03:30:05] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:30:07,927 - [03:30:07] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:30:07,983 - [03:30:07] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:30:08,041 - [03:30:08] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:30:08,052 - [03:30:08] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:30:10,032 - [03:30:10] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:30:10,090 - [03:30:10] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:30:10,156 - [03:30:10] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:10,216 - [03:30:10] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:30:10,279 - [03:30:10] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:30:10,343 - [03:30:10] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:30:10,405 - [03:30:10] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:30:10,461 - [03:30:10] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:30:10,521 - [03:30:10] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:30:10,579 - [03:30:10] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:30:10,638 - [03:30:10] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:10,695 - [03:30:10] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:30:10,752 - [03:30:10] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:30:10,762 - [03:30:10] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:30:11,975 - [03:30:11] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:12,034 - [03:30:12] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:30:13,917 - [03:30:13] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:13,977 - [03:30:13] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:30:15,873 - [03:30:15] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:30:15,933 - [03:30:15] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:30:17,935 - [03:30:17] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:30:17,990 - [03:30:17] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:30:18,047 - [03:30:18] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:30:18,057 - [03:30:18] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:30:20,033 - [03:30:20] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:30:20,124 - [03:30:20] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:30:20,187 - [03:30:20] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:30:20,247 - [03:30:20] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:30:20,324 - [03:30:20] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:20,380 - [03:30:20] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:30:20,447 - [03:30:20] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:30:20,505 - [03:30:20] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:30:20,565 - [03:30:20] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:30:20,623 - [03:30:20] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:30:20,683 - [03:30:20] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:20,739 - [03:30:20] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:30:20,793 - [03:30:20] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:30:20,804 - [03:30:20] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:30:21,981 - [03:30:21] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:22,036 - [03:30:22] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:30:23,921 - [03:30:23] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:23,977 - [03:30:23] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:30:25,886 - [03:30:25] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:30:25,944 - [03:30:25] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:30:27,950 - [03:30:27] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:30:28,009 - [03:30:28] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:30:28,074 - [03:30:28] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:30:28,085 - [03:30:28] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:30:30,033 - [03:30:30] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:30:30,091 - [03:30:30] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:30:30,199 - [03:30:30] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:30:30,258 - [03:30:30] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:30:30,325 - [03:30:30] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:30,382 - [03:30:30] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:30:30,443 - [03:30:30] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:30:30,500 - [03:30:30] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:30:30,572 - [03:30:30] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:30:30,629 - [03:30:30] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:30:30,689 - [03:30:30] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:30,746 - [03:30:30] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:30:30,807 - [03:30:30] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:30:30,817 - [03:30:30] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:30:32,013 - [03:30:32] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:32,071 - [03:30:32] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:30:33,938 - [03:30:33] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:33,996 - [03:30:33] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:30:35,897 - [03:30:35] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:30:35,955 - [03:30:35] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:30:37,959 - [03:30:37] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:30:38,018 - [03:30:38] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:30:38,078 - [03:30:38] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:30:38,089 - [03:30:38] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:30:40,040 - [03:30:40] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:30:40,097 - [03:30:40] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:30:40,255 - [03:30:40] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:30:40,312 - [03:30:40] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:30:40,374 - [03:30:40] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:40,430 - [03:30:40] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:30:40,491 - [03:30:40] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:30:40,548 - [03:30:40] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:30:40,608 - [03:30:40] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:30:40,671 - [03:30:40] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:30:40,731 - [03:30:40] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:40,785 - [03:30:40] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:30:40,841 - [03:30:40] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:30:40,851 - [03:30:40] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:30:42,002 - [03:30:41] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:42,063 - [03:30:42] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:30:43,946 - [03:30:43] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:44,005 - [03:30:43] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:30:45,906 - [03:30:45] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:30:45,965 - [03:30:45] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:30:47,967 - [03:30:47] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:30:48,025 - [03:30:48] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:30:48,083 - [03:30:48] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:30:48,094 - [03:30:48] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:30:50,050 - [03:30:50] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:30:50,107 - [03:30:50] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:30:50,321 - [03:30:50] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:30:50,379 - [03:30:50] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:30:50,442 - [03:30:50] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:50,498 - [03:30:50] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:30:50,558 - [03:30:50] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:30:50,614 - [03:30:50] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:30:50,679 - [03:30:50] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:30:50,739 - [03:30:50] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:30:50,799 - [03:30:50] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:50,856 - [03:30:50] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:30:50,912 - [03:30:50] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:30:50,923 - [03:30:50] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:30:52,012 - [03:30:52] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:52,073 - [03:30:52] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:30:53,954 - [03:30:53] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:30:54,014 - [03:30:54] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:30:55,911 - [03:30:55] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:30:55,969 - [03:30:55] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:30:57,998 - [03:30:57] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:30:58,057 - [03:30:58] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:30:58,114 - [03:30:58] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:30:58,126 - [03:30:58] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:31:00,059 - [03:31:00] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:31:00,118 - [03:31:00] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:31:00,388 - [03:31:00] \U0001f4ca Telemetría de CP_001: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=26.00 kWh
+2025-11-07 03:31:00,446 - [03:31:00] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-11-07 03:31:00,512 - [03:31:00] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:31:00,571 - [03:31:00] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
+2025-11-07 03:31:00,632 - [03:31:00] \U0001f4ca Telemetría de CP_003: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=39.00 kWh
+2025-11-07 03:31:00,689 - [03:31:00] \U0001f4e2 Notificación a Driver DRIVER_003: TELEMETRIA
+2025-11-07 03:31:00,749 - [03:31:00] \U0001f4ca Telemetría de CP_004: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=11.00 kWh
+2025-11-07 03:31:00,806 - [03:31:00] \U0001f4e2 Notificación a Driver DRIVER_004: TELEMETRIA
+2025-11-07 03:31:00,871 - [03:31:00] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:31:00,928 - [03:31:00] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:31:00,984 - [03:31:00] \U0001f4ca Telemetría de CP_006: est=ACTIVADO, E=0.00, P=0.0
+2025-11-07 03:31:00,995 - [03:31:00] [ESTADO] CP_006 -> ACTIVADO.
+2025-11-07 03:31:02,023 - [03:31:02] \U0001f4ca Telemetría de CP_005: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:31:02,081 - [03:31:02] \U0001f4e2 Notificación a Driver DRIVER_006: TELEMETRIA
+2025-11-07 03:31:03,978 - [03:31:03] \U0001f4ca Telemetría de CP_002: est=PENDIENTE_CONFIRMACION_CENTRAL, E=0.00, P=0.0 | Solicitado=23.00 kWh
+2025-11-07 03:31:04,037 - [03:31:04] \U0001f4e2 Notificación a Driver DRIVER_002: TELEMETRIA
