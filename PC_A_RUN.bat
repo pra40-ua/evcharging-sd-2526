@@ -204,7 +204,7 @@ echo Iniciando dashboard web en puerto 8080...
 echo.
 
 REM Lanzar Dashboard Web en nueva ventana (con acceso a BD para sincronización)
-start "Dashboard-Web-PC_A" cmd /k "py web_dashboard.py --kafka !CENTRAL_IP!:9092 --central-ip !CENTRAL_IP! --central-port 5000 --db 127.0.0.1:3306:root:root:evcharging"
+start "Dashboard-Web-PC_A" cmd /k "py web_dashboard.py --kafka !CENTRAL_IP!:9092 --central-ip !CENTRAL_IP! --central-port 5000 --central-api-port 5001 --db 127.0.0.1:3306:root:root:evcharging"
 
 REM Esperar 5 segundos a que el dashboard inicie
 echo Esperando a que el dashboard inicie...
@@ -222,7 +222,8 @@ echo.
 echo Servicios activos:
 echo   [X] Kafka           - Puerto 9092
 echo   [X] MySQL           - Puerto 3306
-echo   [X] EV_Central      - Puerto 5000
+echo   [X] EV_Central      - Puerto 5000 (socket)
+echo   [X] EV_Central API  - Puerto 5001 (REST)
 echo   [X] Dashboard Web   - http://localhost:8080
 echo.
 echo Ventanas abiertas:
@@ -233,7 +234,8 @@ echo Archivo generado para PC_B:
 echo   - central_ip.txt (IP: !CENTRAL_IP!)
 echo.
 echo SIGUIENTE PASO:
-echo   - En PC_B: Copiar central_ip.txt y ejecutar PC_B_COMPLETO.bat
+echo   - En PC_B: Copiar central_ip.txt y ejecutar PC_B_RUN.bat
+echo   - En PC_C: Copiar central_ip.txt y ejecutar PC_C_RUN.bat
 echo.
 echo DASHBOARD WEB:
 echo   - URL: http://localhost:8080

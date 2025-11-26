@@ -55,6 +55,52 @@ if exist central_ip.txt (
 echo.
 
 REM ============================================================
+REM  PASO 0: INICIAR EV_WEATHER
+REM ============================================================
+echo ============================================================
+echo [0/4] INICIANDO EV_WEATHER
+echo ============================================================
+echo.
+
+REM Verificar si existe el archivo de configuración de OpenWeather
+if not exist "OPENWEATHER_API_KEY.txt" (
+    echo [ADVERTENCIA] No se encontro OPENWEATHER_API_KEY.txt
+    echo.
+    echo Para usar EV_Weather, crea un archivo OPENWEATHER_API_KEY.txt
+    echo con tu API Key de OpenWeather (obtener en https://openweathermap.org/api)
+    echo.
+    echo Continuando sin EV_Weather...
+    echo.
+    timeout /t 3 /nobreak >nul
+    goto MENU
+)
+
+REM Leer API Key
+set /p OPENWEATHER_API_KEY=<OPENWEATHER_API_KEY.txt
+if "!OPENWEATHER_API_KEY!"=="" (
+    echo [ADVERTENCIA] OPENWEATHER_API_KEY.txt esta vacio
+    echo Continuando sin EV_Weather...
+    echo.
+    timeout /t 2 /nobreak >nul
+    goto MENU
+)
+
+REM Construir URL de Central API (puerto 5001 para API REST)
+set CENTRAL_API_URL=http://!CENTRAL_IP!:5001/api
+
+echo Iniciando EV_Weather...
+echo   - API Key: !OPENWEATHER_API_KEY:~0,10!...
+echo   - Central API: !CENTRAL_API_URL!
+echo.
+
+REM Lanzar EV_Weather en nueva ventana
+start "EV_Weather-PC_B" cmd /k "py ev_weather\EV_W.py --api-key !OPENWEATHER_API_KEY! --central-url !CENTRAL_API_URL!"
+
+echo [OK] EV_Weather iniciado en ventana separada
+echo.
+timeout /t 2 /nobreak >nul
+
+REM ============================================================
 REM  MENU DE SELECCION
 REM ============================================================
 :MENU
@@ -255,6 +301,7 @@ echo      !NUM_CPS! CHARGING POINT(S) INICIADO(S) CORRECTAMENTE
 echo ============================================================
 echo.
 echo Ventanas abiertas:
+echo   - EV_Weather: Monitoreo climatológico
 echo   - PowerShell: !NUM_CPS! CPs (Engine + Monitor)
 echo   - Navegador: !NUM_CPS! interfaces web
 echo   - Menú Control: !NUM_CPS! menús de control de suministro
@@ -418,7 +465,9 @@ echo ============================================================
 echo      !NUM_DRIVERS! DRIVER(S) INICIADO(S) CORRECTAMENTE
 echo ============================================================
 echo.
-echo Ventanas abiertas (PowerShell): !NUM_DRIVERS! Drivers
+echo Ventanas abiertas:
+echo   - EV_Weather: Monitoreo climatológico
+echo   - PowerShell: !NUM_DRIVERS! Drivers
 echo.
 echo Los drivers se detendran automaticamente al recibir su ticket.
 echo Para detener manualmente: PC_B_STOP_ALL.bat
@@ -529,11 +578,13 @@ echo      SISTEMA PC_B DOCKER INICIADO CORRECTAMENTE
 echo ============================================================
 echo.
 echo Contenedores ejecutandose:
+echo   - EV_Weather: Monitoreo climatológico
 echo   - Engine:  CP_001 en puerto 5001
 echo   - Driver:  DRIVER_456 (MAT: ABC-1234)
 echo   - Monitor: CP_001
 echo.
 echo Ventanas abiertas:
+echo   - EV_Weather: Monitoreo climatológico
 echo   - PowerShell: Engine, Driver, Monitor
 echo   - Navegador: Interfaz web del Engine
 echo   - Menú Control: Menú de control de suministro (CP_001)

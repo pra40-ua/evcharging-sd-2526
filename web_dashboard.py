@@ -53,8 +53,13 @@ CONFIG = {
     'kafka_broker': 'localhost:9092',
     'db_config': None,
     'central_ip': '127.0.0.1',
-    'central_port': 5000
+    'central_port': 5000,
+    'central_api_port': 5001  # Puerto de la API REST de Central
 }
+
+# Estado de alertas climatológicas
+WEATHER_ALERTS = {}  # cp_id -> {'activa': bool, 'temperatura': float, 'timestamp': float}
+WEATHER_ALERTS_LOCK = threading.Lock()
 
 # Productor Kafka para enviar comandos
 KAFKA_PRODUCER = None
@@ -417,13 +422,28 @@ def index():
 @app.route('/api/status')
 def api_status():
     """Devuelve el estado general del sistema."""
+    import requests
+    
     with STATS_LOCK:
         stats_copy = STATS.copy()
     
     with CPS_STATE_LOCK:
         cps_list = list(CPS_STATE.values())
     
-    # Enriquecer con telemetría (extraer campos para el frontend)
+    # Obtener alertas climatológicas de Central
+    try:
+        central_api_url = f"http://{CONFIG['central_ip']}:{CONFIG.get('central_api_port', 5001)}/api/status"
+        response = requests.get(central_api_url, timeout=2)
+        if response.status_code == 200:
+            central_data = response.json()
+            alertas_central = central_data.get('alertas_clima', {})
+            with WEATHER_ALERTS_LOCK:
+                WEATHER_ALERTS.update(alertas_central)
+    except Exception as e:
+        # Si no se puede conectar a Central, usar alertas locales
+        pass
+    
+    # Enriquecer con telemetría y clima (extraer campos para el frontend)
     with TELEMETRIA_LOCK:
         for cp in cps_list:
             cp_id = cp['cp_id']
@@ -449,12 +469,20 @@ def api_status():
                 cp['timestamp_telemetria'] = '-'
                 cp['tiene_sesion_activa'] = False
                 cp['driver_id_sesion'] = None
+            
+            # Agregar información de clima y alertas
+            with WEATHER_ALERTS_LOCK:
+                alerta = WEATHER_ALERTS.get(cp_id, {})
+                cp['alerta_clima'] = alerta.get('activa', False)
+                cp['temperatura'] = alerta.get('temperatura')
+                cp['timestamp_alerta'] = alerta.get('timestamp')
     
     return jsonify({
         'status': 'ok',
         'timestamp': datetime.now().isoformat(),
         'stats': stats_copy,
-        'cps': cps_list
+        'cps': cps_list,
+        'alertas_clima': dict(WEATHER_ALERTS)
     })
 
 
@@ -1259,6 +1287,21 @@ def crear_templates():
                 html += '<tr>';
                 html += `<td><strong>${cp.cp_id}</strong></td>`;
                 html += `<td><span class="status-badge ${estadoClass}">${estado}</span></td>`;
+                
+                // Columna de clima
+                const alertaClima = cp.alerta_clima || false;
+                const temperatura = cp.temperatura;
+                if (temperatura !== undefined && temperatura !== null) {
+                    const tempStr = temperatura.toFixed(1);
+                    if (alertaClima) {
+                        html += `<td><span style="color: #dc3545; font-weight: bold;">⚠️ ${tempStr}°C</span><br><small style="color: #dc3545;">ALERTA</small></td>`;
+                    } else {
+                        html += `<td><span style="color: #28a745;">🌡️ ${tempStr}°C</span></td>`;
+                    }
+                } else {
+                    html += `<td><span style="color: #999;">-</span></td>`;
+                }
+                
                 html += `<td>${(cp.energia_kwh || 0).toFixed(2)}</td>`;
                 html += `<td>${(cp.potencia_kw || 0).toFixed(2)}</td>`;
                 html += `<td>${cp.tiempo_carga_s || 0}</td>`;
@@ -1599,6 +1642,7 @@ def main():
     print(f"  Puerto web:    {args.port}")
     print(f"  Kafka:         {args.kafka}")
     print(f"  Central:       {args.central_ip}:{args.central_port}")
+    print(f"  Central API:   {args.central_ip}:{args.central_api_port}")
     print(f"  Base de datos: {args.db if args.db else 'No configurada'}")
     print("="*70)
     print()

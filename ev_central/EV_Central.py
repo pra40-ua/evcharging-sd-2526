@@ -19,6 +19,13 @@ from rich.panel import Panel
 from rich.layout import Layout
 from rich.text import Text
 import logging
+import base64
+import hashlib
+import secrets
+import requests
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from cryptography.fernet import Fernet
 try:
     import msvcrt as MSVCRT
 except Exception:
@@ -88,6 +95,22 @@ COMMAND_QUEUE: Queue = Queue()
 EVENT_LOG = deque(maxlen=300)
 EVENT_LOG_LOCK = threading.Lock()
 
+# Claves de cifrado simétrico por CP
+CP_ENCRYPTION_KEYS = {}  # cp_id -> Fernet key object
+CP_ENCRYPTION_KEYS_LOCK = threading.Lock()
+
+# Estado de alertas climatológicas
+WEATHER_ALERTS = {}  # cp_id -> {'activa': bool, 'temperatura': float, 'timestamp': float}
+WEATHER_ALERTS_LOCK = threading.Lock()
+
+# Configuración de EV_Registry
+REGISTRY_URL = os.getenv('REGISTRY_URL', 'http://127.0.0.1:6000/api')
+
+# Flask app para API REST
+API_APP = Flask(__name__)
+CORS(API_APP)
+API_PORT = 5000  # Mismo puerto que el socket server, pero diferente endpoint
+
 # =================================================================
 #                         REGISTRO / LOGS
 # =================================================================
@@ -117,6 +140,343 @@ def registrar_evento(mensaje: str, tipo="info") -> None:
         logging.info(linea)
     except Exception:
         pass
+
+# =================================================================
+#                    FUNCIONES DE AUDITORÍA
+# =================================================================
+
+def registrar_auditoria(accion: str, cp_id: str = None, origen_ip: str = None, 
+                        descripcion: str = None, resultado: str = "OK", 
+                        db_connection = None) -> None:
+    """
+    Registra un evento de auditoría en la base de datos.
+    
+    Args:
+        accion: Tipo de acción (ej: "AUTENTICACION", "REGISTRO", "ALERTA_CLIMA", etc.)
+        cp_id: ID del CP (opcional)
+        origen_ip: IP de origen (opcional)
+        descripcion: Descripción detallada del evento
+        resultado: Resultado de la acción ("OK", "ERROR", "DENEGADO", etc.)
+        db_connection: Conexión a la base de datos
+    """
+    try:
+        if db_connection and db_connection.is_connected():
+            cursor = db_connection.cursor()
+            cursor.execute("""
+                INSERT INTO audit_log (fecha_hora, origen_ip, cp_id, accion, descripcion, resultado)
+                VALUES (NOW(), %s, %s, %s, %s, %s)
+            """, (origen_ip, cp_id, accion, descripcion, resultado))
+            db_connection.commit()
+            cursor.close()
+    except Exception as e:
+        # No fallar si hay error en auditoría, solo log
+        print(f"[CENTRAL] ⚠️ Error registrando auditoría: {e}")
+
+# =================================================================
+#                    FUNCIONES DE CIFRADO
+# =================================================================
+
+def generar_clave_cifrado() -> bytes:
+    """Genera una nueva clave de cifrado Fernet."""
+    return Fernet.generate_key()
+
+def obtener_clave_cifrado_cp(cp_id: str, db_connection = None) -> bytes:
+    """
+    Obtiene la clave de cifrado para un CP.
+    Si no existe, genera una nueva y la almacena.
+    
+    Returns:
+        Clave de cifrado Fernet (bytes)
+    """
+    # Primero verificar en memoria
+    with CP_ENCRYPTION_KEYS_LOCK:
+        if cp_id in CP_ENCRYPTION_KEYS:
+            return CP_ENCRYPTION_KEYS[cp_id]
+    
+    # Si no está en memoria, buscar en BD
+    if db_connection and db_connection.is_connected():
+        try:
+            cursor = db_connection.cursor(dictionary=True)
+            cursor.execute("""
+                SELECT encryption_key FROM cp_encryption_keys 
+                WHERE cp_id = %s AND activo = TRUE
+            """, (cp_id,))
+            resultado = cursor.fetchone()
+            cursor.close()
+            
+            if resultado:
+                # Cargar clave desde BD
+                key_b64 = resultado['encryption_key']
+                key_bytes = base64.b64decode(key_b64)
+                with CP_ENCRYPTION_KEYS_LOCK:
+                    CP_ENCRYPTION_KEYS[cp_id] = key_bytes
+                return key_bytes
+        except Exception as e:
+            print(f"[CENTRAL] ⚠️ Error obteniendo clave de BD: {e}")
+    
+    # Si no existe, generar nueva
+    nueva_clave = generar_clave_cifrado()
+    
+    # Almacenar en BD
+    if db_connection and db_connection.is_connected():
+        try:
+            cursor = db_connection.cursor()
+            key_b64 = base64.b64encode(nueva_clave).decode('utf-8')
+            cursor.execute("""
+                INSERT INTO cp_encryption_keys (cp_id, encryption_key, activo)
+                VALUES (%s, %s, TRUE)
+                ON DUPLICATE KEY UPDATE
+                    encryption_key = VALUES(encryption_key),
+                    activo = TRUE,
+                    fecha_ultima_actualizacion = NOW()
+            """, (cp_id, key_b64))
+            db_connection.commit()
+            cursor.close()
+        except Exception as e:
+            print(f"[CENTRAL] ⚠️ Error guardando clave en BD: {e}")
+    
+    # Almacenar en memoria
+    with CP_ENCRYPTION_KEYS_LOCK:
+        CP_ENCRYPTION_KEYS[cp_id] = nueva_clave
+    
+    return nueva_clave
+
+def cifrar_mensaje(mensaje: bytes, clave: bytes) -> bytes:
+    """Cifra un mensaje usando Fernet."""
+    fernet = Fernet(clave)
+    return fernet.encrypt(mensaje)
+
+def descifrar_mensaje(mensaje_cifrado: bytes, clave: bytes) -> bytes:
+    """Descifra un mensaje usando Fernet."""
+    fernet = Fernet(clave)
+    return fernet.decrypt(mensaje_cifrado)
+
+def revocar_clave_cifrado(cp_id: str, db_connection = None) -> bool:
+    """
+    Revoca la clave de cifrado de un CP.
+    Esto forzará una nueva autenticación.
+    
+    Returns:
+        True si se revocó correctamente
+    """
+    try:
+        # Eliminar de memoria
+        with CP_ENCRYPTION_KEYS_LOCK:
+            if cp_id in CP_ENCRYPTION_KEYS:
+                del CP_ENCRYPTION_KEYS[cp_id]
+        
+        # Marcar como inactiva en BD
+        if db_connection and db_connection.is_connected():
+            cursor = db_connection.cursor()
+            cursor.execute("""
+                UPDATE cp_encryption_keys 
+                SET activo = FALSE, fecha_ultima_actualizacion = NOW()
+                WHERE cp_id = %s
+            """, (cp_id,))
+            db_connection.commit()
+            cursor.close()
+        
+        registrar_evento(f"🔑 Clave de cifrado revocada para {cp_id}", "warn")
+        return True
+    except Exception as e:
+        print(f"[CENTRAL] ❌ Error revocando clave: {e}")
+        return False
+
+# =================================================================
+#                    FUNCIONES DE EV_Registry
+# =================================================================
+
+def verificar_registro_cp(cp_id: str) -> bool:
+    """
+    Verifica si un CP está registrado en EV_Registry.
+    
+    Returns:
+        True si está registrado y activo, False en caso contrario
+    """
+    try:
+        url = f"{REGISTRY_URL}/cps"
+        response = requests.get(url, timeout=5)
+        
+        if response.status_code == 200:
+            data = response.json()
+            cps = data.get('cps', [])
+            for cp in cps:
+                if cp.get('cp_id') == cp_id and cp.get('activo'):
+                    return True
+        return False
+    except Exception as e:
+        print(f"[CENTRAL] ⚠️ Error verificando registro en EV_Registry: {e}")
+        # Por compatibilidad, permitir conexión si EV_Registry no está disponible
+        return True
+
+# =================================================================
+#                    API REST - ALERTAS DE CLIMA
+# =================================================================
+
+@API_APP.route('/api/weather_alert', methods=['POST'])
+def api_weather_alert():
+    """
+    Endpoint para recibir alertas climatológicas de EV_W.
+    
+    Body JSON:
+        {
+            "cp_id": "CP001",
+            "temperatura": -5.0,
+            "alerta_activa": true,
+            "timestamp": "2024-01-01T12:00:00"
+        }
+    """
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({
+                'status': 'error',
+                'message': 'No se proporcionó JSON en el body'
+            }), 400
+        
+        cp_id = data.get('cp_id')
+        temperatura = data.get('temperatura')
+        alerta_activa = data.get('alerta_activa', False)
+        
+        if not cp_id:
+            return jsonify({
+                'status': 'error',
+                'message': 'cp_id es requerido'
+            }), 400
+        
+        # Actualizar estado de alerta
+        with WEATHER_ALERTS_LOCK:
+            WEATHER_ALERTS[cp_id] = {
+                'activa': alerta_activa,
+                'temperatura': temperatura,
+                'timestamp': time.time()
+            }
+        
+        # Registrar en BD si hay conexión
+        db_conn = globals().get('_DB_CONN_FOR_API')
+        if db_conn and db_conn.is_connected():
+            try:
+                cursor = db_conn.cursor()
+                cursor.execute("""
+                    INSERT INTO weather_alerts (cp_id, temperatura, alerta_activa, fecha_hora)
+                    VALUES (%s, %s, %s, NOW())
+                """, (cp_id, temperatura, alerta_activa))
+                db_conn.commit()
+                cursor.close()
+            except Exception as e:
+                print(f"[CENTRAL] ⚠️ Error guardando alerta en BD: {e}")
+        
+        # Si hay alerta activa y el CP está suministrando, enviar STOP
+        if alerta_activa:
+            with CP_ESTADO_LOCK:
+                estado_cp = CP_ESTADO.get(cp_id, '')
+            
+            if estado_cp == 'SUMINISTRANDO':
+                # El suministro finalizará con normalidad y luego el CP pasará a "fuera de servicio"
+                registrar_evento(f"⚠️ Alerta climatológica activa para {cp_id} (T={temperatura}°C). Suministro finalizará normalmente.", "warn")
+                # No enviar STOP inmediato, esperar a que finalice naturalmente
+            else:
+                # Cambiar estado a fuera de servicio
+                try:
+                    cambiar_estado_cp(cp_id, 'FUERA_DE_SERVICIO', db_conn)
+                    registrar_evento(f"⚠️ CP {cp_id} fuera de servicio por alerta climatológica (T={temperatura}°C)", "warn")
+                except Exception:
+                    pass
+        else:
+            # Alerta desactivada, restaurar operación
+            try:
+                cambiar_estado_cp(cp_id, 'ACTIVADO', db_conn)
+                registrar_evento(f"✓ CP {cp_id} restaurado tras alerta climatológica (T={temperatura}°C)", "ok")
+            except Exception:
+                pass
+        
+        # Registrar auditoría
+        registrar_auditoria(
+            accion="ALERTA_CLIMA",
+            cp_id=cp_id,
+            origen_ip=request.remote_addr,
+            descripcion=f"Alerta climatológica: T={temperatura}°C, activa={alerta_activa}",
+            resultado="OK",
+            db_connection=db_conn
+        )
+        
+        return jsonify({
+            'status': 'ok',
+            'message': f'Alerta procesada para {cp_id}',
+            'cp_id': cp_id,
+            'alerta_activa': alerta_activa
+        }), 200
+        
+    except Exception as e:
+        print(f"[CENTRAL] ❌ Error procesando alerta climatológica: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            'status': 'error',
+            'message': f'Error interno: {str(e)}'
+        }), 500
+
+@API_APP.route('/api/status', methods=['GET'])
+def api_status_central():
+    """Endpoint para consultar el estado de la Central."""
+    try:
+        with CONEXIONES_ACTIVAS_LOCK:
+            cps_conectados = list(CONEXIONES_ACTIVAS.keys())
+        
+        with CP_ESTADO_LOCK:
+            estados = dict(CP_ESTADO)
+        
+        with WEATHER_ALERTS_LOCK:
+            alertas = dict(WEATHER_ALERTS)
+        
+        return jsonify({
+            'status': 'ok',
+            'cps_conectados': len(cps_conectados),
+            'cps_ids': cps_conectados,
+            'estados': estados,
+            'alertas_clima': alertas
+        }), 200
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+@API_APP.route('/api/revoke_key/<cp_id>', methods=['POST'])
+def api_revoke_key(cp_id):
+    """Endpoint para revocar la clave de cifrado de un CP."""
+    try:
+        db_conn = globals().get('_DB_CONN_FOR_API')
+        if revocar_clave_cifrado(cp_id, db_conn):
+            registrar_auditoria(
+                accion="REVOCACION_CLAVE",
+                cp_id=cp_id,
+                origen_ip=request.remote_addr,
+                descripcion="Clave de cifrado revocada manualmente",
+                resultado="OK",
+                db_connection=db_conn
+            )
+            return jsonify({
+                'status': 'ok',
+                'message': f'Clave revocada para {cp_id}'
+            }), 200
+        else:
+            return jsonify({
+                'status': 'error',
+                'message': f'Error revocando clave para {cp_id}'
+            }), 500
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+def iniciar_api_rest(port: int, db_connection):
+    """Inicia el servidor Flask para la API REST en un hilo separado."""
+    global _DB_CONN_FOR_API
+    _DB_CONN_FOR_API = db_connection
+    print(f"[CENTRAL] Iniciando API REST en puerto {port}...")
+    API_APP.run(host='0.0.0.0', port=port, debug=False, threaded=True, use_reloader=False)
 
 def resumen_telemetria(telemetria: dict) -> str:
     """Devuelve un breve resumen textual de una telemetría para logs."""
@@ -198,7 +558,7 @@ def _enviar_comando_cp(cp_id: str, orden: str) -> bool:
             
             if driver_id and kw_objetivo:
                 # Hay sesión activa válida: iniciar carga
-                trama = construir_trama('START', [driver_id, str(kw_objetivo)])
+                trama = construir_trama('START', [driver_id, str(kw_objetivo)], cp_id=cp_id, cifrar=True)
                 registrar_evento(f"Iniciando carga en {cp_id} (Driver: {driver_id}, kW: {kw_objetivo})")
             else:
                 # Sin sesión activa: NO se puede iniciar
@@ -206,7 +566,7 @@ def _enviar_comando_cp(cp_id: str, orden: str) -> bool:
                 return False
         else:
             # Para STOP y otros comandos
-            trama = construir_trama(orden, ['MANUAL'])
+            trama = construir_trama(orden, ['MANUAL'], cp_id=cp_id, cifrar=True)
         
         cp_socket.sendall(trama)
         
@@ -691,7 +1051,7 @@ def consumir_comandos_control_kafka(broker_list: str):
                                 continue
                             
                             try:
-                                trama_auth = construir_trama('AUTH_REQ', [driver_id, str(kw_objetivo)])
+                                trama_auth = construir_trama('AUTH_REQ', [driver_id, str(kw_objetivo)], cp_id=cp_id, cifrar=True)
                                 cp_socket.sendall(trama_auth)
                                 print(f"\n[CENTRAL] ╔═══════════════════════════════════════════╗")
                                 print(f"[CENTRAL] ║  📤 ENVIANDO COMANDO AL CP                ║")
@@ -1129,22 +1489,40 @@ def calcular_lrc(data: bytes) -> bytes:
         lrc ^= byte
     return bytes([lrc])
 
-def construir_trama(cod_op: str, campos: list) -> bytes:
-    """Construye la trama completa para enviar una respuesta (ej. AUTH)."""
+def construir_trama(cod_op: str, campos: list, cp_id: str = None, cifrar: bool = True) -> bytes:
+    """
+    Construye la trama completa para enviar una respuesta (ej. AUTH).
+    Si se proporciona cp_id y hay clave, cifra el mensaje.
+    """
     # 1. Crear el contenido DATA (Cod_Op#campo1#campo2...)
     DATA = f"{cod_op}#{DELIMITER.join(map(str, campos))}"
     
     # 2. Calcular el LRC de la DATA
     DATA_bytes = DATA.encode('utf-8')
+    
+    # 3. Cifrar si hay clave disponible
+    if cifrar and cp_id:
+        try:
+            clave = obtener_clave_cifrado_cp(cp_id, None)
+            if clave:
+                fernet = Fernet(clave)
+                DATA_bytes = fernet.encrypt(DATA_bytes)
+                # Prefijo para indicar que está cifrado
+                DATA_bytes = b'ENC' + DATA_bytes
+        except Exception as e:
+            print(f"[CENTRAL] ⚠️ Error cifrando mensaje para {cp_id}: {e}")
+            # Continuar sin cifrar si hay error
+    
     LRC_byte = calcular_lrc(DATA_bytes)
     
-    # 3. Ensamblar la trama: STX + DATA (en bytes) + ETX + LRC
+    # 4. Ensamblar la trama: STX + DATA (en bytes) + ETX + LRC
     trama = STX + DATA_bytes + ETX + LRC_byte
     return trama
 
-def descomponer_trama(trama_bytes: bytes) -> tuple:
+def descomponer_trama(trama_bytes: bytes, cp_id: str = None) -> tuple:
     """
     Descompone, valida y parsea la trama recibida del CP.
+    Si está cifrada, la descifra primero.
     Retorna (Cod_Op, campos) o (None, None) si falla la validación.
     """
     
@@ -1162,6 +1540,27 @@ def descomponer_trama(trama_bytes: bytes) -> tuple:
     # La DATA (a la que se le calcula el LRC) es todo el cuerpo MENOS el ETX
     data_bytes = data_con_etx[:-1]
     
+    # Verificar si está cifrado (prefijo 'ENC')
+    if data_bytes.startswith(b'ENC'):
+        if not cp_id:
+            print("[CENTRAL] Error: Mensaje cifrado recibido pero no hay cp_id para descifrar")
+            return None, None
+        
+        # Obtener clave de cifrado
+        clave = obtener_clave_cifrado_cp(cp_id, None)  # db_connection se obtendrá después
+        if not clave:
+            print(f"[CENTRAL] Error: No hay clave de cifrado para {cp_id}")
+            return None, None
+        
+        try:
+            # Descifrar
+            fernet = Fernet(clave)
+            data_cifrado = data_bytes[3:]  # Quitar prefijo 'ENC'
+            data_bytes = fernet.decrypt(data_cifrado)
+        except Exception as e:
+            print(f"[CENTRAL] Error descifrando mensaje de {cp_id}: {e}")
+            return None, None
+    
     # 1. Verificar formato (STX/ETX)
     # Trama debe empezar con STX y el byte ANTES del LRC debe ser ETX
     if not (trama_bytes.startswith(STX) and data_con_etx.endswith(ETX)):
@@ -1169,7 +1568,7 @@ def descomponer_trama(trama_bytes: bytes) -> tuple:
         print("[CENTRAL] Error: Formato de trama incorrecto (STX/ETX faltantes).")
         return None, None
         
-    # 2. Verificar LRC
+    # 2. Verificar LRC (sobre data_bytes descifrado)
     lrc_calculado = calcular_lrc(data_bytes)
     if lrc_recibido != lrc_calculado:
         print(f"[CENTRAL] Error LRC. Recibido: {lrc_recibido.hex()}, Calculado: {lrc_calculado.hex()}. Trama descartada.")
@@ -1739,7 +2138,8 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                 raise ConnectionResetError("Conexión cerrada por el cliente antes del registro.")
             break
 
-        cod_op, campos = descomponer_trama(trama_bytes)
+        # El primer mensaje REG no está cifrado (aún no hay clave)
+        cod_op, campos = descomponer_trama(trama_bytes, cp_id=None)
 
         if cod_op == 'REG' and len(campos) >= 3:
             cp_id = campos[0]
@@ -1760,9 +2160,9 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                 print(f"[CENTRAL] ═══════════════════════════════════════════\n")
                 registrar_evento(f"🚫 CONEXIÓN RECHAZADA: {cp_id} está bloqueado manualmente", "warn")
                 
-                # Enviar mensaje de rechazo al Monitor (opcional)
+                # Enviar mensaje de rechazo al Monitor (sin cifrar, es antes del registro)
                 try:
-                    trama_reject = construir_trama('REJECT', ['Monitor bloqueado manualmente. Use boton Reconectar en dashboard.'])
+                    trama_reject = construir_trama('REJECT', ['Monitor bloqueado manualmente. Use boton Reconectar en dashboard.'], cp_id=None, cifrar=False)
                     conn.sendall(trama_reject)
                 except Exception:
                     pass
@@ -1840,26 +2240,73 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                 import traceback
                 traceback.print_exc()
             
+            # --- VERIFICAR REGISTRO EN EV_Registry ---
+            origen_ip = addr[0] if addr else None
+            if not verificar_registro_cp(cp_id):
+                # CP no registrado en EV_Registry
+                respuesta_trama = construir_trama('AUTH', ['FAIL', 'CP no registrado en EV_Registry. Debe registrarse primero.'], cp_id=None, cifrar=False)
+                conn.sendall(respuesta_trama)
+                print(f"[CENTRAL] <- Enviada respuesta AUTH: FAIL a {cp_id} (No registrado)")
+                registrar_evento(f"❌ AUTH DENEGADO: {cp_id} no registrado en EV_Registry", "error")
+                registrar_auditoria(
+                    accion="INTENTO_AUTENTICACION",
+                    cp_id=cp_id,
+                    origen_ip=origen_ip,
+                    descripcion="Intento de autenticación sin registro previo en EV_Registry",
+                    resultado="DENEGADO",
+                    db_connection=db_connection
+                )
+                return
+            
+            # --- OBTENER O GENERAR CLAVE DE CIFRADO ---
+            clave_cifrado = obtener_clave_cifrado_cp(cp_id, db_connection)
+            clave_b64 = base64.b64encode(clave_cifrado).decode('utf-8')
+            
             # --- LÓGICA BD: Insertar/Actualizar CP y marcar como ACTIVADO ---
             if db_connection and db_connection.is_connected():
                 if registrar_cp_en_bd(db_connection, cp_id, ubicacion, precio_kwh):
-                    respuesta_trama = construir_trama('AUTH', ['OK', 'Autenticacion exitosa'])
+                    # Enviar AUTH con clave de cifrado (sin cifrar, es el primer mensaje después de REG)
+                    respuesta_trama = construir_trama('AUTH', ['OK', 'Autenticacion exitosa', clave_b64], cp_id=None, cifrar=False)
                     conn.sendall(respuesta_trama)
-                    print(f"[CENTRAL] <- Enviada respuesta AUTH: OK a {cp_id}")
-                    registrar_evento(f"AUTH OK enviado a {cp_id}")
+                    print(f"[CENTRAL] <- Enviada respuesta AUTH: OK a {cp_id} (con clave de cifrado)")
+                    registrar_evento(f"AUTH OK enviado a {cp_id} (clave de cifrado proporcionada)")
+                    registrar_auditoria(
+                        accion="AUTENTICACION",
+                        cp_id=cp_id,
+                        origen_ip=origen_ip,
+                        descripcion=f"Autenticación exitosa. Clave de cifrado proporcionada.",
+                        resultado="OK",
+                        db_connection=db_connection
+                    )
                 else:
-                    # Error en BD, rechazar conexión
-                    respuesta_trama = construir_trama('AUTH', ['FAIL', 'Error en base de datos'])
+                    # Error en BD, rechazar conexión (sin cifrar)
+                    respuesta_trama = construir_trama('AUTH', ['FAIL', 'Error en base de datos'], cp_id=None, cifrar=False)
                     conn.sendall(respuesta_trama)
                     print(f"[CENTRAL] <- Enviada respuesta AUTH: FAIL a {cp_id} (Error BD)")
+                    registrar_auditoria(
+                        accion="AUTENTICACION",
+                        cp_id=cp_id,
+                        origen_ip=origen_ip,
+                        descripcion="Error en base de datos durante autenticación",
+                        resultado="ERROR",
+                        db_connection=db_connection
+                    )
                     return
             else:
-                # Sin BD, aceptar conexión pero advertir
+                # Sin BD, aceptar conexión pero advertir (sin cifrar)
                 print(f"[CENTRAL] ADVERTENCIA: Sin conexión a BD, aceptando {cp_id} sin persistencia")
-                respuesta_trama = construir_trama('AUTH', ['OK', 'Autenticacion exitosa (sin BD)'])
+                respuesta_trama = construir_trama('AUTH', ['OK', 'Autenticacion exitosa (sin BD)', clave_b64], cp_id=None, cifrar=False)
                 conn.sendall(respuesta_trama)
-                print(f"[CENTRAL] <- Enviada respuesta AUTH: OK a {cp_id} (sin BD)")
-                registrar_evento(f"AUTH OK enviado a {cp_id} (sin BD)")
+                print(f"[CENTRAL] <- Enviada respuesta AUTH: OK a {cp_id} (sin BD, con clave)")
+                registrar_evento(f"AUTH OK enviado a {cp_id} (sin BD, clave proporcionada)")
+                registrar_auditoria(
+                    accion="AUTENTICACION",
+                    cp_id=cp_id,
+                    origen_ip=origen_ip,
+                    descripcion="Autenticación exitosa sin BD (modo degradado)",
+                    resultado="OK",
+                    db_connection=None
+                )
             
             # --- ALMACENAR CONEXIÓN SOLO DESPUÉS DE COMPLETAR AUTENTICACIÓN ---
             with CONEXIONES_ACTIVAS_LOCK:
@@ -1943,15 +2390,16 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
             
             # Ahora el hilo espera por comandos síncronos (AVR, telemetría síncrona, etc.)
             try:
-                trama_bytes = conn.recv(1024)
+                trama_bytes = conn.recv(4096)  # Aumentar buffer para mensajes cifrados
             except socket.timeout:
                 continue
             if not trama_bytes:
                 # El CP cerró la conexión
                 print(f"[CENTRAL] Conexión con CP {cp_id} cerrada por el cliente.")
-                break 
-                
-            cod_op, campos = descomponer_trama(trama_bytes)
+                break
+            
+            # Después del REG, todos los mensajes deben estar cifrados
+            cod_op, campos = descomponer_trama(trama_bytes, cp_id=cp_id)
             
             if cod_op:
                 # Registrar TODOS los mensajes recibidos con formato claro
@@ -2560,9 +3008,19 @@ def main():
 
     # Inicialización del servidor de Sockets
     try:
+        # Iniciar API REST en hilo separado (puerto 5001 por defecto, o siguiente al socket)
+        api_port = int(os.getenv('API_PORT', args.port + 1))
+        api_thread = threading.Thread(
+            target=iniciar_api_rest,
+            args=(api_port, db_connection),
+            daemon=True
+        )
+        api_thread.start()
+        print(f"[CENTRAL] ✓ API REST iniciada en puerto {api_port}")
+        
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Permite reutilizar el puerto
-        
+
         server_socket.bind(('', args.port)) 
         server_socket.listen(5)
         # Timeout corto para aceptar conexiones y poder revisar el flag de apagado

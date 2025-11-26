@@ -3,3 +3,5 @@ kafka-python-ng             # Cliente Kafka para Python (compatible con Python 3
 rich                        # Para TUI mejorada en Central
 flask==3.0.0                # Framework web para dashboard
 flask-cors==4.0.0           # CORS para API REST del dashboard
+requests                    # Para peticiones HTTP (EV_W, EV_Registry)
+cryptography                # Para funciones de cifrado y seguridad
