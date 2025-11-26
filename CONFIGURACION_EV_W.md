@@ -86,3 +86,5 @@ Una vez configuradas las localizaciones:
 - **"Ciudad no encontrada"**: Verifica el formato `Ciudad,País` y el código de país
 - **"No hay localizaciones configuradas"**: Añade al menos una localización usando la opción `[1]`
 
+
+py ev_weather\EV_W.py --api-key 54076819eadd372702b599c788eb370f --central-url http://127.0.0.1:5001/api

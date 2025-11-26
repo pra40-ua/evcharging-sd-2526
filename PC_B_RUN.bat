@@ -75,23 +75,46 @@ if not exist "OPENWEATHER_API_KEY.txt" (
     goto MENU
 )
 
-REM Leer API Key (eliminando espacios y saltos de línea)
+REM Leer API Key (método más robusto)
 set OPENWEATHER_API_KEY=
-for /f "usebackq tokens=*" %%a in ("OPENWEATHER_API_KEY.txt") do (
-    set "OPENWEATHER_API_KEY=%%a"
-)
-REM Eliminar espacios al inicio y final
-set OPENWEATHER_API_KEY=!OPENWEATHER_API_KEY: =!
+for /f "usebackq delims=" %%a in ("OPENWEATHER_API_KEY.txt") do set "OPENWEATHER_API_KEY=%%a"
 
+REM Eliminar espacios y caracteres de control al inicio y final
+set OPENWEATHER_API_KEY=!OPENWEATHER_API_KEY: =!
+set OPENWEATHER_API_KEY=!OPENWEATHER_API_KEY:	=!
+
+REM Debug: mostrar lo que se leyó
+echo [DEBUG] Contenido leido del archivo: !OPENWEATHER_API_KEY! >> "%LOG_FILE%"
+echo [DEBUG] Longitud: !OPENWEATHER_API_KEY:~0,100! >> "%LOG_FILE%"
+
+REM Verificar que se leyó algo
 if "!OPENWEATHER_API_KEY!"=="" (
-    echo [ADVERTENCIA] OPENWEATHER_API_KEY.txt esta vacio o solo contiene espacios
+    echo [ERROR] OPENWEATHER_API_KEY.txt esta vacio o no se pudo leer correctamente
+    echo.
+    echo Verifica que el archivo contiene tu API Key de OpenWeather
+    echo (solo la clave, sin espacios ni saltos de linea)
+    echo.
     echo Continuando sin EV_Weather...
     echo.
-    timeout /t 2 /nobreak >nul
+    timeout /t 3 /nobreak >nul
     goto MENU
 )
 
-echo [DEBUG] API Key leida: !OPENWEATHER_API_KEY:~0,10!... (longitud: !OPENWEATHER_API_KEY:~0,50!...) >> "%LOG_FILE%"
+REM Verificar longitud mínima (las API keys de OpenWeather suelen tener al menos 32 caracteres)
+set TEST_LEN=!OPENWEATHER_API_KEY:~31,1!
+if "!TEST_LEN!"=="" (
+    echo [ERROR] La API Key parece ser muy corta ^(menos de 32 caracteres^)
+    echo.
+    echo Longitud detectada: !OPENWEATHER_API_KEY:~0,50!
+    echo Verifica que el archivo contiene la API Key completa
+    echo.
+    echo Continuando sin EV_Weather...
+    echo.
+    timeout /t 3 /nobreak >nul
+    goto MENU
+)
+
+echo [DEBUG] API Key leida correctamente: !OPENWEATHER_API_KEY:~0,10!... >> "%LOG_FILE%"
 
 REM Construir URL de Central API (puerto 5001 para API REST)
 set CENTRAL_API_URL=http://!CENTRAL_IP!:5001/api
@@ -107,23 +130,29 @@ echo ============================================================
 echo.
 
 REM Verificar que Python está disponible
+echo [DEBUG] Verificando Python... >> "%LOG_FILE%"
 py --version >nul 2>&1
 if !errorlevel! neq 0 (
     echo [ERROR] Python no esta disponible. EV_Weather no se iniciara.
+    echo [ERROR] Ejecuta: py --version para verificar
     echo Continuando sin EV_Weather...
     echo.
     timeout /t 3 /nobreak >nul
     goto MENU
 )
+echo [DEBUG] Python encontrado >> "%LOG_FILE%"
 
 REM Verificar que existe el archivo EV_W.py
+echo [DEBUG] Verificando ev_weather\EV_W.py... >> "%LOG_FILE%"
 if not exist "ev_weather\EV_W.py" (
     echo [ERROR] No se encuentra ev_weather\EV_W.py
+    echo [ERROR] Verifica que el archivo existe en la ruta correcta
     echo Continuando sin EV_Weather...
     echo.
     timeout /t 3 /nobreak >nul
     goto MENU
 )
+echo [DEBUG] Archivo ev_weather\EV_W.py encontrado >> "%LOG_FILE%"
 
 REM Crear script temporal con las variables ya expandidas
 set TEMP_WEATHER_SCRIPT=%TEMP%\ev_weather_launch_%RANDOM%.bat
