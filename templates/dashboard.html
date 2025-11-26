@@ -372,6 +372,21 @@
                 html += '<tr>';
                 html += `<td><strong>${cp.cp_id}</strong></td>`;
                 html += `<td><span class="status-badge ${estadoClass}">${estado}</span></td>`;
+                
+                // Columna de clima
+                const alertaClima = cp.alerta_clima || false;
+                const temperatura = cp.temperatura;
+                if (temperatura !== undefined && temperatura !== null) {
+                    const tempStr = temperatura.toFixed(1);
+                    if (alertaClima) {
+                        html += `<td><span style="color: #dc3545; font-weight: bold;">⚠️ ${tempStr}°C</span><br><small style="color: #dc3545;">ALERTA</small></td>`;
+                    } else {
+                        html += `<td><span style="color: #28a745;">🌡️ ${tempStr}°C</span></td>`;
+                    }
+                } else {
+                    html += `<td><span style="color: #999;">-</span></td>`;
+                }
+                
                 html += `<td>${(cp.energia_kwh || 0).toFixed(2)}</td>`;
                 html += `<td>${(cp.potencia_kw || 0).toFixed(2)}</td>`;
                 html += `<td>${cp.tiempo_carga_s || 0}</td>`;

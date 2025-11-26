@@ -1624,7 +1624,9 @@ def main():
     parser.add_argument("--central-ip", type=str, default="127.0.0.1",
                         help="IP de EV_Central")
     parser.add_argument("--central-port", type=int, default=5000,
-                        help="Puerto de EV_Central")
+                        help="Puerto de EV_Central (socket)")
+    parser.add_argument("--central-api-port", type=int, default=5001,
+                        help="Puerto de API REST de EV_Central (default: 5001)")
     parser.add_argument("--db", type=str,
                         help="Configuración de BD (formato: host:port:user:password:database)")
     
@@ -1634,6 +1636,7 @@ def main():
     CONFIG['kafka_broker'] = args.kafka
     CONFIG['central_ip'] = args.central_ip
     CONFIG['central_port'] = args.central_port
+    CONFIG['central_api_port'] = args.central_api_port
     CONFIG['db_config'] = args.db
     
     print("="*70)

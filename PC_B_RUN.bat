@@ -75,28 +75,105 @@ if not exist "OPENWEATHER_API_KEY.txt" (
     goto MENU
 )
 
-REM Leer API Key
-set /p OPENWEATHER_API_KEY=<OPENWEATHER_API_KEY.txt
+REM Leer API Key (eliminando espacios y saltos de línea)
+set OPENWEATHER_API_KEY=
+for /f "usebackq tokens=*" %%a in ("OPENWEATHER_API_KEY.txt") do (
+    set "OPENWEATHER_API_KEY=%%a"
+)
+REM Eliminar espacios al inicio y final
+set OPENWEATHER_API_KEY=!OPENWEATHER_API_KEY: =!
+
 if "!OPENWEATHER_API_KEY!"=="" (
-    echo [ADVERTENCIA] OPENWEATHER_API_KEY.txt esta vacio
+    echo [ADVERTENCIA] OPENWEATHER_API_KEY.txt esta vacio o solo contiene espacios
     echo Continuando sin EV_Weather...
     echo.
     timeout /t 2 /nobreak >nul
     goto MENU
 )
 
+echo [DEBUG] API Key leida: !OPENWEATHER_API_KEY:~0,10!... (longitud: !OPENWEATHER_API_KEY:~0,50!...) >> "%LOG_FILE%"
+
 REM Construir URL de Central API (puerto 5001 para API REST)
 set CENTRAL_API_URL=http://!CENTRAL_IP!:5001/api
 
-echo Iniciando EV_Weather...
+echo.
+echo ============================================================
+echo   INICIANDO EV_WEATHER
+echo ============================================================
 echo   - API Key: !OPENWEATHER_API_KEY:~0,10!...
 echo   - Central API: !CENTRAL_API_URL!
+echo   - Archivo: OPENWEATHER_API_KEY.txt encontrado
+echo ============================================================
 echo.
 
-REM Lanzar EV_Weather en nueva ventana
-start "EV_Weather-PC_B" cmd /k "py ev_weather\EV_W.py --api-key !OPENWEATHER_API_KEY! --central-url !CENTRAL_API_URL!"
+REM Verificar que Python está disponible
+py --version >nul 2>&1
+if !errorlevel! neq 0 (
+    echo [ERROR] Python no esta disponible. EV_Weather no se iniciara.
+    echo Continuando sin EV_Weather...
+    echo.
+    timeout /t 3 /nobreak >nul
+    goto MENU
+)
 
-echo [OK] EV_Weather iniciado en ventana separada
+REM Verificar que existe el archivo EV_W.py
+if not exist "ev_weather\EV_W.py" (
+    echo [ERROR] No se encuentra ev_weather\EV_W.py
+    echo Continuando sin EV_Weather...
+    echo.
+    timeout /t 3 /nobreak >nul
+    goto MENU
+)
+
+REM Crear script temporal con las variables ya expandidas
+set TEMP_WEATHER_SCRIPT=%TEMP%\ev_weather_launch_%RANDOM%.bat
+
+REM Guardar valores en variables temporales para usar en el script
+set WEATHER_API_KEY=!OPENWEATHER_API_KEY!
+set WEATHER_CENTRAL_URL=!CENTRAL_API_URL!
+
+(
+echo @echo off
+echo cd /d "%~dp0"
+echo echo ============================================================
+echo echo   EV_WEATHER - Weather Control Office
+echo echo ============================================================
+echo echo.
+echo echo Iniciando EV_Weather...
+echo echo   - API Key: %WEATHER_API_KEY:~0,10%...
+echo echo   - Central API: %WEATHER_CENTRAL_URL%
+echo echo.
+echo echo ============================================================
+echo echo.
+echo py ev_weather\EV_W.py --api-key "%WEATHER_API_KEY%" --central-url "%WEATHER_CENTRAL_URL%"
+echo if errorlevel 1 (
+echo     echo.
+echo     echo [ERROR] EV_Weather fallo al iniciar
+echo     echo Verifica que:
+echo     echo   1. Python esta instalado y en PATH
+echo     echo   2. El archivo ev_weather\EV_W.py existe
+echo     echo   3. Las dependencias estan instaladas ^(pip install -r ev_weather\requirements.txt^)
+echo     echo.
+echo     pause
+echo ) else (
+echo     echo.
+echo     echo EV_Weather ha finalizado. Presiona cualquier tecla para cerrar...
+echo     pause
+echo )
+) > "%TEMP_WEATHER_SCRIPT%"
+
+echo Lanzando EV_Weather en nueva ventana...
+echo [DEBUG] Script temporal: %TEMP_WEATHER_SCRIPT% >> "%LOG_FILE%"
+echo [DEBUG] API Key: !OPENWEATHER_API_KEY:~0,10!... >> "%LOG_FILE%"
+echo [DEBUG] Central URL: !CENTRAL_API_URL! >> "%LOG_FILE%"
+
+start "EV_Weather-PC_B" cmd /k "%TEMP_WEATHER_SCRIPT%"
+
+REM Esperar un momento para verificar que la ventana se abrió
+timeout /t 2 /nobreak >nul
+
+echo [OK] EV_Weather deberia estar ejecutandose en ventana separada
+echo      Busca la ventana titulada "EV_Weather-PC_B"
 echo.
 timeout /t 2 /nobreak >nul
 
