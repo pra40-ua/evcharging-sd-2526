@@ -1,0 +1,30 @@
+============================================================ 
+ LOG DE EJECUCION - PC_B_RUN.bat 
+ Fecha/Hora: 26/11/2025 22:04:07,40 
+============================================================ 
+ 
+Docker version 28.4.0, build d8eb465
+[DEBUG] Directorio actual: C:\Users\panpatuhambre\Desktop\curso 25-26\SD\prac1ConRomero\evcharging-sd-2526 
+[DEBUG] Verificando existencia de OPENWEATHER_API_KEY.txt... 
+[DEBUG] Ruta completa buscada: C:\Users\panpatuhambre\Desktop\curso 25-26\SD\prac1ConRomero\evcharging-sd-2526\OPENWEATHER_API_KEY.txt 
+[DEBUG] Archivo OPENWEATHER_API_KEY.txt encontrado 
+[DEBUG] Contenido leido del archivo: 54076819eadd372702b599c788eb370f 
+[DEBUG] Longitud de la API Key: 
+54076819eadd372702b599c788eb370f 
+[DEBUG] Verificando que la API Key no este vacia... 
+[DEBUG] Valor de OPENWEATHER_API_KEY: "54076819eadd372702b599c788eb370f" 
+[DEBUG] Verificando que la API Key fue leida correctamente... 
+[DEBUG] Valor de OPENWEATHER_API_KEY: "54076819eadd372702b599c788eb370f" 
+[DEBUG] API Key validada: tiene contenido 
+[DEBUG] Verificando Python... 
+[DEBUG] Python encontrado 
+[DEBUG] Verificando ev_weather\EV_W.py... 
+[DEBUG] Archivo ev_weather\EV_W.py encontrado 
+[DEBUG] Llegando a :launch_weather 
+[DEBUG] API Key leida correctamente: 54076819ea... 
+[DEBUG] Iniciando lanzamiento de EV_Weather... 
+[DEBUG] Creando script temporal... 
+[DEBUG] Ruta del script temporal: C:\Users\PANPAT~1\AppData\Local\Temp\ev_weather_launch_32516.bat 
+[DEBUG] Variables temporales configuradas 
+[DEBUG] Escribiendo contenido del script temporal... 
+[DEBUG] Ruta completa: C:\Users\PANPAT~1\AppData\Local\Temp\ev_weather_launch_32516.bat 
