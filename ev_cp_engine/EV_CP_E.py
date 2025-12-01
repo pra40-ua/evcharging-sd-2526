@@ -24,6 +24,7 @@ import platform
 import urllib.request
 import urllib.error
 import webbrowser
+import requests
 
 # Importaciones para la interfaz web
 from flask import Flask, render_template, jsonify, request, make_response, redirect
@@ -740,6 +741,7 @@ def mostrar_interfaz_cp(cp_id: str):
     print("    [d] Desenchufar vehículo (Unplug)")
     print("    [r] Simular RFID / Iniciar sesión")
     print("    [s] Mostrar estado actual")
+    print("    [l] Cambiar localización")
     print("    [h] Ayuda")
     print("    [q] Salir")
     print("="*70)
@@ -803,6 +805,32 @@ def menu_interactivo_engine() -> None:
             print(f"\n[{cp_id}] 📱 Simulando lectura de RFID...")
             print(f"[{cp_id}] (Esta acción normalmente se hace desde la web/driver)")
             print(f"[{cp_id}] Estado actual: {obtener_estado_actual()}")
+            continue
+        
+        if cmd == 'l':
+            print(f"\n[{cp_id}] 📍 Cambiar localización")
+            try:
+                nueva_localizacion = input(f"  Nueva localización (formato: Ciudad,País): ").strip()
+                if nueva_localizacion:
+                    # Actualizar en EV_W si está disponible
+                    weather_api_url = os.getenv('WEATHER_API_URL', 'http://127.0.0.1:5002')
+                    try:
+                        update_url = f"{weather_api_url}/weather/update_location/{cp_id}"
+                        payload = {'localizacion': nueva_localizacion}
+                        response = requests.put(update_url, json=payload, timeout=2)
+                        if response.status_code == 200:
+                            print(f"[{cp_id}] ✓ Localización actualizada en EV_W: {nueva_localizacion}")
+                        else:
+                            print(f"[{cp_id}] ⚠️ No se pudo actualizar en EV_W (HTTP {response.status_code})")
+                    except Exception as e:
+                        print(f"[{cp_id}] ⚠️ EV_W no disponible: {e}")
+                    print(f"[{cp_id}] ✓ Localización cambiada a: {nueva_localizacion}")
+                else:
+                    print(f"[{cp_id}] ❌ Localización no puede estar vacía")
+            except (EOFError, KeyboardInterrupt):
+                print(f"\n[{cp_id}] Operación cancelada")
+            except Exception as e:
+                print(f"[{cp_id}] ❌ Error cambiando localización: {e}")
             continue
             
         if cmd == 'q':

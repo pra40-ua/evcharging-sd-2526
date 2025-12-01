@@ -1274,6 +1274,7 @@ def crear_templates():
             html += '<th>Potencia (kW)</th>';
             html += '<th>Tiempo (s)</th>';
             html += '<th>Última Act.</th>';
+            html += '<th>🌡️ Clima</th>';
             html += '<th>Acciones</th>';
             html += '</tr></thead><tbody>';
             
@@ -1284,29 +1285,30 @@ def crear_templates():
                 const estadoClass = 'status-' + estado.toLowerCase().replace('í', 'i').replace('-', '-');
                 const tieneSesion = cp.tiene_sesion_activa || false;
                 
-                html += '<tr>';
-                html += `<td><strong>${cp.cp_id}</strong></td>`;
-                html += `<td><span class="status-badge ${estadoClass}">${estado}</span></td>`;
-                
-                // Columna de clima
-                const alertaClima = cp.alerta_clima || false;
-                const temperatura = cp.temperatura;
-                if (temperatura !== undefined && temperatura !== null) {
-                    const tempStr = temperatura.toFixed(1);
-                    if (alertaClima) {
-                        html += `<td><span style="color: #dc3545; font-weight: bold;">⚠️ ${tempStr}°C</span><br><small style="color: #dc3545;">ALERTA</small></td>`;
-                    } else {
-                        html += `<td><span style="color: #28a745;">🌡️ ${tempStr}°C</span></td>`;
-                    }
+            html += '<tr>';
+            html += `<td><strong>${cp.cp_id}</strong></td>`;
+            html += `<td><span class="status-badge ${estadoClass}">${estado}</span></td>`;
+            
+            html += `<td>${(cp.energia_kwh || 0).toFixed(2)}</td>`;
+            html += `<td>${(cp.potencia_kw || 0).toFixed(2)}</td>`;
+            html += `<td>${cp.tiempo_carga_s || 0}</td>`;
+            html += `<td>${cp.timestamp_telemetria || '-'}</td>`;
+            
+            // Columna de clima (después de energía)
+            const alertaClima = cp.alerta_clima || false;
+            const temperatura = cp.temperatura;
+            if (temperatura !== undefined && temperatura !== null) {
+                const tempStr = temperatura.toFixed(1);
+                if (alertaClima) {
+                    html += `<td><span style="color: #dc3545; font-weight: bold;">⚠️ ${tempStr}°C</span><br><small style="color: #dc3545;">ALERTA ACTIVA</small></td>`;
                 } else {
-                    html += `<td><span style="color: #999;">-</span></td>`;
+                    html += `<td><span style="color: #28a745;">🌡️ ${tempStr}°C</span></td>`;
                 }
-                
-                html += `<td>${(cp.energia_kwh || 0).toFixed(2)}</td>`;
-                html += `<td>${(cp.potencia_kw || 0).toFixed(2)}</td>`;
-                html += `<td>${cp.tiempo_carga_s || 0}</td>`;
-                html += `<td>${cp.timestamp_telemetria || '-'}</td>`;
-                html += '<td>';
+            } else {
+                html += `<td><span style="color: #999;">-</span></td>`;
+            }
+            
+            html += '<td>';
                 
                 // Botones de control según el NUEVO FLUJO INTERACTIVO (3 PASOS)
                 if (estado === 'DESCONECTADO') {

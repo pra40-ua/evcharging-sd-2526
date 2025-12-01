@@ -374,7 +374,18 @@ def api_weather_alert():
             if estado_cp == 'SUMINISTRANDO':
                 # El suministro finalizará con normalidad y luego el CP pasará a "fuera de servicio"
                 registrar_evento(f"⚠️ Alerta climatológica activa para {cp_id} (T={temperatura}°C). Suministro finalizará normalmente.", "warn")
-                # No enviar STOP inmediato, esperar a que finalice naturalmente
+                # Enviar STOP para que finalice el suministro actual
+                try:
+                    with CONEXIONES_ACTIVAS_LOCK:
+                        conn = CONEXIONES_ACTIVAS.get(cp_id)
+                    if conn:
+                        # Enviar STOP cifrado al CP
+                        trama_stop = construir_trama('STOP', [], cp_id=cp_id, cifrar=True)
+                        conn.sendall(trama_stop)
+                        print(f"[CENTRAL] 📤 STOP enviado a {cp_id} por alerta climatológica (T={temperatura}°C)")
+                        registrar_evento(f"📤 STOP enviado a {cp_id} por alerta climatológica", "warn")
+                except Exception as e:
+                    print(f"[CENTRAL] ⚠️ Error enviando STOP a {cp_id}: {e}")
             else:
                 # Cambiar estado a fuera de servicio
                 try:

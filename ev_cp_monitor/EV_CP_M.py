@@ -354,11 +354,51 @@ def autenticar_en_registry(username: str, password: str) -> bool:
 def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str) -> socket.socket:
     """Conecta al EV_Central y realiza el registro. Retorna el socket conectado."""
     
-    ubicacion_cp = "C/Mayor, 45"
+    # Solicitar localización al usuario si no está configurada
+    ubicacion_cp = os.getenv(f'CP_{cp_id}_UBICACION', '')
+    if not ubicacion_cp:
+        try:
+            print(f"\n{'='*70}")
+            print(f"  REGISTRO DE CP: {cp_id}")
+            print(f"{'='*70}")
+            print("  Por favor, ingrese la localización del CP:")
+            print("  Formato: Ciudad,País (ejemplo: Madrid,ES)")
+            ubicacion_cp = input(f"  Localización para {cp_id}: ").strip()
+            if not ubicacion_cp:
+                ubicacion_cp = "Madrid,ES"  # Valor por defecto
+                print(f"  Usando localización por defecto: {ubicacion_cp}")
+            print(f"{'='*70}\n")
+        except (EOFError, KeyboardInterrupt):
+            ubicacion_cp = "Madrid,ES"  # Valor por defecto si no hay entrada
+            print(f"[CP_M] Usando localización por defecto: {ubicacion_cp}")
+    
     precio_kwh = "0.48"
     client_socket = None
 
     try:
+        # Registrar localización en EV_W si está disponible
+        weather_api_url = os.getenv('WEATHER_API_URL', 'http://127.0.0.1:5000/api')
+        try:
+            # Extraer ciudad,país de la ubicación
+            if ',' in ubicacion_cp:
+                ciudad_pais = ubicacion_cp.split(',')[0].strip() + ',' + ubicacion_cp.split(',')[1].strip() if len(ubicacion_cp.split(',')) >= 2 else ubicacion_cp
+            else:
+                ciudad_pais = ubicacion_cp
+            
+            # Intentar registrar en EV_W (no crítico si falla)
+            try:
+                weather_register_url = f"{weather_api_url.replace('/api', '')}/weather/register_cp" if '/api' in weather_api_url else f"{weather_api_url}/weather/register_cp"
+                payload = {'cp_id': cp_id, 'localizacion': ciudad_pais}
+                response = requests.post(weather_register_url, json=payload, timeout=2)
+                if response.status_code in (200, 201):
+                    print(f"[CP_M] ✓ Localización registrada en EV_W: {ciudad_pais}")
+                else:
+                    print(f"[CP_M] ⚠️ No se pudo registrar en EV_W (HTTP {response.status_code})")
+            except Exception as e:
+                print(f"[CP_M] ⚠️ EV_W no disponible o error registrando localización: {e}")
+        except Exception:
+            pass  # No crítico si falla
+        
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # Timeout de conexión para evitar bloqueos indefinidos
         client_socket.settimeout(10)

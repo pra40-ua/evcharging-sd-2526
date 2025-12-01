@@ -12,12 +12,19 @@ import time
 import argparse
 import threading
 import json
+import os
 from datetime import datetime
 from typing import Dict, List, Optional
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 # =================================================================
 #                    CONFIGURACIÓN GLOBAL
 # =================================================================
+
+# Flask app para API REST
+WEATHER_APP = Flask(__name__)
+CORS(WEATHER_APP)
 
 # Localizaciones de CPs (ciudad, país)
 LOCALIZACIONES: Dict[str, str] = {}  # cp_id -> "Ciudad,País"
@@ -362,6 +369,108 @@ def estado_alertas():
         
         print("="*70)
 
+# =================================================================
+#                    API REST - REGISTRO DE CPs
+# =================================================================
+
+@WEATHER_APP.route('/weather/register_cp', methods=['POST'])
+def api_register_cp():
+    """Endpoint para registrar un CP automáticamente desde el Monitor."""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({
+                'status': 'error',
+                'message': 'No se proporcionó JSON en el body'
+            }), 400
+        
+        cp_id = data.get('cp_id')
+        localizacion = data.get('localizacion', '')
+        
+        if not cp_id:
+            return jsonify({
+                'status': 'error',
+                'message': 'cp_id es requerido'
+            }), 400
+        
+        if not localizacion:
+            return jsonify({
+                'status': 'error',
+                'message': 'localizacion es requerida'
+            }), 400
+        
+        with LOCALIZACIONES_LOCK:
+            LOCALIZACIONES[cp_id] = localizacion
+        
+        print(f"[EV_W] ✓ CP {cp_id} registrado automáticamente: {localizacion}")
+        
+        # Consultar temperatura inmediatamente
+        temp = obtener_temperatura(localizacion)
+        if temp is not None:
+            print(f"[EV_W]   Temperatura actual: {temp:.1f}°C")
+        
+        return jsonify({
+            'status': 'ok',
+            'cp_id': cp_id,
+            'localizacion': localizacion,
+            'temperatura_actual': temp,
+            'message': f'CP {cp_id} registrado correctamente'
+        }), 201
+        
+    except Exception as e:
+        print(f"[EV_W] ❌ Error registrando CP: {e}")
+        return jsonify({
+            'status': 'error',
+            'message': f'Error interno: {str(e)}'
+        }), 500
+
+@WEATHER_APP.route('/weather/update_location/<cp_id>', methods=['PUT'])
+def api_update_location(cp_id):
+    """Endpoint para actualizar la localización de un CP."""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({
+                'status': 'error',
+                'message': 'No se proporcionó JSON en el body'
+            }), 400
+        
+        nueva_localizacion = data.get('localizacion', '')
+        
+        if not nueva_localizacion:
+            return jsonify({
+                'status': 'error',
+                'message': 'localizacion es requerida'
+            }), 400
+        
+        with LOCALIZACIONES_LOCK:
+            if cp_id in LOCALIZACIONES:
+                LOCALIZACIONES[cp_id] = nueva_localizacion
+                print(f"[EV_W] ✓ Localización actualizada para {cp_id}: {nueva_localizacion}")
+                
+                # Consultar temperatura inmediatamente
+                temp = obtener_temperatura(nueva_localizacion)
+                
+                return jsonify({
+                    'status': 'ok',
+                    'cp_id': cp_id,
+                    'localizacion': nueva_localizacion,
+                    'temperatura_actual': temp,
+                    'message': f'Localización actualizada para {cp_id}'
+                }), 200
+            else:
+                return jsonify({
+                    'status': 'error',
+                    'message': f'CP {cp_id} no encontrado'
+                }), 404
+        
+    except Exception as e:
+        print(f"[EV_W] ❌ Error actualizando localización: {e}")
+        return jsonify({
+            'status': 'error',
+            'message': f'Error interno: {str(e)}'
+        }), 500
+
 def menu_interactivo():
     """Menú interactivo para gestionar localizaciones."""
     while True:
@@ -432,6 +541,15 @@ def main():
     monitoreo_thread = threading.Thread(target=bucle_monitoreo_clima, daemon=True)
     monitoreo_thread.start()
     print("[EV_W] ✓ Hilo de monitoreo iniciado")
+    
+    # Iniciar servidor Flask para API REST en hilo separado
+    api_port = int(os.getenv('WEATHER_API_PORT', '5002'))
+    api_thread = threading.Thread(
+        target=lambda: WEATHER_APP.run(host='0.0.0.0', port=api_port, debug=False, threaded=True),
+        daemon=True
+    )
+    api_thread.start()
+    print(f"[EV_W] ✓ API REST iniciada en puerto {api_port}")
     
     # Iniciar menú interactivo en el hilo principal
     try:
