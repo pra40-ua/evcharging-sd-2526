@@ -9,6 +9,10 @@ import base64
 import os
 import json
 from cryptography.fernet import Fernet
+import urllib3
+
+# Deshabilitar advertencias SSL para certificados autofirmados
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # =================================================================
 #                         FUNCIONES DE PROTOCOLO
@@ -162,7 +166,17 @@ ENCRYPTION_KEY = None
 ENCRYPTION_KEY_LOCK = threading.Lock()
 
 # URL de EV_Registry
-REGISTRY_URL = os.getenv('REGISTRY_URL', 'http://127.0.0.1:6000/api')
+# Si REGISTRY_URL no especifica protocolo, intentar HTTPS primero, luego HTTP
+REGISTRY_URL_ENV = os.getenv('REGISTRY_URL', '')
+if REGISTRY_URL_ENV:
+    REGISTRY_URL = REGISTRY_URL_ENV
+else:
+    # Por defecto, intentar HTTPS primero (si hay certificados)
+    # Si no funciona, el código intentará HTTP
+    REGISTRY_URL = os.getenv('REGISTRY_URL_HTTPS', 'https://127.0.0.1:6000/api')
+    # Fallback a HTTP si HTTPS no está disponible
+    if not REGISTRY_URL.startswith(('http://', 'https://')):
+        REGISTRY_URL = f'https://{REGISTRY_URL}'
 
 # =================================================================
 #                       LÓGICA DE COMUNICACIÓN CENTRAL
@@ -211,18 +225,39 @@ def enviar_orden_a_engine(engine_ip: str, engine_port: int, orden: str, cp_id: s
 def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
     """
     Registra el CP en EV_Registry.
+    Intenta HTTPS primero, luego HTTP si falla.
     
     Returns:
         (success: bool, username: str, password: str) o (False, None, None)
     """
+    # Intentar HTTPS primero si la URL no especifica protocolo
+    base_url = REGISTRY_URL
+    if not base_url.startswith(('http://', 'https://')):
+        base_url = f'https://{base_url}'
+    
+    # Si la URL base termina en /api, no agregar /register dos veces
+    if base_url.endswith('/api'):
+        url = f"{base_url}/register"
+    else:
+        url = f"{base_url}/api/register"
+    
+    payload = {
+        'cp_id': cp_id,
+        'ubicacion': ubicacion
+    }
+    
     try:
-        url = f"{REGISTRY_URL}/register"
-        payload = {
-            'cp_id': cp_id,
-            'ubicacion': ubicacion
-        }
-        
-        response = requests.post(url, json=payload, timeout=10)
+        # Intentar HTTPS primero (con verify=False para certificados autofirmados)
+        try:
+            response = requests.post(url, json=payload, timeout=10, verify=False)
+        except (requests.exceptions.SSLError, requests.exceptions.ConnectionError) as e:
+            # Si HTTPS falla, intentar HTTP
+            if url.startswith('https://'):
+                url_http = url.replace('https://', 'http://')
+                print(f"[CP_M] ⚠️ HTTPS falló, intentando HTTP...")
+                response = requests.post(url_http, json=payload, timeout=10)
+            else:
+                raise
         
         if response.status_code == 201:
             data = response.json()
@@ -259,18 +294,39 @@ def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
 def autenticar_en_registry(username: str, password: str) -> bool:
     """
     Autentica el CP en EV_Registry.
+    Intenta HTTPS primero, luego HTTP si falla.
     
     Returns:
         True si la autenticación fue exitosa
     """
+    # Intentar HTTPS primero si la URL no especifica protocolo
+    base_url = REGISTRY_URL
+    if not base_url.startswith(('http://', 'https://')):
+        base_url = f'https://{base_url}'
+    
+    # Si la URL base termina en /api, no agregar /authenticate dos veces
+    if base_url.endswith('/api'):
+        url = f"{base_url}/authenticate"
+    else:
+        url = f"{base_url}/api/authenticate"
+    
+    payload = {
+        'username': username,
+        'password': password
+    }
+    
     try:
-        url = f"{REGISTRY_URL}/authenticate"
-        payload = {
-            'username': username,
-            'password': password
-        }
-        
-        response = requests.post(url, json=payload, timeout=10)
+        # Intentar HTTPS primero (con verify=False para certificados autofirmados)
+        try:
+            response = requests.post(url, json=payload, timeout=10, verify=False)
+        except (requests.exceptions.SSLError, requests.exceptions.ConnectionError) as e:
+            # Si HTTPS falla, intentar HTTP
+            if url.startswith('https://'):
+                url_http = url.replace('https://', 'http://')
+                print(f"[CP_M] ⚠️ HTTPS falló, intentando HTTP...")
+                response = requests.post(url_http, json=payload, timeout=10)
+            else:
+                raise
         
         if response.status_code == 200:
             data = response.json()

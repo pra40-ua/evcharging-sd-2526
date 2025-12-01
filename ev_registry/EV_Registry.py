@@ -600,6 +600,10 @@ def main():
                         help="Puerto del servidor (default: 6000)")
     parser.add_argument("--ssl", action='store_true',
                         help="Habilitar HTTPS (requiere certificados)")
+    parser.add_argument("--ssl-cert", type=str, default="certificados/registry_cert.pem",
+                        help="Ruta al archivo de certificado SSL (default: certificados/registry_cert.pem)")
+    parser.add_argument("--ssl-key", type=str, default="certificados/registry_key.pem",
+                        help="Ruta al archivo de clave privada SSL (default: certificados/registry_key.pem)")
     
     args = parser.parse_args()
     
@@ -630,13 +634,35 @@ def main():
     print(f"[EV_Registry] Iniciando servidor en puerto {REGISTRY_PORT}...")
     
     if args.ssl:
-        # Configurar SSL (requiere certificados)
+        # Configurar SSL
         context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-        # Nota: En producción, usar certificados reales
-        # context.load_cert_chain('cert.pem', 'key.pem')
-        print("[EV_Registry] ⚠️ SSL habilitado pero requiere certificados configurados")
-        app.run(host='0.0.0.0', port=REGISTRY_PORT, ssl_context=context, debug=False, threaded=True)
+        
+        # Verificar que existen los archivos de certificado
+        cert_path = args.ssl_cert
+        key_path = args.ssl_key
+        
+        if not os.path.exists(cert_path):
+            print(f"[EV_Registry] ❌ ERROR: No se encuentra el certificado: {cert_path}")
+            print(f"[EV_Registry] Ejecuta generar_certificados_ssl.bat o generar_certificados_ssl.ps1 para generar certificados")
+            return
+        
+        if not os.path.exists(key_path):
+            print(f"[EV_Registry] ❌ ERROR: No se encuentra la clave privada: {key_path}")
+            print(f"[EV_Registry] Ejecuta generar_certificados_ssl.bat o generar_certificados_ssl.ps1 para generar certificados")
+            return
+        
+        try:
+            context.load_cert_chain(cert_path, key_path)
+            print(f"[EV_Registry] ✓ Certificados SSL cargados:")
+            print(f"  - Certificado: {cert_path}")
+            print(f"  - Clave privada: {key_path}")
+            app.run(host='0.0.0.0', port=REGISTRY_PORT, ssl_context=context, debug=False, threaded=True)
+        except Exception as e:
+            print(f"[EV_Registry] ❌ ERROR cargando certificados SSL: {e}")
+            print(f"[EV_Registry] Verifica que los archivos de certificado sean válidos")
+            return
     else:
+        print("[EV_Registry] ⚠️ SSL deshabilitado. Usando HTTP (no seguro)")
         app.run(host='0.0.0.0', port=REGISTRY_PORT, debug=False, threaded=True)
 
 if __name__ == "__main__":

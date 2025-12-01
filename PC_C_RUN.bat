@@ -77,11 +77,31 @@ echo   - BD Host: !CENTRAL_IP_BD!
 echo   - BD Puerto: 3306
 echo.
 
+REM Verificar si existen certificados SSL
+set USE_SSL=0
+if exist "certificados\registry_cert.pem" (
+    if exist "certificados\registry_key.pem" (
+        set USE_SSL=1
+        echo [INFO] Certificados SSL encontrados. Usando HTTPS.
+    )
+)
+
 REM Lanzar EV_Registry en nueva ventana
-start "EV_Registry-PC_C" cmd /k "py ev_registry\EV_Registry.py --db-host !CENTRAL_IP_BD! --db-port 3306 --db-user root --db-password root --db-name evcharging --port 6000"
+if !USE_SSL! equ 1 (
+    start "EV_Registry-PC_C" cmd /k "py ev_registry\EV_Registry.py --db-host !CENTRAL_IP_BD! --db-port 3306 --db-user root --db-password root --db-name evcharging --port 6000 --ssl --ssl-cert certificados\registry_cert.pem --ssl-key certificados\registry_key.pem"
+    echo [OK] EV_Registry iniciado con HTTPS (puerto 6000)
+) else (
+    start "EV_Registry-PC_C" cmd /k "py ev_registry\EV_Registry.py --db-host !CENTRAL_IP_BD! --db-port 3306 --db-user root --db-password root --db-name evcharging --port 6000"
+    echo [OK] EV_Registry iniciado con HTTP (puerto 6000)
+    echo [INFO] Para usar HTTPS, ejecuta generar_certificados_ssl.bat primero
+)
 
 echo [OK] EV_Registry iniciado en ventana separada
-echo   - API REST: http://localhost:6000/api
+if !USE_SSL! equ 1 (
+    echo   - API REST: https://localhost:6000/api (HTTPS)
+) else (
+    echo   - API REST: http://localhost:6000/api (HTTP)
+)
 echo.
 timeout /t 3 /nobreak >nul
 
