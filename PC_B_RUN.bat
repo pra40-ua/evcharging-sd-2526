@@ -62,63 +62,89 @@ echo [0/4] INICIANDO EV_WEATHER
 echo ============================================================
 echo.
 
-REM Verificar si existe el archivo de configuración de OpenWeather
-if not exist "OPENWEATHER_API_KEY.txt" (
-    echo [ADVERTENCIA] No se encontro OPENWEATHER_API_KEY.txt
-    echo.
-    echo Para usar EV_Weather, crea un archivo OPENWEATHER_API_KEY.txt
-    echo con tu API Key de OpenWeather (obtener en https://openweathermap.org/api)
-    echo.
-    echo Continuando sin EV_Weather...
-    echo.
-    timeout /t 3 /nobreak >nul
-    goto MENU
+REM Debug: mostrar directorio actual
+echo [DEBUG] Directorio actual: %CD% >> "%LOG_FILE%"
+echo [DEBUG] Verificando existencia de OPENWEATHER_API_KEY.txt... >> "%LOG_FILE%"
+echo [DEBUG] Ruta completa buscada: %CD%\OPENWEATHER_API_KEY.txt >> "%LOG_FILE%"
+
+REM Verificar si existe el archivo de configuración de OpenWeather (con ruta completa)
+set "WEATHER_KEY_FILE=%CD%\OPENWEATHER_API_KEY.txt"
+if not exist "!WEATHER_KEY_FILE!" (
+    REM Intentar también con ruta relativa
+    if not exist "OPENWEATHER_API_KEY.txt" (
+        echo [ADVERTENCIA] No se encontro OPENWEATHER_API_KEY.txt
+        echo [DEBUG] Archivo no encontrado en: !WEATHER_KEY_FILE! >> "%LOG_FILE%"
+        echo [DEBUG] Archivo no encontrado en: %CD%\OPENWEATHER_API_KEY.txt >> "%LOG_FILE%"
+        echo.
+        echo Para usar EV_Weather, crea un archivo OPENWEATHER_API_KEY.txt
+        echo con tu API Key de OpenWeather (obtener en https://openweathermap.org/api)
+        echo.
+        echo Continuando sin EV_Weather...
+        echo.
+        timeout /t 3 /nobreak >nul
+        goto MENU
+    )
 )
 
-REM Leer API Key (método más robusto)
-set OPENWEATHER_API_KEY=
-for /f "usebackq delims=" %%a in ("OPENWEATHER_API_KEY.txt") do set "OPENWEATHER_API_KEY=%%a"
+echo [DEBUG] Archivo OPENWEATHER_API_KEY.txt encontrado >> "%LOG_FILE%"
+echo [OK] Archivo OPENWEATHER_API_KEY.txt encontrado
+echo [INFO] Leyendo contenido del archivo...
 
-REM Eliminar espacios y caracteres de control al inicio y final
-set OPENWEATHER_API_KEY=!OPENWEATHER_API_KEY: =!
-set OPENWEATHER_API_KEY=!OPENWEATHER_API_KEY:	=!
+REM Leer API Key (método más robusto - solo primera línea)
+REM Usar ruta completa para asegurar que se lee desde el directorio correcto
+set OPENWEATHER_API_KEY=
+set "WEATHER_KEY_FILE=%CD%\OPENWEATHER_API_KEY.txt"
+if exist "OPENWEATHER_API_KEY.txt" (
+    for /f "usebackq delims=" %%a in ("OPENWEATHER_API_KEY.txt") do (
+        set "OPENWEATHER_API_KEY=%%a"
+        goto :read_done
+    )
+) else if exist "!WEATHER_KEY_FILE!" (
+    for /f "usebackq delims=" %%a in ("!WEATHER_KEY_FILE!") do (
+        set "OPENWEATHER_API_KEY=%%a"
+        goto :read_done
+    )
+)
+:read_done
+
+REM El for /f ya elimina saltos de línea automáticamente
+REM Solo necesitamos eliminar espacios y tabs si los hay
+REM (pero normalmente la API key no debería tenerlos)
 
 REM Debug: mostrar lo que se leyó
 echo [DEBUG] Contenido leido del archivo: !OPENWEATHER_API_KEY! >> "%LOG_FILE%"
-echo [DEBUG] Longitud: !OPENWEATHER_API_KEY:~0,100! >> "%LOG_FILE%"
+echo [DEBUG] Longitud de la API Key: >> "%LOG_FILE%"
+echo !OPENWEATHER_API_KEY! >> "%LOG_FILE%"
 
-REM Verificar que se leyó algo
-if "!OPENWEATHER_API_KEY!"=="" (
-    echo [ERROR] OPENWEATHER_API_KEY.txt esta vacio o no se pudo leer correctamente
-    echo.
-    echo Verifica que el archivo contiene tu API Key de OpenWeather
-    echo (solo la clave, sin espacios ni saltos de linea)
-    echo.
-    echo Continuando sin EV_Weather...
-    echo.
-    timeout /t 3 /nobreak >nul
-    goto MENU
+REM Mostrar información en pantalla
+if defined OPENWEATHER_API_KEY (
+    echo [OK] API Key leida correctamente
+    echo [INFO] Longitud: !OPENWEATHER_API_KEY:~0,50!...
+    echo [DEBUG] Verificando que la API Key no este vacia... >> "%LOG_FILE%"
+    echo [DEBUG] Valor de OPENWEATHER_API_KEY: "!OPENWEATHER_API_KEY!" >> "%LOG_FILE%"
+) else (
+    echo [ERROR] No se pudo leer la API Key del archivo
+    echo [ERROR] OPENWEATHER_API_KEY no esta definida >> "%LOG_FILE%"
 )
 
-REM Verificar longitud mínima (las API keys de OpenWeather suelen tener al menos 32 caracteres)
-set TEST_LEN=!OPENWEATHER_API_KEY:~31,1!
-if "!TEST_LEN!"=="" (
-    echo [ERROR] La API Key parece ser muy corta ^(menos de 32 caracteres^)
-    echo.
-    echo Longitud detectada: !OPENWEATHER_API_KEY:~0,50!
-    echo Verifica que el archivo contiene la API Key completa
-    echo.
-    echo Continuando sin EV_Weather...
-    echo.
-    timeout /t 3 /nobreak >nul
-    goto MENU
-)
+REM Verificar que se leyó algo - validación simple
+echo [DEBUG] Verificando que la API Key fue leida correctamente... >> "%LOG_FILE%"
+echo [DEBUG] Valor de OPENWEATHER_API_KEY: "!OPENWEATHER_API_KEY!" >> "%LOG_FILE%"
 
-echo [DEBUG] API Key leida correctamente: !OPENWEATHER_API_KEY:~0,10!... >> "%LOG_FILE%"
+REM Si la variable no está definida o está vacía, saltar a MENU
+if not defined OPENWEATHER_API_KEY goto :skip_weather
+if "!OPENWEATHER_API_KEY!"=="" goto :skip_weather
+
+REM Si llegamos aquí, la API key está definida y no está vacía
+echo [DEBUG] API Key validada: tiene contenido >> "%LOG_FILE%"
+echo [OK] API Key leida y validada correctamente
+echo [INFO] Continuando con el inicio de EV_Weather...
 
 REM Construir URL de Central API (puerto 5001 para API REST)
 set CENTRAL_API_URL=http://!CENTRAL_IP!:5001/api
 
+echo.
+echo [OK] Todas las validaciones completadas correctamente
 echo.
 echo ============================================================
 echo   INICIANDO EV_WEATHER
@@ -153,29 +179,69 @@ if not exist "ev_weather\EV_W.py" (
     goto MENU
 )
 echo [DEBUG] Archivo ev_weather\EV_W.py encontrado >> "%LOG_FILE%"
+goto :launch_weather
+
+:skip_weather
+echo.
+echo [ERROR] No se pudo leer la API Key del archivo
+echo [ERROR] El archivo existe pero esta vacio o no se pudo leer >> "%LOG_FILE%"
+echo.
+echo Verifica que el archivo contiene tu API Key de OpenWeather
+echo (solo la clave, sin espacios ni saltos de linea)
+echo.
+echo Continuando sin EV_Weather...
+echo.
+timeout /t 3 /nobreak >nul
+echo [DEBUG] Saltando al MENU desde skip_weather >> "%LOG_FILE%"
+goto MENU
+
+:launch_weather
+
+echo [DEBUG] Llegando a :launch_weather >> "%LOG_FILE%"
+echo [DEBUG] API Key leida correctamente: !OPENWEATHER_API_KEY:~0,10!... >> "%LOG_FILE%"
+echo [DEBUG] Iniciando lanzamiento de EV_Weather... >> "%LOG_FILE%"
+echo [INFO] Preparando lanzamiento de EV_Weather...
 
 REM Crear script temporal con las variables ya expandidas
+echo [DEBUG] Creando script temporal... >> "%LOG_FILE%"
 set TEMP_WEATHER_SCRIPT=%TEMP%\ev_weather_launch_%RANDOM%.bat
+echo [DEBUG] Ruta del script temporal: !TEMP_WEATHER_SCRIPT! >> "%LOG_FILE%"
 
 REM Guardar valores en variables temporales para usar en el script
 set WEATHER_API_KEY=!OPENWEATHER_API_KEY!
 set WEATHER_CENTRAL_URL=!CENTRAL_API_URL!
+echo [DEBUG] Variables temporales configuradas >> "%LOG_FILE%"
 
+REM Crear el script temporal usando un método más robusto
+echo [DEBUG] Escribiendo contenido del script temporal... >> "%LOG_FILE%"
+echo [DEBUG] Ruta completa: !TEMP_WEATHER_SCRIPT! >> "%LOG_FILE%"
+
+REM Guardar las variables en variables con nombres más simples para evitar problemas de expansión
+set "WK=!WEATHER_API_KEY!"
+set "WCU=!WEATHER_CENTRAL_URL!"
+
+REM Guardar el directorio del proyecto para usar en el script temporal
+set "PROJ_DIR=%CD%"
+echo [DEBUG] Directorio del proyecto: !PROJ_DIR! >> "%LOG_FILE%"
+
+REM Crear el script usando un bloque que expande correctamente las variables
+REM Escapar correctamente los caracteres especiales dentro del bloque
 (
 echo @echo off
-echo cd /d "%~dp0"
+echo setlocal EnableDelayedExpansion
+echo cd /d "!PROJ_DIR!"
 echo echo ============================================================
 echo echo   EV_WEATHER - Weather Control Office
 echo echo ============================================================
 echo echo.
 echo echo Iniciando EV_Weather...
-echo echo   - API Key: %WEATHER_API_KEY:~0,10%...
-echo echo   - Central API: %WEATHER_CENTRAL_URL%
+echo echo   - API Key: !WK:~0,10!...
+echo echo   - Central API: !WCU!
 echo echo.
 echo echo ============================================================
 echo echo.
-echo py ev_weather\EV_W.py --api-key "%WEATHER_API_KEY%" --central-url "%WEATHER_CENTRAL_URL%"
-echo if errorlevel 1 (
+echo py ev_weather\EV_W.py --api-key "!WK!" --central-url "!WCU!"
+echo ^if errorlevel 1 ^(
 echo     echo.
 echo     echo [ERROR] EV_Weather fallo al iniciar
 echo     echo Verifica que:
@@ -184,19 +250,49 @@ echo     echo   2. El archivo ev_weather\EV_W.py existe
 echo     echo   3. Las dependencias estan instaladas ^(pip install -r ev_weather\requirements.txt^)
 echo     echo.
 echo     pause
-echo ) else (
+echo ^) else ^(
 echo     echo.
 echo     echo EV_Weather ha finalizado. Presiona cualquier tecla para cerrar...
 echo     pause
-echo )
-) > "%TEMP_WEATHER_SCRIPT%"
+echo ^)
+) > "!TEMP_WEATHER_SCRIPT!"
+set CREATE_RESULT=!errorlevel!
+echo [DEBUG] Resultado de creacion del script: !CREATE_RESULT! >> "%LOG_FILE%"
 
+REM Verificar que el archivo se creó correctamente
+if not exist "!TEMP_WEATHER_SCRIPT!" (
+    echo [ERROR] El script temporal no se creo correctamente >> "%LOG_FILE%"
+    echo [ERROR] No se pudo crear el script temporal para EV_Weather
+    echo [ERROR] Ruta intentada: !TEMP_WEATHER_SCRIPT!
+    echo.
+    pause
+    goto MENU
+)
+
+if !CREATE_RESULT! neq 0 (
+    echo [ERROR] Fallo al crear el script temporal >> "%LOG_FILE%"
+    echo [ERROR] No se pudo crear el script temporal para EV_Weather
+    echo [ERROR] Ruta intentada: !TEMP_WEATHER_SCRIPT!
+    echo.
+    pause
+    goto MENU
+)
+
+echo [DEBUG] Script temporal creado exitosamente >> "%LOG_FILE%"
 echo Lanzando EV_Weather en nueva ventana...
-echo [DEBUG] Script temporal: %TEMP_WEATHER_SCRIPT% >> "%LOG_FILE%"
+echo [DEBUG] Script temporal: !TEMP_WEATHER_SCRIPT! >> "%LOG_FILE%"
 echo [DEBUG] API Key: !OPENWEATHER_API_KEY:~0,10!... >> "%LOG_FILE%"
 echo [DEBUG] Central URL: !CENTRAL_API_URL! >> "%LOG_FILE%"
 
-start "EV_Weather-PC_B" cmd /k "%TEMP_WEATHER_SCRIPT%"
+start "EV_Weather-PC_B" cmd /k "!TEMP_WEATHER_SCRIPT!"
+if !errorlevel! neq 0 (
+    echo [ERROR] Fallo al lanzar EV_Weather >> "%LOG_FILE%"
+    echo [ERROR] No se pudo lanzar EV_Weather en nueva ventana
+    echo.
+    pause
+    goto MENU
+)
+echo [DEBUG] Comando START ejecutado exitosamente >> "%LOG_FILE%"
 
 REM Esperar un momento para verificar que la ventana se abrió
 timeout /t 2 /nobreak >nul
@@ -204,12 +300,14 @@ timeout /t 2 /nobreak >nul
 echo [OK] EV_Weather deberia estar ejecutandose en ventana separada
 echo      Busca la ventana titulada "EV_Weather-PC_B"
 echo.
+echo [DEBUG] EV_Weather lanzado, continuando al MENU... >> "%LOG_FILE%"
 timeout /t 2 /nobreak >nul
 
 REM ============================================================
 REM  MENU DE SELECCION
 REM ============================================================
 :MENU
+echo [DEBUG] Llegando al MENU >> "%LOG_FILE%"
 echo ============================================================
 echo   MENU DE OPCIONES
 echo ============================================================
@@ -224,7 +322,7 @@ echo.
 set "MODO="
 set /p MODO="Selecciona opcion (1, 2, 3 o 0): "
 
-REM Validar que se ingreso algo
+REM Si no se ingresó nada (usuario presionó Enter sin escribir), volver al MENU
 if not defined MODO (
     echo.
     echo [ERROR] Debes seleccionar una opcion.
@@ -248,6 +346,8 @@ goto MENU
 :SALIR
 echo.
 echo Saliendo...
+echo [DEBUG] Saliendo del script >> "%LOG_FILE%"
+pause
 exit /b 0
 
 REM ============================================================
@@ -1011,3 +1111,14 @@ echo ============================================================ >> "%LOG_FILE%
 
 endlocal
 goto :eof
+
+REM ============================================================
+REM  PUNTO DE SEGURIDAD - NO DEBERIA LLEGAR AQUI
+REM ============================================================
+:ERROR_EXIT
+echo.
+echo [ERROR] El script ha terminado inesperadamente
+echo [ERROR] Revisa el archivo de log para mas detalles
+echo.
+pause
+exit /b 1
