@@ -51,28 +51,83 @@ Export-PfxCertificate -Cert $cert -FilePath $pfxPath -Password $password | Out-N
 # Exportar certificado en formato PEM
 $certBytes = $cert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
 $certBase64 = [System.Convert]::ToBase64String($certBytes)
-$certPEM = "-----BEGIN CERTIFICATE-----`n"
-$certPEM += ($certBase64 -replace '(.{64})', '$1`n')
-$certPEM += "`n-----END CERTIFICATE-----"
-[System.IO.File]::WriteAllText($certPath, $certPEM)
+$certPEM = "-----BEGIN CERTIFICATE-----" + [Environment]::NewLine
+$certPEM += ($certBase64 -replace '(.{64})', '$1' + [Environment]::NewLine)
+$certPEM += [Environment]::NewLine + "-----END CERTIFICATE-----" + [Environment]::NewLine
+[System.IO.File]::WriteAllText($certPath, $certPEM, [System.Text.Encoding]::UTF8)
 
 Write-Host "[OK] Certificado exportado: $certPath" -ForegroundColor Green
 
 Write-Host "[3/3] Exportando clave privada..." -ForegroundColor Yellow
 
-# Para la clave privada, necesitamos usar OpenSSL o convertir desde PFX
-# Por ahora, generamos un script para extraerla
-$extractKeyScript = @"
-# Extraer clave privada desde PFX usando OpenSSL
-# Ejecutar: openssl pkcs12 -in registry.pfx -nocerts -nodes -out registry_key.pem
-# Contraseña: evregistry123
+# Intentar extraer la clave privada usando Python (más confiable que OpenSSL)
+$pythonScript = @"
+import sys
+import os
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.serialization import pkcs12
+
+pfx_path = r"$pfxPath"
+output_path = r"$keyPath"
+password = "evregistry123"
+
+try:
+    with open(pfx_path, 'rb') as f:
+        pfx_data = f.read()
+    
+    private_key, certificate, additional_certificates = pkcs12.load_key_and_certificates(
+        pfx_data, password.encode('utf-8'))
+    
+    if private_key is None:
+        sys.exit(1)
+    
+    pem_key = private_key.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.NoEncryption())
+    
+    with open(output_path, 'wb') as f:
+        f.write(pem_key)
+    
+    sys.exit(0)
+except Exception:
+    sys.exit(1)
 "@
 
-Write-Host "[INFO] Clave privada está en el archivo PFX" -ForegroundColor Yellow
-Write-Host "       Para extraerla, ejecuta:" -ForegroundColor Yellow
-Write-Host "       openssl pkcs12 -in certificados\registry.pfx -nocerts -nodes -out certificados\registry_key.pem" -ForegroundColor Cyan
-Write-Host "       Contraseña: evregistry123" -ForegroundColor Cyan
-Write-Host ""
+# Guardar script temporal
+$tempScript = Join-Path $env:TEMP "extract_key_$(Get-Random).py"
+$pythonScript | Out-File -FilePath $tempScript -Encoding UTF8
+
+# Intentar ejecutar con Python
+$pythonFound = $false
+$pythonCmds = @("python", "python3", "py")
+
+foreach ($cmd in $pythonCmds) {
+    $pythonCmd = Get-Command $cmd -ErrorAction SilentlyContinue
+    if ($pythonCmd) {
+        Write-Host "[INFO] Extrayendo clave privada usando Python..." -ForegroundColor Yellow
+        $result = & $cmd $tempScript 2>&1
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "[OK] Clave privada extraida: $keyPath" -ForegroundColor Green
+            $pythonFound = $true
+            break
+        }
+    }
+}
+
+# Limpiar script temporal
+Remove-Item $tempScript -ErrorAction SilentlyContinue
+
+if (-not $pythonFound) {
+    Write-Host "[ADVERTENCIA] No se pudo extraer la clave privada automaticamente" -ForegroundColor Yellow
+    Write-Host "              La clave privada esta en el archivo PFX" -ForegroundColor Yellow
+    Write-Host "              Para extraerla manualmente:" -ForegroundColor Yellow
+    Write-Host "              python extraer_clave_privada.py" -ForegroundColor Cyan
+    Write-Host "              O con OpenSSL:" -ForegroundColor Yellow
+    Write-Host "              openssl pkcs12 -in certificados\registry.pfx -nocerts -nodes -out certificados\registry_key.pem" -ForegroundColor Cyan
+    Write-Host "              Contrasena: evregistry123" -ForegroundColor Cyan
+    Write-Host ""
+}
 
 # Guardar información del certificado
 $certInfo = @"
@@ -99,16 +154,18 @@ Write-Host "============================================================" -Foreg
 Write-Host ""
 Write-Host "Archivos generados en: certificados\" -ForegroundColor Yellow
 Write-Host "  - registry_cert.pem  (Certificado)" -ForegroundColor White
+if (Test-Path $keyPath) {
+    Write-Host "  - registry_key.pem   (Clave privada) [OK]" -ForegroundColor Green
+} else {
+    Write-Host "  - registry_key.pem   (Clave privada) [Pendiente]" -ForegroundColor Yellow
+}
 Write-Host "  - registry.pfx       (Certificado + Clave privada)" -ForegroundColor White
 Write-Host "  - README.txt         (Instrucciones)" -ForegroundColor White
 Write-Host ""
 Write-Host "IMPORTANTE:" -ForegroundColor Yellow
 Write-Host "  - Estos son certificados autofirmados (solo para desarrollo)" -ForegroundColor White
-Write-Host "  - Los navegadores mostrarán advertencias de seguridad" -ForegroundColor White
-Write-Host "  - Para producción, use certificados de una CA reconocida" -ForegroundColor White
-Write-Host ""
-Write-Host "Para extraer la clave privada:" -ForegroundColor Yellow
-Write-Host "  openssl pkcs12 -in certificados\registry.pfx -nocerts -nodes -out certificados\registry_key.pem" -ForegroundColor Cyan
+Write-Host "  - Los navegadores mostraran advertencias de seguridad" -ForegroundColor White
+Write-Host "  - Para produccion, use certificados de una CA reconocida" -ForegroundColor White
 Write-Host ""
 pause
 

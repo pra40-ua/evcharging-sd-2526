@@ -250,12 +250,53 @@ def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
         # Intentar HTTPS primero (con verify=False para certificados autofirmados)
         try:
             response = requests.post(url, json=payload, timeout=10, verify=False)
-        except (requests.exceptions.SSLError, requests.exceptions.ConnectionError) as e:
-            # Si HTTPS falla, intentar HTTP
+        except requests.exceptions.SSLError as ssl_err:
+            # Error SSL específico - puede ser problema de certificado o configuración
+            error_msg = str(ssl_err).lower()
+            # Si es un error de versión SSL o handshake, el servidor puede estar escuchando en HTTP
+            if 'wrong_version_number' in error_msg or 'handshake' in error_msg:
+                print(f"[CP_M] ⚠️ Error SSL: El servidor puede estar escuchando en HTTP en lugar de HTTPS")
+                print(f"[CP_M]   Intentando HTTP como fallback...")
+                # Intentar HTTP como fallback
+                if url.startswith('https://'):
+                    url_http = url.replace('https://', 'http://')
+                    try:
+                        response = requests.post(url_http, json=payload, timeout=10)
+                    except requests.exceptions.ConnectionError:
+                        print(f"[CP_M] ❌ HTTP también falló. Verifique que EV_Registry esté ejecutándose.")
+                        raise ssl_err
+                else:
+                    raise
+            # Para otros errores SSL, intentar HTTP como fallback
+            if url.startswith('https://'):
+                url_http = url.replace('https://', 'http://')
+                print(f"[CP_M] ⚠️ HTTPS falló por error SSL, intentando HTTP...")
+                try:
+                    response = requests.post(url_http, json=payload, timeout=10)
+                except requests.exceptions.ConnectionError:
+                    # Si HTTP también falla, el servidor probablemente solo escucha HTTPS
+                    print(f"[CP_M] ⚠️ HTTP también falló. El servidor puede estar configurado solo para HTTPS.")
+                    raise ssl_err  # Re-lanzar el error SSL original
+            else:
+                raise
+        except requests.exceptions.ConnectionError as conn_err:
+            # Error de conexión - puede ser que el servidor no esté escuchando en ese puerto/protocolo
+            error_msg = str(conn_err).lower()
+            # Si es "Connection refused", el servidor no está escuchando en ese protocolo
+            if 'connection refused' in error_msg and url.startswith('https://'):
+                print(f"[CP_M] ⚠️ Conexión HTTPS rechazada. El servidor puede estar configurado solo para HTTPS.")
+                print(f"[CP_M]   Verifique que EV_Registry esté ejecutándose con SSL habilitado.")
+                raise
+            # Para otros errores de conexión, intentar HTTP como fallback
             if url.startswith('https://'):
                 url_http = url.replace('https://', 'http://')
                 print(f"[CP_M] ⚠️ HTTPS falló, intentando HTTP...")
-                response = requests.post(url_http, json=payload, timeout=10)
+                try:
+                    response = requests.post(url_http, json=payload, timeout=10)
+                except requests.exceptions.ConnectionError:
+                    # Si HTTP también falla, el servidor probablemente solo escucha HTTPS
+                    print(f"[CP_M] ⚠️ HTTP también falló. El servidor puede estar configurado solo para HTTPS.")
+                    raise conn_err  # Re-lanzar el error de conexión original
             else:
                 raise
         
