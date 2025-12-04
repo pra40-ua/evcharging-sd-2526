@@ -1,0 +1,48 @@
+================================================================================
+LOG INICIADO: 2025-12-04 18:37:21
+Archivo de log: logs/cnn_cifar10_20251204_183721.log
+================================================================================
+
+Forma de X_train: (50000, 32, 32, 3)
+Forma de X_test: (10000, 32, 32, 3)
+Forma de Y_train: (50000, 10)
+Forma de Y_test: (10000, 10)
+============================================================
+TAREA CNN3: Optimización de Arquitectura CNN
+============================================================
+Forma de X_train: (50000, 32, 32, 3)
+Forma de X_test: (10000, 32, 32, 3)
+Forma de Y_train: (50000, 10)
+Forma de Y_test: (10000, 10)
+
+============================================================
+Entrenando: CNN3_A
+Filtros: [32, 64, 128], Kernel: 3, Pooling: max, Dense: [100], Batch: 32
+============================================================
+
+================================================================================
+ERROR DURANTE LA EJECUCIÓN: 2025-12-04 18:37:23
+Error: 'NoneType' object is not iterable
+
+Traceback completo:
+Traceback (most recent call last):
+  File "C:\Users\panpatuhambre\Desktop\curso 25-26\SD\prac1ConRomero\evcharging-sd-2526\cnn_cifar10.py", line 590, in <module>
+    modelos_cnn3, historiales_cnn3, mejor_cnn3 = tarea_CNN3()
+  File "C:\Users\panpatuhambre\Desktop\curso 25-26\SD\prac1ConRomero\evcharging-sd-2526\cnn_cifar10.py", line 454, in tarea_CNN3
+    modelo, historial = probar_CNN(
+  File "C:\Users\panpatuhambre\Desktop\curso 25-26\SD\prac1ConRomero\evcharging-sd-2526\cnn_cifar10.py", line 142, in probar_CNN
+    model.add(layers.Conv2D(
+  File "C:\Users\panpatuhambre\AppData\Local\Programs\Python\Python310\lib\site-packages\keras\src\dtensor\utils.py", line 96, in _wrap_function
+    init_method(layer_instance, *args, **kwargs)
+  File "C:\Users\panpatuhambre\AppData\Local\Programs\Python\Python310\lib\site-packages\keras\src\layers\convolutional\conv2d.py", line 179, in __init__
+    super().__init__(
+  File "C:\Users\panpatuhambre\AppData\Local\Programs\Python\Python310\lib\site-packages\keras\src\layers\convolutional\base_conv.py", line 118, in __init__
+    super().__init__(
+  File "C:\Users\panpatuhambre\AppData\Local\Programs\Python\Python310\lib\site-packages\tensorflow\python\trackable\base.py", line 204, in _method_wrapper
+    result = method(self, *args, **kwargs)
+  File "C:\Users\panpatuhambre\AppData\Local\Programs\Python\Python310\lib\site-packages\keras\src\engine\base_layer.py", line 452, in __init__
+    batch_input_shape = (batch_size,) + tuple(kwargs["input_shape"])
+TypeError: 'NoneType' object is not iterable
+
+Log guardado en: logs/cnn_cifar10_20251204_183721.log
+================================================================================

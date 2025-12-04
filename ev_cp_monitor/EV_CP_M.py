@@ -635,12 +635,12 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                     if es_trama_fin(resp_cmd):
                         print(f"[{cp_id}] 📩 Trama FIN recibida del Engine (respuesta a CMD '{orden}'). Reenviando a Central...")
                         try:
-                        # Descomponer y reconstruir cifrado para Central
-                        cod_fin_cmd, campos_fin_cmd = descomponer_trama(resp_cmd)
-                        if cod_fin_cmd == 'FIN':
-                            trama_fin_cifrada = construir_trama('FIN', campos_fin_cmd, cifrar=True)
-                            central_socket.sendall(trama_fin_cifrada)
-                            print(f"[{cp_id}] 📤 Trama FIN reenviada a Central con éxito (cifrado).")
+                            # Descomponer y reconstruir cifrado para Central
+                            cod_fin_cmd, campos_fin_cmd = descomponer_trama(resp_cmd)
+                            if cod_fin_cmd == 'FIN':
+                                trama_fin_cifrada = construir_trama('FIN', campos_fin_cmd, cifrar=True)
+                                central_socket.sendall(trama_fin_cifrada)
+                                print(f"[{cp_id}] 📤 Trama FIN reenviada a Central con éxito (cifrado).")
                         except Exception as e:
                             print(f"[{cp_id}] ❌ ERROR al reenviar FIN a Central: {e}")
                             import traceback
@@ -692,12 +692,12 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                             central_socket.sendall(trama_completa)
                             print(f"[{cp_id}] 📤 Trama FIN reenviada a Central con éxito.")
                         else:
-                        # Fallback: reconstruir si no tenemos la trama original (cifrado)
-                        print(f"[{cp_id}] ⚠️ Advertencia: Reconstruyendo FIN (trama original no disponible)")
-                        print(f"[{cp_id}]   Campos FIN: {args}")
-                        trama_fin = construir_trama('FIN', args, cifrar=True)
-                        central_socket.sendall(trama_fin)
-                        print(f"[{cp_id}] ✅ FIN enviado exitosamente a Central (cifrado)")
+                            # Fallback: reconstruir si no tenemos la trama original (cifrado)
+                            print(f"[{cp_id}] ⚠️ Advertencia: Reconstruyendo FIN (trama original no disponible)")
+                            print(f"[{cp_id}]   Campos FIN: {args}")
+                            trama_fin = construir_trama('FIN', args, cifrar=True)
+                            central_socket.sendall(trama_fin)
+                            print(f"[{cp_id}] ✅ FIN enviado exitosamente a Central (cifrado)")
                     except Exception as e:
                         print(f"[{cp_id}] ❌ ERROR al reenviar FIN a Central: {e}")
                         import traceback
