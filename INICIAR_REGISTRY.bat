@@ -23,22 +23,27 @@ echo   - Base de datos: evcharging
 echo   - Puerto Registry: 6000
 echo.
 
-REM Verificar si hay certificados SSL
+REM Verificar si hay certificados SSL válidos
+set USE_SSL=0
 if exist "certificados\registry_cert.pem" (
     if exist "certificados\registry_key.pem" (
-        echo [INFO] Certificados SSL encontrados. Iniciando con HTTPS...
-        echo.
-        start "EV_Registry" cmd /k "python ev_registry\EV_Registry.py --db-host %CENTRAL_IP_BD% --db-port 3306 --db-user root --db-password root --db-name evcharging --port 6000 --ssl --ssl-cert certificados\registry_cert.pem --ssl-key certificados\registry_key.pem"
-        echo [OK] EV_Registry iniciado con HTTPS (puerto 6000)
-        echo   - API REST: https://localhost:6000/api
-    ) else (
-        echo [INFO] Certificado encontrado pero falta la clave. Iniciando con HTTP...
-        start "EV_Registry" cmd /k "python ev_registry\EV_Registry.py --db-host %CENTRAL_IP_BD% --db-port 3306 --db-user root --db-password root --db-name evcharging --port 6000"
-        echo [OK] EV_Registry iniciado con HTTP (puerto 6000)
-        echo   - API REST: http://localhost:6000/api
+        REM Verificar que los archivos no estén vacíos
+        for %%A in ("certificados\registry_cert.pem") do if %%~zA gtr 0 (
+            for %%B in ("certificados\registry_key.pem") do if %%~zB gtr 0 (
+                set USE_SSL=1
+            )
+        )
     )
+)
+
+if %USE_SSL% equ 1 (
+    echo [INFO] Certificados SSL encontrados. Iniciando con HTTPS...
+    echo.
+    start "EV_Registry" cmd /k "python ev_registry\EV_Registry.py --db-host %CENTRAL_IP_BD% --db-port 3306 --db-user root --db-password root --db-name evcharging --port 6000 --ssl --ssl-cert certificados\registry_cert.pem --ssl-key certificados\registry_key.pem"
+    echo [OK] EV_Registry iniciado con HTTPS (puerto 6000)
+    echo   - API REST: https://localhost:6000/api
 ) else (
-    echo [INFO] No se encontraron certificados SSL. Iniciando con HTTP...
+    echo [INFO] No se encontraron certificados SSL válidos. Iniciando con HTTP...
     echo [ADVERTENCIA] Para usar HTTPS, ejecuta: generar_certificados_ssl.bat
     echo.
     start "EV_Registry" cmd /k "python ev_registry\EV_Registry.py --db-host %CENTRAL_IP_BD% --db-port 3306 --db-user root --db-password root --db-name evcharging --port 6000"
