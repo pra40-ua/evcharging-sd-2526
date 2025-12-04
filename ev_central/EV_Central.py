@@ -309,6 +309,38 @@ def verificar_registro_cp(cp_id: str) -> bool:
         # Por compatibilidad, permitir conexión si EV_Registry no está disponible
         return True
 
+def verificar_credenciales_registry(cp_id: str, username: str, password: str) -> bool:
+    """
+    Verifica las credenciales de un CP con EV_Registry.
+    
+    Args:
+        cp_id: ID del CP
+        username: Username proporcionado por EV_Registry
+        password: Password proporcionado por EV_Registry
+    
+    Returns:
+        True si las credenciales son válidas, False en caso contrario
+    """
+    try:
+        # Intentar autenticar con EV_Registry
+        auth_url = f"{REGISTRY_URL}/authenticate"
+        payload = {
+            'username': username,
+            'password': password
+        }
+        response = requests.post(auth_url, json=payload, timeout=5)
+        
+        if response.status_code == 200:
+            data = response.json()
+            # Verificar que el cp_id coincida
+            if data.get('status') == 'ok' and data.get('cp_id') == cp_id:
+                return True
+        return False
+    except Exception as e:
+        print(f"[CENTRAL] ⚠️ Error verificando credenciales en EV_Registry: {e}")
+        # Por compatibilidad, permitir si EV_Registry no está disponible
+        return True
+
 # =================================================================
 #                    API REST - ALERTAS DE CLIMA
 # =================================================================
@@ -2156,6 +2188,13 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
             cp_id = campos[0]
             ubicacion = campos[1]
             precio_kwh = float(campos[2])
+            
+            # Extraer credenciales si están presentes (nuevo formato: REG#cp_id#ubicacion#precio#username#password)
+            username = None
+            password = None
+            if len(campos) >= 5:
+                username = campos[3]
+                password = campos[4]
 
             # ====== VERIFICAR SI EL MONITOR ESTÁ BLOQUEADO MANUALMENTE ======
             with CP_MONITOR_BLOQUEADO_LOCK:
@@ -2251,8 +2290,10 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                 import traceback
                 traceback.print_exc()
             
-            # --- VERIFICAR REGISTRO EN EV_Registry ---
+            # --- VERIFICAR REGISTRO Y CREDENCIALES EN EV_Registry ---
             origen_ip = addr[0] if addr else None
+            
+            # Verificar que el CP esté registrado
             if not verificar_registro_cp(cp_id):
                 # CP no registrado en EV_Registry
                 respuesta_trama = construir_trama('AUTH', ['FAIL', 'CP no registrado en EV_Registry. Debe registrarse primero.'], cp_id=None, cifrar=False)
@@ -2268,6 +2309,37 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     db_connection=db_connection
                 )
                 return
+            
+            # Verificar credenciales si fueron proporcionadas
+            if username and password:
+                if not verificar_credenciales_registry(cp_id, username, password):
+                    # Credenciales inválidas
+                    respuesta_trama = construir_trama('AUTH', ['FAIL', 'Credenciales inválidas. Verifique username y password de EV_Registry.'], cp_id=None, cifrar=False)
+                    conn.sendall(respuesta_trama)
+                    print(f"[CENTRAL] <- Enviada respuesta AUTH: FAIL a {cp_id} (Credenciales inválidas)")
+                    registrar_evento(f"❌ AUTH DENEGADO: {cp_id} credenciales inválidas", "error")
+                    registrar_auditoria(
+                        accion="INTENTO_AUTENTICACION",
+                        cp_id=cp_id,
+                        origen_ip=origen_ip,
+                        descripcion=f"Intento de autenticación con credenciales inválidas (username: {username[:10]}...)",
+                        resultado="DENEGADO",
+                        db_connection=db_connection
+                    )
+                    return
+                else:
+                    print(f"[CENTRAL] ✓ Credenciales verificadas correctamente con EV_Registry para {cp_id}")
+                    registrar_auditoria(
+                        accion="VERIFICACION_CREDENCIALES",
+                        cp_id=cp_id,
+                        origen_ip=origen_ip,
+                        descripcion="Credenciales verificadas correctamente con EV_Registry",
+                        resultado="OK",
+                        db_connection=db_connection
+                    )
+            else:
+                # No se proporcionaron credenciales, solo verificar registro (modo compatibilidad)
+                print(f"[CENTRAL] ⚠️ No se proporcionaron credenciales en REG. Verificando solo registro...")
             
             # --- OBTENER O GENERAR CLAVE DE CIFRADO ---
             clave_cifrado = obtener_clave_cifrado_cp(cp_id, db_connection)
@@ -2411,6 +2483,24 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
             
             # Después del REG, todos los mensajes deben estar cifrados
             cod_op, campos = descomponer_trama(trama_bytes, cp_id=cp_id)
+            
+            # Si no se pudo descifrar (clave revocada o inválida)
+            if not cod_op and trama_bytes:
+                # Verificar si el mensaje estaba cifrado pero no se pudo descifrar
+                if b'ENC' in trama_bytes:
+                    print(f"[CENTRAL] ⚠️ ERROR: No se pudo descifrar mensaje de {cp_id}. Clave posiblemente revocada.")
+                    registrar_evento(f"🔑 ERROR: No se pudo descifrar mensaje de {cp_id}. Clave revocada o inválida.", "warn")
+                    registrar_auditoria(
+                        accion="ERROR_CIFRADO",
+                        cp_id=cp_id,
+                        origen_ip=addr[0] if addr else None,
+                        descripcion="Mensaje cifrado recibido pero no se pudo descifrar. Clave posiblemente revocada.",
+                        resultado="ERROR",
+                        db_connection=db_connection
+                    )
+                    # Cerrar conexión para forzar reautenticación
+                    print(f"[CENTRAL] Cerrando conexión con {cp_id} para forzar reautenticación...")
+                    break
             
             if cod_op:
                 # Registrar TODOS los mensajes recibidos con formato claro
