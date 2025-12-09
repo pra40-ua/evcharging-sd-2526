@@ -12,9 +12,14 @@ echo ========================================================================
 echo.
 
 REM Detectar IP de la base de datos (Central)
+REM Si se ejecuta en PC_A, usa localhost. Si se ejecuta en PC_B/PC_C, usa la IP de PC_A
 set CENTRAL_IP_BD=127.0.0.1
 if exist "central_ip.txt" (
     for /f "tokens=*" %%i in (central_ip.txt) do set CENTRAL_IP_BD=%%i
+    echo [INFO] IP de BD detectada desde central_ip.txt: %CENTRAL_IP_BD%
+    echo [INFO] Si Registry está en PC_B/PC_C, se conectará a BD en PC_A
+    echo [INFO] Si Registry está en PC_A, se conectará a BD local
+    echo.
 )
 
 echo [INFO] Configuración:
