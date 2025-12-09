@@ -55,6 +55,75 @@ if exist central_ip.txt (
 echo.
 
 REM ============================================================
+REM  CONFIGURAR REGISTRY_URL AUTOMATICAMENTE
+REM ============================================================
+echo ============================================================
+echo [INFO] CONFIGURANDO REGISTRY_URL
+echo ============================================================
+echo.
+
+REM Verificar si Registry está corriendo localmente (puerto 6000)
+set REGISTRY_LOCAL=0
+echo [INFO] Verificando si Registry está corriendo localmente (puerto 6000)...
+echo [DEBUG] Verificando si Registry está corriendo localmente en puerto 6000... >> "%LOG_FILE%"
+
+REM Intentar HTTPS primero
+powershell -NoProfile -ExecutionPolicy Bypass -Command "try { $response = Invoke-WebRequest -Uri 'https://127.0.0.1:6000/api/health' -Method GET -SkipCertificateCheck -TimeoutSec 2 -ErrorAction Stop; exit 0 } catch { exit 1 }" >nul 2>&1
+if !errorlevel! equ 0 (
+    set REGISTRY_LOCAL=1
+    set REGISTRY_URL=https://127.0.0.1:6000/api
+    echo [OK] Registry detectado localmente (HTTPS)
+    echo [DEBUG] Registry local detectado (HTTPS) >> "%LOG_FILE%"
+    goto :registry_configured
+)
+
+REM Intentar HTTP
+powershell -NoProfile -ExecutionPolicy Bypass -Command "try { $response = Invoke-WebRequest -Uri 'http://127.0.0.1:6000/api/health' -Method GET -TimeoutSec 2 -ErrorAction Stop; exit 0 } catch { exit 1 }" >nul 2>&1
+if !errorlevel! equ 0 (
+    set REGISTRY_LOCAL=1
+    set REGISTRY_URL=http://127.0.0.1:6000/api
+    echo [OK] Registry detectado localmente (HTTP)
+    echo [DEBUG] Registry local detectado (HTTP) >> "%LOG_FILE%"
+    goto :registry_configured
+)
+
+REM Registry no está local, intentar en PC_A (Central)
+echo [INFO] Registry no detectado localmente. Verificando en PC_A...
+echo [DEBUG] Intentando conectar a Registry en PC_A: https://!CENTRAL_IP!:6000/api/health >> "%LOG_FILE%"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "try { $response = Invoke-WebRequest -Uri 'https://!CENTRAL_IP!:6000/api/health' -Method GET -SkipCertificateCheck -TimeoutSec 2 -ErrorAction Stop; exit 0 } catch { exit 1 }" >nul 2>&1
+if !errorlevel! equ 0 (
+    set REGISTRY_URL=https://!CENTRAL_IP!:6000/api
+    echo [OK] Registry detectado en PC_A (HTTPS)
+    echo [DEBUG] Registry detectado en PC_A (HTTPS): !REGISTRY_URL! >> "%LOG_FILE%"
+    goto :registry_configured
+)
+
+REM Intentar HTTP en PC_A
+powershell -NoProfile -ExecutionPolicy Bypass -Command "try { $response = Invoke-WebRequest -Uri 'http://!CENTRAL_IP!:6000/api/health' -Method GET -TimeoutSec 2 -ErrorAction Stop; exit 0 } catch { exit 1 }" >nul 2>&1
+if !errorlevel! equ 0 (
+    set REGISTRY_URL=http://!CENTRAL_IP!:6000/api
+    echo [OK] Registry detectado en PC_A (HTTP)
+    echo [DEBUG] Registry detectado en PC_A (HTTP): !REGISTRY_URL! >> "%LOG_FILE%"
+    goto :registry_configured
+)
+
+REM Si no se encuentra, usar localhost por defecto (el Monitor intentará conectarse)
+set REGISTRY_URL=https://127.0.0.1:6000/api
+echo [ADVERTENCIA] Registry no detectado. Usando configuración por defecto: !REGISTRY_URL!
+echo [ADVERTENCIA] Asegúrate de que Registry esté ejecutándose antes de iniciar los CPs
+echo [DEBUG] Registry no detectado, usando por defecto: !REGISTRY_URL! >> "%LOG_FILE%"
+
+:registry_configured
+REM Configurar variable de entorno para esta sesión
+set REGISTRY_URL=!REGISTRY_URL!
+echo.
+echo [OK] REGISTRY_URL configurado: !REGISTRY_URL!
+echo [DEBUG] REGISTRY_URL final: !REGISTRY_URL! >> "%LOG_FILE%"
+echo.
+echo ============================================================
+echo.
+
+REM ============================================================
 REM  PASO 0: INICIAR EV_WEATHER
 REM ============================================================
 echo ============================================================
@@ -772,7 +841,7 @@ echo [4/4] LANZANDO MONITOR
 echo ============================================================
 echo.
 
-start "Monitor-PC_B" powershell -NoExit -Command "Write-Host 'Iniciando Monitor (CP_001)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --network host --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 --name monitor -e CP_ID=CP_001 -e CENTRAL_IP=!CENTRAL_IP! -e CENTRAL_PORT=5000 -e ENGINE_IP=localhost -e ENGINE_PORT=5001 ev_monitor:local"
+start "Monitor-PC_B" powershell -NoExit -Command "Write-Host 'Iniciando Monitor (CP_001)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --network host --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 --name monitor -e CP_ID=CP_001 -e CENTRAL_IP=!CENTRAL_IP! -e CENTRAL_PORT=5000 -e ENGINE_IP=localhost -e ENGINE_PORT=5001 -e REGISTRY_URL=!REGISTRY_URL! ev_monitor:local"
 
 echo [OK] Monitor iniciado en ventana separada
 echo.
@@ -844,7 +913,7 @@ set /a WEB_PORT_ENGINE=9000+%CP_NUM%
 
 REM Construir comando ENGINE: Sin --network host, con mapeo de puertos TCP y Web
 set "ENGINE_CMD=docker run --rm -p !ENGINE_PORT!:!ENGINE_PORT! -p !WEB_PORT_ENGINE!:!WEB_PORT_ENGINE! --name engine_!CP_ID! --label project=evcharging-pc-b --label component=engine --label cp_id=!CP_ID! -e ENGINE_PORT=!ENGINE_PORT! -e CP_ID=!CP_ID! -e KAFKA_SERVER=%KAFKA_SERVER% -e WEB_PORT=!WEB_PORT_ENGINE! ev_engine:local"
-set "MONITOR_CMD=docker run --rm --network host --name monitor_!CP_ID! --label project=evcharging-pc-b --label component=monitor --label cp_id=!CP_ID! -e CP_ID=!CP_ID! -e CENTRAL_IP=%CENTRAL_IP% -e CENTRAL_PORT=5000 -e ENGINE_IP=localhost -e ENGINE_PORT=!ENGINE_PORT! ev_monitor:local"
+set "MONITOR_CMD=docker run --rm --network host --name monitor_!CP_ID! --label project=evcharging-pc-b --label component=monitor --label cp_id=!CP_ID! -e CP_ID=!CP_ID! -e CENTRAL_IP=%CENTRAL_IP% -e CENTRAL_PORT=5000 -e ENGINE_IP=localhost -e ENGINE_PORT=!ENGINE_PORT! -e REGISTRY_URL=!REGISTRY_URL! ev_monitor:local"
 
 echo. >> "%LOG_FILE%"
 echo [DEBUG] ---- COMANDO ENGINE ---- >> "%LOG_FILE%"
