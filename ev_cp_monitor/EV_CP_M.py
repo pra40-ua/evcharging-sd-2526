@@ -250,53 +250,12 @@ def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
         # Intentar HTTPS primero (con verify=False para certificados autofirmados)
         try:
             response = requests.post(url, json=payload, timeout=10, verify=False)
-        except requests.exceptions.SSLError as ssl_err:
-            # Error SSL específico - puede ser problema de certificado o configuración
-            error_msg = str(ssl_err).lower()
-            # Si es un error de versión SSL o handshake, el servidor puede estar escuchando en HTTP
-            if 'wrong_version_number' in error_msg or 'handshake' in error_msg:
-                print(f"[CP_M] ⚠️ Error SSL: El servidor puede estar escuchando en HTTP en lugar de HTTPS")
-                print(f"[CP_M]   Intentando HTTP como fallback...")
-                # Intentar HTTP como fallback
-                if url.startswith('https://'):
-                    url_http = url.replace('https://', 'http://')
-                    try:
-                        response = requests.post(url_http, json=payload, timeout=10)
-                    except requests.exceptions.ConnectionError:
-                        print(f"[CP_M] ❌ HTTP también falló. Verifique que EV_Registry esté ejecutándose.")
-                        raise ssl_err
-                else:
-                    raise
-            # Para otros errores SSL, intentar HTTP como fallback
-            if url.startswith('https://'):
-                url_http = url.replace('https://', 'http://')
-                print(f"[CP_M] ⚠️ HTTPS falló por error SSL, intentando HTTP...")
-                try:
-                    response = requests.post(url_http, json=payload, timeout=10)
-                except requests.exceptions.ConnectionError:
-                    # Si HTTP también falla, el servidor probablemente solo escucha HTTPS
-                    print(f"[CP_M] ⚠️ HTTP también falló. El servidor puede estar configurado solo para HTTPS.")
-                    raise ssl_err  # Re-lanzar el error SSL original
-            else:
-                raise
-        except requests.exceptions.ConnectionError as conn_err:
-            # Error de conexión - puede ser que el servidor no esté escuchando en ese puerto/protocolo
-            error_msg = str(conn_err).lower()
-            # Si es "Connection refused", el servidor no está escuchando en ese protocolo
-            if 'connection refused' in error_msg and url.startswith('https://'):
-                print(f"[CP_M] ⚠️ Conexión HTTPS rechazada. El servidor puede estar configurado solo para HTTPS.")
-                print(f"[CP_M]   Verifique que EV_Registry esté ejecutándose con SSL habilitado.")
-                raise
-            # Para otros errores de conexión, intentar HTTP como fallback
+        except (requests.exceptions.SSLError, requests.exceptions.ConnectionError) as e:
+            # Si HTTPS falla, intentar HTTP
             if url.startswith('https://'):
                 url_http = url.replace('https://', 'http://')
                 print(f"[CP_M] ⚠️ HTTPS falló, intentando HTTP...")
-                try:
-                    response = requests.post(url_http, json=payload, timeout=10)
-                except requests.exceptions.ConnectionError:
-                    # Si HTTP también falla, el servidor probablemente solo escucha HTTPS
-                    print(f"[CP_M] ⚠️ HTTP también falló. El servidor puede estar configurado solo para HTTPS.")
-                    raise conn_err  # Re-lanzar el error de conexión original
+                response = requests.post(url_http, json=payload, timeout=10)
             else:
                 raise
         
@@ -392,49 +351,33 @@ def autenticar_en_registry(username: str, password: str) -> bool:
 #                    FUNCIONES DE REGISTRO CON CENTRAL
 # =================================================================
 
-def reautenticar_con_central(central_ip: str, central_port: int, cp_id: str) -> socket.socket:
-    """
-    Reautentica el CP con EV_Central después de que la clave fue revocada.
-    Usa las credenciales almacenadas de EV_Registry.
-    """
-    print(f"\n{'='*70}")
-    print(f"  REAUTENTICACIÓN CON EV_Central")
-    print(f"{'='*70}")
+def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str) -> socket.socket:
+    """Conecta al EV_Central y realiza el registro. Retorna el socket conectado."""
     
-    # Obtener credenciales almacenadas
-    with REGISTRY_CREDENTIALS_LOCK:
-        username = REGISTRY_CREDENTIALS.get('username')
-        password = REGISTRY_CREDENTIALS.get('password')
-        stored_cp_id = REGISTRY_CREDENTIALS.get('cp_id')
-    
-    if not username or not password:
-        print(f"[CP_M] ❌ ERROR: No hay credenciales almacenadas de EV_Registry")
-        print(f"[CP_M] El CP debe registrarse nuevamente en EV_Registry")
-        raise Exception("Credenciales de EV_Registry no disponibles")
-    
-    if stored_cp_id != cp_id:
-        print(f"[CP_M] ⚠️ ADVERTENCIA: cp_id no coincide con credenciales almacenadas")
-    
-    # Obtener ubicación (puede estar en variable de entorno o necesitarse de nuevo)
+    # Solicitar localización al usuario si no está configurada
     ubicacion_cp = os.getenv(f'CP_{cp_id}_UBICACION', '')
     if not ubicacion_cp:
-        ubicacion_cp = "Madrid,ES"  # Valor por defecto
-        print(f"[CP_M] Usando localización por defecto: {ubicacion_cp}")
-    
-    print(f"[CP_M] Reautenticando {cp_id} con credenciales de EV_Registry...")
-    
-    # Conectar y autenticar
-    return conectar_y_registrar(central_ip, central_port, cp_id, username, password, ubicacion_cp)
-
-def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, username: str, password: str, ubicacion_cp: str) -> socket.socket:
-    """Conecta al EV_Central y realiza el registro con autenticación. Retorna el socket conectado."""
+        try:
+            print(f"\n{'='*70}")
+            print(f"  REGISTRO DE CP: {cp_id}")
+            print(f"{'='*70}")
+            print("  Por favor, ingrese la localización del CP:")
+            print("  Formato: Ciudad,País (ejemplo: Madrid,ES)")
+            ubicacion_cp = input(f"  Localización para {cp_id}: ").strip()
+            if not ubicacion_cp:
+                ubicacion_cp = "Madrid,ES"  # Valor por defecto
+                print(f"  Usando localización por defecto: {ubicacion_cp}")
+            print(f"{'='*70}\n")
+        except (EOFError, KeyboardInterrupt):
+            ubicacion_cp = "Madrid,ES"  # Valor por defecto si no hay entrada
+            print(f"[CP_M] Usando localización por defecto: {ubicacion_cp}")
     
     precio_kwh = "0.48"
     client_socket = None
 
     try:
         # Registrar localización en EV_W si está disponible
-        weather_api_url = os.getenv('WEATHER_API_URL', 'http://127.0.0.1:5002')
+        weather_api_url = os.getenv('WEATHER_API_URL', 'http://127.0.0.1:5000/api')
         try:
             # Extraer ciudad,país de la ubicación
             if ',' in ubicacion_cp:
@@ -444,7 +387,7 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, usernam
             
             # Intentar registrar en EV_W (no crítico si falla)
             try:
-                weather_register_url = f"{weather_api_url}/weather/register_cp"
+                weather_register_url = f"{weather_api_url.replace('/api', '')}/weather/register_cp" if '/api' in weather_api_url else f"{weather_api_url}/weather/register_cp"
                 payload = {'cp_id': cp_id, 'localizacion': ciudad_pais}
                 response = requests.post(weather_register_url, json=payload, timeout=2)
                 if response.status_code in (200, 201):
@@ -460,9 +403,6 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, usernam
         # Timeout de conexión para evitar bloqueos indefinidos
         client_socket.settimeout(10)
         
-        print(f"\n{'='*70}")
-        print(f"  PASO 1: CONEXIÓN Y AUTENTICACIÓN CON EV_Central")
-        print(f"{'='*70}")
         print(f"[CP_M] Intentando conectar a EV_Central en {central_ip}:{central_port}...")
         
         try:
@@ -480,15 +420,13 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, usernam
         except socket.gaierror as e:
             raise Exception(f"No se pudo resolver el hostname/IP {central_ip}: {e}")
         
-        print("[CP_M] Conexión con Central establecida. Enviando REG con credenciales...")
+        print("[CP_M] Conexión con Central establecida. Enviando REG...")
         
         # Quitar timeout para la comunicación posterior
         client_socket.settimeout(None)
 
-        # Enviar REG con credenciales: REG#cp_id#ubicacion#precio_kwh#username#password
-        trama_registro = construir_trama('REG', [cp_id, ubicacion_cp, precio_kwh, username, password], cifrar=False)
+        trama_registro = construir_trama('REG', [cp_id, ubicacion_cp, precio_kwh])
         client_socket.sendall(trama_registro)
-        print(f"[CP_M] ✓ REG enviado con credenciales de EV_Registry")
 
         respuesta_bytes = client_socket.recv(1024)
         if not respuesta_bytes:
@@ -510,17 +448,11 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, usernam
                     with ENCRYPTION_KEY_LOCK:
                         ENCRYPTION_KEY = clave_bytes
                     print(f"[CP_M] ✓ Clave de cifrado recibida y almacenada")
-                    print(f"[CP_M]   Todos los mensajes posteriores se cifrarán con esta clave")
                 except Exception as e:
                     print(f"[CP_M] ⚠️ Error procesando clave de cifrado: {e}")
             
             print(f"[CP_M] ¡{cp_id} REGISTRO EXITOSO! Estado ACTIVADO. Mensaje: {mensaje}")
             return client_socket 
-        elif cod_op == 'AUTH' and campos and campos[0] == 'FAIL':
-            # Autenticación fallida
-            motivo = campos[1] if len(campos) > 1 else 'Autenticación denegada'
-            print(f"[CP_M] ❌ AUTENTICACIÓN FALLIDA: {motivo}")
-            raise Exception(f"Fallo de autenticación: {motivo}")
         else:
             raise Exception(f"Fallo de autenticación. Respuesta inválida o AUTH#FAIL. Cod={cod_op}, Campos={campos}")
 
@@ -545,23 +477,6 @@ def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, 
                 break
             
             cod_op, campos = descomponer_trama_cifrada(trama_bytes)
-            
-            # Manejar error de clave revocada o inválida
-            if cod_op == 'AUTH' and campos and campos[0] == 'FAIL':
-                motivo = campos[1] if len(campos) > 1 else 'Clave revocada'
-                if 'clave' in motivo.lower() or 'revoc' in motivo.lower() or 'cifrado' in motivo.lower():
-                    print(f"\n{'='*70}")
-                    print(f"[{cp_id}] ⚠️ CLAVE DE CIFRADO REVOCADA O INVÁLIDA")
-                    print(f"  Motivo: {motivo}")
-                    print(f"  El CP debe reautenticarse para obtener nueva clave")
-                    print(f"{'='*70}\n")
-                    # Limpiar clave actual
-                    with ENCRYPTION_KEY_LOCK:
-                        ENCRYPTION_KEY = None
-                    # Cerrar conexión para forzar reautenticación
-                    central_socket.close()
-                    # Lanzar excepción para que el hilo principal maneje la reautenticación
-                    raise Exception("Clave de cifrado revocada - requiere reautenticación")
             
             if cod_op == 'AUTH_REQ':
                 # AUTH_REQ#<driver_id>#<kw_deseados>
@@ -954,42 +869,8 @@ def main():
     
     central_socket = None
     try:
-        # 0. PASO PREVIO: Registro en EV_Registry con ID y localización
-        print(f"\n{'='*70}")
-        print(f"  PASO 0: REGISTRO EN EV_Registry")
-        print(f"{'='*70}")
-        
-        # Solicitar localización
-        ubicacion_cp = os.getenv(f'CP_{args.cp_id}_UBICACION', '')
-        if not ubicacion_cp:
-            try:
-                print("  Por favor, ingrese la localización del CP:")
-                print("  Formato: Ciudad,País (ejemplo: Madrid,ES)")
-                ubicacion_cp = input(f"  Localización para {args.cp_id}: ").strip()
-                if not ubicacion_cp:
-                    ubicacion_cp = "Madrid,ES"  # Valor por defecto
-                    print(f"  Usando localización por defecto: {ubicacion_cp}")
-            except (EOFError, KeyboardInterrupt):
-                ubicacion_cp = "Madrid,ES"  # Valor por defecto
-                print(f"[CP_M] Usando localización por defecto: {ubicacion_cp}")
-        
-        # Registrar en EV_Registry
-        print(f"[CP_M] Registrando {args.cp_id} en EV_Registry...")
-        success, username, password = registrar_en_registry(args.cp_id, ubicacion_cp)
-        
-        if not success or not username or not password:
-            print(f"[CP_M] ❌ ERROR: No se pudo registrar en EV_Registry")
-            print(f"[CP_M] El CP debe estar registrado en EV_Registry antes de conectarse a Central")
-            print(f"[CP_M] Verifique que EV_Registry esté ejecutándose y accesible")
-            sys.exit(1)
-        
-        print(f"[CP_M] ✓ Registrado en EV_Registry correctamente")
-        print(f"[CP_M]   Username: {username}")
-        print(f"[CP_M]   Password: {password[:10]}...")
-        print(f"{'='*70}\n")
-        
-        # 1. Registro y autenticación en la Central (con credenciales)
-        central_socket = conectar_y_registrar(args.central_ip, args.central_port, args.cp_id, username, password, ubicacion_cp)
+        # 1. Registro en la Central
+        central_socket = conectar_y_registrar(args.central_ip, args.central_port, args.cp_id)
 
         # 2. Hilo de escucha de comandos de la Central
         central_listener_thread = threading.Thread(
@@ -1008,39 +889,10 @@ def main():
         health_check_thread.start()
 
         print("\n[CP_M] Sistema ACTIVADO. Monitorización local de Engine iniciada.")
-        print("[CP_M] Si la clave de cifrado es revocada, el sistema intentará reautenticarse automáticamente.")
 
-        # Bucle principal para mantener el proceso vivo y manejar reautenticación
+        # Bucle principal para mantener el proceso vivo
         while True:
             time.sleep(1)
-            
-            # Verificar si el hilo de escucha de Central terminó (posible clave revocada)
-            if not central_listener_thread.is_alive():
-                print(f"\n[{args.cp_id}] ⚠️ Conexión con Central perdida. Intentando reautenticación...")
-                try:
-                    # Reautenticar
-                    central_socket = reautenticar_con_central(args.central_ip, args.central_port, args.cp_id)
-                    
-                    # Reiniciar hilos
-                    central_listener_thread = threading.Thread(
-                        target=escuchar_central,
-                        args=(central_socket, args.cp_id, args.engine_ip, args.engine_port),
-                        daemon=True
-                    )
-                    central_listener_thread.start()
-                    
-                    health_check_thread = threading.Thread(
-                        target=chequear_salud_engine,
-                        args=(args.engine_ip, args.engine_port, central_socket, args.cp_id),
-                        daemon=True
-                    )
-                    health_check_thread.start()
-                    
-                    print(f"[{args.cp_id}] ✓ Reautenticación exitosa. Sistema restaurado.")
-                except Exception as e:
-                    print(f"[{args.cp_id}] ❌ Error en reautenticación: {e}")
-                    print(f"[{args.cp_id}] Reintentando en 10 segundos...")
-                    time.sleep(10)
 
     except Exception as e:
         print(f"[{args.cp_id}] Proceso EC_CP_M finalizado debido a un error crítico: {e}")
