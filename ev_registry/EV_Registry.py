@@ -635,7 +635,15 @@ def main():
     
     if args.ssl:
         # Configurar SSL
-        context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+        try:
+            # Intentar usar PROTOCOL_TLS_SERVER (Python 3.7+)
+            context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+        except AttributeError:
+            # Fallback para versiones anteriores de Python
+            try:
+                context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+            except AttributeError:
+                context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
         
         # Verificar que existen los archivos de certificado
         cert_path = args.ssl_cert
@@ -651,15 +659,40 @@ def main():
             print(f"[EV_Registry] Ejecuta generar_certificados_ssl.bat o generar_certificados_ssl.ps1 para generar certificados")
             return
         
+        # Verificar que los archivos no estén vacíos
+        if os.path.getsize(cert_path) == 0:
+            print(f"[EV_Registry] ❌ ERROR: El archivo de certificado está vacío: {cert_path}")
+            return
+        
+        if os.path.getsize(key_path) == 0:
+            print(f"[EV_Registry] ❌ ERROR: El archivo de clave privada está vacío: {key_path}")
+            return
+        
         try:
+            # Cargar certificado y clave privada
             context.load_cert_chain(cert_path, key_path)
-            print(f"[EV_Registry] ✓ Certificados SSL cargados:")
-            print(f"  - Certificado: {cert_path}")
-            print(f"  - Clave privada: {key_path}")
+            
+            # Configuraciones adicionales de seguridad
+            context.check_hostname = False
+            context.verify_mode = ssl.CERT_NONE  # Para certificados autofirmados
+            
+            print(f"[EV_Registry] ✓ Certificados SSL cargados correctamente:")
+            print(f"  - Certificado: {cert_path} ({os.path.getsize(cert_path)} bytes)")
+            print(f"  - Clave privada: {key_path} ({os.path.getsize(key_path)} bytes)")
+            print(f"[EV_Registry] Iniciando servidor HTTPS en puerto {REGISTRY_PORT}...")
             app.run(host='0.0.0.0', port=REGISTRY_PORT, ssl_context=context, debug=False, threaded=True)
+        except ssl.SSLError as e:
+            print(f"[EV_Registry] ❌ ERROR SSL: {e}")
+            print(f"[EV_Registry] Verifica que los certificados sean válidos y estén en formato PEM")
+            print(f"[EV_Registry] Puedes regenerarlos con: generar_certificados_ssl.bat")
+            import traceback
+            traceback.print_exc()
+            return
         except Exception as e:
             print(f"[EV_Registry] ❌ ERROR cargando certificados SSL: {e}")
             print(f"[EV_Registry] Verifica que los archivos de certificado sean válidos")
+            import traceback
+            traceback.print_exc()
             return
     else:
         print("[EV_Registry] ⚠️ SSL deshabilitado. Usando HTTP (no seguro)")

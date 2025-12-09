@@ -37,11 +37,13 @@ if exist "certificados\registry_cert.pem" (
 )
 
 if %USE_SSL% equ 1 (
-    echo [INFO] Certificados SSL encontrados. Iniciando con HTTPS...
+    echo [INFO] Certificados SSL encontrados. Intentando iniciar con HTTPS...
+    echo [ADVERTENCIA] Si falla SSL, se iniciará automáticamente con HTTP
     echo.
-    start "EV_Registry" cmd /k "python ev_registry\EV_Registry.py --db-host %CENTRAL_IP_BD% --db-port 3306 --db-user root --db-password root --db-name evcharging --port 6000 --ssl --ssl-cert certificados\registry_cert.pem --ssl-key certificados\registry_key.pem"
-    echo [OK] EV_Registry iniciado con HTTPS (puerto 6000)
-    echo   - API REST: https://localhost:6000/api
+    REM Intentar con SSL primero, pero si falla, el usuario puede ejecutar sin SSL
+    start "EV_Registry" cmd /k "python ev_registry\EV_Registry.py --db-host %CENTRAL_IP_BD% --db-port 3306 --db-user root --db-password root --db-name evcharging --port 6000 --ssl --ssl-cert certificados\registry_cert.pem --ssl-key certificados\registry_key.pem || python ev_registry\EV_Registry.py --db-host %CENTRAL_IP_BD% --db-port 3306 --db-user root --db-password root --db-name evcharging --port 6000"
+    echo [OK] EV_Registry iniciado (intentando HTTPS, fallback a HTTP si falla)
+    echo   - API REST: https://localhost:6000/api (o http://localhost:6000/api si SSL falla)
 ) else (
     echo [INFO] No se encontraron certificados SSL válidos. Iniciando con HTTP...
     echo [ADVERTENCIA] Para usar HTTPS, ejecuta: generar_certificados_ssl.bat

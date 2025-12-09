@@ -2,6 +2,33 @@
 
 Este documento explica cómo verificar que un Charging Point (CP) se ha conectado correctamente a Central usando las credenciales del EV_Registry.
 
+## ⚠️ IMPORTANTE: Iniciar EV_Registry Primero
+
+**ANTES de ejecutar el Monitor del CP, debes iniciar EV_Registry.**
+
+### Opción 1: Usar el script (Recomendado)
+
+```bash
+# En Windows:
+INICIAR_REGISTRY.bat
+
+# O en PowerShell:
+.\INICIAR_REGISTRY.ps1
+```
+
+### Opción 2: Iniciar manualmente
+
+```bash
+py ev_registry\EV_Registry.py --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password root --db-name evcharging --port 6000
+```
+
+**Espera unos segundos** hasta que veas el mensaje:
+```
+[EV_Registry] Iniciando servidor en puerto 6000...
+```
+
+Luego puedes ejecutar el Monitor del CP.
+
 ## Proceso de Autenticación
 
 El proceso de autenticación sigue estos pasos:
