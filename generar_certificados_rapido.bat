@@ -54,7 +54,7 @@ exit /b 1
 
 :found
 echo [OK] OpenSSL encontrado: %OPENSSL_CMD%
-%OPENSSL_CMD% version
+"%OPENSSL_CMD%" version
 echo.
 
 REM Crear directorio
@@ -62,7 +62,7 @@ if not exist "certificados" mkdir "certificados"
 cd certificados
 
 echo [1/2] Generando clave privada RSA 2048 bits...
-%OPENSSL_CMD% genrsa -out registry_key.pem 2048
+"%OPENSSL_CMD%" genrsa -out registry_key.pem 2048
 if %errorlevel% neq 0 (
     echo [ERROR] Fallo al generar clave privada
     pause
@@ -72,7 +72,7 @@ echo [OK] Clave privada generada: registry_key.pem
 echo.
 
 echo [2/2] Generando certificado autofirmado (válido 365 días)...
-%OPENSSL_CMD% req -new -x509 -key registry_key.pem -out registry_cert.pem -days 365 -subj "/C=ES/ST=Madrid/L=Madrid/O=EV_Registry/CN=localhost"
+"%OPENSSL_CMD%" req -new -x509 -key registry_key.pem -out registry_cert.pem -days 365 -subj "/C=ES/ST=Madrid/L=Madrid/O=EV_Registry/CN=localhost"
 if %errorlevel% neq 0 (
     echo [ERROR] Fallo al generar certificado
     pause
