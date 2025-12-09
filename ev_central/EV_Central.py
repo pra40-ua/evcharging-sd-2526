@@ -2312,11 +2312,20 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
             
             # Verificar credenciales si fueron proporcionadas
             if username and password:
+                print(f"\n[CENTRAL] ╔═══════════════════════════════════════════╗")
+                print(f"[CENTRAL] ║  🔐 VERIFICANDO CREDENCIALES CON REGISTRY  ║")
+                print(f"[CENTRAL] ╚═══════════════════════════════════════════╝")
+                print(f"[CENTRAL]    CP ID: {cp_id}")
+                print(f"[CENTRAL]    Username: {username}")
+                print(f"[CENTRAL]    Verificando con EV_Registry...")
+                
                 if not verificar_credenciales_registry(cp_id, username, password):
                     # Credenciales inválidas
                     respuesta_trama = construir_trama('AUTH', ['FAIL', 'Credenciales inválidas. Verifique username y password de EV_Registry.'], cp_id=None, cifrar=False)
                     conn.sendall(respuesta_trama)
-                    print(f"[CENTRAL] <- Enviada respuesta AUTH: FAIL a {cp_id} (Credenciales inválidas)")
+                    print(f"[CENTRAL] ❌ CREDENCIALES INVÁLIDAS")
+                    print(f"[CENTRAL]    El Registry rechazó las credenciales proporcionadas")
+                    print(f"[CENTRAL] ═══════════════════════════════════════════\n")
                     registrar_evento(f"❌ AUTH DENEGADO: {cp_id} credenciales inválidas", "error")
                     registrar_auditoria(
                         accion="INTENTO_AUTENTICACION",
@@ -2328,12 +2337,16 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     )
                     return
                 else:
-                    print(f"[CENTRAL] ✓ Credenciales verificadas correctamente con EV_Registry para {cp_id}")
+                    print(f"[CENTRAL] ✓ CREDENCIALES VÁLIDAS")
+                    print(f"[CENTRAL]    EV_Registry confirmó que las credenciales son correctas")
+                    print(f"[CENTRAL]    Autenticación exitosa mediante Registry")
+                    print(f"[CENTRAL] ═══════════════════════════════════════════\n")
+                    registrar_evento(f"✓ AUTH OK: {cp_id} autenticado con credenciales del Registry", "ok")
                     registrar_auditoria(
                         accion="VERIFICACION_CREDENCIALES",
                         cp_id=cp_id,
                         origen_ip=origen_ip,
-                        descripcion="Credenciales verificadas correctamente con EV_Registry",
+                        descripcion=f"Credenciales verificadas correctamente con EV_Registry (username: {username[:10]}...)",
                         resultado="OK",
                         db_connection=db_connection
                     )

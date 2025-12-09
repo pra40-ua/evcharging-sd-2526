@@ -1,0 +1,314 @@
+2025-12-09 19:05:58,398 - [19:05:58] Modo consola simple activado
+2025-12-09 19:05:58,415 - Updating subscribed topics to: ('telemetria_cp',)
+2025-12-09 19:05:58,419 - Updating subscribed topics to: ('central_commands',)
+2025-12-09 19:05:58,419 - Updating subscribed topics to: ('driver_requests',)
+2025-12-09 19:05:58,419 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-09 19:05:58,424 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-09 19:05:58,424 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-09 19:05:58,424 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-09 19:05:58,425 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-09 19:05:58,425 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-09 19:05:58,428 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.43:5001
+2025-12-09 19:05:58,428 - [33mPress CTRL+C to quit[0m
+2025-12-09 19:05:58,447 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-09 19:05:58,447 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-09 19:05:58,632 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-09 19:05:58,632 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-09 19:05:58,632 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-09 19:05:58,632 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-09 19:05:58,632 - Starting new heartbeat thread
+2025-12-09 19:05:58,632 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-09 19:05:58,633 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-09 19:05:58,633 - Starting new heartbeat thread
+2025-12-09 19:05:58,633 - Starting new heartbeat thread
+2025-12-09 19:05:58,633 - Revoking previously assigned partitions set() for group central-control-group
+2025-12-09 19:05:58,633 - Revoking previously assigned partitions set() for group central_processing_group
+2025-12-09 19:05:58,633 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-12-09 19:05:58,634 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-09 19:05:58,634 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-09 19:05:58,634 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-09 19:05:58,634 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-09 19:05:58,634 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-09 19:05:58,634 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-09 19:05:58,634 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-09 19:05:58,634 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-09 19:05:58,634 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-09 19:05:58,735 - (Re-)joining group central-telemetry-group
+2025-12-09 19:05:58,735 - (Re-)joining group central-control-group
+2025-12-09 19:05:58,735 - (Re-)joining group central_processing_group
+2025-12-09 19:05:58,739 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-09 19:05:58,739 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-09 19:05:58,739 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-09 19:05:58,840 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-09 19:05:58,840 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-09 19:05:58,840 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-09 19:05:58,840 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-09 19:05:58,840 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-09 19:05:58,841 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-09 19:05:58,943 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-09 19:05:58,943 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-09 19:05:58,943 - (Re-)joining group central-telemetry-group
+2025-12-09 19:05:58,943 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-09 19:05:58,943 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-09 19:05:58,943 - (Re-)joining group central-control-group
+2025-12-09 19:05:58,943 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-09 19:05:58,944 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-09 19:05:58,944 - (Re-)joining group central_processing_group
+2025-12-09 19:05:58,945 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-09 19:05:58,945 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-09 19:05:58,945 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-09 19:05:59,047 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-09 19:05:59,047 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-09 19:05:59,047 - (Re-)joining group central-control-group
+2025-12-09 19:05:59,047 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-09 19:05:59,048 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-09 19:05:59,048 - (Re-)joining group central-telemetry-group
+2025-12-09 19:05:59,048 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-09 19:05:59,048 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-09 19:05:59,048 - (Re-)joining group central_processing_group
+2025-12-09 19:06:00,892 - 192.168.1.43 - - [09/Dec/2025 19:06:00] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:00,968 - 192.168.1.43 - - [09/Dec/2025 19:06:00] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:01,214 - 192.168.1.43 - - [09/Dec/2025 19:06:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:01,291 - 192.168.1.43 - - [09/Dec/2025 19:06:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:01,541 - 192.168.1.43 - - [09/Dec/2025 19:06:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:01,649 - 192.168.1.43 - - [09/Dec/2025 19:06:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:02,062 - Elected group leader -- performing partition assignments using range
+2025-12-09 19:06:02,063 - Elected group leader -- performing partition assignments using range
+2025-12-09 19:06:02,063 - Elected group leader -- performing partition assignments using range
+2025-12-09 19:06:02,073 - Successfully joined group central-telemetry-group with generation 1
+2025-12-09 19:06:02,074 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0)]
+2025-12-09 19:06:02,074 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0)} for group central-telemetry-group
+2025-12-09 19:06:02,074 - Successfully joined group central-control-group with generation 1
+2025-12-09 19:06:02,074 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-12-09 19:06:02,074 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-12-09 19:06:02,074 - Successfully joined group central_processing_group with generation 1
+2025-12-09 19:06:02,074 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)]
+2025-12-09 19:06:02,075 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)} for group central_processing_group
+2025-12-09 19:06:03,952 - 192.168.1.43 - - [09/Dec/2025 19:06:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:05,656 - 192.168.1.43 - - [09/Dec/2025 19:06:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:06,046 - 192.168.1.43 - - [09/Dec/2025 19:06:06] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:07,654 - 192.168.1.43 - - [09/Dec/2025 19:06:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:08,044 - 192.168.1.43 - - [09/Dec/2025 19:06:08] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:09,664 - 192.168.1.43 - - [09/Dec/2025 19:06:09] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:10,068 - 192.168.1.43 - - [09/Dec/2025 19:06:10] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:11,662 - 192.168.1.43 - - [09/Dec/2025 19:06:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:12,063 - 192.168.1.43 - - [09/Dec/2025 19:06:12] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:13,646 - 192.168.1.43 - - [09/Dec/2025 19:06:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:14,060 - 192.168.1.43 - - [09/Dec/2025 19:06:14] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:15,655 - 192.168.1.43 - - [09/Dec/2025 19:06:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:16,045 - 192.168.1.43 - - [09/Dec/2025 19:06:16] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:17,660 - 192.168.1.43 - - [09/Dec/2025 19:06:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:18,063 - 192.168.1.43 - - [09/Dec/2025 19:06:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:19,643 - 192.168.1.43 - - [09/Dec/2025 19:06:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:20,057 - 192.168.1.43 - - [09/Dec/2025 19:06:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:21,652 - 192.168.1.43 - - [09/Dec/2025 19:06:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:22,053 - 192.168.1.43 - - [09/Dec/2025 19:06:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:23,655 - 192.168.1.43 - - [09/Dec/2025 19:06:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:24,058 - 192.168.1.43 - - [09/Dec/2025 19:06:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:25,668 - 192.168.1.43 - - [09/Dec/2025 19:06:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:26,068 - 192.168.1.43 - - [09/Dec/2025 19:06:26] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:27,662 - 192.168.1.43 - - [09/Dec/2025 19:06:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:28,065 - 192.168.1.43 - - [09/Dec/2025 19:06:28] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:29,652 - 192.168.1.43 - - [09/Dec/2025 19:06:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:30,058 - 192.168.1.43 - - [09/Dec/2025 19:06:30] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:30,382 - 192.168.1.43 - - [09/Dec/2025 19:06:30] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:31,654 - 192.168.1.43 - - [09/Dec/2025 19:06:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:32,054 - 192.168.1.43 - - [09/Dec/2025 19:06:32] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:33,659 - 192.168.1.43 - - [09/Dec/2025 19:06:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:34,060 - 192.168.1.43 - - [09/Dec/2025 19:06:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:34,409 - [19:06:34] \u2705 NUEVO CP: Registro inicial de CP_002.
+2025-12-09 19:06:34,430 - [19:06:34] \u26a1 CP CP_002 registrado y conectado (Madrid,ES)
+2025-12-09 19:06:34,433 - [19:06:34] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:06:34,450 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-09 19:06:34,451 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-09 19:06:34,451 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-09 19:06:34,460 - [19:06:34] Telemetría inicial publicada para CP_002
+2025-12-09 19:06:35,654 - 192.168.1.43 - - [09/Dec/2025 19:06:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:36,059 - 192.168.1.43 - - [09/Dec/2025 19:06:36] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:36,552 - [19:06:36] AUTH OK enviado a CP_002 (clave de cifrado proporcionada)
+2025-12-09 19:06:37,668 - 192.168.1.43 - - [09/Dec/2025 19:06:37] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:38,058 - 192.168.1.43 - - [09/Dec/2025 19:06:38] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:39,663 - 192.168.1.43 - - [09/Dec/2025 19:06:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:40,065 - 192.168.1.43 - - [09/Dec/2025 19:06:40] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:41,314 - [19:06:41] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:06:41,320 - [19:06:41] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:06:41,664 - 192.168.1.43 - - [09/Dec/2025 19:06:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:42,066 - 192.168.1.43 - - [09/Dec/2025 19:06:42] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:43,461 - [19:06:43] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:06:43,467 - [19:06:43] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:06:43,649 - 192.168.1.43 - - [09/Dec/2025 19:06:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:44,051 - 192.168.1.43 - - [09/Dec/2025 19:06:44] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:45,662 - 192.168.1.43 - - [09/Dec/2025 19:06:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:46,064 - 192.168.1.43 - - [09/Dec/2025 19:06:46] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:47,659 - 192.168.1.43 - - [09/Dec/2025 19:06:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:47,970 - 192.168.1.43 - - [09/Dec/2025 19:06:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:49,340 - 192.168.1.43 - - [09/Dec/2025 19:06:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:49,947 - 192.168.1.43 - - [09/Dec/2025 19:06:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:51,254 - [19:06:51] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:06:51,261 - [19:06:51] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:06:51,667 - 192.168.1.43 - - [09/Dec/2025 19:06:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:51,977 - 192.168.1.43 - - [09/Dec/2025 19:06:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:53,337 - 192.168.1.43 - - [09/Dec/2025 19:06:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:53,474 - [19:06:53] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:06:53,480 - [19:06:53] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:06:53,958 - 192.168.1.43 - - [09/Dec/2025 19:06:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:55,643 - 192.168.1.43 - - [09/Dec/2025 19:06:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:55,964 - 192.168.1.43 - - [09/Dec/2025 19:06:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:57,358 - 192.168.1.43 - - [09/Dec/2025 19:06:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:57,943 - 192.168.1.43 - - [09/Dec/2025 19:06:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:59,645 - 192.168.1.43 - - [09/Dec/2025 19:06:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:06:59,952 - 192.168.1.43 - - [09/Dec/2025 19:06:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:01,263 - [19:07:01] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:07:01,269 - [19:07:01] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:07:01,347 - 192.168.1.43 - - [09/Dec/2025 19:07:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:01,952 - 192.168.1.43 - - [09/Dec/2025 19:07:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:03,489 - [19:07:03] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:07:03,496 - [19:07:03] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:07:03,664 - 192.168.1.43 - - [09/Dec/2025 19:07:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:03,976 - 192.168.1.43 - - [09/Dec/2025 19:07:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:05,363 - 192.168.1.43 - - [09/Dec/2025 19:07:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:05,950 - 192.168.1.43 - - [09/Dec/2025 19:07:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:07,923 - 192.168.1.43 - - [09/Dec/2025 19:07:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:08,199 - 192.168.1.43 - - [09/Dec/2025 19:07:08] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:09,644 - 192.168.1.43 - - [09/Dec/2025 19:07:09] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:10,354 - 192.168.1.43 - - [09/Dec/2025 19:07:10] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:11,277 - [19:07:11] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:07:11,284 - [19:07:11] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:07:11,639 - 192.168.1.43 - - [09/Dec/2025 19:07:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:12,357 - 192.168.1.43 - - [09/Dec/2025 19:07:12] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:13,499 - [19:07:13] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:07:13,505 - [19:07:13] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:07:13,638 - 192.168.1.43 - - [09/Dec/2025 19:07:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:14,382 - 192.168.1.43 - - [09/Dec/2025 19:07:14] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:15,644 - 192.168.1.43 - - [09/Dec/2025 19:07:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:16,368 - 192.168.1.43 - - [09/Dec/2025 19:07:16] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:17,644 - 192.168.1.43 - - [09/Dec/2025 19:07:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:18,373 - 192.168.1.43 - - [09/Dec/2025 19:07:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:19,642 - 192.168.1.43 - - [09/Dec/2025 19:07:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:20,368 - 192.168.1.43 - - [09/Dec/2025 19:07:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:21,286 - [19:07:21] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:07:21,293 - [19:07:21] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:07:21,636 - 192.168.1.43 - - [09/Dec/2025 19:07:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:22,371 - 192.168.1.43 - - [09/Dec/2025 19:07:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:23,512 - [19:07:23] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:07:23,518 - [19:07:23] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:07:23,624 - 192.168.1.43 - - [09/Dec/2025 19:07:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:24,372 - 192.168.1.43 - - [09/Dec/2025 19:07:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:25,639 - 192.168.1.43 - - [09/Dec/2025 19:07:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:26,379 - 192.168.1.43 - - [09/Dec/2025 19:07:26] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:27,648 - 192.168.1.43 - - [09/Dec/2025 19:07:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:28,375 - 192.168.1.43 - - [09/Dec/2025 19:07:28] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:29,647 - 192.168.1.43 - - [09/Dec/2025 19:07:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:30,374 - 192.168.1.43 - - [09/Dec/2025 19:07:30] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:30,685 - 192.168.1.43 - - [09/Dec/2025 19:07:30] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:31,301 - [19:07:31] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:07:31,308 - [19:07:31] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:07:31,642 - 192.168.1.43 - - [09/Dec/2025 19:07:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:32,368 - 192.168.1.43 - - [09/Dec/2025 19:07:32] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:33,526 - [19:07:33] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:07:33,532 - [19:07:33] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:07:33,646 - 192.168.1.43 - - [09/Dec/2025 19:07:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:34,376 - 192.168.1.43 - - [09/Dec/2025 19:07:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:35,643 - 192.168.1.43 - - [09/Dec/2025 19:07:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:36,365 - 192.168.1.43 - - [09/Dec/2025 19:07:36] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:37,647 - 192.168.1.43 - - [09/Dec/2025 19:07:37] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:38,362 - 192.168.1.43 - - [09/Dec/2025 19:07:38] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:39,648 - 192.168.1.43 - - [09/Dec/2025 19:07:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:40,377 - 192.168.1.43 - - [09/Dec/2025 19:07:40] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:41,302 - [19:07:41] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:07:41,309 - [19:07:41] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:07:41,645 - 192.168.1.43 - - [09/Dec/2025 19:07:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:42,375 - 192.168.1.43 - - [09/Dec/2025 19:07:42] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:43,550 - [19:07:43] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:07:43,556 - [19:07:43] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:07:43,645 - 192.168.1.43 - - [09/Dec/2025 19:07:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:44,369 - 192.168.1.43 - - [09/Dec/2025 19:07:44] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:45,649 - 192.168.1.43 - - [09/Dec/2025 19:07:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:46,358 - 192.168.1.43 - - [09/Dec/2025 19:07:46] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:47,639 - 192.168.1.43 - - [09/Dec/2025 19:07:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:48,368 - 192.168.1.43 - - [09/Dec/2025 19:07:48] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:49,640 - 192.168.1.43 - - [09/Dec/2025 19:07:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:50,366 - 192.168.1.43 - - [09/Dec/2025 19:07:50] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:51,304 - [19:07:51] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:07:51,310 - [19:07:51] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:07:51,648 - 192.168.1.43 - - [09/Dec/2025 19:07:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:52,383 - 192.168.1.43 - - [09/Dec/2025 19:07:52] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:53,549 - [19:07:53] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:07:53,555 - [19:07:53] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:07:53,638 - 192.168.1.43 - - [09/Dec/2025 19:07:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:54,374 - 192.168.1.43 - - [09/Dec/2025 19:07:54] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:55,649 - 192.168.1.43 - - [09/Dec/2025 19:07:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:56,379 - 192.168.1.43 - - [09/Dec/2025 19:07:56] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:57,646 - 192.168.1.43 - - [09/Dec/2025 19:07:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:58,373 - 192.168.1.43 - - [09/Dec/2025 19:07:58] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:07:59,639 - 192.168.1.43 - - [09/Dec/2025 19:07:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:00,366 - 192.168.1.43 - - [09/Dec/2025 19:08:00] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:01,315 - [19:08:01] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:08:01,321 - [19:08:01] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:08:01,634 - 192.168.1.43 - - [09/Dec/2025 19:08:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:02,380 - 192.168.1.43 - - [09/Dec/2025 19:08:02] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:03,561 - [19:08:03] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:08:03,566 - [19:08:03] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:08:03,646 - 192.168.1.43 - - [09/Dec/2025 19:08:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:04,374 - 192.168.1.43 - - [09/Dec/2025 19:08:04] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:05,639 - 192.168.1.43 - - [09/Dec/2025 19:08:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:06,369 - 192.168.1.43 - - [09/Dec/2025 19:08:06] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:07,649 - 192.168.1.43 - - [09/Dec/2025 19:08:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:09,951 - 192.168.1.43 - - [09/Dec/2025 19:08:09] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:11,326 - [19:08:11] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:08:11,332 - [19:08:11] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:08:11,650 - 192.168.1.43 - - [09/Dec/2025 19:08:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:13,570 - [19:08:13] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:08:13,576 - [19:08:13] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:08:13,956 - 192.168.1.43 - - [09/Dec/2025 19:08:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:15,639 - 192.168.1.43 - - [09/Dec/2025 19:08:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:17,953 - 192.168.1.43 - - [09/Dec/2025 19:08:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:19,645 - 192.168.1.43 - - [09/Dec/2025 19:08:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:21,340 - [19:08:21] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:08:21,347 - [19:08:21] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:08:21,946 - 192.168.1.43 - - [09/Dec/2025 19:08:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:23,589 - [19:08:23] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:08:23,596 - [19:08:23] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:08:23,627 - 192.168.1.43 - - [09/Dec/2025 19:08:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:25,952 - 192.168.1.43 - - [09/Dec/2025 19:08:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:27,637 - 192.168.1.43 - - [09/Dec/2025 19:08:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:29,940 - 192.168.1.43 - - [09/Dec/2025 19:08:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:30,200 - 192.168.1.43 - - [09/Dec/2025 19:08:30] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:30,371 - 192.168.1.43 - - [09/Dec/2025 19:08:30] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:31,355 - [19:08:31] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:08:31,361 - [19:08:31] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:08:31,624 - 192.168.1.43 - - [09/Dec/2025 19:08:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:33,609 - [19:08:33] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:08:33,615 - [19:08:33] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:08:33,942 - 192.168.1.43 - - [09/Dec/2025 19:08:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:35,644 - 192.168.1.43 - - [09/Dec/2025 19:08:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:37,955 - 192.168.1.43 - - [09/Dec/2025 19:08:37] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:39,646 - 192.168.1.43 - - [09/Dec/2025 19:08:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:41,364 - [19:08:41] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:08:41,371 - [19:08:41] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:08:41,941 - 192.168.1.43 - - [09/Dec/2025 19:08:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:43,617 - [19:08:43] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:08:43,624 - [19:08:43] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:08:43,624 - 192.168.1.43 - - [09/Dec/2025 19:08:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:45,946 - 192.168.1.43 - - [09/Dec/2025 19:08:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:47,627 - 192.168.1.43 - - [09/Dec/2025 19:08:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:49,955 - 192.168.1.43 - - [09/Dec/2025 19:08:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:51,372 - [19:08:51] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:08:51,379 - [19:08:51] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:08:51,637 - 192.168.1.43 - - [09/Dec/2025 19:08:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:53,631 - [19:08:53] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:08:53,638 - [19:08:53] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:08:53,930 - 192.168.1.43 - - [09/Dec/2025 19:08:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:55,647 - 192.168.1.43 - - [09/Dec/2025 19:08:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:57,948 - 192.168.1.43 - - [09/Dec/2025 19:08:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:08:59,646 - 192.168.1.43 - - [09/Dec/2025 19:08:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:09:01,381 - [19:09:01] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:09:01,389 - [19:09:01] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:09:01,950 - 192.168.1.43 - - [09/Dec/2025 19:09:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:09:03,630 - 192.168.1.43 - - [09/Dec/2025 19:09:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-09 19:09:03,645 - [19:09:03] \U0001f4ca Telemetría de CP_002: est=ACTIVADO, E=0.00, P=0.0
+2025-12-09 19:09:03,652 - [19:09:03] [ESTADO] CP_002 -> ACTIVADO.
+2025-12-09 19:09:05,937 - 192.168.1.43 - - [09/Dec/2025 19:09:05] "GET /api/status HTTP/1.1" 200 -

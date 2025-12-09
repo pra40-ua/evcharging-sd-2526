@@ -375,6 +375,48 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str) -> sock
     precio_kwh = "0.48"
     client_socket = None
 
+    # ====== PASO 1: REGISTRO/AUTENTICACIÓN EN EV_Registry ======
+    print(f"\n{'='*70}")
+    print(f"  [CP_M] PASO 1: REGISTRO/AUTENTICACIÓN EN EV_Registry")
+    print(f"{'='*70}")
+    
+    username = None
+    password = None
+    
+    # Verificar si ya tenemos credenciales almacenadas
+    with REGISTRY_CREDENTIALS_LOCK:
+        if REGISTRY_CREDENTIALS.get('username') and REGISTRY_CREDENTIALS.get('password'):
+            username = REGISTRY_CREDENTIALS['username']
+            password = REGISTRY_CREDENTIALS['password']
+            print(f"[CP_M] ✓ Credenciales de Registry encontradas en memoria")
+            print(f"[CP_M]   Username: {username}")
+            print(f"[CP_M]   Intentando autenticación con Registry...")
+            
+            # Intentar autenticar con las credenciales existentes
+            if autenticar_en_registry(username, password):
+                print(f"[CP_M] ✓ Autenticación exitosa con Registry usando credenciales existentes")
+            else:
+                print(f"[CP_M] ⚠️ Autenticación fallida. Intentando registro nuevo...")
+                username = None
+                password = None
+    
+    # Si no hay credenciales o la autenticación falló, registrar nuevo CP
+    if not username or not password:
+        print(f"[CP_M] Registrando CP {cp_id} en EV_Registry...")
+        success, username, password = registrar_en_registry(cp_id, ubicacion_cp)
+        
+        if not success or not username or not password:
+            print(f"[CP_M] ❌ ERROR: No se pudo registrar/autenticar en EV_Registry")
+            print(f"[CP_M] ⚠️ Continuando sin credenciales (modo compatibilidad)...")
+            username = None
+            password = None
+        else:
+            print(f"[CP_M] ✓ Registro exitoso en EV_Registry")
+            print(f"[CP_M]   Username: {username}")
+            print(f"[CP_M]   Password: {password[:10]}... (mostrando primeros 10 caracteres)")
+    
+    print(f"{'='*70}\n")
+
     try:
         # Registrar localización en EV_W si está disponible
         weather_api_url = os.getenv('WEATHER_API_URL', 'http://127.0.0.1:5000/api')
@@ -425,7 +467,25 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str) -> sock
         # Quitar timeout para la comunicación posterior
         client_socket.settimeout(None)
 
-        trama_registro = construir_trama('REG', [cp_id, ubicacion_cp, precio_kwh])
+        # ====== PASO 2: ENVIAR REG CON CREDENCIALES DEL REGISTRY ======
+        print(f"\n{'='*70}")
+        print(f"  [CP_M] PASO 2: ENVIANDO REG A CENTRAL CON CREDENCIALES")
+        print(f"{'='*70}")
+        
+        # Construir mensaje REG con credenciales si están disponibles
+        campos_reg = [cp_id, ubicacion_cp, precio_kwh]
+        if username and password:
+            campos_reg.extend([username, password])
+            print(f"[CP_M] ✓ Enviando REG con credenciales del Registry:")
+            print(f"[CP_M]   CP_ID: {cp_id}")
+            print(f"[CP_M]   Username: {username}")
+            print(f"[CP_M]   Password: {password[:10]}... (enviado completo)")
+        else:
+            print(f"[CP_M] ⚠️ Enviando REG sin credenciales (modo compatibilidad)")
+        
+        print(f"{'='*70}\n")
+        
+        trama_registro = construir_trama('REG', campos_reg)
         client_socket.sendall(trama_registro)
 
         respuesta_bytes = client_socket.recv(1024)
@@ -451,7 +511,18 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str) -> sock
                 except Exception as e:
                     print(f"[CP_M] ⚠️ Error procesando clave de cifrado: {e}")
             
-            print(f"[CP_M] ¡{cp_id} REGISTRO EXITOSO! Estado ACTIVADO. Mensaje: {mensaje}")
+            print(f"\n{'='*70}")
+            print(f"  [CP_M] ✓ REGISTRO Y AUTENTICACIÓN EXITOSOS")
+            print(f"{'='*70}")
+            if username and password:
+                print(f"[CP_M] ✓ Credenciales del Registry verificadas correctamente por Central")
+                print(f"[CP_M]   Username: {username}")
+                print(f"[CP_M]   Central validó las credenciales con EV_Registry")
+            print(f"[CP_M]   CP ID: {cp_id}")
+            print(f"[CP_M]   Estado: ACTIVADO")
+            print(f"[CP_M]   Mensaje: {mensaje}")
+            print(f"{'='*70}\n")
+            
             return client_socket 
         else:
             raise Exception(f"Fallo de autenticación. Respuesta inválida o AUTH#FAIL. Cod={cod_op}, Campos={campos}")
