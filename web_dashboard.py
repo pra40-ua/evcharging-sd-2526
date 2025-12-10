@@ -182,7 +182,11 @@ def consumir_telemetria(broker: str):
                 session_timeout_ms=30000,
                 heartbeat_interval_ms=10000,
                 max_poll_interval_ms=300000,
-                request_timeout_ms=40000
+                request_timeout_ms=40000,
+                connections_max_idle_ms=540000,  # Mantener conexiones vivas más tiempo
+                metadata_max_age_ms=300000,  # Cache de metadata más largo
+                reconnect_backoff_ms=50,  # Reintento rápido de conexión
+                reconnect_backoff_max_ms=1000  # Máximo tiempo de espera para reconexión
             )
             
             print("[DASHBOARD] ✓ Consumidor de telemetría conectado correctamente")
@@ -192,6 +196,10 @@ def consumir_telemetria(broker: str):
             # Bucle de consumo usando poll() para mejor control
             while True:
                 try:
+                    # Verificar que el consumidor no esté cerrado antes de hacer poll
+                    # kafka-python-ng no tiene un método directo para verificar, pero podemos
+                    # intentar el poll y manejar el error específico
+                    
                     # Poll con timeout corto para permitir reconexión si hay error
                     records = consumer.poll(timeout_ms=1000, max_records=10)
                     
@@ -341,7 +349,26 @@ def consumir_telemetria(broker: str):
                         ultimo_log = ahora
                 
                 except Exception as poll_error:
+                    error_msg = str(poll_error)
                     print(f"[DASHBOARD] ⚠️ Error en poll de Kafka: {poll_error}")
+                    
+                    # Manejar específicamente el error de file descriptor
+                    if "Invalid file descriptor" in error_msg or "file descriptor" in error_msg.lower():
+                        print("[DASHBOARD] [INFO] Consumidor perdió conexión con Kafka.")
+                        print("[DASHBOARD] [INFO] Esto puede ocurrir si Kafka se reinició o hay problemas de red.")
+                        print("[DASHBOARD] [INFO] Se intentará reconectar automáticamente...")
+                        # No cerrar manualmente, el consumidor ya está en estado inválido
+                        consumer = None
+                        # Añadir un pequeño delay antes de romper para dar tiempo a que Kafka se recupere
+                        time.sleep(1)
+                    else:
+                        # Para otros errores, intentar cerrar limpiamente
+                        try:
+                            if consumer is not None:
+                                consumer.close()
+                        except:
+                            pass
+                    
                     # Romper el bucle interno para intentar reconectar
                     break
         
@@ -354,17 +381,25 @@ def consumir_telemetria(broker: str):
                 return
             
             # Espera progresiva antes de reintentar (backoff exponencial)
+            # Añadir un pequeño delay adicional para errores de file descriptor
             espera = min(2 ** reintentos, 30)  # Máximo 30 segundos
+            if reintentos > 0:
+                espera = max(espera, 2)  # Mínimo 2 segundos entre reintentos
             print(f"[DASHBOARD] Reintentando en {espera} segundos...")
             time.sleep(espera)
         
         finally:
-            # Cerrar el consumidor si existe
+            # Cerrar el consumidor si existe y no está ya cerrado
             if consumer is not None:
                 try:
+                    # Verificar si el consumidor está en un estado válido antes de cerrar
+                    # Intentar cerrar solo si no hay error de file descriptor
                     consumer.close()
                     print("[DASHBOARD] Consumidor cerrado correctamente")
-                except:
+                except Exception as close_error:
+                    # Si ya está cerrado o en estado inválido, ignorar el error
+                    if "Invalid file descriptor" not in str(close_error):
+                        print(f"[DASHBOARD] [INFO] Consumidor ya estaba cerrado o en estado inválido")
                     pass
 
 

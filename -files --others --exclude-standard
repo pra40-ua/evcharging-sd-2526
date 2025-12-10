@@ -1,0 +1,60 @@
+[1mdiff --git a/logs/central.log b/logs/central.log[m
+[1mindex 5e2971a..291ea3c 100644[m
+[1m--- a/logs/central.log[m
+[1m+++ b/logs/central.log[m
+[36m@@ -870,3 +870,139 @@[m
+ 2025-12-09 19:17:15,559 - [19:17:15] [ESTADO] CP_001 -> ACTIVADO.[m
+ 2025-12-09 19:17:19,479 - [19:17:19] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0[m
+ 2025-12-09 19:17:19,485 - [19:17:19] [ESTADO] CP_001 -> ACTIVADO.[m
+[32m+[m[32m2025-12-10 15:59:35,524 - package: mysql.connector.plugins[m
+[32m+[m[32m2025-12-10 15:59:35,525 - plugin_name: caching_sha2_password[m
+[32m+[m[32m2025-12-10 15:59:35,525 - AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin[m
+[32m+[m[32m2025-12-10 15:59:35,556 - Updating subscribed topics to: ('driver_requests',)[m
+[32m+[m[32m2025-12-10 15:59:35,556 - Updating subscribed topics to: ('telemetria_cp',)[m
+[32m+[m[32m2025-12-10 15:59:35,558 - <BrokerConnection node_id=bootstrap-0 host=172.21.243.242:9092 <connecting> [IPv4 ('172.21.243.242', 9092)]>: connecting to 172.21.243.242:9092 [('172.21.243.242', 9092) IPv4][m
+[32m+[m[32m2025-12-10 15:59:35,558 - Updating subscribed topics to: ('central_commands',)[m
+[32m+[m[32m2025-12-10 15:59:35,558 - <BrokerConnection node_id=bootstrap-0 host=172.21.243.242:9092 <connecting> [IPv4 ('172.21.243.242', 9092)]>: connecting to 172.21.243.242:9092 [('172.21.243.242', 9092) IPv4][m
+[32m+[m[32m2025-12-10 15:59:35,559 - <BrokerConnection node_id=bootstrap-0 host=172.21.243.242:9092 <connecting> [IPv4 ('172.21.243.242', 9092)]>: Connection complete.[m
+[32m+[m[32m2025-12-10 15:59:35,560 - [15:59:35] Modo consola simple activado[m
+[32m+[m[32m2025-12-10 15:59:35,560 - <BrokerConnection node_id=bootstrap-0 host=172.21.243.242:9092 <connecting> [IPv4 ('172.21.243.242', 9092)]>: Connection complete.[m
+[32m+[m[32m2025-12-10 15:59:35,560 - <BrokerConnection node_id=bootstrap-0 host=172.21.243.242:9092 <connecting> [IPv4 ('172.21.243.242', 9092)]>: connecting to 172.21.243.242:9092 [('172.21.243.242', 9092) IPv4][m
+[32m+[m[32m2025-12-10 15:59:35,561 - <BrokerConnection node_id=bootstrap-0 host=172.21.243.242:9092 <connecting> [IPv4 ('172.21.243.242', 9092)]>: Connection complete.[m
+[32m+[m[32m2025-12-10 15:59:35,613 - <BrokerConnection node_id=bootstrap-0 host=172.21.243.242:9092 <connecting> [IPv4 ('172.21.243.242', 9092)]>: connecting to 172.21.243.242:9092 [('172.21.243.242', 9092) IPv4][m
+[32m+[m[32m2025-12-10 15:59:35,614 - <BrokerConnection node_id=bootstrap-0 host=172.21.243.242:9092 <connecting> [IPv4 ('172.21.243.242', 9092)]>: Connection complete.[m
+[32m+[m[32m2025-12-10 15:59:35,770 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='172.21.243.242', port=9092, rack=None)[m
+[32m+[m[32m2025-12-10 15:59:35,770 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='172.21.243.242', port=9092, rack=None)[m
+[32m+[m[32m2025-12-10 15:59:35,770 - Discovered coordinator coordinator-1 for group central_processing_group[m
+[32m+[m[32m2025-12-10 15:59:35,771 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='172.21.243.242', port=9092, rack=None)[m
+[32m+[m[32m2025-12-10 15:59:35,771 - Discovered coordinator coordinator-1 for group central-telemetry-group[m
+[32m+[m[32m2025-12-10 15:59:35,771 - Discovered coordinator coordinator-1 for group central-control-group[m
+[32m+[m[32m2025-12-10 15:59:35,771 - Starting new heartbeat thread[m
+[32m+[m[32m2025-12-10 15:59:35,772 - Starting new heartbeat thread[m
+[32m+[m[32m2025-12-10 15:59:35,772 - Starting new heartbeat thread[m
+[32m+[m[32m2025-12-10 15:59:35,772 - Revoking previously assigned partitions set() for group central_processing_group[m
+[32m+[m[32m2025-12-10 15:59:35,773 - Revoking previously assigned partitions set() for group central-control-group[m
+[32m+[m[32m2025-12-10 15:59:35,773 - Revoking previously assigned partitions set() for group central-telemetry-group[m
+[32m+[m[32m2025-12-10 15:59:35,773 - <BrokerConnection node_id=coordinator-1 host=172.21.243.242:9092 <connecting> [IPv4 ('172.21.243.242', 9092)]>: connecting to 172.21.243.242:9092 [('172.21.243.242', 9092) IPv4][m
+[32m+[m[32m2025-12-10 15:59:35,774 - <BrokerConnection node_id=coordinator-1 host=172.21.243.242:9092 <connecting> [IPv4 ('172.21.243.242', 9092)]>: connecting to 172.21.243.242:9092 [('172.21.243.242', 9092) IPv4][m
+[32m+[m[32m2025-12-10 15:59:35,774 - <BrokerConnection node_id=coordinator-1 host=172.21.243.242:9092 <connecting> [IPv4 ('172.21.243.242', 9092)]>: connecting to 172.21.243.242:9092 [('172.21.243.242', 9092) IPv4][m
+[32m+[m[32m2025-12-10 15:59:35,774 - <BrokerConnection node_id=coordinator-1 host=172.21.243.242:9092 <connecting> [IPv4 ('172.21.243.242', 9092)]>: Connection complete.[m
+[32m+[m[32m2025-12-10 15:59:35,774 - <BrokerConnection node_id=bootstrap-0 host=172.21.243.242:9092 <connected> [IPv4 ('172.21.243.242', 9092)]>: Closing connection.[m[41m [m
+[32m+[m[32m2025-12-10 15:59:35,774 - <BrokerConnection node_id=coordinator-1 host=172.21.243.242:9092 <connecting> [IPv4 ('172.21.243.242', 9092)]>: Connection complete.[m
+[32m+[m[32m2025-12-10 15:59:35,775 - <BrokerConnection node_id=bootstrap-0 host=172.21.243.242:9092 <connected> [IPv4 ('172.21.243.242', 9092)]>: Closing connection.[m[41m [m
+[32m+[m[32m2025-12-10 15:59:35,875 - <BrokerConnection node_id=coordinator-1 host=172.21.243.242:9092 <connecting> [IPv4 ('172.21.243.242', 9092)]>: Connection complete.[m
+[32m+[m[32m2025-12-10 15:59:35,875 - <BrokerConnection node_id=bootstrap-0 host=172.21.243.242:9092 <connected> [IPv4 ('172.21.243.242', 9092)]>: Closing connection.[m[41m [m
+[32m+[m[32m2025-12-10 15:59:35,875 - (Re-)joining group central_processing_group[m
+[32m+[m[32m2025-12-10 15:59:35,875 - (Re-)joining group central-telemetry-group[m
+[32m+[m[32m2025-12-10 15:59:35,876 - <BrokerConnection node_id=bootstrap-0 host=172.21.243.242:9092 <connecting> [IPv4 ('172.21.243.242', 9092)]>: connecting to 172.21.243.242:9092 [('172.21.243.242', 9092) IPv4][m
+[32m+[m[32m2025-12-10 15:59:35,876 - <BrokerConnection node_id=bootstrap-0 host=172.21.243.242:9092 <connecting> [IPv4 ('172.21.243.242', 9092)]>: Connection complete.[m
+[32m+[m[32m2025-12-10 15:59:35,880 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.[m
+[32m+[m[32m2025-12-10 15:59:35,881 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.[m
+[32m+[m[32m2025-12-10 15:59:35,975 - (Re-)joining group central-control-group[m
+[32m+[m[32m2025-12-10 15:59:35,976 - <BrokerConnection node_id=bootstrap-0 host=172.21.243.242:9092 <connecting> [IPv4 ('172.21.243.242', 9092)]>: connecting to 172.21.243.242:9092 [('172.21.243.242', 9092) IPv4][m
+[32m+[m[32m2025-12-10 15:59:35,976 - <BrokerConnection node_id=bootstrap-0 host=172.21.243.242:9092 <connecting> [IPv4 ('172.21.243.242', 9092)]>: Connection complete.[m
+[32m+[m[32m2025-12-10 15:59:35,978 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.[m
+[32m+[m[32m2025-12-10 15:59:35,982 - <BrokerConnection node_id=1 host=172.21.243.242:9092 <connecting> [IPv4 ('172.21.243.242', 9092)]>: connecting to 172.21.243.242:9092 [('172.21.243.242', 9092) IPv4][m
+[32m+[m[32m2025-12-10 15:59:35,982 - <BrokerConnection node_id=1 host=172.21.243.242:9092 <connecting> [IPv4 ('172.21.243.242', 9092)]>: Connection complete.[m
+[32m+[m[32m2025-12-10 15:59:35,984 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='172.21.243.242', port=9092, rack=None)[m
+[32m+[m[32m2025-12-10 15:59:35,984 - Discovered coordinator coordinator-1 for group central_processing_group[m
+[32m+[m[32m2025-12-10 15:59:35,984 - (Re-)joining group central_processing_group[m
+[32m+[m[32m2025-12-10 15:59:35,987 - Marking the coordinator dead (node coord
