@@ -171,8 +171,9 @@ REGISTRY_URL_ENV = os.getenv('REGISTRY_URL', '')
 if REGISTRY_URL_ENV:
     REGISTRY_URL = REGISTRY_URL_ENV
 else:
-    # Por defecto, usar HTTPS (obligatorio según guía)
-    REGISTRY_URL = os.getenv('REGISTRY_URL_HTTPS', 'https://127.0.0.1:6000')
+    # Por defecto, usar localhost (funciona mejor que 127.0.0.1 en algunos sistemas)
+    # Usar HTTPS (obligatorio según guía)
+    REGISTRY_URL = os.getenv('REGISTRY_URL_HTTPS', 'https://localhost:6000')
     # Asegurar que use HTTPS
     if not REGISTRY_URL.startswith(('http://', 'https://')):
         REGISTRY_URL = f'https://{REGISTRY_URL}'
@@ -227,11 +228,14 @@ def enviar_orden_a_engine(engine_ip: str, engine_port: int, orden: str, cp_id: s
 def verificar_registry_disponible(base_url: str) -> bool:
     """
     Verifica que el Registry esté disponible antes de intentar registrar.
+    Intenta con la URL proporcionada y, si falla, intenta con localhost.
     
     Returns:
         True si el Registry está disponible
     """
     health_url = f"{base_url}/api/health"
+    
+    # Intentar primero con la URL proporcionada
     try:
         response = requests.get(health_url, timeout=5, verify=False)
         if response.status_code == 200:
@@ -239,14 +243,29 @@ def verificar_registry_disponible(base_url: str) -> bool:
             return True
         else:
             print(f"[CP_M] ⚠️ Registry responde pero con código {response.status_code}")
-            return False
     except requests.exceptions.ConnectionError:
+        # Si falla con 127.0.0.1, intentar con localhost
+        if '127.0.0.1' in base_url:
+            localhost_url = base_url.replace('127.0.0.1', 'localhost')
+            health_url_localhost = f"{localhost_url}/api/health"
+            print(f"[CP_M] ⚠️ No se pudo conectar con {base_url}, intentando con localhost...")
+            try:
+                response = requests.get(health_url_localhost, timeout=5, verify=False)
+                if response.status_code == 200:
+                    print(f"[CP_M] ✓ Registry disponible en {localhost_url}")
+                    # Actualizar la URL base para usar localhost
+                    return True
+            except Exception:
+                pass
+        
         print(f"[CP_M] ❌ Registry no disponible en {base_url}")
         print(f"[CP_M]   Verifica que el Registry esté ejecutándose")
         return False
     except Exception as e:
         print(f"[CP_M] ⚠️ Error verificando Registry: {e}")
         return False
+    
+    return False
 
 def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
     """
