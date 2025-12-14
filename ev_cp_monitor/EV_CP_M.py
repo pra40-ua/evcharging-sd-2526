@@ -311,6 +311,8 @@ def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
     Returns:
         (success: bool, username: str, password: str) o (False, None, None)
     """
+    global REGISTRY_URL
+    
     # Asegurar que la URL base use HTTPS (obligatorio según guía)
     base_url = REGISTRY_URL.rstrip('/')
     if not base_url.startswith('https://'):
@@ -325,6 +327,15 @@ def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
         print(f"[CP_M] ❌ Registry no disponible. No se puede registrar.")
         print(f"[CP_M]   Asegúrate de ejecutar INICIAR_REGISTRY_PC_B.bat primero")
         return False, None, None
+    
+    # IMPORTANTE: Usar el REGISTRY_URL actualizado por verificar_registry_disponible
+    # (puede haber cambiado a host.docker.internal si estamos en un contenedor Docker)
+    base_url = REGISTRY_URL.rstrip('/')
+    if not base_url.startswith('https://'):
+        if base_url.startswith('http://'):
+            base_url = base_url.replace('http://', 'https://', 1)
+        else:
+            base_url = f'https://{base_url}'
     
     # Usar endpoint según guía: PUT/POST /register/cp
     url = f"{base_url}/register/cp"
@@ -401,6 +412,8 @@ def autenticar_en_registry(username: str, password: str) -> bool:
     Returns:
         True si la autenticación fue exitosa
     """
+    global REGISTRY_URL
+    
     # Asegurar que la URL base use HTTPS (obligatorio según guía)
     base_url = REGISTRY_URL.rstrip('/')
     if not base_url.startswith('https://'):
