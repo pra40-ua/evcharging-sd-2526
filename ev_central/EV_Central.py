@@ -286,26 +286,74 @@ def revocar_clave_cifrado(cp_id: str, db_connection = None) -> bool:
 #                    FUNCIONES DE EV_Registry
 # =================================================================
 
-def verificar_registro_cp(cp_id: str) -> bool:
+def verificar_registro_cp(cp_id: str, db_connection=None) -> bool:
     """
     Verifica si un CP está registrado en EV_Registry.
+    
+    Si db_connection está disponible, consulta directamente la tabla cp_registry
+    en la BD compartida (más eficiente y no depende de red).
+    Si no, intenta verificar vía HTTP con el Registry.
+    
+    Args:
+        cp_id: ID del CP a verificar
+        db_connection: Conexión opcional a la BD MySQL
     
     Returns:
         True si está registrado y activo, False en caso contrario
     """
+    # Prioridad 1: Verificar desde BD compartida (más eficiente)
+    if db_connection and db_connection.is_connected():
+        try:
+            cursor = db_connection.cursor(dictionary=True)
+            # Verificar si la tabla cp_registry existe (puede no existir si Registry nunca se ejecutó)
+            cursor.execute(
+                "SELECT cp_id, activo FROM cp_registry WHERE cp_id = %s",
+                (cp_id,)
+            )
+            registro = cursor.fetchone()
+            cursor.close()
+            
+            if registro and registro.get('activo'):
+                print(f"[CENTRAL] ✓ CP {cp_id} verificado en BD (registrado y activo)")
+                return True
+            elif registro:
+                print(f"[CENTRAL] ⚠️ CP {cp_id} encontrado en BD pero está inactivo")
+                return False
+            else:
+                print(f"[CENTRAL] ⚠️ CP {cp_id} NO encontrado en cp_registry (BD)")
+                return False
+        except Error as e:
+            # Error específico de MySQL (ej: tabla no existe)
+            error_msg = str(e).lower()
+            if "doesn't exist" in error_msg or "table" in error_msg or "1146" in error_msg:
+                print(f"[CENTRAL] ⚠️ Tabla cp_registry no encontrada en BD, usando método HTTP")
+            else:
+                print(f"[CENTRAL] ⚠️ Error consultando BD para verificar registro de {cp_id}: {e}")
+            # Continuar con método HTTP como fallback
+        except Exception as e:
+            # Cualquier otro error (no MySQL)
+            print(f"[CENTRAL] ⚠️ Error consultando BD para verificar registro de {cp_id}: {e}")
+            # Continuar con método HTTP como fallback
+    
+    # Prioridad 2: Verificar vía HTTP con Registry (si BD no disponible o falló)
     try:
+        # Deshabilitar advertencias SSL para certificados autofirmados
+        import urllib3
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        
         url = f"{REGISTRY_URL}/cps"
-        response = requests.get(url, timeout=5)
+        response = requests.get(url, timeout=5, verify=False)  # verify=False para certificados autofirmados
         
         if response.status_code == 200:
             data = response.json()
             cps = data.get('cps', [])
             for cp in cps:
                 if cp.get('cp_id') == cp_id and cp.get('activo'):
+                    print(f"[CENTRAL] ✓ CP {cp_id} verificado en Registry (HTTP)")
                     return True
         return False
     except Exception as e:
-        print(f"[CENTRAL] ⚠️ Error verificando registro en EV_Registry: {e}")
+        print(f"[CENTRAL] ⚠️ Error verificando registro en EV_Registry vía HTTP: {e}")
         # Por compatibilidad, permitir conexión si EV_Registry no está disponible
         return True
 
@@ -2293,8 +2341,8 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
             # --- VERIFICAR REGISTRO Y CREDENCIALES EN EV_Registry ---
             origen_ip = addr[0] if addr else None
             
-            # Verificar que el CP esté registrado
-            if not verificar_registro_cp(cp_id):
+            # Verificar que el CP esté registrado (usando BD compartida si está disponible)
+            if not verificar_registro_cp(cp_id, db_connection):
                 # CP no registrado en EV_Registry
                 respuesta_trama = construir_trama('AUTH', ['FAIL', 'CP no registrado en EV_Registry. Debe registrarse primero.'], cp_id=None, cifrar=False)
                 conn.sendall(respuesta_trama)

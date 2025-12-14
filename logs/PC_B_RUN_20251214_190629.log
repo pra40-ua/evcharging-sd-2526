@@ -1,0 +1,41 @@
+============================================================ 
+ LOG DE EJECUCION - PC_B_RUN.bat 
+ Fecha/Hora: 14/12/2025 19:06:29,55 
+============================================================ 
+ 
+Docker version 28.5.1, build e180ab8
+[DEBUG] Verificando si Registry está corriendo localmente en puerto 6000... 
+[DEBUG] Registry local detectado (HTTPS) 
+[DEBUG] REGISTRY_URL final:  
+[DEBUG] Directorio actual: C:\Users\luisi\Documents\sd\evcharging-sd-2526 
+[DEBUG] Verificando existencia de OPENWEATHER_API_KEY.txt... 
+[DEBUG] Ruta completa buscada: C:\Users\luisi\Documents\sd\evcharging-sd-2526\OPENWEATHER_API_KEY.txt 
+[DEBUG] Archivo OPENWEATHER_API_KEY.txt encontrado 
+[DEBUG] Contenido leido del archivo: 54076819eadd372702b599c788eb370f 
+[DEBUG] Longitud de la API Key: 
+54076819eadd372702b599c788eb370f 
+[DEBUG] Verificando que la API Key no este vacia... 
+[DEBUG] Valor de OPENWEATHER_API_KEY: "54076819eadd372702b599c788eb370f" 
+[DEBUG] Verificando que la API Key fue leida correctamente... 
+[DEBUG] Valor de OPENWEATHER_API_KEY: "54076819eadd372702b599c788eb370f" 
+[DEBUG] API Key validada: tiene contenido 
+[DEBUG] Verificando Python... 
+[DEBUG] Python encontrado 
+[DEBUG] Verificando ev_weather\EV_W.py... 
+[DEBUG] Archivo ev_weather\EV_W.py encontrado 
+[DEBUG] Llegando a :launch_weather 
+[DEBUG] API Key leida correctamente: 54076819ea... 
+[DEBUG] Iniciando lanzamiento de EV_Weather... 
+[DEBUG] Creando script temporal... 
+[DEBUG] Ruta del script temporal: C:\Users\luisi\AppData\Local\Temp\ev_weather_launch_30068.bat 
+[DEBUG] Variables temporales configuradas 
+[DEBUG] Escribiendo contenido del script temporal... 
+[DEBUG] Ruta completa: C:\Users\luisi\AppData\Local\Temp\ev_weather_launch_30068.bat 
+[DEBUG] Directorio del proyecto: C:\Users\luisi\Documents\sd\evcharging-sd-2526 
+[DEBUG] Resultado de creacion del script: 0 
+[DEBUG] Script temporal creado exitosamente 
+[DEBUG] Script temporal: C:\Users\luisi\AppData\Local\Temp\ev_weather_launch_30068.bat 
+[DEBUG] API Key: 54076819ea... 
+[DEBUG] Central URL: http://192.168.1.43:5001/api 
+[DEBUG] Comando START ejecutado exitosamente 
+[DEBUG] EV_Weather lanzado, continuando al MENU... 
