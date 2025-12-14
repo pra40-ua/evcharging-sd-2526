@@ -359,7 +359,9 @@ def verificar_registro_cp(cp_id: str, db_connection=None) -> bool:
 
 def verificar_credenciales_registry(cp_id: str, username: str, password: str) -> bool:
     """
-    Verifica las credenciales de un CP con EV_Registry.
+    Verifica las credenciales de un CP consultando directamente la BD.
+    Según los requisitos, EV_Central consulta la BD (en PC_A) para validar
+    si el CP está registrado y si las credenciales son correctas.
     
     Args:
         cp_id: ID del CP
@@ -370,24 +372,82 @@ def verificar_credenciales_registry(cp_id: str, username: str, password: str) ->
         True si las credenciales son válidas, False en caso contrario
     """
     try:
-        # Intentar autenticar con EV_Registry
-        auth_url = f"{REGISTRY_URL}/authenticate"
-        payload = {
-            'username': username,
-            'password': password
-        }
-        response = requests.post(auth_url, json=payload, timeout=5)
+        # Obtener conexión a BD
+        cfg = globals().get('DB_CONFIG_STR')
+        if not cfg:
+            print(f"[CENTRAL] ❌ No hay configuración de BD disponible")
+            return False
         
-        if response.status_code == 200:
-            data = response.json()
-            # Verificar que el cp_id coincida
-            if data.get('status') == 'ok' and data.get('cp_id') == cp_id:
-                return True
-        return False
+        connection = conectar_bd(cfg)
+        if not connection or not connection.is_connected():
+            print(f"[CENTRAL] ❌ No se pudo conectar a la BD para verificar credenciales")
+            return False
+        
+        try:
+            cursor = connection.cursor(dictionary=True)
+            
+            # Verificar que el CP esté registrado y activo en cp_registry
+            cursor.execute("""
+                SELECT r.cp_id, r.activo as cp_activo,
+                       c.username, c.password_hash, c.salt, c.activo as creds_activas
+                FROM cp_registry r
+                LEFT JOIN cp_credentials c ON r.cp_id = c.cp_id
+                WHERE r.cp_id = %s
+            """, (cp_id,))
+            
+            resultado = cursor.fetchone()
+            cursor.close()
+            connection.close()
+            
+            if not resultado:
+                print(f"[CENTRAL] ❌ CP {cp_id} no encontrado en cp_registry")
+                return False
+            
+            if not resultado['cp_activo']:
+                print(f"[CENTRAL] ❌ CP {cp_id} está dado de baja en cp_registry")
+                return False
+            
+            if not resultado['username'] or not resultado['password_hash']:
+                print(f"[CENTRAL] ❌ CP {cp_id} no tiene credenciales registradas")
+                return False
+            
+            if not resultado['creds_activas']:
+                print(f"[CENTRAL] ❌ Las credenciales del CP {cp_id} están desactivadas")
+                return False
+            
+            # Verificar que el username coincida
+            if resultado['username'] != username:
+                print(f"[CENTRAL] ❌ Username no coincide para CP {cp_id}")
+                return False
+            
+            # Verificar password usando SHA256 con salt (misma lógica que EV_Registry)
+            salt = resultado.get('salt', '')
+            if not salt:
+                print(f"[CENTRAL] ❌ CP {cp_id} tiene credenciales sin salt (requiere regeneración)")
+                return False
+            
+            # Calcular hash del password proporcionado
+            combined = f"{password}{salt}".encode('utf-8')
+            hash_calculado = hashlib.sha256(combined).hexdigest()
+            
+            if hash_calculado != resultado['password_hash']:
+                print(f"[CENTRAL] ❌ Password incorrecto para CP {cp_id}")
+                return False
+            
+            print(f"[CENTRAL] ✓ Credenciales verificadas en BD para CP {cp_id}")
+            return True
+            
+        except Error as e:
+            print(f"[CENTRAL] ❌ Error de BD verificando credenciales: {e}")
+            if connection and connection.is_connected():
+                connection.close()
+            return False
+            
     except Exception as e:
-        print(f"[CENTRAL] ⚠️ Error verificando credenciales en EV_Registry: {e}")
-        # Por compatibilidad, permitir si EV_Registry no está disponible
-        return True
+        print(f"[CENTRAL] ❌ Error verificando credenciales: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
 
 # =================================================================
 #                    API REST - ALERTAS DE CLIMA
