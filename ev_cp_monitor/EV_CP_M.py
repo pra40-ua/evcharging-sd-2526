@@ -228,43 +228,67 @@ def enviar_orden_a_engine(engine_ip: str, engine_port: int, orden: str, cp_id: s
 def verificar_registry_disponible(base_url: str) -> bool:
     """
     Verifica que el Registry esté disponible antes de intentar registrar.
-    Intenta con la URL proporcionada y, si falla, intenta con localhost.
+    Intenta con la URL proporcionada y, si falla, intenta con localhost o 127.0.0.1.
     
     Returns:
         True si el Registry está disponible
     """
     health_url = f"{base_url}/api/health"
     
-    # Intentar primero con la URL proporcionada
-    try:
-        response = requests.get(health_url, timeout=5, verify=False)
-        if response.status_code == 200:
-            print(f"[CP_M] ✓ Registry disponible en {base_url}")
-            return True
-        else:
-            print(f"[CP_M] ⚠️ Registry responde pero con código {response.status_code}")
-    except requests.exceptions.ConnectionError:
-        # Si falla con 127.0.0.1, intentar con localhost
-        if '127.0.0.1' in base_url:
-            localhost_url = base_url.replace('127.0.0.1', 'localhost')
-            health_url_localhost = f"{localhost_url}/api/health"
-            print(f"[CP_M] ⚠️ No se pudo conectar con {base_url}, intentando con localhost...")
-            try:
-                response = requests.get(health_url_localhost, timeout=5, verify=False)
-                if response.status_code == 200:
-                    print(f"[CP_M] ✓ Registry disponible en {localhost_url}")
-                    # Actualizar la URL base para usar localhost
-                    return True
-            except Exception:
-                pass
-        
-        print(f"[CP_M] ❌ Registry no disponible en {base_url}")
-        print(f"[CP_M]   Verifica que el Registry esté ejecutándose")
-        return False
-    except Exception as e:
-        print(f"[CP_M] ⚠️ Error verificando Registry: {e}")
-        return False
+    # Lista de URLs alternativas a probar
+    urls_a_probar = [base_url]
+    if 'localhost' in base_url:
+        urls_a_probar.append(base_url.replace('localhost', '127.0.0.1'))
+    elif '127.0.0.1' in base_url:
+        urls_a_probar.append(base_url.replace('127.0.0.1', 'localhost'))
     
+    # Intentar con cada URL
+    for url_intento in urls_a_probar:
+        health_url_intento = f"{url_intento}/api/health"
+        try:
+            print(f"[CP_M] Intentando conectar a {health_url_intento}...")
+            # Aumentar timeout y asegurar que verify=False esté configurado
+            response = requests.get(
+                health_url_intento, 
+                timeout=10,  # Aumentado de 5 a 10 segundos
+                verify=False,
+                allow_redirects=True
+            )
+            print(f"[CP_M] Respuesta recibida: HTTP {response.status_code}")
+            if response.status_code == 200:
+                print(f"[CP_M] ✓ Registry disponible en {url_intento}")
+                # Si la URL que funcionó es diferente a la original, actualizar
+                if url_intento != base_url:
+                    print(f"[CP_M]   Usando {url_intento} en lugar de {base_url}")
+                    # Actualizar REGISTRY_URL globalmente para usar la URL que funcionó
+                    global REGISTRY_URL
+                    REGISTRY_URL = url_intento
+                return True
+            else:
+                print(f"[CP_M] ⚠️ Registry responde pero con código {response.status_code}")
+                print(f"[CP_M]   Respuesta: {response.text[:200]}")
+        except requests.exceptions.SSLError as ssl_err:
+            print(f"[CP_M] ⚠️ Error SSL con {url_intento}: {ssl_err}")
+            import traceback
+            traceback.print_exc()
+            continue
+        except requests.exceptions.ConnectionError as conn_err:
+            print(f"[CP_M] ⚠️ No se pudo conectar a {url_intento}")
+            print(f"[CP_M]   Error: {str(conn_err)[:200]}")
+            continue
+        except requests.exceptions.Timeout:
+            print(f"[CP_M] ⚠️ Timeout al conectar a {url_intento}")
+            continue
+        except Exception as e:
+            print(f"[CP_M] ⚠️ Error verificando {url_intento}: {e}")
+            import traceback
+            traceback.print_exc()
+            continue
+    
+    print(f"[CP_M] ❌ Registry no disponible en ninguna de las URLs probadas")
+    print(f"[CP_M]   URLs probadas: {', '.join(urls_a_probar)}")
+    print(f"[CP_M]   Verifica que el Registry esté ejecutándose")
+    print(f"[CP_M]   Prueba manualmente: curl -k https://localhost:6000/api/health")
     return False
 
 def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
