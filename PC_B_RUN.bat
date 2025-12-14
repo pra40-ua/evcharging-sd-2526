@@ -863,7 +863,7 @@ echo [4/4] LANZANDO MONITOR
 echo ============================================================
 echo.
 
-start "Monitor-PC_B" powershell -NoExit -Command "Write-Host 'Iniciando Monitor (CP_001)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --network host --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 --name monitor -e CP_ID=CP_001 -e CENTRAL_IP=!CENTRAL_IP! -e CENTRAL_PORT=5000 -e ENGINE_IP=localhost -e ENGINE_PORT=5001 -e REGISTRY_URL=!REGISTRY_URL! ev_monitor:local"
+start "Monitor-PC_B" powershell -NoExit -Command "Write-Host 'Iniciando Monitor (CP_001)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --network host --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 --name monitor -e CP_ID=CP_001 -e CENTRAL_IP=!CENTRAL_IP! -e CENTRAL_PORT=5000 -e ENGINE_IP=localhost -e ENGINE_PORT=5001 -e REGISTRY_URL=!REGISTRY_URL! -e WEATHER_API_URL=http://127.0.0.1:5002 ev_monitor:local"
 
 echo [OK] Monitor iniciado en ventana separada
 echo.
@@ -935,7 +935,7 @@ set /a WEB_PORT_ENGINE=9000+%CP_NUM%
 
 REM Construir comando ENGINE: Sin --network host, con mapeo de puertos TCP y Web
 set "ENGINE_CMD=docker run --rm -p !ENGINE_PORT!:!ENGINE_PORT! -p !WEB_PORT_ENGINE!:!WEB_PORT_ENGINE! --name engine_!CP_ID! --label project=evcharging-pc-b --label component=engine --label cp_id=!CP_ID! -e ENGINE_PORT=!ENGINE_PORT! -e CP_ID=!CP_ID! -e KAFKA_SERVER=%KAFKA_SERVER% -e WEB_PORT=!WEB_PORT_ENGINE! ev_engine:local"
-set "MONITOR_CMD=docker run --rm --network host --name monitor_!CP_ID! --label project=evcharging-pc-b --label component=monitor --label cp_id=!CP_ID! -e CP_ID=!CP_ID! -e CENTRAL_IP=%CENTRAL_IP% -e CENTRAL_PORT=5000 -e ENGINE_IP=localhost -e ENGINE_PORT=!ENGINE_PORT! -e REGISTRY_URL=!REGISTRY_URL! ev_monitor:local"
+set "MONITOR_CMD=docker run --rm --network host --name monitor_!CP_ID! --label project=evcharging-pc-b --label component=monitor --label cp_id=!CP_ID! -e CP_ID=!CP_ID! -e CENTRAL_IP=%CENTRAL_IP% -e CENTRAL_PORT=5000 -e ENGINE_IP=localhost -e ENGINE_PORT=!ENGINE_PORT! -e REGISTRY_URL=!REGISTRY_URL! -e WEATHER_API_URL=http://127.0.0.1:5002 ev_monitor:local"
 
 echo. >> "%LOG_FILE%"
 echo [DEBUG] ---- COMANDO ENGINE ---- >> "%LOG_FILE%"

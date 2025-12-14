@@ -538,7 +538,8 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str) -> sock
 
     try:
         # Registrar localización en EV_W si está disponible
-        weather_api_url = os.getenv('WEATHER_API_URL', 'http://127.0.0.1:5000/api')
+        # EV_W escucha en puerto 5002 por defecto, y el endpoint es /weather/register_cp
+        weather_api_url = os.getenv('WEATHER_API_URL', 'http://127.0.0.1:5002')
         try:
             # Extraer ciudad,país de la ubicación
             if ',' in ubicacion_cp:

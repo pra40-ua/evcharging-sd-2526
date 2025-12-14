@@ -4,7 +4,7 @@ EV_W - Weather Control Office
 Módulo que monitorea el clima en las localizaciones de los CPs y notifica alertas a EV_Central.
 
 Uso:
-    python EV_W.py --api-key <OPENWEATHER_API_KEY> --central-url http://127.0.0.1:5000/api
+    python EV_W.py --api-key <OPENWEATHER_API_KEY> --central-url http://127.0.0.1:5001/api
 """
 
 import requests
@@ -144,6 +144,7 @@ def notificar_alerta_central(cp_id: str, temperatura: float, activar: bool) -> b
 def procesar_localizacion(cp_id: str, ciudad_pais: str):
     """
     Procesa una localización: consulta temperatura y gestiona alertas.
+    Siempre envía la temperatura a Central para que se refleje en el dashboard.
     
     Args:
         cp_id: ID del punto de carga
@@ -159,8 +160,11 @@ def procesar_localizacion(cp_id: str, ciudad_pais: str):
     with ALERTAS_LOCK:
         alerta_actual = ALERTAS_ACTIVAS.get(cp_id, False)
     
+    # Determinar si debe haber alerta (temperatura < 0°C)
+    debe_haber_alerta = temperatura < 0.0
+    
     # Lógica de alerta: temperatura < 0°C
-    if temperatura < 0.0:
+    if debe_haber_alerta:
         # Debe activar alerta si no está activa
         if not alerta_actual:
             print(f"\n{'='*70}")
@@ -170,13 +174,14 @@ def procesar_localizacion(cp_id: str, ciudad_pais: str):
             print(f"  Temperatura: {temperatura:.1f}°C (< 0°C)")
             print(f"{'='*70}\n")
             
-            # Notificar a Central
+            # Notificar a Central (activar alerta)
             if notificar_alerta_central(cp_id, temperatura, True):
                 with ALERTAS_LOCK:
                     ALERTAS_ACTIVAS[cp_id] = True
         else:
-            # Alerta ya activa, solo log
+            # Alerta ya activa, enviar temperatura actualizada a Central
             print(f"[EV_W] Alerta activa para {cp_id}: T={temperatura:.1f}°C")
+            notificar_alerta_central(cp_id, temperatura, True)
     else:
         # Temperatura >= 0°C, debe desactivar alerta si está activa
         if alerta_actual:
@@ -187,13 +192,15 @@ def procesar_localizacion(cp_id: str, ciudad_pais: str):
             print(f"  Temperatura: {temperatura:.1f}°C (>= 0°C)")
             print(f"{'='*70}\n")
             
-            # Notificar a Central
+            # Notificar a Central (desactivar alerta)
             if notificar_alerta_central(cp_id, temperatura, False):
                 with ALERTAS_LOCK:
                     ALERTAS_ACTIVAS[cp_id] = False
         else:
-            # Sin alerta, solo log periódico
+            # Sin alerta, pero siempre enviar temperatura a Central para el dashboard
             print(f"[EV_W] {cp_id} ({ciudad_pais}): T={temperatura:.1f}°C - OK")
+            # Enviar temperatura sin alerta para que se muestre en el dashboard
+            notificar_alerta_central(cp_id, temperatura, False)
 
 def bucle_monitoreo_clima():
     """
@@ -512,8 +519,8 @@ def main():
     parser = argparse.ArgumentParser(description="EV_W - Weather Control Office")
     parser.add_argument("--api-key", type=str, required=True,
                         help="API Key de OpenWeather (obtener en https://openweathermap.org/api)")
-    parser.add_argument("--central-url", type=str, default="http://127.0.0.1:5000/api",
-                        help="URL base de la API de EV_Central (default: http://127.0.0.1:5000/api)")
+    parser.add_argument("--central-url", type=str, default="http://127.0.0.1:5001/api",
+                        help="URL base de la API de EV_Central (default: http://127.0.0.1:5001/api)")
     
     args = parser.parse_args()
     
