@@ -224,6 +224,30 @@ def enviar_orden_a_engine(engine_ip: str, engine_port: int, orden: str, cp_id: s
 #                    FUNCIONES DE EV_Registry
 # =================================================================
 
+def verificar_registry_disponible(base_url: str) -> bool:
+    """
+    Verifica que el Registry esté disponible antes de intentar registrar.
+    
+    Returns:
+        True si el Registry está disponible
+    """
+    health_url = f"{base_url}/api/health"
+    try:
+        response = requests.get(health_url, timeout=5, verify=False)
+        if response.status_code == 200:
+            print(f"[CP_M] ✓ Registry disponible en {base_url}")
+            return True
+        else:
+            print(f"[CP_M] ⚠️ Registry responde pero con código {response.status_code}")
+            return False
+    except requests.exceptions.ConnectionError:
+        print(f"[CP_M] ❌ Registry no disponible en {base_url}")
+        print(f"[CP_M]   Verifica que el Registry esté ejecutándose")
+        return False
+    except Exception as e:
+        print(f"[CP_M] ⚠️ Error verificando Registry: {e}")
+        return False
+
 def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
     """
     Registra el CP en EV_Registry usando el endpoint según la guía.
@@ -239,6 +263,13 @@ def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
             base_url = base_url.replace('http://', 'https://', 1)
         else:
             base_url = f'https://{base_url}'
+    
+    # Verificar que el Registry esté disponible antes de intentar registrar
+    print(f"[CP_M] Verificando disponibilidad del Registry en {base_url}...")
+    if not verificar_registry_disponible(base_url):
+        print(f"[CP_M] ❌ Registry no disponible. No se puede registrar.")
+        print(f"[CP_M]   Asegúrate de ejecutar INICIAR_REGISTRY_PC_B.bat primero")
+        return False, None, None
     
     # Usar endpoint según guía: PUT/POST /register/cp
     url = f"{base_url}/register/cp"
