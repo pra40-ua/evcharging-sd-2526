@@ -3,7 +3,11 @@ REM ========================================================================
 REM  SCRIPT PARA INICIAR EV_Registry EN PC_B
 REM ========================================================================
 REM  Este script inicia EV_Registry en PC_B para que los CPs puedan
-REM  registrarse antes de conectarse a EV_Central en PC_A.
+REM  registrarse, darse de baja y autenticarse en el sistema.
+REM  
+REM  IMPORTANTE: Los CPs deben registrarse primero en el Registry antes
+REM  de poder autenticarse en EV_Central. El Registry devuelve las
+REM  credenciales que el CP usará para su autenticación en EV_Central.
 REM ========================================================================
 
 setlocal EnableDelayedExpansion
@@ -17,7 +21,7 @@ echo.
 REM ============================================================
 REM  PASO 1: DETECTAR IP DE BASE DE DATOS (PC_A)
 REM ============================================================
-echo [1/3] DETECTANDO IP DE BASE DE DATOS EN PC_A
+echo [1/4] DETECTANDO IP DE BASE DE DATOS EN PC_A
 echo.
 
 REM Leer IP de PC_A desde central_ip.txt
@@ -39,24 +43,49 @@ exit /b 1
 :ip_found
 echo.
 
+REM ============================================================
+REM  PASO 2: VERIFICAR QUE PYTHON ESTÁ DISPONIBLE
+REM ============================================================
+echo [2/4] VERIFICANDO PYTHON
+echo.
+
+python --version >nul 2>&1
+if errorlevel 1 (
+    py --version >nul 2>&1
+    if errorlevel 1 (
+        echo [ERROR] Python no esta disponible
+        echo.
+        echo Debes instalar Python o asegurarte de que esta en el PATH.
+        echo Prueba ejecutando: python --version o py --version
+        echo.
+        pause
+        exit /b 1
+    )
+    set PYTHON_CMD=py
+) else (
+    set PYTHON_CMD=python
+)
+
+echo [OK] Python detectado
+echo.
+
+REM ============================================================
+REM  PASO 3: VERIFICAR CONEXIÓN A BASE DE DATOS EN PC_A
+REM ============================================================
+echo [3/4] VERIFICANDO CONEXIÓN A BASE DE DATOS EN PC_A
+echo.
+
 echo [INFO] Configuracion:
 echo   - Base de datos en PC_A: !CENTRAL_IP_BD!:3306
 echo   - Database: evcharging
 echo   - Puerto Registry: 6000
 echo.
-
-REM ============================================================
-REM  PASO 2: VERIFICAR CONEXIÓN A BASE DE DATOS EN PC_A
-REM ============================================================
-echo [2/3] VERIFICANDO CONEXIÓN A BASE DE DATOS EN PC_A
-echo.
-
 echo Verificando que MySQL en PC_A esta accesible ^(!CENTRAL_IP_BD!:3306^)...
 echo ^(Esto puede tardar unos segundos^)
 echo.
 
 REM Verificar conexión usando Python
-python -c "import sys; import mysql.connector; conn = mysql.connector.connect(host='!CENTRAL_IP_BD!', port=3306, user='root', password='root', database='evcharging', connection_timeout=5); conn.close(); sys.exit(0)" 2>nul
+!PYTHON_CMD! -c "import sys; import mysql.connector; conn = mysql.connector.connect(host='!CENTRAL_IP_BD!', port=3306, user='root', password='root', database='evcharging', connection_timeout=5); conn.close(); sys.exit(0)" 2>nul
 set MYSQL_CHECK_RESULT=%errorlevel%
 
 if !MYSQL_CHECK_RESULT! neq 0 (
@@ -84,9 +113,9 @@ echo [OK] Conexion a base de datos verificada correctamente
 echo.
 
 REM ============================================================
-REM  PASO 3: VERIFICAR CERTIFICADOS SSL (OBLIGATORIO)
+REM  PASO 4: VERIFICAR CERTIFICADOS SSL (OBLIGATORIO)
 REM ============================================================
-echo [3/3] VERIFICANDO CERTIFICADOS SSL
+echo [4/4] VERIFICANDO CERTIFICADOS SSL
 echo.
 
 REM Verificar si hay certificados SSL válidos (OBLIGATORIO)
@@ -113,10 +142,21 @@ if !USE_SSL! equ 1 (
     echo   - Certificado: certificados\registry_cert.pem ^(!CERT_SIZE! bytes^)
     echo   - Clave privada: certificados\registry_key.pem ^(!KEY_SIZE! bytes^)
     echo.
+    
+    REM Verificar que existe el archivo EV_Registry.py
+    if not exist "ev_registry\EV_Registry.py" (
+        echo [ERROR] No se encuentra ev_registry\EV_Registry.py
+        echo.
+        echo Verifica que el archivo existe en la ruta correcta.
+        echo.
+        pause
+        exit /b 1
+    )
+    
     echo [INFO] Iniciando EV_Registry en PC_B con HTTPS ^(SSL obligatorio^)...
     echo [INFO] Conectandose a BD en PC_A: !CENTRAL_IP_BD!:3306
     echo.
-    start "EV_Registry_PC_B" cmd /k "python ev_registry\EV_Registry.py --db-host !CENTRAL_IP_BD! --db-port 3306 --db-user root --db-password root --db-name evcharging --port 6000 --ssl --ssl-cert certificados\registry_cert.pem --ssl-key certificados\registry_key.pem"
+    start "EV_Registry_PC_B" cmd /k "!PYTHON_CMD! ev_registry\EV_Registry.py --db-host !CENTRAL_IP_BD! --db-port 3306 --db-user root --db-password root --db-name evcharging --port 6000 --ssl --ssl-cert certificados\registry_cert.pem --ssl-key certificados\registry_key.pem"
     echo [OK] EV_Registry iniciado en PC_B con HTTPS ^(puerto 6000^)
     echo   - API REST: https://localhost:6000/api
     echo   - Conectado a BD en PC_A: !CENTRAL_IP_BD!:3306
@@ -156,19 +196,37 @@ echo   - Protocolo: HTTPS ^(SSL obligatorio^)
 echo   - API REST: https://localhost:6000/api
 echo   - Base de datos: !CENTRAL_IP_BD!:3306/evcharging ^(en PC_A^)
 echo.
+echo [FUNCIONALIDADES DISPONIBLES]
+echo   - REGISTRO: POST /api/register - Registra un nuevo CP en el sistema
+echo   - BAJA: DELETE /api/unregister/^<cp_id^> - Da de baja un CP
+echo   - AUTENTICACION: POST /api/authenticate - Autentica un CP con credenciales
+echo   - LISTADO: GET /api/cps - Lista todos los CPs registrados
+echo   - HEALTH: GET /api/health - Verifica estado del servicio
+echo.
+echo [FLUJO DE INTEGRACION DE CPs]
+echo   1. El CP ^(a traves de EV_CP_M - Monitor^) se conecta al Registry via HTTPS
+echo   2. El CP se registra mediante POST /api/register con su ID y ubicacion
+echo   3. El Registry devuelve las credenciales ^(username y password^) al CP
+echo   4. El CP usa estas credenciales para autenticarse posteriormente en EV_Central
+echo   5. IMPORTANTE: Sin registro previo, la autenticacion en EV_Central sera denegada
+echo.
 echo [IMPORTANTE] 
 echo   - Espera unos segundos a que EV_Registry se inicie completamente
-echo   - Los CPs de PC_B deben registrarse primero con Registry antes de conectar a Central
-echo   - Registry esta conectado a la BD en PC_A ^(!CENTRAL_IP_BD!^)
+echo   - Los CPs deben registrarse PRIMERO en el Registry antes de conectar a Central
+echo   - La comunicacion con el Registry debe ser segura ^(HTTPS/SSL obligatorio^)
+echo   - Registry esta conectado a la BD en PC_A ^(!CENTRAL_IP_BD!^) para compartir
+echo     informacion de CPs con EV_Central
 echo.
 echo [VERIFICAR CONEXION]
 echo   Desde otro terminal, prueba:
-echo   curl -k https://localhost:6000/api/status
+echo   curl -k https://localhost:6000/api/health
 echo.
 echo [SIGUIENTE PASO]
-echo   Ahora puedes ejecutar los CPs en PC_B usando los scripts:
-echo   - INICIAR_CP01.bat
-echo   - INICIAR_CP02.bat ^(si corresponde^)
+echo   Ahora puedes ejecutar los CPs en PC_B. El Monitor ^(EV_CP_M^) debe:
+echo   1. Conectarse al Registry via HTTPS: https://localhost:6000/api
+echo   2. Registrar el CP mediante POST /api/register
+echo   3. Guardar las credenciales recibidas
+echo   4. Usar esas credenciales para autenticarse en EV_Central
 echo.
 echo Presiona cualquier tecla para cerrar esta ventana...
 echo ^(EV_Registry seguira corriendo en su ventana separada^)
