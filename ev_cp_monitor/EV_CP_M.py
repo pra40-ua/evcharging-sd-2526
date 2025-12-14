@@ -248,15 +248,19 @@ def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
         'ubicacion': ubicacion
     }
     
+    print(f"[CP_M] Intentando registrar en Registry: {url}")
+    print(f"[CP_M] Payload: cp_id={cp_id}, ubicacion={ubicacion}")
+    
     try:
         # Usar HTTPS obligatoriamente (con verify=False para certificados autofirmados)
         # Según la guía, el cifrado del canal es obligatorio
-        import urllib3
-        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        # urllib3 ya está importado al inicio del archivo
         
         # Intentar POST primero (método preferido)
         try:
+            print(f"[CP_M] Enviando POST a {url}...")
             response = requests.post(url, json=payload, timeout=10, verify=False)
+            print(f"[CP_M] Respuesta recibida: HTTP {response.status_code}")
         except requests.exceptions.SSLError as ssl_err:
             # Si hay error SSL específico, mostrar mensaje más claro
             print(f"[CP_M] ❌ Error SSL al conectar con EV_Registry: {ssl_err}")
@@ -329,8 +333,7 @@ def autenticar_en_registry(username: str, password: str) -> bool:
     
     try:
         # Usar HTTPS obligatoriamente (con verify=False para certificados autofirmados)
-        import urllib3
-        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        # urllib3 ya está importado al inicio del archivo
         
         try:
             response = requests.post(url, json=payload, timeout=10, verify=False)
