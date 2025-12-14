@@ -166,17 +166,19 @@ ENCRYPTION_KEY = None
 ENCRYPTION_KEY_LOCK = threading.Lock()
 
 # URL de EV_Registry
-# Si REGISTRY_URL no especifica protocolo, intentar HTTPS primero, luego HTTP
+# Según la guía, el Registry debe usar HTTPS obligatoriamente
 REGISTRY_URL_ENV = os.getenv('REGISTRY_URL', '')
 if REGISTRY_URL_ENV:
     REGISTRY_URL = REGISTRY_URL_ENV
 else:
-    # Por defecto, intentar HTTPS primero (si hay certificados)
-    # Si no funciona, el código intentará HTTP
-    REGISTRY_URL = os.getenv('REGISTRY_URL_HTTPS', 'https://127.0.0.1:6000/api')
-    # Fallback a HTTP si HTTPS no está disponible
+    # Por defecto, usar HTTPS (obligatorio según guía)
+    REGISTRY_URL = os.getenv('REGISTRY_URL_HTTPS', 'https://127.0.0.1:6000')
+    # Asegurar que use HTTPS
     if not REGISTRY_URL.startswith(('http://', 'https://')):
         REGISTRY_URL = f'https://{REGISTRY_URL}'
+    # Si se especifica HTTP, cambiarlo a HTTPS (Registry solo escucha HTTPS)
+    if REGISTRY_URL.startswith('http://') and not REGISTRY_URL.startswith('https://'):
+        REGISTRY_URL = REGISTRY_URL.replace('http://', 'https://', 1)
 
 # =================================================================
 #                       LÓGICA DE COMUNICACIÓN CENTRAL
@@ -224,22 +226,22 @@ def enviar_orden_a_engine(engine_ip: str, engine_port: int, orden: str, cp_id: s
 
 def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
     """
-    Registra el CP en EV_Registry.
-    Intenta HTTPS primero, luego HTTP si falla.
+    Registra el CP en EV_Registry usando el endpoint según la guía.
+    Usa HTTPS obligatoriamente (SSL/TLS según guía).
     
     Returns:
         (success: bool, username: str, password: str) o (False, None, None)
     """
-    # Intentar HTTPS primero si la URL no especifica protocolo
-    base_url = REGISTRY_URL
-    if not base_url.startswith(('http://', 'https://')):
-        base_url = f'https://{base_url}'
+    # Asegurar que la URL base use HTTPS (obligatorio según guía)
+    base_url = REGISTRY_URL.rstrip('/')
+    if not base_url.startswith('https://'):
+        if base_url.startswith('http://'):
+            base_url = base_url.replace('http://', 'https://', 1)
+        else:
+            base_url = f'https://{base_url}'
     
-    # Si la URL base termina en /api, no agregar /register dos veces
-    if base_url.endswith('/api'):
-        url = f"{base_url}/register"
-    else:
-        url = f"{base_url}/api/register"
+    # Usar endpoint según guía: PUT/POST /register/cp
+    url = f"{base_url}/register/cp"
     
     payload = {
         'cp_id': cp_id,
@@ -247,17 +249,26 @@ def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
     }
     
     try:
-        # Intentar HTTPS primero (con verify=False para certificados autofirmados)
+        # Usar HTTPS obligatoriamente (con verify=False para certificados autofirmados)
+        # Según la guía, el cifrado del canal es obligatorio
+        import urllib3
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        
+        # Intentar POST primero (método preferido)
         try:
             response = requests.post(url, json=payload, timeout=10, verify=False)
-        except (requests.exceptions.SSLError, requests.exceptions.ConnectionError) as e:
-            # Si HTTPS falla, intentar HTTP
-            if url.startswith('https://'):
-                url_http = url.replace('https://', 'http://')
-                print(f"[CP_M] ⚠️ HTTPS falló, intentando HTTP...")
-                response = requests.post(url_http, json=payload, timeout=10)
-            else:
-                raise
+        except requests.exceptions.SSLError as ssl_err:
+            # Si hay error SSL específico, mostrar mensaje más claro
+            print(f"[CP_M] ❌ Error SSL al conectar con EV_Registry: {ssl_err}")
+            print(f"[CP_M]   Verifica que el Registry esté ejecutándose con HTTPS")
+            print(f"[CP_M]   URL intentada: {url}")
+            return False, None, None
+        except requests.exceptions.ConnectionError as conn_err:
+            # Error de conexión (puerto cerrado, host no alcanzable, etc.)
+            print(f"[CP_M] ❌ Error de conexión con EV_Registry: {conn_err}")
+            print(f"[CP_M]   Verifica que el Registry esté ejecutándose en {base_url}")
+            print(f"[CP_M]   El Registry debe estar escuchando en HTTPS (puerto 6000)")
+            return False, None, None
         
         if response.status_code == 201:
             data = response.json()
@@ -289,26 +300,27 @@ def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
         return False, None, None
     except Exception as e:
         print(f"[CP_M] ❌ Error inesperado registrando: {e}")
+        import traceback
+        traceback.print_exc()
         return False, None, None
 
 def autenticar_en_registry(username: str, password: str) -> bool:
     """
-    Autentica el CP en EV_Registry.
-    Intenta HTTPS primero, luego HTTP si falla.
+    Autentica el CP en EV_Registry usando HTTPS obligatoriamente.
     
     Returns:
         True si la autenticación fue exitosa
     """
-    # Intentar HTTPS primero si la URL no especifica protocolo
-    base_url = REGISTRY_URL
-    if not base_url.startswith(('http://', 'https://')):
-        base_url = f'https://{base_url}'
+    # Asegurar que la URL base use HTTPS (obligatorio según guía)
+    base_url = REGISTRY_URL.rstrip('/')
+    if not base_url.startswith('https://'):
+        if base_url.startswith('http://'):
+            base_url = base_url.replace('http://', 'https://', 1)
+        else:
+            base_url = f'https://{base_url}'
     
-    # Si la URL base termina en /api, no agregar /authenticate dos veces
-    if base_url.endswith('/api'):
-        url = f"{base_url}/authenticate"
-    else:
-        url = f"{base_url}/api/authenticate"
+    # Usar endpoint de autenticación
+    url = f"{base_url}/api/authenticate"
     
     payload = {
         'username': username,
@@ -316,17 +328,18 @@ def autenticar_en_registry(username: str, password: str) -> bool:
     }
     
     try:
-        # Intentar HTTPS primero (con verify=False para certificados autofirmados)
+        # Usar HTTPS obligatoriamente (con verify=False para certificados autofirmados)
+        import urllib3
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        
         try:
             response = requests.post(url, json=payload, timeout=10, verify=False)
-        except (requests.exceptions.SSLError, requests.exceptions.ConnectionError) as e:
-            # Si HTTPS falla, intentar HTTP
-            if url.startswith('https://'):
-                url_http = url.replace('https://', 'http://')
-                print(f"[CP_M] ⚠️ HTTPS falló, intentando HTTP...")
-                response = requests.post(url_http, json=payload, timeout=10)
-            else:
-                raise
+        except requests.exceptions.SSLError as ssl_err:
+            print(f"[CP_M] ❌ Error SSL al autenticar con EV_Registry: {ssl_err}")
+            return False
+        except requests.exceptions.ConnectionError as conn_err:
+            print(f"[CP_M] ❌ Error de conexión al autenticar: {conn_err}")
+            return False
         
         if response.status_code == 200:
             data = response.json()

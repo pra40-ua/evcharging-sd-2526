@@ -309,6 +309,101 @@ def registrar_cp():
             'message': f'Error interno: {str(e)}'
         }), 500
 
+# =================================================================
+#                    ENDPOINTS SEGÚN GUÍA (Release 2)
+# =================================================================
+
+@app.route('/register/cp', methods=['POST', 'PUT'])
+def registrar_cp_guia():
+    """
+    Registra un nuevo CP en el sistema (endpoint según guía).
+    Alias de /api/register para cumplir con la guía de implementación.
+    """
+    return registrar_cp()
+
+@app.route('/register/cp/<cp_id>', methods=['DELETE'])
+def dar_baja_cp_guia(cp_id):
+    """
+    Da de baja un CP del sistema (endpoint según guía).
+    Alias de /api/unregister/<cp_id> para cumplir con la guía de implementación.
+    """
+    return dar_baja_cp(cp_id)
+
+@app.route('/register/cp/<cp_id>', methods=['GET'])
+def consultar_cp(cp_id):
+    """
+    Consulta el estado/datos de un CP (opcional según guía).
+    
+    Returns:
+        {
+            "status": "ok",
+            "cp_id": "CP001",
+            "ubicacion": "...",
+            "activo": true,
+            "fecha_registro": "...",
+            "username": "..."
+        }
+    """
+    try:
+        connection = obtener_conexion_bd()
+        if not connection:
+            return jsonify({
+                'status': 'error',
+                'message': 'Error de conexión a base de datos'
+            }), 500
+        
+        try:
+            cursor = connection.cursor(dictionary=True)
+            
+            # Obtener información del CP
+            cursor.execute("""
+                SELECT r.cp_id, r.ubicacion, r.fecha_registro, r.activo,
+                       c.username, c.activo as credenciales_activas
+                FROM cp_registry r
+                LEFT JOIN cp_credentials c ON r.cp_id = c.cp_id
+                WHERE r.cp_id = %s
+            """, (cp_id,))
+            
+            cp_data = cursor.fetchone()
+            cursor.close()
+            connection.close()
+            
+            if not cp_data:
+                return jsonify({
+                    'status': 'error',
+                    'message': f'CP {cp_id} no encontrado'
+                }), 404
+            
+            return jsonify({
+                'status': 'ok',
+                'cp_id': cp_data['cp_id'],
+                'ubicacion': cp_data['ubicacion'],
+                'activo': bool(cp_data['activo']),
+                'fecha_registro': cp_data['fecha_registro'].isoformat() if cp_data['fecha_registro'] else None,
+                'username': cp_data['username'],
+                'credenciales_activas': bool(cp_data['credenciales_activas'])
+            }), 200
+            
+        except Error as e:
+            if connection:
+                connection.close()
+            print(f"[EV_Registry] ❌ Error en BD: {e}")
+            return jsonify({
+                'status': 'error',
+                'message': f'Error en base de datos: {str(e)}'
+            }), 500
+        
+    except Exception as e:
+        print(f"[EV_Registry] ❌ Error consultando CP: {e}")
+        return jsonify({
+            'status': 'error',
+            'message': f'Error interno: {str(e)}'
+        }), 500
+
+# =================================================================
+#                    ENDPOINTS ORIGINALES (compatibilidad)
+# =================================================================
+
 @app.route('/api/unregister/<cp_id>', methods=['DELETE'])
 def dar_baja_cp(cp_id):
     """
