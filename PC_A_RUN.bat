@@ -146,6 +146,36 @@ if %errorlevel% equ 0 (
 )
 echo.
 
+REM Verificar que MySQL está listo antes de limpiar
+echo Verificando que MySQL esta listo...
+timeout /t 3 /nobreak >nul
+docker exec mysql mysqladmin ping -h localhost -uroot -proot >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [ADVERTENCIA] MySQL puede no estar listo aun, esperando...
+    timeout /t 5 /nobreak >nul
+)
+
+REM ============================================================
+REM  PASO 2.5: LIMPIAR BASE DE DATOS
+REM ============================================================
+echo ============================================================
+echo [2.5/4] LIMPIANDO BASE DE DATOS
+echo ============================================================
+echo.
+echo Eliminando datos anteriores de la base de datos...
+echo.
+
+REM Limpiar todas las tablas usando TRUNCATE
+docker exec mysql mysql -u root -proot evcharging -e "SET FOREIGN_KEY_CHECKS=0; TRUNCATE TABLE charging_points; TRUNCATE TABLE telemetria_log; TRUNCATE TABLE cp_encryption_keys; TRUNCATE TABLE audit_log; TRUNCATE TABLE weather_alerts; SET FOREIGN_KEY_CHECKS=1;" >nul 2>&1
+
+if %errorlevel% equ 0 (
+    echo [OK] Base de datos limpiada exitosamente.
+) else (
+    echo [ADVERTENCIA] No se pudo limpiar la base de datos completamente.
+    echo Continuando de todas formas...
+)
+echo.
+
 REM ============================================================
 REM  PASO 3: INICIAR EV_CENTRAL
 REM ============================================================
