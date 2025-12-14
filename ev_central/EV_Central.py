@@ -3108,6 +3108,7 @@ def cambiar_estado_cp(cp_id: str, nuevo_estado: str, db_connection: mysql.connec
                 'PARADO': 'Parado',
                 'AVERÍA': 'Averiado',
                 'AVERIA': 'Averiado',
+                'FUERA_DE_SERVICIO': 'Fuera De Servicio',
             }
             estado_bd = mapa_bd.get(nuevo_estado_norm, nuevo_estado_norm.title())
             actualizar_estado_cp(db_connection, cp_id, estado_bd)

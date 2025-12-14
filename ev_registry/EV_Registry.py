@@ -206,10 +206,45 @@ def registrar_cp():
             
             if existente:
                 if existente['activo']:
+                    # CP ya registrado y activo: regenerar credenciales y devolverlas
+                    # Esto permite que un CP que se reinicie pueda obtener nuevas credenciales
+                    print(f"[EV_Registry] CP {cp_id} ya registrado. Regenerando credenciales...")
+                    
+                    # Actualizar ubicación si se proporcionó una nueva
+                    cursor.execute("""
+                        UPDATE cp_registry 
+                        SET ubicacion = %s, fecha_ultima_actualizacion = NOW()
+                        WHERE cp_id = %s
+                    """, (ubicacion, cp_id))
+                    
+                    # Generar nuevas credenciales
+                    username, password = generar_credenciales()
+                    password_hash, salt = generar_password_hash(password)
+                    
+                    cursor.execute("""
+                        INSERT INTO cp_credentials (cp_id, username, password_hash, salt, activo)
+                        VALUES (%s, %s, %s, %s, TRUE)
+                        ON DUPLICATE KEY UPDATE
+                            username = VALUES(username),
+                            password_hash = VALUES(password_hash),
+                            salt = VALUES(salt),
+                            activo = TRUE,
+                            fecha_ultima_actualizacion = NOW()
+                    """, (cp_id, username, password_hash, salt))
+                    
+                    connection.commit()
+                    cursor.close()
+                    connection.close()
+                    
+                    print(f"[EV_Registry] ✓ Credenciales regeneradas para CP {cp_id}")
+                    
                     return jsonify({
-                        'status': 'error',
-                        'message': f'CP {cp_id} ya está registrado y activo'
-                    }), 409
+                        'status': 'ok',
+                        'cp_id': cp_id,
+                        'username': username,
+                        'password': password,
+                        'message': f'CP {cp_id} ya registrado. Credenciales regeneradas.'
+                    }), 200
                 else:
                     # Reactivar CP existente
                     cursor.execute("""

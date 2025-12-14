@@ -1080,6 +1080,8 @@ def crear_templates():
         .status-esperando-confirmacion-fin { background: #dc3545; color: white; }
         .status-esperando-driver { background: #17a2b8; color: white; }
         .status-pendiente-confirmacion-central { background: #007bff; color: white; animation: pulse 2s infinite; }
+        .status-fuera_de_servicio { background: #6610f2; color: white; }
+        .status-fuera-de-servicio { background: #6610f2; color: white; }
         
         .btn-control {
             padding: 6px 12px;
@@ -1351,6 +1353,10 @@ def crear_templates():
                     html += `<button class="btn-control" onclick="reconectarMonitor('${cp.cp_id}')" style="background: #28a745;">🔌 Reconectar Monitor</button>`;
                 } else if (estado === 'AVERIADO' || estado === 'AVERÍA') {
                     html += '<button class="btn-control" disabled>❌ Averiado</button>';
+                } else if (estado === 'FUERA_DE_SERVICIO' || estado === 'FUERA DE SERVICIO') {
+                    // CP fuera de servicio por alerta climatológica
+                    html += '<span style="color: #6610f2; font-size: 12px; font-weight: bold;">❄️ FUERA DE SERVICIO</span>';
+                    html += '<br><small style="color: #6610f2;">Alerta climatológica activa</small>';
                 } else if (estado === 'PENDIENTE_CONFIRMACION_CENTRAL' || estado === 'PENDIENTE CONFIRMACION CENTRAL') {
                     // PASO 1: Driver solicitó, operador de Central debe preparar
                     const driver = cp.driver_id_sesion || 'Driver';
