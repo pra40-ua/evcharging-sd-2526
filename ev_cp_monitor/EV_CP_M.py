@@ -228,7 +228,7 @@ def enviar_orden_a_engine(engine_ip: str, engine_port: int, orden: str, cp_id: s
 def verificar_registry_disponible(base_url: str) -> bool:
     """
     Verifica que el Registry esté disponible antes de intentar registrar.
-    Intenta con la URL proporcionada y, si falla, intenta con localhost o 127.0.0.1.
+    Intenta con la URL proporcionada y, si falla, intenta con localhost, 127.0.0.1 y host.docker.internal.
     
     Returns:
         True si el Registry está disponible
@@ -239,8 +239,20 @@ def verificar_registry_disponible(base_url: str) -> bool:
     urls_a_probar = [base_url]
     if 'localhost' in base_url:
         urls_a_probar.append(base_url.replace('localhost', '127.0.0.1'))
+        # host.docker.internal es necesario para acceder al host de Windows desde contenedores Docker
+        urls_a_probar.append(base_url.replace('localhost', 'host.docker.internal'))
     elif '127.0.0.1' in base_url:
         urls_a_probar.append(base_url.replace('127.0.0.1', 'localhost'))
+        # host.docker.internal es necesario para acceder al host de Windows desde contenedores Docker
+        urls_a_probar.append(base_url.replace('127.0.0.1', 'host.docker.internal'))
+    elif 'host.docker.internal' not in base_url:
+        # Si no tiene ninguna de las anteriores, añadir host.docker.internal como alternativa
+        import re
+        # Extraer host actual de la URL
+        match = re.search(r'https?://([^:/]+)', base_url)
+        if match:
+            current_host = match.group(1)
+            urls_a_probar.append(base_url.replace(current_host, 'host.docker.internal'))
     
     # Intentar con cada URL
     for url_intento in urls_a_probar:

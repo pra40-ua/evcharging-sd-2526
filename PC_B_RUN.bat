@@ -71,9 +71,11 @@ REM Intentar HTTPS primero
 powershell -NoProfile -ExecutionPolicy Bypass -Command "try { $response = Invoke-WebRequest -Uri 'https://127.0.0.1:6000/api/health' -Method GET -SkipCertificateCheck -TimeoutSec 2 -ErrorAction Stop; exit 0 } catch { exit 1 }" >nul 2>&1
 if !errorlevel! equ 0 (
     set REGISTRY_LOCAL=1
-    set REGISTRY_URL=https://127.0.0.1:6000/api
+    REM IMPORTANTE: Usar host.docker.internal para que los contenedores Docker puedan acceder al host de Windows
+    set REGISTRY_URL=https://host.docker.internal:6000/api
     echo [OK] Registry detectado localmente (HTTPS)
-    echo [DEBUG] Registry local detectado (HTTPS) >> "%LOG_FILE%"
+    echo [INFO] Usando host.docker.internal para acceso desde contenedores Docker
+    echo [DEBUG] Registry local detectado (HTTPS) - usando host.docker.internal >> "%LOG_FILE%"
     goto :registry_configured
 )
 
@@ -81,9 +83,11 @@ REM Intentar HTTP
 powershell -NoProfile -ExecutionPolicy Bypass -Command "try { $response = Invoke-WebRequest -Uri 'http://127.0.0.1:6000/api/health' -Method GET -TimeoutSec 2 -ErrorAction Stop; exit 0 } catch { exit 1 }" >nul 2>&1
 if !errorlevel! equ 0 (
     set REGISTRY_LOCAL=1
-    set REGISTRY_URL=http://127.0.0.1:6000/api
+    REM IMPORTANTE: Usar host.docker.internal para que los contenedores Docker puedan acceder al host de Windows
+    set REGISTRY_URL=http://host.docker.internal:6000/api
     echo [OK] Registry detectado localmente (HTTP)
-    echo [DEBUG] Registry local detectado (HTTP) >> "%LOG_FILE%"
+    echo [INFO] Usando host.docker.internal para acceso desde contenedores Docker
+    echo [DEBUG] Registry local detectado (HTTP) - usando host.docker.internal >> "%LOG_FILE%"
     goto :registry_configured
 )
 
