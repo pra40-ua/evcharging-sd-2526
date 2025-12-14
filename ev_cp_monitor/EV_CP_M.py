@@ -371,7 +371,8 @@ def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
             print(f"[CP_M]   El Registry debe estar escuchando en HTTPS (puerto 6000)")
             return False, None, None
         
-        if response.status_code == 201:
+        if response.status_code in (200, 201):
+            # 201 = nuevo registro, 200 = credenciales regeneradas
             data = response.json()
             username = data.get('username')
             password = data.get('password')
@@ -382,7 +383,10 @@ def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
                     REGISTRY_CREDENTIALS['password'] = password
                     REGISTRY_CREDENTIALS['cp_id'] = cp_id
                 
-                print(f"[CP_M] ✓ Registrado en EV_Registry")
+                if response.status_code == 201:
+                    print(f"[CP_M] ✓ Registrado en EV_Registry (nuevo)")
+                else:
+                    print(f"[CP_M] ✓ Registrado en EV_Registry (credenciales regeneradas)")
                 print(f"[CP_M]   Username: {username}")
                 print(f"[CP_M]   Password: {password[:10]}...")
                 return True, username, password
