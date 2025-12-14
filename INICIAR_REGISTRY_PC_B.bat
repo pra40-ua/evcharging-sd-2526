@@ -221,13 +221,21 @@ echo [VERIFICAR CONEXION]
 echo   Desde otro terminal, prueba:
 echo   curl -k https://localhost:6000/api/health
 echo.
-echo [SIGUIENTE PASO]
-echo   Ahora puedes ejecutar los CPs en PC_B. El Monitor ^(EV_CP_M^) debe:
-echo   1. Conectarse al Registry via HTTPS: https://localhost:6000/api
-echo   2. Registrar el CP mediante POST /api/register
-echo   3. Guardar las credenciales recibidas
-echo   4. Usar esas credenciales para autenticarse en EV_Central
+echo [SIGUIENTE PASO - IMPORTANTE]
+echo   Ahora que Registry esta corriendo, puedes ejecutar los CPs:
+echo.
+echo   1. En otra ventana, ejecuta: PC_B_RUN.bat
+echo   2. El Monitor ^(EV_CP_M^) detectara automaticamente el Registry local
+echo   3. El CP se registrara automaticamente en el Registry
+echo   4. El CP recibira credenciales y se conectara a EV_Central
+echo.
+echo NOTA: Deja esta ventana abierta ^(Registry debe seguir corriendo^)
+echo.
+echo [VERIFICAR QUE FUNCIONA]
+echo   Antes de ejecutar PC_B_RUN.bat, puedes verificar Registry desde otra terminal:
+echo   curl -k https://localhost:6000/api/health
 echo.
 echo Presiona cualquier tecla para cerrar esta ventana...
-echo ^(EV_Registry seguira corriendo en su ventana separada^)
+echo ^(ADVERTENCIA: Si cierras esta ventana, Registry se detendra^)
+echo ^(El Registry debe estar corriendo mientras ejecutas los CPs^)
 pause >nul

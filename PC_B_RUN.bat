@@ -107,11 +107,29 @@ if !errorlevel! equ 0 (
     goto :registry_configured
 )
 
-REM Si no se encuentra, usar localhost por defecto (el Monitor intentará conectarse)
-set REGISTRY_URL=https://127.0.0.1:6000/api
-echo [ADVERTENCIA] Registry no detectado. Usando configuración por defecto: !REGISTRY_URL!
-echo [ADVERTENCIA] Asegúrate de que Registry esté ejecutándose antes de iniciar los CPs
-echo [DEBUG] Registry no detectado, usando por defecto: !REGISTRY_URL! >> "%LOG_FILE%"
+REM Si no se encuentra, mostrar error crítico
+echo [ERROR] Registry NO detectado ni localmente ni en PC_A
+echo.
+echo ========================================================================
+echo   ERROR CRÍTICO: EV_Registry NO ESTÁ EJECUTÁNDOSE
+echo ========================================================================
+echo.
+echo El Registry es OBLIGATORIO antes de ejecutar los CPs.
+echo.
+echo PASOS REQUERIDOS:
+echo   1. Ejecuta primero: INICIAR_REGISTRY_PC_B.bat
+echo   2. Espera a ver el mensaje: "EV_Registry iniciado en PC_B con HTTPS"
+echo   3. Luego ejecuta este script nuevamente: PC_B_RUN.bat
+echo.
+echo IMPORTANTE:
+echo   - El Registry debe estar en el mismo PC_B donde ejecutas los CPs
+echo   - El Registry debe estar en el puerto 6000
+echo   - Debes haber ejecutado PC_A_RUN.bat primero para iniciar MySQL
+echo.
+echo [ERROR] No se puede continuar sin Registry activo >> "%LOG_FILE%"
+echo [ERROR] REGISTRY_URL no configurado porque Registry no está disponible >> "%LOG_FILE%"
+pause
+exit /b 1
 
 :registry_configured
 REM Configurar variable de entorno para esta sesión
