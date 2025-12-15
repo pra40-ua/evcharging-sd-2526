@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EV Central Dashboard</title>
+    <!-- Socket.IO Client Library -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -253,15 +255,170 @@
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+        
+        /* Estilos para notificaciones en tiempo real */
+        .notification-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 400px;
+        }
+        
+        .notification {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            animation: slideInNotification 0.4s ease, fadeOut 0.5s ease 5s forwards;
+            border-left: 5px solid #667eea;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .notification.driver-conectado {
+            border-left-color: #007bff;
+            background: linear-gradient(135deg, #ffffff 0%, #e7f1ff 100%);
+        }
+        
+        .notification.estado-cambiado {
+            border-left-color: #28a745;
+        }
+        
+        .notification.averia {
+            border-left-color: #dc3545;
+            background: linear-gradient(135deg, #ffffff 0%, #ffe7e7 100%);
+        }
+        
+        .notification-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        
+        .notification-icon {
+            font-size: 24px;
+        }
+        
+        .notification-title {
+            font-weight: 700;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .notification-body {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        .notification-time {
+            font-size: 11px;
+            color: #999;
+            margin-top: 8px;
+        }
+        
+        .notification-close {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            line-height: 1;
+        }
+        
+        .notification-close:hover {
+            color: #333;
+        }
+        
+        @keyframes slideInNotification {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+        }
+        
+        /* Indicador de conexión WebSocket */
+        .ws-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+        
+        .ws-status.connected {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .ws-status.disconnected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .ws-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        .ws-status.connected .ws-dot {
+            background: #28a745;
+        }
+        
+        .ws-status.disconnected .ws-dot {
+            background: #dc3545;
+            animation: none;
+        }
+        
+        /* Resaltado de fila cuando hay nuevo evento */
+        .cps-table tr.highlight-new {
+            animation: highlightRow 2s ease;
+        }
+        
+        @keyframes highlightRow {
+            0% { background-color: #fff3cd; }
+            100% { background-color: transparent; }
+        }
     </style>
 </head>
 <body>
+    <!-- Contenedor de notificaciones en tiempo real -->
+    <div id="notification-container" class="notification-container"></div>
+    
     <div class="container">
         <header>
             <h1>
                 <span>⚡</span>
                 EV Central Dashboard
                 <span class="refresh-indicator"></span>
+                <span id="ws-status" class="ws-status disconnected">
+                    <span class="ws-dot"></span>
+                    <span id="ws-status-text">Conectando...</span>
+                </span>
             </h1>
             <div style="text-align: right;">
                 <div style="font-size: 12px; color: #666;">Sistema de Carga de Vehículos Eléctricos</div>
@@ -313,7 +470,225 @@
     </div>
     
     <script>
-        // Actualización automática cada 2 segundos
+        // =====================================================
+        //          WEBSOCKET - CONEXIÓN EN TIEMPO REAL
+        // =====================================================
+        
+        // Conectar a Socket.IO
+        const socket = io();
+        let wsConnected = false;
+        
+        // Manejar conexión WebSocket
+        socket.on('connect', function() {
+            console.log('✓ WebSocket conectado');
+            wsConnected = true;
+            actualizarIndicadorWS(true);
+            
+            // Solicitar estado inicial
+            socket.emit('solicitar_estado');
+        });
+        
+        socket.on('disconnect', function() {
+            console.log('✗ WebSocket desconectado');
+            wsConnected = false;
+            actualizarIndicadorWS(false);
+        });
+        
+        // Recibir estado inicial al conectar
+        socket.on('estado_inicial', function(data) {
+            console.log('Estado inicial recibido:', data);
+            // Actualizar dashboard con los datos recibidos
+            if (data.stats) {
+                document.getElementById('stat-total').textContent = data.stats.total_cps || 0;
+                document.getElementById('stat-activos').textContent = data.stats.cps_activos || 0;
+                document.getElementById('stat-suministrando').textContent = data.stats.cps_suministrando || 0;
+                document.getElementById('stat-averiados').textContent = data.stats.cps_averiados || 0;
+                document.getElementById('stat-energia').textContent = (data.stats.energia_total || 0).toFixed(2) + ' kWh';
+                document.getElementById('stat-sesiones').textContent = data.stats.sesiones_activas || 0;
+            }
+            if (data.cps) {
+                actualizarTablaCPs(data.cps);
+            }
+        });
+        
+        // Recibir actualizaciones de CP en tiempo real
+        socket.on('actualizacion_cp', function(data) {
+            console.log('📡 Actualización CP:', data);
+            
+            const tipo = data.tipo;
+            const cpId = data.cp_id;
+            const datos = data.datos;
+            
+            // Mostrar notificación según el tipo de evento
+            if (tipo === 'driver_conectado') {
+                mostrarNotificacionTiempoReal({
+                    tipo: 'driver-conectado',
+                    icono: '🚗',
+                    titulo: 'DRIVER CONECTADO',
+                    mensaje: `<strong>${datos.driver_id || 'Driver'}</strong> solicita carga en <strong>${cpId}</strong>`,
+                    detalles: datos.objetivo_kwh ? `Objetivo: ${datos.objetivo_kwh} kWh` : '',
+                    timestamp: data.timestamp
+                });
+                
+                // Resaltar fila del CP
+                resaltarFilaCP(cpId);
+                
+                // Actualizar dashboard inmediatamente
+                actualizarDashboard();
+                
+            } else if (tipo === 'estado_cambiado') {
+                const estadoNuevo = datos.estado_nuevo || '';
+                
+                // Notificación especial para estados importantes
+                if (estadoNuevo.includes('AVERI')) {
+                    mostrarNotificacionTiempoReal({
+                        tipo: 'averia',
+                        icono: '⚠️',
+                        titulo: 'AVERÍA DETECTADA',
+                        mensaje: `El CP <strong>${cpId}</strong> reporta avería`,
+                        detalles: `Estado anterior: ${datos.estado_anterior}`,
+                        timestamp: data.timestamp
+                    });
+                } else if (estadoNuevo === 'SUMINISTRANDO' || estadoNuevo === 'CARGANDO') {
+                    mostrarNotificacionTiempoReal({
+                        tipo: 'estado-cambiado',
+                        icono: '⚡',
+                        titulo: 'SUMINISTRO INICIADO',
+                        mensaje: `<strong>${cpId}</strong> comenzó a suministrar energía`,
+                        detalles: datos.driver_id ? `Driver: ${datos.driver_id}` : '',
+                        timestamp: data.timestamp
+                    });
+                } else if (estadoNuevo === 'LISTO_PARA_INICIAR') {
+                    mostrarNotificacionTiempoReal({
+                        tipo: 'estado-cambiado',
+                        icono: '✅',
+                        titulo: 'LISTO PARA INICIAR',
+                        mensaje: `<strong>${cpId}</strong> está listo para iniciar suministro`,
+                        detalles: 'Confirme el inicio desde el dashboard',
+                        timestamp: data.timestamp
+                    });
+                }
+                
+                // Resaltar fila y actualizar
+                resaltarFilaCP(cpId);
+                actualizarDashboard();
+                
+            } else if (tipo === 'nuevo_cp') {
+                mostrarNotificacionTiempoReal({
+                    tipo: 'estado-cambiado',
+                    icono: '🔌',
+                    titulo: 'NUEVO CP DETECTADO',
+                    mensaje: `Se ha detectado el punto de carga <strong>${cpId}</strong>`,
+                    detalles: datos.ubicacion || '',
+                    timestamp: data.timestamp
+                });
+                
+                actualizarDashboard();
+            }
+        });
+        
+        // Recibir nuevos eventos
+        socket.on('nuevo_evento', function(evento) {
+            console.log('📋 Nuevo evento:', evento);
+            // Actualizar lista de eventos
+            actualizarEventosDesdeWS(evento);
+        });
+        
+        // Función para actualizar indicador de WebSocket
+        function actualizarIndicadorWS(conectado) {
+            const wsStatus = document.getElementById('ws-status');
+            const wsText = document.getElementById('ws-status-text');
+            
+            if (conectado) {
+                wsStatus.className = 'ws-status connected';
+                wsText.textContent = 'Tiempo real';
+            } else {
+                wsStatus.className = 'ws-status disconnected';
+                wsText.textContent = 'Reconectando...';
+            }
+        }
+        
+        // Función para mostrar notificaciones en tiempo real
+        function mostrarNotificacionTiempoReal(config) {
+            const container = document.getElementById('notification-container');
+            
+            const notification = document.createElement('div');
+            notification.className = `notification ${config.tipo}`;
+            
+            const time = new Date().toLocaleTimeString('es-ES');
+            
+            notification.innerHTML = `
+                <button class="notification-close" onclick="this.parentElement.remove()">×</button>
+                <div class="notification-header">
+                    <span class="notification-icon">${config.icono}</span>
+                    <span class="notification-title">${config.titulo}</span>
+                </div>
+                <div class="notification-body">
+                    ${config.mensaje}
+                    ${config.detalles ? `<br><small>${config.detalles}</small>` : ''}
+                </div>
+                <div class="notification-time">${time}</div>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Auto-remover después de 6 segundos
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 6000);
+            
+            // Mantener máximo 5 notificaciones
+            while (container.children.length > 5) {
+                container.removeChild(container.firstChild);
+            }
+        }
+        
+        // Función para resaltar fila de CP
+        function resaltarFilaCP(cpId) {
+            setTimeout(() => {
+                const filas = document.querySelectorAll('.cps-table tbody tr');
+                filas.forEach(fila => {
+                    const celdaId = fila.querySelector('td:first-child strong');
+                    if (celdaId && celdaId.textContent === cpId) {
+                        fila.classList.add('highlight-new');
+                        setTimeout(() => fila.classList.remove('highlight-new'), 2000);
+                    }
+                });
+            }, 100);
+        }
+        
+        // Función para actualizar eventos desde WebSocket
+        function actualizarEventosDesdeWS(evento) {
+            const container = document.getElementById('events-container');
+            
+            // Crear nuevo elemento de evento
+            const eventDiv = document.createElement('div');
+            eventDiv.className = 'event-item';
+            eventDiv.innerHTML = `
+                <span class="event-time">${evento.timestamp}</span>
+                <span>${evento.mensaje}</span>
+            `;
+            
+            // Insertar al principio
+            if (container.firstChild) {
+                container.insertBefore(eventDiv, container.firstChild);
+            } else {
+                container.appendChild(eventDiv);
+            }
+            
+            // Mantener máximo 20 eventos
+            while (container.children.length > 20) {
+                container.removeChild(container.lastChild);
+            }
+        }
+        
+        // =====================================================
+        //          POLLING - ACTUALIZACIÓN PERIÓDICA
+        // =====================================================
+        
+        // Actualización automática cada 2 segundos (backup si WebSocket falla)
         let updateInterval;
         
         function actualizarDashboard() {

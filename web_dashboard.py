@@ -5,10 +5,16 @@ Interfaz visual para monitorizar y controlar la red de puntos de carga.
 
 Uso:
     python web_dashboard.py --central-ip 127.0.0.1 --kafka 127.0.0.1:9092
+
+CARACTERÍSTICAS:
+    - WebSockets para actualizaciones en tiempo real
+    - Notificaciones instantáneas cuando un driver se conecta a un CP
+    - API REST para compatibilidad con polling
 """
 
 from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS
+from flask_socketio import SocketIO, emit
 from kafka import KafkaConsumer, KafkaProducer
 import json
 import threading
@@ -20,6 +26,10 @@ import mysql.connector
 
 app = Flask(__name__)
 CORS(app)
+
+# Configuración de Socket.IO para WebSockets
+# async_mode='threading' para compatibilidad con hilos de Kafka
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
 # =================================================================
 #                    ESTADO GLOBAL DEL DASHBOARD
@@ -263,6 +273,9 @@ def consumir_telemetria(broker: str):
                                     print(f"[DASHBOARD]    Precio: {CPS_STATE[cp_id]['precio_kwh']} €/kWh")
                                     print(f"[DASHBOARD]    Sesión activa: {CPS_STATE[cp_id]['tiene_sesion_activa']}")
                                     print(f"[DASHBOARD]    Driver: {CPS_STATE[cp_id]['driver_id_sesion']}")
+                                    
+                                    # WEBSOCKET: Emitir evento de nuevo CP
+                                    emitir_actualizacion_cp(cp_id, CPS_STATE[cp_id], 'nuevo_cp')
                                 
                                 estado_carga_recibido = telemetria.get('estado_carga', telemetria.get('estado', 'DESCONOCIDO'))
                                 
@@ -322,6 +335,15 @@ def consumir_telemetria(broker: str):
                                 # Registrar evento solo si el estado cambió
                                 if estado_anterior != estado_carga:
                                     registrar_evento(f"{cp_id}: {estado_anterior} → {estado_carga}", 'info')
+                                    
+                                    # WEBSOCKET: Emitir cambio de estado
+                                    emitir_actualizacion_cp(cp_id, {
+                                        'estado_anterior': estado_anterior,
+                                        'estado_nuevo': estado_carga,
+                                        'driver_id': driver_id,
+                                        'tiene_sesion': tiene_sesion
+                                    }, 'estado_cambiado')
+                                    
                                     if 'AVERI' in estado_carga.upper():
                                         print(f"[DASHBOARD] ⚠️⚠️⚠️ CAMBIO A AVERÍA: {cp_id} → {estado_carga} ⚠️⚠️⚠️")
                                     elif 'PENDIENTE_CONFIRMACION_CENTRAL' in estado_carga.upper():
@@ -334,6 +356,15 @@ def consumir_telemetria(broker: str):
                                         print(f"[DASHBOARD] ║  Sesión activa: {tiene_sesion}")
                                         print(f"[DASHBOARD] ║  Este CP debería mostrar botón en web")
                                         print(f"[DASHBOARD] ╚══════════════════════════════════════════\n")
+                                        
+                                        # WEBSOCKET: Emitir evento especial de driver conectado
+                                        emitir_actualizacion_cp(cp_id, {
+                                            'driver_id': driver_id,
+                                            'cp_id': cp_id,
+                                            'estado': estado_carga,
+                                            'objetivo_kwh': telemetria.get('objetivo_kwh'),
+                                            'ubicacion': CPS_STATE[cp_id].get('ubicacion', '-')
+                                        }, 'driver_conectado')
                                     else:
                                         print(f"[DASHBOARD] Estado actualizado: {cp_id} → {estado_carga} (kW={kw_entregados}, P={potencia}, t={tiempo}s)")
                             
@@ -404,7 +435,7 @@ def consumir_telemetria(broker: str):
 
 
 def registrar_evento(mensaje: str, tipo: str = 'info'):
-    """Registra un evento en el log del dashboard."""
+    """Registra un evento en el log del dashboard y lo emite via WebSocket."""
     with EVENTOS_LOCK:
         evento = {
             'timestamp': datetime.now().strftime('%H:%M:%S'),
@@ -416,6 +447,38 @@ def registrar_evento(mensaje: str, tipo: str = 'info'):
         # Mantener solo los últimos 100 eventos
         if len(EVENTOS) > 100:
             EVENTOS.pop(0)
+    
+    # Emitir evento via WebSocket para actualización en tiempo real
+    try:
+        socketio.emit('nuevo_evento', evento)
+    except Exception as e:
+        print(f"[DASHBOARD] Error emitiendo evento WebSocket: {e}")
+
+
+def emitir_actualizacion_cp(cp_id: str, datos: dict, tipo_evento: str = 'actualizacion'):
+    """
+    Emite una actualización de CP via WebSocket.
+    
+    Tipos de evento:
+        - 'driver_conectado': Un driver se conectó a un CP
+        - 'estado_cambiado': El estado del CP cambió
+        - 'telemetria': Actualización de telemetría
+        - 'actualizacion': Actualización general
+    """
+    try:
+        payload = {
+            'tipo': tipo_evento,
+            'cp_id': cp_id,
+            'timestamp': datetime.now().isoformat(),
+            'datos': datos
+        }
+        socketio.emit('actualizacion_cp', payload)
+        
+        # Log especial para conexiones de driver
+        if tipo_evento == 'driver_conectado':
+            print(f"[WEBSOCKET] 📡 Emitido: Driver {datos.get('driver_id', '?')} conectado a {cp_id}")
+    except Exception as e:
+        print(f"[DASHBOARD] Error emitiendo actualización WebSocket: {e}")
 
 
 def actualizar_estadisticas():
@@ -938,15 +1001,88 @@ def api_confirmar_fin(cp_id):
 
 
 # =================================================================
+#                    WEBSOCKET HANDLERS
+# =================================================================
+
+@socketio.on('connect')
+def handle_connect():
+    """Handler cuando un cliente se conecta via WebSocket."""
+    print(f"[WEBSOCKET] ✓ Cliente conectado")
+    
+    # Enviar estado actual al cliente que acaba de conectarse
+    with CPS_STATE_LOCK:
+        cps_list = list(CPS_STATE.values())
+    
+    with STATS_LOCK:
+        stats_copy = STATS.copy()
+    
+    emit('estado_inicial', {
+        'cps': cps_list,
+        'stats': stats_copy,
+        'timestamp': datetime.now().isoformat()
+    })
+
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    """Handler cuando un cliente se desconecta."""
+    print(f"[WEBSOCKET] Cliente desconectado")
+
+
+@socketio.on('solicitar_estado')
+def handle_solicitar_estado():
+    """Cliente solicita el estado actual de todos los CPs."""
+    with CPS_STATE_LOCK:
+        cps_list = list(CPS_STATE.values())
+    
+    with STATS_LOCK:
+        stats_copy = STATS.copy()
+    
+    # Enriquecer con telemetría
+    with TELEMETRIA_LOCK:
+        for cp in cps_list:
+            cp_id = cp['cp_id']
+            if cp_id in TELEMETRIA:
+                tel = TELEMETRIA[cp_id]
+                cp['energia_kwh'] = tel.get('kw_entregados', 0) or tel.get('energia_total', 0)
+                cp['potencia_kw'] = tel.get('potencia_actual', 0)
+                cp['tiempo_carga_s'] = tel.get('tiempo_carga_s', 0)
+                cp['tiene_sesion_activa'] = tel.get('tiene_sesion_activa', False)
+                cp['driver_id_sesion'] = tel.get('driver_id_sesion', None)
+    
+    emit('estado_completo', {
+        'cps': cps_list,
+        'stats': stats_copy,
+        'timestamp': datetime.now().isoformat()
+    })
+
+
+# =================================================================
 #                    TEMPLATES HTML
 # =================================================================
 
 def crear_templates():
-    """Crea el template HTML del dashboard."""
+    """Crea el template HTML del dashboard (solo si no existe o no tiene WebSockets)."""
     import os
     
     # Crear directorio templates si no existe
     os.makedirs('templates', exist_ok=True)
+    
+    template_path = 'templates/dashboard.html'
+    
+    # Verificar si el template ya existe y tiene WebSockets
+    if os.path.exists(template_path):
+        try:
+            with open(template_path, 'r', encoding='utf-8') as f:
+                contenido_actual = f.read()
+                if 'socket.io' in contenido_actual.lower() and 'actualizacion_cp' in contenido_actual:
+                    print("[DASHBOARD] ✓ Template con WebSockets ya existe, no se sobrescribe")
+                    return
+        except Exception:
+            pass
+    
+    print("[DASHBOARD] Generando template HTML básico (sin WebSockets)...")
+    print("[DASHBOARD] ⚠️  NOTA: Para WebSockets, use el template en templates/dashboard.html")
     
     html_content = '''<!DOCTYPE html>
 <html lang="es">
@@ -1720,12 +1856,13 @@ def main():
     )
     kafka_thread.start()
     
-    print(f"\n[DASHBOARD] Iniciando servidor web en http://0.0.0.0:{args.port}")
+    print(f"\n[DASHBOARD] Iniciando servidor web con WebSockets en http://0.0.0.0:{args.port}")
     print(f"[DASHBOARD] Accede desde tu navegador a: http://localhost:{args.port}")
+    print(f"[DASHBOARD] ✓ WebSockets habilitados para notificaciones en tiempo real")
     print()
     
-    # Iniciar servidor Flask
-    app.run(host='0.0.0.0', port=args.port, debug=False, threaded=True)
+    # Iniciar servidor Flask con Socket.IO
+    socketio.run(app, host='0.0.0.0', port=args.port, debug=False, allow_unsafe_werkzeug=True)
 
 
 if __name__ == "__main__":
