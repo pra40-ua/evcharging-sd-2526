@@ -59532,3 +59532,495 @@ t-requests
 2025-12-15 23:12:36,352 - [23:12:36] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
 2025-12-15 23:12:38,693 - [23:12:38] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
 2025-12-15 23:12:38,729 - [23:12:38] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:12:46,314 - [23:12:46] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:12:46,355 - [23:12:46] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:12:48,706 - [23:12:48] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:12:48,743 - [23:12:48] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:12:56,324 - [23:12:56] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:12:56,361 - [23:12:56] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:12:58,718 - [23:12:58] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:12:58,754 - [23:12:58] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:13:06,332 - [23:13:06] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:13:06,366 - [23:13:06] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:13:08,730 - [23:13:08] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:13:08,766 - [23:13:08] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:13:16,343 - [23:13:16] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:13:16,379 - [23:13:16] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:13:17,579 - 192.168.1.43 - - [15/Dec/2025 23:13:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:13:17,908 - 192.168.1.43 - - [15/Dec/2025 23:13:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:13:18,242 - 192.168.1.43 - - [15/Dec/2025 23:13:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:13:18,573 - 192.168.1.43 - - [15/Dec/2025 23:13:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:13:18,742 - [23:13:18] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:13:18,777 - [23:13:18] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:13:18,904 - 192.168.1.43 - - [15/Dec/2025 23:13:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:13:19,232 - 192.168.1.43 - - [15/Dec/2025 23:13:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:13:19,557 - 192.168.1.43 - - [15/Dec/2025 23:13:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:13:19,888 - 192.168.1.43 - - [15/Dec/2025 23:13:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:13:20,217 - 192.168.1.43 - - [15/Dec/2025 23:13:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:13:20,541 - 192.168.1.43 - - [15/Dec/2025 23:13:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:13:20,869 - 192.168.1.43 - - [15/Dec/2025 23:13:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:13:21,176 - 192.168.1.43 - - [15/Dec/2025 23:13:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:13:26,348 - [23:13:26] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:13:26,382 - [23:13:26] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:13:28,756 - [23:13:28] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:13:28,791 - [23:13:28] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:13:36,362 - [23:13:36] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:13:36,398 - [23:13:36] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:13:38,769 - [23:13:38] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:13:38,803 - [23:13:38] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:13:46,374 - [23:13:46] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:13:46,411 - [23:13:46] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:13:48,778 - [23:13:48] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:13:48,814 - [23:13:48] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:13:56,384 - [23:13:56] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:13:56,420 - [23:13:56] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:13:58,799 - [23:13:58] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:13:58,839 - [23:13:58] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:14:06,395 - [23:14:06] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:14:06,434 - [23:14:06] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:14:08,803 - [23:14:08] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:14:08,846 - [23:14:08] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:14:16,397 - [23:14:16] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:14:16,433 - [23:14:16] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:14:17,882 - 192.168.1.43 - - [15/Dec/2025 23:14:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:14:18,197 - 192.168.1.43 - - [15/Dec/2025 23:14:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:14:18,520 - 192.168.1.43 - - [15/Dec/2025 23:14:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:14:18,818 - [23:14:18] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:14:18,835 - 192.168.1.43 - - [15/Dec/2025 23:14:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:14:18,855 - [23:14:18] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:14:19,167 - 192.168.1.43 - - [15/Dec/2025 23:14:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:14:19,476 - 192.168.1.43 - - [15/Dec/2025 23:14:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:14:19,793 - 192.168.1.43 - - [15/Dec/2025 23:14:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:14:19,814 - 192.168.1.43 - - [15/Dec/2025 23:14:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:14:20,143 - 192.168.1.43 - - [15/Dec/2025 23:14:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:14:20,412 - 192.168.1.43 - - [15/Dec/2025 23:14:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:14:20,475 - 192.168.1.43 - - [15/Dec/2025 23:14:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:14:20,742 - 192.168.1.43 - - [15/Dec/2025 23:14:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:14:26,407 - [23:14:26] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:14:26,438 - [23:14:26] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:14:28,830 - [23:14:28] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:14:28,868 - [23:14:28] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:14:36,421 - [23:14:36] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:14:36,457 - [23:14:36] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:14:38,841 - [23:14:38] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:14:38,878 - [23:14:38] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:14:46,425 - [23:14:46] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:14:46,454 - [23:14:46] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:14:48,850 - [23:14:48] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:14:48,882 - [23:14:48] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:14:56,440 - [23:14:56] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:14:56,474 - [23:14:56] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:14:58,862 - [23:14:58] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:14:58,895 - [23:14:58] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:15:06,448 - [23:15:06] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:15:06,481 - [23:15:06] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:15:08,872 - [23:15:08] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:15:08,902 - [23:15:08] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:15:16,454 - [23:15:16] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:15:16,486 - [23:15:16] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:15:17,570 - 192.168.1.43 - - [15/Dec/2025 23:15:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:15:17,875 - 192.168.1.43 - - [15/Dec/2025 23:15:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:15:18,180 - 192.168.1.43 - - [15/Dec/2025 23:15:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:15:18,486 - 192.168.1.43 - - [15/Dec/2025 23:15:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:15:18,801 - 192.168.1.43 - - [15/Dec/2025 23:15:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:15:18,884 - [23:15:18] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:15:18,916 - [23:15:18] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:15:19,115 - 192.168.1.43 - - [15/Dec/2025 23:15:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:15:19,439 - 192.168.1.43 - - [15/Dec/2025 23:15:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:15:19,762 - 192.168.1.43 - - [15/Dec/2025 23:15:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:15:20,080 - 192.168.1.43 - - [15/Dec/2025 23:15:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:15:20,398 - 192.168.1.43 - - [15/Dec/2025 23:15:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:15:20,706 - 192.168.1.43 - - [15/Dec/2025 23:15:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:15:21,027 - 192.168.1.43 - - [15/Dec/2025 23:15:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:15:26,464 - [23:15:26] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:15:26,495 - [23:15:26] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:15:28,896 - [23:15:28] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:15:28,930 - [23:15:28] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:15:36,480 - [23:15:36] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:15:36,513 - [23:15:36] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:15:38,908 - [23:15:38] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:15:38,939 - [23:15:38] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:15:46,483 - [23:15:46] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:15:46,515 - [23:15:46] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:15:48,933 - [23:15:48] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:15:48,984 - [23:15:48] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:15:56,502 - [23:15:56] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:15:56,535 - [23:15:56] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:15:58,932 - [23:15:58] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:15:58,967 - [23:15:58] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:16:06,506 - [23:16:06] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:16:06,538 - [23:16:06] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:16:08,945 - [23:16:08] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:16:08,976 - [23:16:08] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:16:16,538 - [23:16:16] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:16:16,569 - [23:16:16] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:16:17,872 - 192.168.1.43 - - [15/Dec/2025 23:16:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:16:18,177 - 192.168.1.43 - - [15/Dec/2025 23:16:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:16:18,491 - 192.168.1.43 - - [15/Dec/2025 23:16:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:16:18,797 - 192.168.1.43 - - [15/Dec/2025 23:16:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:16:18,956 - [23:16:18] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:16:18,988 - [23:16:18] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:16:19,106 - 192.168.1.43 - - [15/Dec/2025 23:16:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:16:19,423 - 192.168.1.43 - - [15/Dec/2025 23:16:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:16:19,737 - 192.168.1.43 - - [15/Dec/2025 23:16:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:16:19,754 - 192.168.1.43 - - [15/Dec/2025 23:16:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:16:20,072 - 192.168.1.43 - - [15/Dec/2025 23:16:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:16:20,315 - 192.168.1.43 - - [15/Dec/2025 23:16:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:16:20,395 - 192.168.1.43 - - [15/Dec/2025 23:16:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:16:20,631 - 192.168.1.43 - - [15/Dec/2025 23:16:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:16:26,521 - [23:16:26] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:16:26,554 - [23:16:26] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:16:28,971 - [23:16:28] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:16:29,005 - [23:16:29] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:16:36,528 - [23:16:36] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:16:36,562 - [23:16:36] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:16:38,981 - [23:16:38] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:16:39,014 - [23:16:39] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:16:46,543 - [23:16:46] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:16:46,581 - [23:16:46] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:16:48,995 - [23:16:48] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:16:49,031 - [23:16:49] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:16:56,550 - [23:16:56] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:16:56,585 - [23:16:56] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:16:59,010 - [23:16:59] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:16:59,044 - [23:16:59] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:17:06,564 - [23:17:06] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:17:06,602 - [23:17:06] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:17:09,018 - [23:17:09] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:17:09,054 - [23:17:09] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:17:16,574 - [23:17:16] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:17:16,615 - [23:17:16] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:17:17,572 - 192.168.1.43 - - [15/Dec/2025 23:17:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:17:17,898 - 192.168.1.43 - - [15/Dec/2025 23:17:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:17:18,212 - 192.168.1.43 - - [15/Dec/2025 23:17:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:17:18,529 - 192.168.1.43 - - [15/Dec/2025 23:17:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:17:18,851 - 192.168.1.43 - - [15/Dec/2025 23:17:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:17:19,026 - [23:17:19] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:17:19,058 - [23:17:19] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:17:19,173 - 192.168.1.43 - - [15/Dec/2025 23:17:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:17:19,487 - 192.168.1.43 - - [15/Dec/2025 23:17:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:17:19,807 - 192.168.1.43 - - [15/Dec/2025 23:17:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:17:20,123 - 192.168.1.43 - - [15/Dec/2025 23:17:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:17:20,446 - 192.168.1.43 - - [15/Dec/2025 23:17:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:17:20,764 - 192.168.1.43 - - [15/Dec/2025 23:17:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:17:21,071 - 192.168.1.43 - - [15/Dec/2025 23:17:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:17:26,581 - [23:17:26] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:17:26,618 - [23:17:26] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:17:29,037 - [23:17:29] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:17:29,068 - [23:17:29] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:17:36,588 - [23:17:36] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:17:36,620 - [23:17:36] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:17:39,058 - [23:17:39] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:17:39,098 - [23:17:39] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:17:46,602 - [23:17:46] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:17:46,636 - [23:17:46] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:17:49,077 - [23:17:49] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:17:49,120 - [23:17:49] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:17:56,609 - [23:17:56] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:17:56,642 - [23:17:56] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:17:59,083 - [23:17:59] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:17:59,117 - [23:17:59] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:18:06,620 - [23:18:06] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:18:06,655 - [23:18:06] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:18:09,093 - [23:18:09] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:18:09,126 - [23:18:09] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:18:16,629 - [23:18:16] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:18:16,668 - [23:18:16] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:18:17,863 - 192.168.1.43 - - [15/Dec/2025 23:18:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:18:18,174 - 192.168.1.43 - - [15/Dec/2025 23:18:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:18:18,489 - 192.168.1.43 - - [15/Dec/2025 23:18:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:18:18,782 - 192.168.1.43 - - [15/Dec/2025 23:18:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:18:19,051 - 192.168.1.43 - - [15/Dec/2025 23:18:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:18:19,118 - 192.168.1.43 - - [15/Dec/2025 23:18:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:18:19,127 - [23:18:19] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:18:19,162 - [23:18:19] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:18:19,426 - 192.168.1.43 - - [15/Dec/2025 23:18:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:18:19,750 - 192.168.1.43 - - [15/Dec/2025 23:18:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:18:20,001 - 192.168.1.43 - - [15/Dec/2025 23:18:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:18:20,080 - 192.168.1.43 - - [15/Dec/2025 23:18:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:18:20,322 - 192.168.1.43 - - [15/Dec/2025 23:18:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:18:20,399 - 192.168.1.43 - - [15/Dec/2025 23:18:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:18:26,651 - [23:18:26] \U0001f4ca Telemetría de CP_001: est=ESPERANDO_OPERADOR_ENGINE, E=0.00, P=0.0 | Solicitado=50.00 kWh
+2025-12-15 23:18:26,683 - [23:18:26] \U0001f4e2 Notificación a Driver DRIVER_001: TELEMETRIA
+2025-12-15 23:19:30,169 - package: mysql.connector.plugins
+2025-12-15 23:19:30,169 - plugin_name: caching_sha2_password
+2025-12-15 23:19:30,169 - AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+2025-12-15 23:19:30,186 - [23:19:30] Modo consola simple activado
+2025-12-15 23:19:30,201 - Updating subscribed topics to: ('driver_requests',)
+2025-12-15 23:19:30,204 - Updating subscribed topics to: ('central_commands',)
+2025-12-15 23:19:30,207 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:19:30,207 - Updating subscribed topics to: ('telemetria_cp',)
+2025-12-15 23:19:30,210 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:19:30,210 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:19:30,211 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:19:30,211 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:19:30,211 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:19:30,212 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.43:5001
+2025-12-15 23:19:30,212 - [33mPress CTRL+C to quit[0m
+2025-12-15 23:19:30,235 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:19:30,236 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:19:30,418 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:19:30,418 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:19:30,418 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:19:30,418 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:19:30,418 - Starting new heartbeat thread
+2025-12-15 23:19:30,418 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:19:30,419 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:19:30,419 - Revoking previously assigned partitions set() for group central_processing_group
+2025-12-15 23:19:30,419 - Starting new heartbeat thread
+2025-12-15 23:19:30,419 - Starting new heartbeat thread
+2025-12-15 23:19:30,419 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:19:30,419 - Revoking previously assigned partitions set() for group central-control-group
+2025-12-15 23:19:30,419 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-12-15 23:19:30,420 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:19:30,420 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:19:30,420 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:19:30,420 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:19:30,420 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:19:30,420 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:19:30,421 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:19:30,421 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:19:30,521 - (Re-)joining group central_processing_group
+2025-12-15 23:19:30,521 - (Re-)joining group central-telemetry-group
+2025-12-15 23:19:30,521 - (Re-)joining group central-control-group
+2025-12-15 23:19:30,525 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:19:30,525 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:19:30,525 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:19:30,626 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:19:30,626 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:19:30,626 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:19:30,626 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:19:30,627 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:19:30,627 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:19:30,729 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:19:30,730 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:19:30,730 - (Re-)joining group central_processing_group
+2025-12-15 23:19:30,730 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:19:30,730 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:19:30,730 - (Re-)joining group central-control-group
+2025-12-15 23:19:30,729 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:19:30,730 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:19:30,730 - (Re-)joining group central-telemetry-group
+2025-12-15 23:19:30,731 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:19:30,731 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:19:30,732 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:19:30,833 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:19:30,833 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:19:30,833 - (Re-)joining group central_processing_group
+2025-12-15 23:19:30,834 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:19:30,834 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:19:30,834 - (Re-)joining group central-telemetry-group
+2025-12-15 23:19:30,834 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:19:30,834 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:19:30,834 - (Re-)joining group central-control-group
+2025-12-15 23:19:30,835 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:19:30,835 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:19:30,835 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:19:30,937 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:19:30,937 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:19:30,937 - (Re-)joining group central_processing_group
+2025-12-15 23:19:30,937 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:19:30,937 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:19:30,938 - (Re-)joining group central-control-group
+2025-12-15 23:19:30,937 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:19:30,938 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:19:30,938 - (Re-)joining group central-telemetry-group
+2025-12-15 23:19:30,939 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:19:30,939 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:19:30,939 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:19:31,041 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:19:31,041 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:19:31,041 - (Re-)joining group central-telemetry-group
+2025-12-15 23:19:31,041 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:19:31,042 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:19:31,042 - (Re-)joining group central-control-group
+2025-12-15 23:19:31,041 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:19:31,042 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:19:31,042 - (Re-)joining group central_processing_group
+2025-12-15 23:19:31,043 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:19:31,145 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:19:31,145 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:19:31,146 - (Re-)joining group central-telemetry-group
+2025-12-15 23:19:33,211 - 192.168.1.43 - - [15/Dec/2025 23:19:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:19:33,515 - 192.168.1.43 - - [15/Dec/2025 23:19:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:19:33,834 - 192.168.1.43 - - [15/Dec/2025 23:19:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:19:33,849 - 192.168.1.43 - - [15/Dec/2025 23:19:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:19:34,057 - Elected group leader -- performing partition assignments using range
+2025-12-15 23:19:34,058 - Elected group leader -- performing partition assignments using range
+2025-12-15 23:19:34,073 - Successfully joined group central_processing_group with generation 1
+2025-12-15 23:19:34,073 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)]
+2025-12-15 23:19:34,073 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)} for group central_processing_group
+2025-12-15 23:19:34,073 - Successfully joined group central-control-group with generation 1
+2025-12-15 23:19:34,073 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-12-15 23:19:34,073 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-12-15 23:19:34,148 - Elected group leader -- performing partition assignments using range
+2025-12-15 23:19:34,151 - Successfully joined group central-telemetry-group with generation 1
+2025-12-15 23:19:34,151 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)]
+2025-12-15 23:19:34,151 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)} for group central-telemetry-group
+2025-12-15 23:19:37,838 - 192.168.1.43 - - [15/Dec/2025 23:19:37] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:19:39,852 - 192.168.1.43 - - [15/Dec/2025 23:19:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:19:41,550 - 192.168.1.43 - - [15/Dec/2025 23:19:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:19:43,864 - 192.168.1.43 - - [15/Dec/2025 23:19:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:19:45,562 - 192.168.1.43 - - [15/Dec/2025 23:19:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:19:47,841 - 192.168.1.43 - - [15/Dec/2025 23:19:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:19:49,536 - 192.168.1.43 - - [15/Dec/2025 23:19:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:19:51,858 - 192.168.1.43 - - [15/Dec/2025 23:19:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:19:53,538 - 192.168.1.43 - - [15/Dec/2025 23:19:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:19:55,870 - 192.168.1.43 - - [15/Dec/2025 23:19:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:19:57,537 - 192.168.1.43 - - [15/Dec/2025 23:19:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:19:59,853 - 192.168.1.43 - - [15/Dec/2025 23:19:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:01,537 - 192.168.1.43 - - [15/Dec/2025 23:20:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:03,853 - 192.168.1.43 - - [15/Dec/2025 23:20:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:05,557 - 192.168.1.43 - - [15/Dec/2025 23:20:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:07,844 - 192.168.1.43 - - [15/Dec/2025 23:20:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:09,553 - 192.168.1.43 - - [15/Dec/2025 23:20:09] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:11,867 - 192.168.1.43 - - [15/Dec/2025 23:20:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:13,536 - 192.168.1.43 - - [15/Dec/2025 23:20:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:15,851 - 192.168.1.43 - - [15/Dec/2025 23:20:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:17,541 - 192.168.1.43 - - [15/Dec/2025 23:20:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:17,883 - 192.168.1.43 - - [15/Dec/2025 23:20:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:18,202 - 192.168.1.43 - - [15/Dec/2025 23:20:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:18,522 - 192.168.1.43 - - [15/Dec/2025 23:20:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:18,835 - 192.168.1.43 - - [15/Dec/2025 23:20:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:19,155 - 192.168.1.43 - - [15/Dec/2025 23:20:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:19,495 - 192.168.1.43 - - [15/Dec/2025 23:20:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:19,814 - 192.168.1.43 - - [15/Dec/2025 23:20:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:20,143 - 192.168.1.43 - - [15/Dec/2025 23:20:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:20,471 - 192.168.1.43 - - [15/Dec/2025 23:20:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:20,791 - 192.168.1.43 - - [15/Dec/2025 23:20:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:21,118 - 192.168.1.43 - - [15/Dec/2025 23:20:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:21,428 - 192.168.1.43 - - [15/Dec/2025 23:20:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:21,753 - 192.168.1.43 - - [15/Dec/2025 23:20:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:22,079 - 192.168.1.43 - - [15/Dec/2025 23:20:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:23,867 - 192.168.1.43 - - [15/Dec/2025 23:20:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:25,548 - 192.168.1.43 - - [15/Dec/2025 23:20:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:27,855 - 192.168.1.43 - - [15/Dec/2025 23:20:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:29,560 - 192.168.1.43 - - [15/Dec/2025 23:20:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:31,850 - 192.168.1.43 - - [15/Dec/2025 23:20:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:33,562 - 192.168.1.43 - - [15/Dec/2025 23:20:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:35,862 - 192.168.1.43 - - [15/Dec/2025 23:20:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:37,554 - 192.168.1.43 - - [15/Dec/2025 23:20:37] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:39,874 - 192.168.1.43 - - [15/Dec/2025 23:20:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:40,154 - [23:20:40] \u2705 NUEVO CP: Registro inicial de CP_001.
+2025-12-15 23:20:40,175 - [23:20:40] \u26a1 CP CP_001 registrado y conectado (Madrid,ES)
+2025-12-15 23:20:40,178 - [23:20:40] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:20:40,188 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:20:40,188 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:20:40,188 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:20:40,203 - [23:20:40] Telemetría inicial publicada para CP_001
+2025-12-15 23:20:40,214 - 192.168.1.43 - - [15/Dec/2025 23:20:40] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:40,281 - [23:20:40] \u2713 AUTH OK: CP_001 autenticado con credenciales del Registry
+2025-12-15 23:20:40,314 - [23:20:40] AUTH OK enviado a CP_001 (clave de cifrado proporcionada)
+2025-12-15 23:20:40,532 - 192.168.1.43 - - [15/Dec/2025 23:20:40] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:40,850 - 192.168.1.43 - - [15/Dec/2025 23:20:40] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:41,151 - [23:20:41] \U0001f511 ERROR: No se pudo descifrar mensaje de CP_001. Clave revocada o inválida.
+2025-12-15 23:20:41,164 - [23:20:41] Monitor desconectado: CP_001
+2025-12-15 23:20:41,180 - 192.168.1.43 - - [15/Dec/2025 23:20:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:41,180 - [23:20:41] [ESTADO] CP_001 -> AVERÍA (antes: ACTIVADO). Motivo: Desconexión inesperada del CP
+2025-12-15 23:20:41,192 - [23:20:41] [INFO] CP_001 podrá reconectarse automáticamente al reiniciar su Monitor.
+2025-12-15 23:20:41,507 - 192.168.1.43 - - [15/Dec/2025 23:20:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:41,868 - 192.168.1.43 - - [15/Dec/2025 23:20:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:43,856 - 192.168.1.43 - - [15/Dec/2025 23:20:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:45,544 - 192.168.1.43 - - [15/Dec/2025 23:20:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:47,850 - 192.168.1.43 - - [15/Dec/2025 23:20:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:49,543 - 192.168.1.43 - - [15/Dec/2025 23:20:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:51,867 - 192.168.1.43 - - [15/Dec/2025 23:20:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:53,554 - 192.168.1.43 - - [15/Dec/2025 23:20:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:55,208 - [23:20:55] [\u26a0\ufe0f] CP CP_001 sin telemetría hace 15s y socket cerrado \u2192 DESCONECTADO
+2025-12-15 23:20:55,211 - [23:20:55] [ESTADO] CP_001 -> DESCONECTADO (antes: AVERÍA).
+2025-12-15 23:20:55,861 - 192.168.1.43 - - [15/Dec/2025 23:20:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:57,546 - 192.168.1.43 - - [15/Dec/2025 23:20:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:20:59,850 - 192.168.1.43 - - [15/Dec/2025 23:20:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:01,536 - 192.168.1.43 - - [15/Dec/2025 23:21:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:03,851 - 192.168.1.43 - - [15/Dec/2025 23:21:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:05,536 - 192.168.1.43 - - [15/Dec/2025 23:21:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:07,851 - 192.168.1.43 - - [15/Dec/2025 23:21:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:09,554 - 192.168.1.43 - - [15/Dec/2025 23:21:09] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:11,855 - 192.168.1.43 - - [15/Dec/2025 23:21:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:13,559 - 192.168.1.43 - - [15/Dec/2025 23:21:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:15,838 - 192.168.1.43 - - [15/Dec/2025 23:21:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:17,562 - 192.168.1.43 - - [15/Dec/2025 23:21:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:17,894 - 192.168.1.43 - - [15/Dec/2025 23:21:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:18,224 - 192.168.1.43 - - [15/Dec/2025 23:21:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:18,549 - 192.168.1.43 - - [15/Dec/2025 23:21:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:18,877 - 192.168.1.43 - - [15/Dec/2025 23:21:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:19,200 - 192.168.1.43 - - [15/Dec/2025 23:21:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:19,536 - 192.168.1.43 - - [15/Dec/2025 23:21:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:19,861 - 192.168.1.43 - - [15/Dec/2025 23:21:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:20,200 - 192.168.1.43 - - [15/Dec/2025 23:21:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:20,526 - 192.168.1.43 - - [15/Dec/2025 23:21:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:20,838 - 192.168.1.43 - - [15/Dec/2025 23:21:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:21,147 - 192.168.1.43 - - [15/Dec/2025 23:21:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:21,470 - 192.168.1.43 - - [15/Dec/2025 23:21:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:21,798 - 192.168.1.43 - - [15/Dec/2025 23:21:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:21,982 - [23:21:21] \U0001f697 Solicitud de Driver DRIVER_001 para CP CP_001: 44.0 kWh
+2025-12-15 23:21:21,985 - Topic driver_status_DRIVER_001 not found in cluster metadata
+2025-12-15 23:21:22,126 - 192.168.1.43 - - [15/Dec/2025 23:21:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:22,139 - [23:21:22] \U0001f4e2 Notificación a Driver DRIVER_001: RECIBIDA
+2025-12-15 23:21:22,177 - [23:21:22] \U0001f4e2 Notificación a Driver DRIVER_001: DENEGADA
+2025-12-15 23:21:23,861 - 192.168.1.43 - - [15/Dec/2025 23:21:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:25,551 - 192.168.1.43 - - [15/Dec/2025 23:21:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:27,867 - 192.168.1.43 - - [15/Dec/2025 23:21:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:29,577 - 192.168.1.43 - - [15/Dec/2025 23:21:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:31,896 - 192.168.1.43 - - [15/Dec/2025 23:21:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:33,548 - 192.168.1.43 - - [15/Dec/2025 23:21:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:35,853 - 192.168.1.43 - - [15/Dec/2025 23:21:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:37,549 - 192.168.1.43 - - [15/Dec/2025 23:21:37] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:39,855 - 192.168.1.43 - - [15/Dec/2025 23:21:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:41,540 - 192.168.1.43 - - [15/Dec/2025 23:21:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:43,867 - 192.168.1.43 - - [15/Dec/2025 23:21:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:45,549 - 192.168.1.43 - - [15/Dec/2025 23:21:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:47,846 - 192.168.1.43 - - [15/Dec/2025 23:21:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:49,549 - 192.168.1.43 - - [15/Dec/2025 23:21:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:51,855 - 192.168.1.43 - - [15/Dec/2025 23:21:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:53,549 - 192.168.1.43 - - [15/Dec/2025 23:21:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:55,855 - 192.168.1.43 - - [15/Dec/2025 23:21:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:57,540 - 192.168.1.43 - - [15/Dec/2025 23:21:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:21:59,846 - 192.168.1.43 - - [15/Dec/2025 23:21:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:01,540 - 192.168.1.43 - - [15/Dec/2025 23:22:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:03,856 - 192.168.1.43 - - [15/Dec/2025 23:22:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:05,562 - 192.168.1.43 - - [15/Dec/2025 23:22:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:07,898 - 192.168.1.43 - - [15/Dec/2025 23:22:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:09,586 - 192.168.1.43 - - [15/Dec/2025 23:22:09] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:11,880 - 192.168.1.43 - - [15/Dec/2025 23:22:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:13,566 - 192.168.1.43 - - [15/Dec/2025 23:22:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:15,884 - 192.168.1.43 - - [15/Dec/2025 23:22:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:17,571 - 192.168.1.43 - - [15/Dec/2025 23:22:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:17,877 - 192.168.1.43 - - [15/Dec/2025 23:22:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:18,187 - 192.168.1.43 - - [15/Dec/2025 23:22:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:18,493 - 192.168.1.43 - - [15/Dec/2025 23:22:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:18,817 - 192.168.1.43 - - [15/Dec/2025 23:22:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:19,134 - 192.168.1.43 - - [15/Dec/2025 23:22:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:19,453 - 192.168.1.43 - - [15/Dec/2025 23:22:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:19,775 - 192.168.1.43 - - [15/Dec/2025 23:22:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:20,101 - 192.168.1.43 - - [15/Dec/2025 23:22:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:20,423 - 192.168.1.43 - - [15/Dec/2025 23:22:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:20,727 - 192.168.1.43 - - [15/Dec/2025 23:22:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:21,061 - 192.168.1.43 - - [15/Dec/2025 23:22:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:21,381 - 192.168.1.43 - - [15/Dec/2025 23:22:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:21,700 - 192.168.1.43 - - [15/Dec/2025 23:22:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:22,032 - 192.168.1.43 - - [15/Dec/2025 23:22:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:23,873 - 192.168.1.43 - - [15/Dec/2025 23:22:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:25,574 - 192.168.1.43 - - [15/Dec/2025 23:22:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:27,882 - 192.168.1.43 - - [15/Dec/2025 23:22:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:29,566 - 192.168.1.43 - - [15/Dec/2025 23:22:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:31,873 - 192.168.1.43 - - [15/Dec/2025 23:22:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:33,559 - 192.168.1.43 - - [15/Dec/2025 23:22:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:35,869 - 192.168.1.43 - - [15/Dec/2025 23:22:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:37,570 - 192.168.1.43 - - [15/Dec/2025 23:22:37] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:39,883 - 192.168.1.43 - - [15/Dec/2025 23:22:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:41,557 - 192.168.1.43 - - [15/Dec/2025 23:22:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:43,865 - 192.168.1.43 - - [15/Dec/2025 23:22:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:45,559 - 192.168.1.43 - - [15/Dec/2025 23:22:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:47,879 - 192.168.1.43 - - [15/Dec/2025 23:22:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:49,573 - 192.168.1.43 - - [15/Dec/2025 23:22:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:51,875 - 192.168.1.43 - - [15/Dec/2025 23:22:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:53,563 - 192.168.1.43 - - [15/Dec/2025 23:22:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:55,883 - 192.168.1.43 - - [15/Dec/2025 23:22:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:57,576 - 192.168.1.43 - - [15/Dec/2025 23:22:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:22:59,881 - 192.168.1.43 - - [15/Dec/2025 23:22:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:23:01,564 - 192.168.1.43 - - [15/Dec/2025 23:23:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:23:03,866 - 192.168.1.43 - - [15/Dec/2025 23:23:03] "GET /api/status HTTP/1.1" 200 -

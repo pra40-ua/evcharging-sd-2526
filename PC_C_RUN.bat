@@ -56,60 +56,10 @@ if exist central_ip.txt (
 echo.
 
 REM ============================================================
-REM  PASO 0: INICIAR EV_REGISTRY
-REM ============================================================
-echo ============================================================
-echo [0/4] INICIANDO EV_REGISTRY
-echo ============================================================
-echo.
-
-REM Detectar IP de la Central para la BD (si está en PC_A)
-REM Por defecto, asumimos que la BD está en PC_A
-if exist central_ip.txt (
-    set /p CENTRAL_IP_BD=<central_ip.txt
-) else (
-    set CENTRAL_IP_BD=192.168.1.43
-)
-
-echo Iniciando EV_Registry...
-echo   - Puerto: 6000
-echo   - BD Host: !CENTRAL_IP_BD!
-echo   - BD Puerto: 3306
-echo.
-
-REM Verificar si existen certificados SSL
-set USE_SSL=0
-if exist "certificados\registry_cert.pem" (
-    if exist "certificados\registry_key.pem" (
-        set USE_SSL=1
-        echo [INFO] Certificados SSL encontrados. Usando HTTPS.
-    )
-)
-
-REM Lanzar EV_Registry en nueva ventana
-if !USE_SSL! equ 1 (
-    start "EV_Registry-PC_C" cmd /k "py ev_registry\EV_Registry.py --db-host !CENTRAL_IP_BD! --db-port 3306 --db-user root --db-password root --db-name evcharging --port 6000 --ssl --ssl-cert certificados\registry_cert.pem --ssl-key certificados\registry_key.pem"
-    echo [OK] EV_Registry iniciado con HTTPS (puerto 6000)
-) else (
-    start "EV_Registry-PC_C" cmd /k "py ev_registry\EV_Registry.py --db-host !CENTRAL_IP_BD! --db-port 3306 --db-user root --db-password root --db-name evcharging --port 6000"
-    echo [OK] EV_Registry iniciado con HTTP (puerto 6000)
-    echo [INFO] Para usar HTTPS, ejecuta generar_certificados_ssl.bat primero
-)
-
-echo [OK] EV_Registry iniciado en ventana separada
-if !USE_SSL! equ 1 (
-    echo   - API REST: https://localhost:6000/api (HTTPS)
-) else (
-    echo   - API REST: http://localhost:6000/api (HTTP)
-)
-echo.
-timeout /t 3 /nobreak >nul
-
-REM ============================================================
 REM  CONFIGURACION DE DRIVERS
 REM ============================================================
 echo ============================================================
-echo [1/4] CONFIGURACION DE DRIVERS
+echo [1/3] CONFIGURACION DE DRIVERS
 echo ============================================================
 echo.
 
@@ -147,7 +97,7 @@ timeout /t 2 /nobreak >nul
 
 REM CONSTRUIR IMAGEN
 echo ============================================================
-echo [2/4] CONSTRUYENDO IMAGEN DOCKER
+echo [2/3] CONSTRUYENDO IMAGEN DOCKER
 echo ============================================================
 echo.
 
@@ -177,7 +127,7 @@ timeout /t 2 /nobreak >nul
 
 REM DETECTAR DRIVERS EXISTENTES Y CPs OCUPADOS
 echo ============================================================
-echo [3/4] DETECTANDO DRIVERS EXISTENTES Y CPs OCUPADOS
+echo [3/3] DETECTANDO DRIVERS EXISTENTES Y CPs OCUPADOS
 echo ============================================================
 echo.
 
@@ -236,7 +186,7 @@ timeout /t 2 /nobreak >nul
 
 REM LANZAR DRIVERS
 echo ============================================================
-echo [4/4] LANZANDO DRIVERS
+echo LANZANDO DRIVERS
 echo ============================================================
 echo.
 
@@ -290,7 +240,6 @@ if !DRIVERS_ASIGNADOS! LSS !NUM_DRIVERS! (
 echo ============================================================
 echo.
 echo Ventanas abiertas:
-echo   - EV_Registry: API REST en http://localhost:6000/api
 if !DRIVERS_ASIGNADOS! GTR 0 (
     echo   - PowerShell: !DRIVERS_ASIGNADOS! Driver(s)
 )
