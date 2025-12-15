@@ -1863,15 +1863,27 @@ def api_iniciar_suministro():
     cp_id = ENGINE_CP_ID or 'CP_UNKNOWN'
     
     with ESTADO_FLUJO_LOCK:
-        if ESTADO_FLUJO != 'ESPERANDO_DRIVER':
+        estado_actual = ESTADO_FLUJO
+        if estado_actual != 'ESPERANDO_DRIVER':
             # Permitir inicio si existe sesión activa aunque el estado no esté sincronizado
             with SESSION_LOCK:
                 driver_tmp = CURRENT_DRIVER_ID
                 objetivo_tmp = TARGET_KWH
             if not (driver_tmp and driver_tmp != 'UNKNOWN' and objetivo_tmp is not None):
+                # Mensaje de error más descriptivo
+                if estado_actual == 'REPOSO':
+                    mensaje_error = (
+                        f'No se puede iniciar. Estado actual: {estado_actual}. '
+                        f'Primero debes hacer clic en "PREPARAR SUMINISTRO" desde el Dashboard de Central '
+                        f'para que el Engine reciba la autorización (AUTH_REQ).'
+                    )
+                elif estado_actual == 'CARGANDO':
+                    mensaje_error = f'Ya hay un suministro en curso. Estado: {estado_actual}'
+                else:
+                    mensaje_error = f'No se puede iniciar. Estado actual: {estado_actual}'
                 return jsonify({
                     'status': 'error',
-                    'mensaje': f'No se puede iniciar. Estado actual: {ESTADO_FLUJO}'
+                    'mensaje': mensaje_error
                 }), 400
             # Forzar transición para continuar
             ESTADO_FLUJO = 'LISTO_PARA_INICIAR'
