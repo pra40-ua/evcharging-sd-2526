@@ -44,7 +44,8 @@ def obtener_conexion_bd():
             port=DB_CONFIG['port'],
             user=DB_CONFIG['user'],
             password=DB_CONFIG['password'],
-            database=DB_CONFIG['database']
+            database=DB_CONFIG['database'],
+            ssl_disabled=True  # Deshabilitar SSL para evitar errores con Docker MySQL
         )
         return connection
     except Error as e:

@@ -1691,16 +1691,29 @@ def descomponer_trama(trama_bytes: bytes, cp_id: str = None) -> tuple:
     # La DATA (a la que se le calcula el LRC) es todo el cuerpo MENOS el ETX
     data_bytes = data_con_etx[:-1]
     
-    # Verificar si está cifrado (prefijo 'ENC')
+    # 1. Verificar formato (STX/ETX)
+    # Trama debe empezar con STX y el byte ANTES del LRC debe ser ETX
+    if not (trama_bytes.startswith(STX) and data_con_etx.endswith(ETX)):
+        print("[CENTRAL] Error: Formato de trama incorrecto (STX/ETX faltantes).")
+        return None, None
+    
+    # 2. Verificar LRC sobre los datos ORIGINALES (antes de descifrar)
+    # El LRC fue calculado sobre los datos cifrados, así que debemos verificarlo antes de descifrar
+    lrc_calculado = calcular_lrc(data_bytes)
+    if lrc_recibido != lrc_calculado:
+        print(f"[CENTRAL] Error LRC. Recibido: {lrc_recibido.hex()}, Calculado: {lrc_calculado.hex()}. Trama descartada.")
+        return None, None
+    
+    # 3. Verificar si está cifrado (prefijo 'ENC') y descifrar
     if data_bytes.startswith(b'ENC'):
         if not cp_id:
             print("[CENTRAL] Error: Mensaje cifrado recibido pero no hay cp_id para descifrar")
             return None, None
         
         # Obtener clave de cifrado
-        clave = obtener_clave_cifrado_cp(cp_id, None)  # db_connection se obtendrá después
+        clave = obtener_clave_cifrado_cp(cp_id, None)
         if not clave:
-            print(f"[CENTRAL] Error: No hay clave de cifrado para {cp_id}")
+            print(f"[CENTRAL] ⚠️ ERROR: No se pudo descifrar mensaje de {cp_id}. Clave posiblemente revocada.")
             return None, None
         
         try:
@@ -1709,23 +1722,10 @@ def descomponer_trama(trama_bytes: bytes, cp_id: str = None) -> tuple:
             data_cifrado = data_bytes[3:]  # Quitar prefijo 'ENC'
             data_bytes = fernet.decrypt(data_cifrado)
         except Exception as e:
-            print(f"[CENTRAL] Error descifrando mensaje de {cp_id}: {e}")
+            print(f"[CENTRAL] ⚠️ ERROR: No se pudo descifrar mensaje de {cp_id}. Clave posiblemente revocada.")
             return None, None
-    
-    # 1. Verificar formato (STX/ETX)
-    # Trama debe empezar con STX y el byte ANTES del LRC debe ser ETX
-    if not (trama_bytes.startswith(STX) and data_con_etx.endswith(ETX)):
-        # Ahora verificamos que el byte antes del LRC es ETX
-        print("[CENTRAL] Error: Formato de trama incorrecto (STX/ETX faltantes).")
-        return None, None
         
-    # 2. Verificar LRC (sobre data_bytes descifrado)
-    lrc_calculado = calcular_lrc(data_bytes)
-    if lrc_recibido != lrc_calculado:
-        print(f"[CENTRAL] Error LRC. Recibido: {lrc_recibido.hex()}, Calculado: {lrc_calculado.hex()}. Trama descartada.")
-        return None, None
-        
-    # 3. Decodificar y parsear DATA
+    # 4. Decodificar y parsear DATA
     try:
         DATA = data_bytes.decode('utf-8')
         partes = DATA.split(DELIMITER)
@@ -1763,7 +1763,8 @@ def conectar_bd(db_config: str) -> mysql.connector.connection.MySQLConnection:
             database=database,
             autocommit=True,
             charset='utf8mb4',
-            collation='utf8mb4_general_ci'
+            collation='utf8mb4_general_ci',
+            ssl_disabled=True  # Deshabilitar SSL para evitar errores con Docker MySQL
         )
         
         if connection.is_connected():
