@@ -1910,14 +1910,32 @@ def actualizar_estado_cp(connection: mysql.connector.connection.MySQLConnection 
         return False
 
 def obtener_estado_cp(connection: mysql.connector.connection.MySQLConnection, cp_id: str):
-    """Obtiene el estado actual del CP desde la BD. Devuelve str o None si no existe."""
+    """Obtiene el estado actual del CP desde la BD. Devuelve str o None si no existe.
+    Primero busca en charging_points, si no encuentra, verifica cp_registry como fallback."""
     try:
         cursor = connection.cursor()
+        # Primero buscar en charging_points
         cursor.execute("SELECT estado FROM charging_points WHERE cp_id = %s", (cp_id,))
         result = cursor.fetchone()
-        cursor.close()
         if result:
+            cursor.close()
             return result[0]
+        
+        # Si no está en charging_points, verificar si está registrado en cp_registry
+        # (puede estar registrado en Registry pero no en charging_points si se conectó sin BD)
+        try:
+            cursor.execute("SELECT activo FROM cp_registry WHERE cp_id = %s", (cp_id,))
+            registry_result = cursor.fetchone()
+            if registry_result:
+                # CP está registrado en Registry, devolver "Activado" como estado por defecto
+                cursor.close()
+                print(f"[CENTRAL] CP {cp_id} encontrado en cp_registry pero no en charging_points. Usando estado 'Activado'.")
+                return "Activado"
+        except Exception:
+            # Si la tabla cp_registry no existe o hay error, ignorar
+            pass
+        
+        cursor.close()
         return None
     except Error as e:
         print(f"[CENTRAL] Error consultando estado de CP {cp_id}: {e}")
@@ -2502,20 +2520,46 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     )
                     return
             else:
-                # Sin BD, aceptar conexión pero advertir (sin cifrar)
-                print(f"[CENTRAL] ADVERTENCIA: Sin conexión a BD, aceptando {cp_id} sin persistencia")
-                respuesta_trama = construir_trama('AUTH', ['OK', 'Autenticacion exitosa (sin BD)', clave_b64], cp_id=None, cifrar=False)
-                conn.sendall(respuesta_trama)
-                print(f"[CENTRAL] <- Enviada respuesta AUTH: OK a {cp_id} (sin BD, con clave)")
-                registrar_evento(f"AUTH OK enviado a {cp_id} (sin BD, clave proporcionada)")
-                registrar_auditoria(
-                    accion="AUTENTICACION",
-                    cp_id=cp_id,
-                    origen_ip=origen_ip,
-                    descripcion="Autenticación exitosa sin BD (modo degradado)",
-                    resultado="OK",
-                    db_connection=None
-                )
+                # Sin BD, intentar reconectar y registrar
+                print(f"[CENTRAL] ADVERTENCIA: Sin conexión a BD, intentando reconectar...")
+                db_connection = _asegurar_conexion_bd(db_connection)
+                
+                if db_connection and db_connection.is_connected():
+                    # Reconectó, intentar registrar ahora
+                    if registrar_cp_en_bd(db_connection, cp_id, ubicacion, precio_kwh):
+                        respuesta_trama = construir_trama('AUTH', ['OK', 'Autenticacion exitosa', clave_b64], cp_id=None, cifrar=False)
+                        conn.sendall(respuesta_trama)
+                        print(f"[CENTRAL] <- Enviada respuesta AUTH: OK a {cp_id} (con clave de cifrado)")
+                        registrar_evento(f"AUTH OK enviado a {cp_id} (clave de cifrado proporcionada)")
+                        registrar_auditoria(
+                            accion="AUTENTICACION",
+                            cp_id=cp_id,
+                            origen_ip=origen_ip,
+                            descripcion=f"Autenticación exitosa. Clave de cifrado proporcionada.",
+                            resultado="OK",
+                            db_connection=db_connection
+                        )
+                    else:
+                        # Falló registro pero BD está conectada
+                        respuesta_trama = construir_trama('AUTH', ['OK', 'Autenticacion exitosa (error al registrar en BD)', clave_b64], cp_id=None, cifrar=False)
+                        conn.sendall(respuesta_trama)
+                        print(f"[CENTRAL] <- Enviada respuesta AUTH: OK a {cp_id} (error al registrar en BD)")
+                        registrar_evento(f"AUTH OK enviado a {cp_id} (error al registrar en BD)")
+                else:
+                    # Sin BD, aceptar conexión pero advertir (sin cifrar)
+                    print(f"[CENTRAL] ADVERTENCIA: Sin conexión a BD, aceptando {cp_id} sin persistencia")
+                    respuesta_trama = construir_trama('AUTH', ['OK', 'Autenticacion exitosa (sin BD)', clave_b64], cp_id=None, cifrar=False)
+                    conn.sendall(respuesta_trama)
+                    print(f"[CENTRAL] <- Enviada respuesta AUTH: OK a {cp_id} (sin BD, con clave)")
+                    registrar_evento(f"AUTH OK enviado a {cp_id} (sin BD, clave proporcionada)")
+                    registrar_auditoria(
+                        accion="AUTENTICACION",
+                        cp_id=cp_id,
+                        origen_ip=origen_ip,
+                        descripcion="Autenticación exitosa sin BD (modo degradado)",
+                        resultado="OK",
+                        db_connection=None
+                    )
             
             # --- ALMACENAR CONEXIÓN SOLO DESPUÉS DE COMPLETAR AUTENTICACIÓN ---
             with CONEXIONES_ACTIVAS_LOCK:

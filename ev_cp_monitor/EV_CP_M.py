@@ -118,7 +118,14 @@ def descomponer_trama_cifrada(trama_bytes: bytes) -> tuple:
         print(f"[CP_M] DEBUG descomponer: formato inválido STX/ETX")
         return None, None
     
-    # Verificar si está cifrado
+    # Verificar LRC sobre los datos ORIGINALES (antes de descifrar)
+    # El LRC fue calculado sobre los datos cifrados, así que debemos verificarlo antes de descifrar
+    lrc_calculado = calcular_lrc(data_bytes)
+    if lrc_recibido != lrc_calculado:
+        print(f"[CP_M] DEBUG descomponer: LRC incorrecto (recibido={lrc_recibido.hex()}, calculado={lrc_calculado.hex()})")
+        return None, None
+    
+    # Verificar si está cifrado y descifrar
     if data_bytes.startswith(b'ENC'):
         # Descifrar
         with ENCRYPTION_KEY_LOCK:
@@ -134,11 +141,6 @@ def descomponer_trama_cifrada(trama_bytes: bytes) -> tuple:
         else:
             print(f"[CP_M] ⚠️ Mensaje cifrado recibido pero no hay clave disponible")
             return None, None
-    
-    lrc_calculado = calcular_lrc(data_bytes)
-    if lrc_recibido != lrc_calculado:
-        print(f"[CP_M] DEBUG descomponer: LRC incorrecto (recibido={lrc_recibido.hex()}, calculado={lrc_calculado.hex()})")
-        return None, None
     
     try:
         DATA = data_bytes.decode('utf-8')

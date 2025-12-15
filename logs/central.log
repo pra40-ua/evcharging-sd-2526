@@ -63074,3 +63074,1038 @@ t-requests
 2025-12-15 23:54:51,626 - [23:54:51] [ESTADO] CP_001 -> ACTIVADO.
 2025-12-15 23:54:51,629 - [23:54:51] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
 2025-12-15 23:54:51,630 - 192.168.1.36 - - [15/Dec/2025 23:54:51] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:54:53,883 - 192.168.1.43 - - [15/Dec/2025 23:54:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:54:54,929 - [23:54:54] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:54:54,935 - [23:54:54] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:54:55,571 - 192.168.1.43 - - [15/Dec/2025 23:54:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:54:56,346 - [23:54:56] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:54:56,349 - [23:54:56] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:54:56,349 - 192.168.1.36 - - [15/Dec/2025 23:54:56] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:54:57,880 - 192.168.1.43 - - [15/Dec/2025 23:54:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:54:57,956 - [23:54:57] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:54:57,962 - [23:54:57] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:54:59,578 - 192.168.1.43 - - [15/Dec/2025 23:54:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:01,095 - [23:55:01] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:01,099 - [23:55:01] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:55:01,099 - 192.168.1.36 - - [15/Dec/2025 23:55:01] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:55:01,878 - 192.168.1.43 - - [15/Dec/2025 23:55:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:03,573 - 192.168.1.43 - - [15/Dec/2025 23:55:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:04,940 - [23:55:04] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:55:04,948 - [23:55:04] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:05,789 - [23:55:05] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:05,792 - [23:55:05] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:55:05,792 - 192.168.1.36 - - [15/Dec/2025 23:55:05] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:55:05,881 - 192.168.1.43 - - [15/Dec/2025 23:55:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:07,574 - 192.168.1.43 - - [15/Dec/2025 23:55:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:07,963 - [23:55:07] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:55:07,969 - [23:55:07] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:09,879 - 192.168.1.43 - - [15/Dec/2025 23:55:09] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:10,527 - [23:55:10] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:10,530 - [23:55:10] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:55:10,530 - 192.168.1.36 - - [15/Dec/2025 23:55:10] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:55:11,563 - 192.168.1.43 - - [15/Dec/2025 23:55:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:13,872 - 192.168.1.43 - - [15/Dec/2025 23:55:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:14,955 - [23:55:14] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:55:14,961 - [23:55:14] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:15,263 - [23:55:15] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:15,268 - [23:55:15] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:55:15,268 - 192.168.1.36 - - [15/Dec/2025 23:55:15] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:55:15,580 - 192.168.1.43 - - [15/Dec/2025 23:55:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:17,865 - 192.168.1.43 - - [15/Dec/2025 23:55:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:17,983 - [23:55:17] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:55:17,991 - [23:55:17] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:18,178 - 192.168.1.43 - - [15/Dec/2025 23:55:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:18,505 - 192.168.1.43 - - [15/Dec/2025 23:55:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:18,814 - 192.168.1.43 - - [15/Dec/2025 23:55:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:19,128 - 192.168.1.43 - - [15/Dec/2025 23:55:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:19,452 - 192.168.1.43 - - [15/Dec/2025 23:55:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:19,771 - 192.168.1.43 - - [15/Dec/2025 23:55:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:19,978 - [23:55:19] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:19,982 - [23:55:19] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:55:19,982 - 192.168.1.36 - - [15/Dec/2025 23:55:19] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:55:20,081 - 192.168.1.43 - - [15/Dec/2025 23:55:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:20,412 - 192.168.1.43 - - [15/Dec/2025 23:55:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:20,727 - 192.168.1.43 - - [15/Dec/2025 23:55:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:21,031 - 192.168.1.43 - - [15/Dec/2025 23:55:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:21,045 - 192.168.1.43 - - [15/Dec/2025 23:55:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:21,370 - 192.168.1.43 - - [15/Dec/2025 23:55:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:21,627 - 192.168.1.43 - - [15/Dec/2025 23:55:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:21,891 - 192.168.1.43 - - [15/Dec/2025 23:55:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:21,954 - 192.168.1.43 - - [15/Dec/2025 23:55:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:22,200 - 192.168.1.43 - - [15/Dec/2025 23:55:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:22,284 - 192.168.1.43 - - [15/Dec/2025 23:55:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:22,514 - 192.168.1.43 - - [15/Dec/2025 23:55:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:22,606 - 192.168.1.43 - - [15/Dec/2025 23:55:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:22,840 - 192.168.1.43 - - [15/Dec/2025 23:55:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:23,572 - 192.168.1.43 - - [15/Dec/2025 23:55:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:24,695 - [23:55:24] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:24,698 - [23:55:24] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:55:24,698 - 192.168.1.36 - - [15/Dec/2025 23:55:24] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:55:24,962 - [23:55:24] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:55:24,968 - [23:55:24] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:25,873 - 192.168.1.43 - - [15/Dec/2025 23:55:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:27,558 - 192.168.1.43 - - [15/Dec/2025 23:55:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:27,983 - [23:55:27] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:55:27,988 - [23:55:27] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:29,436 - [23:55:29] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:29,439 - [23:55:29] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:55:29,439 - 192.168.1.36 - - [15/Dec/2025 23:55:29] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:55:29,863 - 192.168.1.43 - - [15/Dec/2025 23:55:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:31,583 - 192.168.1.43 - - [15/Dec/2025 23:55:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:33,883 - 192.168.1.43 - - [15/Dec/2025 23:55:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:34,180 - [23:55:34] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:34,183 - [23:55:34] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:55:34,183 - 192.168.1.36 - - [15/Dec/2025 23:55:34] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:55:34,974 - [23:55:34] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:55:34,979 - [23:55:34] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:35,570 - 192.168.1.43 - - [15/Dec/2025 23:55:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:37,867 - 192.168.1.43 - - [15/Dec/2025 23:55:37] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:38,002 - [23:55:37] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:55:38,008 - [23:55:38] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:38,914 - [23:55:38] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:38,917 - [23:55:38] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:55:38,917 - 192.168.1.36 - - [15/Dec/2025 23:55:38] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:55:39,577 - 192.168.1.43 - - [15/Dec/2025 23:55:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:41,871 - 192.168.1.43 - - [15/Dec/2025 23:55:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:43,559 - 192.168.1.43 - - [15/Dec/2025 23:55:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:43,696 - [23:55:43] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:43,699 - [23:55:43] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:55:43,699 - 192.168.1.36 - - [15/Dec/2025 23:55:43] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:55:44,989 - [23:55:44] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:55:44,995 - [23:55:44] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:45,904 - 192.168.1.43 - - [15/Dec/2025 23:55:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:47,590 - 192.168.1.43 - - [15/Dec/2025 23:55:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:48,003 - [23:55:48] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:55:48,009 - [23:55:48] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:48,400 - [23:55:48] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:48,403 - [23:55:48] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:55:48,403 - 192.168.1.36 - - [15/Dec/2025 23:55:48] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:55:49,884 - 192.168.1.43 - - [15/Dec/2025 23:55:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:51,572 - 192.168.1.43 - - [15/Dec/2025 23:55:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:53,197 - [23:55:53] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:53,200 - [23:55:53] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:55:53,200 - 192.168.1.36 - - [15/Dec/2025 23:55:53] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:55:53,874 - 192.168.1.43 - - [15/Dec/2025 23:55:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:55,002 - [23:55:54] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:55:55,007 - [23:55:55] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:55,561 - 192.168.1.43 - - [15/Dec/2025 23:55:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:57,872 - 192.168.1.43 - - [15/Dec/2025 23:55:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:55:57,987 - [23:55:57] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:57,997 - [23:55:57] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:55:57,997 - 192.168.1.36 - - [15/Dec/2025 23:55:57] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:55:58,017 - [23:55:58] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:55:58,022 - [23:55:58] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:55:59,573 - 192.168.1.43 - - [15/Dec/2025 23:55:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:01,885 - 192.168.1.43 - - [15/Dec/2025 23:56:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:02,683 - [23:56:02] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:02,688 - [23:56:02] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:56:02,688 - 192.168.1.36 - - [15/Dec/2025 23:56:02] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:56:03,576 - 192.168.1.43 - - [15/Dec/2025 23:56:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:05,013 - [23:56:05] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:56:05,019 - [23:56:05] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:05,886 - 192.168.1.43 - - [15/Dec/2025 23:56:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:07,415 - [23:56:07] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:07,417 - [23:56:07] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:56:07,417 - 192.168.1.36 - - [15/Dec/2025 23:56:07] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:56:07,578 - 192.168.1.43 - - [15/Dec/2025 23:56:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:08,025 - [23:56:08] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:56:08,030 - [23:56:08] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:09,864 - 192.168.1.43 - - [15/Dec/2025 23:56:09] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:11,572 - 192.168.1.43 - - [15/Dec/2025 23:56:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:12,179 - [23:56:12] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:12,182 - [23:56:12] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:56:12,182 - 192.168.1.36 - - [15/Dec/2025 23:56:12] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:56:13,893 - 192.168.1.43 - - [15/Dec/2025 23:56:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:15,025 - [23:56:15] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:56:15,031 - [23:56:15] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:15,574 - 192.168.1.43 - - [15/Dec/2025 23:56:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:16,914 - [23:56:16] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:16,917 - [23:56:16] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:56:16,917 - 192.168.1.36 - - [15/Dec/2025 23:56:16] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:56:17,873 - 192.168.1.43 - - [15/Dec/2025 23:56:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:18,061 - [23:56:18] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:56:18,067 - [23:56:18] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:18,184 - 192.168.1.43 - - [15/Dec/2025 23:56:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:18,516 - 192.168.1.43 - - [15/Dec/2025 23:56:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:18,825 - 192.168.1.43 - - [15/Dec/2025 23:56:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:19,147 - 192.168.1.43 - - [15/Dec/2025 23:56:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:19,461 - 192.168.1.43 - - [15/Dec/2025 23:56:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:19,767 - 192.168.1.43 - - [15/Dec/2025 23:56:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:20,090 - 192.168.1.43 - - [15/Dec/2025 23:56:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:20,393 - 192.168.1.43 - - [15/Dec/2025 23:56:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:20,701 - 192.168.1.43 - - [15/Dec/2025 23:56:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:20,912 - 192.168.1.43 - - [15/Dec/2025 23:56:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:21,018 - 192.168.1.43 - - [15/Dec/2025 23:56:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:21,230 - 192.168.1.43 - - [15/Dec/2025 23:56:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:21,337 - 192.168.1.43 - - [15/Dec/2025 23:56:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:21,562 - 192.168.1.43 - - [15/Dec/2025 23:56:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:21,656 - [23:56:21] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:21,659 - 192.168.1.43 - - [15/Dec/2025 23:56:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:21,659 - [23:56:21] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:56:21,660 - 192.168.1.36 - - [15/Dec/2025 23:56:21] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:56:21,888 - 192.168.1.43 - - [15/Dec/2025 23:56:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:21,983 - 192.168.1.43 - - [15/Dec/2025 23:56:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:22,197 - 192.168.1.43 - - [15/Dec/2025 23:56:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:56:25,035 - [23:56:25] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:56:25,040 - [23:56:25] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:26,398 - [23:56:26] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:26,401 - [23:56:26] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:56:26,401 - 192.168.1.36 - - [15/Dec/2025 23:56:26] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:56:28,043 - [23:56:28] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:56:28,048 - [23:56:28] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:31,152 - [23:56:31] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:31,155 - [23:56:31] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:56:31,155 - 192.168.1.36 - - [15/Dec/2025 23:56:31] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:56:35,048 - [23:56:35] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:56:35,054 - [23:56:35] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:35,862 - [23:56:35] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:35,865 - [23:56:35] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:56:35,865 - 192.168.1.36 - - [15/Dec/2025 23:56:35] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:56:38,053 - [23:56:38] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:56:38,059 - [23:56:38] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:40,631 - [23:56:40] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:40,634 - [23:56:40] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:56:40,634 - 192.168.1.36 - - [15/Dec/2025 23:56:40] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:56:45,059 - [23:56:45] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:56:45,064 - [23:56:45] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:45,378 - [23:56:45] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:45,381 - [23:56:45] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:56:45,382 - 192.168.1.36 - - [15/Dec/2025 23:56:45] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:56:48,064 - [23:56:48] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:56:48,069 - [23:56:48] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:50,131 - [23:56:50] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:50,134 - [23:56:50] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:56:50,135 - 192.168.1.36 - - [15/Dec/2025 23:56:50] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:56:54,850 - [23:56:54] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:54,853 - [23:56:54] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:56:54,853 - 192.168.1.36 - - [15/Dec/2025 23:56:54] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:56:55,074 - [23:56:55] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:56:55,080 - [23:56:55] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:58,077 - [23:56:58] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:56:58,085 - [23:56:58] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:59,600 - [23:56:59] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:56:59,603 - [23:56:59] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:56:59,603 - 192.168.1.36 - - [15/Dec/2025 23:56:59] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:57:05,081 - [23:57:05] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:57:05,086 - [23:57:05] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:57:08,081 - [23:57:08] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:57:08,087 - [23:57:08] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:57:12,931 - [23:57:12] Monitor desconectado: CP_001
+2025-12-15 23:57:12,934 - [23:57:12] [ESTADO] CP_001 -> AVERÍA (antes: ACTIVADO). Motivo: Desconexión inesperada del CP
+2025-12-15 23:57:12,940 - [23:57:12] [INFO] CP_001 podrá reconectarse automáticamente al reiniciar su Monitor.
+2025-12-15 23:57:17,576 - 192.168.1.43 - - [15/Dec/2025 23:57:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:57:17,904 - 192.168.1.43 - - [15/Dec/2025 23:57:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:57:18,235 - 192.168.1.43 - - [15/Dec/2025 23:57:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:57:18,568 - 192.168.1.43 - - [15/Dec/2025 23:57:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:57:18,886 - 192.168.1.43 - - [15/Dec/2025 23:57:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:04,421 - package: mysql.connector.plugins
+2025-12-15 23:58:04,421 - plugin_name: caching_sha2_password
+2025-12-15 23:58:04,421 - AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+2025-12-15 23:58:04,428 - [23:58:04] Modo consola simple activado
+2025-12-15 23:58:04,444 - Updating subscribed topics to: ('driver_requests',)
+2025-12-15 23:58:04,447 - Updating subscribed topics to: ('telemetria_cp',)
+2025-12-15 23:58:04,447 - Updating subscribed topics to: ('central_commands',)
+2025-12-15 23:58:04,453 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:58:04,453 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:58:04,453 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:58:04,453 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:58:04,454 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:58:04,454 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:58:04,458 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.43:5001
+2025-12-15 23:58:04,458 - [33mPress CTRL+C to quit[0m
+2025-12-15 23:58:04,477 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:58:04,477 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:58:04,661 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:58:04,662 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:58:04,661 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:58:04,662 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:58:04,661 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:58:04,662 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:58:04,662 - Starting new heartbeat thread
+2025-12-15 23:58:04,662 - Starting new heartbeat thread
+2025-12-15 23:58:04,662 - Starting new heartbeat thread
+2025-12-15 23:58:04,662 - Revoking previously assigned partitions set() for group central_processing_group
+2025-12-15 23:58:04,662 - Revoking previously assigned partitions set() for group central-control-group
+2025-12-15 23:58:04,662 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-12-15 23:58:04,663 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:58:04,663 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:58:04,663 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:58:04,663 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:58:04,663 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:58:04,663 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:58:04,663 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:58:04,664 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:58:04,664 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:58:04,764 - (Re-)joining group central-telemetry-group
+2025-12-15 23:58:04,764 - (Re-)joining group central-control-group
+2025-12-15 23:58:04,764 - (Re-)joining group central_processing_group
+2025-12-15 23:58:04,768 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:58:04,768 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:58:04,768 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:58:04,869 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:58:04,869 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:58:04,869 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:58:04,869 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:58:04,869 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:58:04,869 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:58:04,972 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:58:04,972 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:58:04,972 - (Re-)joining group central-control-group
+2025-12-15 23:58:04,972 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:58:04,972 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:58:04,972 - (Re-)joining group central_processing_group
+2025-12-15 23:58:04,972 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:58:04,973 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:58:04,973 - (Re-)joining group central-telemetry-group
+2025-12-15 23:58:04,973 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:58:04,974 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:58:04,974 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:58:05,075 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:58:05,076 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:58:05,076 - (Re-)joining group central-control-group
+2025-12-15 23:58:05,075 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:58:05,076 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:58:05,076 - (Re-)joining group central-telemetry-group
+2025-12-15 23:58:05,076 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:58:05,076 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:58:05,076 - (Re-)joining group central_processing_group
+2025-12-15 23:58:05,077 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:58:05,077 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:58:05,077 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:58:05,180 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:58:05,180 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:58:05,180 - (Re-)joining group central_processing_group
+2025-12-15 23:58:05,180 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:58:05,180 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:58:05,180 - (Re-)joining group central-control-group
+2025-12-15 23:58:05,180 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:58:05,180 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:58:05,181 - (Re-)joining group central-telemetry-group
+2025-12-15 23:58:05,181 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:58:05,182 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:58:05,182 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:58:05,284 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:58:05,284 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:58:05,284 - (Re-)joining group central-telemetry-group
+2025-12-15 23:58:05,284 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:58:05,284 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:58:05,284 - (Re-)joining group central_processing_group
+2025-12-15 23:58:05,284 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:58:05,284 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:58:05,284 - (Re-)joining group central-control-group
+2025-12-15 23:58:08,298 - Elected group leader -- performing partition assignments using range
+2025-12-15 23:58:08,300 - Elected group leader -- performing partition assignments using range
+2025-12-15 23:58:08,300 - Elected group leader -- performing partition assignments using range
+2025-12-15 23:58:08,313 - Successfully joined group central-control-group with generation 1
+2025-12-15 23:58:08,314 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-12-15 23:58:08,314 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-12-15 23:58:08,314 - Successfully joined group central-telemetry-group with generation 1
+2025-12-15 23:58:08,314 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)]
+2025-12-15 23:58:08,314 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2), TopicPartition(topic='telemetria_cp', partition=0)} for group central-telemetry-group
+2025-12-15 23:58:08,314 - Successfully joined group central_processing_group with generation 1
+2025-12-15 23:58:08,314 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)]
+2025-12-15 23:58:08,315 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2), TopicPartition(topic='driver_requests', partition=0)} for group central_processing_group
+2025-12-15 23:58:11,615 - 192.168.1.43 - - [15/Dec/2025 23:58:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:13,305 - 192.168.1.43 - - [15/Dec/2025 23:58:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:15,604 - 192.168.1.43 - - [15/Dec/2025 23:58:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:17,308 - 192.168.1.43 - - [15/Dec/2025 23:58:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:17,872 - 192.168.1.43 - - [15/Dec/2025 23:58:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:18,190 - 192.168.1.43 - - [15/Dec/2025 23:58:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:18,498 - 192.168.1.43 - - [15/Dec/2025 23:58:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:18,804 - 192.168.1.43 - - [15/Dec/2025 23:58:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:19,119 - 192.168.1.43 - - [15/Dec/2025 23:58:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:19,427 - 192.168.1.43 - - [15/Dec/2025 23:58:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:19,743 - 192.168.1.43 - - [15/Dec/2025 23:58:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:20,057 - 192.168.1.43 - - [15/Dec/2025 23:58:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:20,364 - 192.168.1.43 - - [15/Dec/2025 23:58:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:20,669 - 192.168.1.43 - - [15/Dec/2025 23:58:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:20,976 - 192.168.1.43 - - [15/Dec/2025 23:58:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:21,281 - 192.168.1.43 - - [15/Dec/2025 23:58:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:21,587 - 192.168.1.43 - - [15/Dec/2025 23:58:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:21,893 - 192.168.1.43 - - [15/Dec/2025 23:58:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:22,199 - 192.168.1.43 - - [15/Dec/2025 23:58:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:22,505 - 192.168.1.43 - - [15/Dec/2025 23:58:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:22,811 - 192.168.1.43 - - [15/Dec/2025 23:58:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:23,116 - 192.168.1.43 - - [15/Dec/2025 23:58:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:23,423 - 192.168.1.43 - - [15/Dec/2025 23:58:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:23,728 - 192.168.1.43 - - [15/Dec/2025 23:58:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:24,034 - 192.168.1.43 - - [15/Dec/2025 23:58:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:24,340 - 192.168.1.43 - - [15/Dec/2025 23:58:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:25,626 - 192.168.1.43 - - [15/Dec/2025 23:58:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:27,314 - 192.168.1.43 - - [15/Dec/2025 23:58:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:29,600 - 192.168.1.43 - - [15/Dec/2025 23:58:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:31,297 - 192.168.1.43 - - [15/Dec/2025 23:58:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:33,612 - 192.168.1.43 - - [15/Dec/2025 23:58:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:35,306 - 192.168.1.43 - - [15/Dec/2025 23:58:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:37,618 - 192.168.1.43 - - [15/Dec/2025 23:58:37] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:39,306 - 192.168.1.43 - - [15/Dec/2025 23:58:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:41,612 - 192.168.1.43 - - [15/Dec/2025 23:58:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:43,307 - 192.168.1.43 - - [15/Dec/2025 23:58:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:44,227 - [23:58:44] \u2705 NUEVO CP: Registro inicial de CP_001.
+2025-12-15 23:58:44,250 - [23:58:44] \u26a1 CP CP_001 registrado y conectado (Madrid,ES)
+2025-12-15 23:58:44,253 - [23:58:44] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:58:44,257 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:58:44,257 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:58:44,257 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:58:44,272 - [23:58:44] Telemetría inicial publicada para CP_001
+2025-12-15 23:58:44,580 - 192.168.1.43 - - [15/Dec/2025 23:58:44] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:44,752 - [23:58:44] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:58:44,755 - [23:58:44] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-15 23:58:44,756 - 192.168.1.36 - - [15/Dec/2025 23:58:44] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:58:44,886 - 192.168.1.43 - - [15/Dec/2025 23:58:44] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:45,201 - 192.168.1.43 - - [15/Dec/2025 23:58:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:45,507 - 192.168.1.43 - - [15/Dec/2025 23:58:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:45,830 - 192.168.1.43 - - [15/Dec/2025 23:58:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:46,130 - 192.168.1.43 - - [15/Dec/2025 23:58:46] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:46,359 - [23:58:46] \u2713 AUTH OK: CP_001 autenticado con credenciales del Registry
+2025-12-15 23:58:46,369 - [23:58:46] AUTH OK enviado a CP_001 (sin BD, clave proporcionada)
+2025-12-15 23:58:46,375 - 192.168.1.43 - - [15/Dec/2025 23:58:46] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:46,448 - 192.168.1.43 - - [15/Dec/2025 23:58:46] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:46,754 - 192.168.1.43 - - [15/Dec/2025 23:58:46] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:46,757 - 192.168.1.43 - - [15/Dec/2025 23:58:46] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:47,071 - 192.168.1.43 - - [15/Dec/2025 23:58:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:47,330 - 192.168.1.43 - - [15/Dec/2025 23:58:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:47,612 - 192.168.1.43 - - [15/Dec/2025 23:58:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:47,648 - 192.168.1.43 - - [15/Dec/2025 23:58:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:49,313 - 192.168.1.43 - - [15/Dec/2025 23:58:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:49,471 - [23:58:49] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:58:49,481 - [23:58:49] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-15 23:58:49,481 - 192.168.1.36 - - [15/Dec/2025 23:58:49] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:58:49,494 - [23:58:49] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:58:49,501 - [23:58:49] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:58:50,654 - [23:58:50] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:58:50,661 - [23:58:50] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:58:51,613 - 192.168.1.43 - - [15/Dec/2025 23:58:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:53,307 - 192.168.1.43 - - [15/Dec/2025 23:58:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:54,238 - [23:58:54] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:58:54,242 - [23:58:54] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-15 23:58:54,242 - 192.168.1.36 - - [15/Dec/2025 23:58:54] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:58:55,604 - 192.168.1.43 - - [15/Dec/2025 23:58:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:57,307 - 192.168.1.43 - - [15/Dec/2025 23:58:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:58:58,943 - [23:58:58] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:58:58,946 - [23:58:58] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-15 23:58:58,947 - 192.168.1.36 - - [15/Dec/2025 23:58:58] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:58:59,496 - [23:58:59] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:58:59,502 - [23:58:59] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:58:59,611 - 192.168.1.43 - - [15/Dec/2025 23:58:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:00,587 - [23:59:00] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:59:00,593 - [23:59:00] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:01,307 - 192.168.1.43 - - [15/Dec/2025 23:59:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:03,611 - 192.168.1.43 - - [15/Dec/2025 23:59:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:03,651 - [23:59:03] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:03,654 - [23:59:03] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-15 23:59:03,655 - 192.168.1.36 - - [15/Dec/2025 23:59:03] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:59:05,308 - 192.168.1.43 - - [15/Dec/2025 23:59:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:07,620 - 192.168.1.43 - - [15/Dec/2025 23:59:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:08,378 - [23:59:08] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:08,381 - [23:59:08] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-15 23:59:08,381 - 192.168.1.36 - - [15/Dec/2025 23:59:08] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:59:09,308 - 192.168.1.43 - - [15/Dec/2025 23:59:09] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:09,513 - [23:59:09] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:59:09,518 - [23:59:09] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:10,589 - [23:59:10] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:59:10,595 - [23:59:10] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:11,626 - 192.168.1.43 - - [15/Dec/2025 23:59:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:13,073 - [23:59:13] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:13,076 - [23:59:13] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-15 23:59:13,076 - 192.168.1.36 - - [15/Dec/2025 23:59:13] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:59:13,304 - 192.168.1.43 - - [15/Dec/2025 23:59:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:15,599 - 192.168.1.43 - - [15/Dec/2025 23:59:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:17,302 - 192.168.1.43 - - [15/Dec/2025 23:59:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:17,733 - [23:59:17] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:17,736 - [23:59:17] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-15 23:59:17,737 - 192.168.1.36 - - [15/Dec/2025 23:59:17] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:59:17,885 - 192.168.1.43 - - [15/Dec/2025 23:59:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:18,204 - 192.168.1.43 - - [15/Dec/2025 23:59:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:18,513 - 192.168.1.43 - - [15/Dec/2025 23:59:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:18,831 - 192.168.1.43 - - [15/Dec/2025 23:59:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:19,151 - 192.168.1.43 - - [15/Dec/2025 23:59:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:19,456 - 192.168.1.43 - - [15/Dec/2025 23:59:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:19,526 - [23:59:19] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:59:19,531 - [23:59:19] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:19,773 - 192.168.1.43 - - [15/Dec/2025 23:59:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:20,091 - 192.168.1.43 - - [15/Dec/2025 23:59:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:20,408 - 192.168.1.43 - - [15/Dec/2025 23:59:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:20,596 - [23:59:20] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:59:20,602 - [23:59:20] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:20,726 - 192.168.1.43 - - [15/Dec/2025 23:59:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:21,040 - 192.168.1.43 - - [15/Dec/2025 23:59:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:21,354 - 192.168.1.43 - - [15/Dec/2025 23:59:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:21,677 - 192.168.1.43 - - [15/Dec/2025 23:59:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:21,995 - 192.168.1.43 - - [15/Dec/2025 23:59:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:22,314 - 192.168.1.43 - - [15/Dec/2025 23:59:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:22,438 - [23:59:22] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:22,441 - [23:59:22] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-15 23:59:22,442 - 192.168.1.36 - - [15/Dec/2025 23:59:22] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:59:22,638 - 192.168.1.43 - - [15/Dec/2025 23:59:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:22,958 - 192.168.1.43 - - [15/Dec/2025 23:59:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:23,276 - 192.168.1.43 - - [15/Dec/2025 23:59:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:23,607 - 192.168.1.43 - - [15/Dec/2025 23:59:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:23,925 - 192.168.1.43 - - [15/Dec/2025 23:59:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:24,244 - 192.168.1.43 - - [15/Dec/2025 23:59:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:24,562 - 192.168.1.43 - - [15/Dec/2025 23:59:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:25,611 - 192.168.1.43 - - [15/Dec/2025 23:59:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:27,152 - [23:59:27] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:27,155 - [23:59:27] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-15 23:59:27,156 - 192.168.1.36 - - [15/Dec/2025 23:59:27] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:59:27,307 - 192.168.1.43 - - [15/Dec/2025 23:59:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:29,536 - [23:59:29] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:59:29,542 - [23:59:29] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:29,597 - 192.168.1.43 - - [15/Dec/2025 23:59:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:30,606 - [23:59:30] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:59:30,612 - [23:59:30] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:31,298 - 192.168.1.43 - - [15/Dec/2025 23:59:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:31,869 - [23:59:31] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:31,873 - [23:59:31] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-15 23:59:31,873 - 192.168.1.36 - - [15/Dec/2025 23:59:31] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:59:33,088 - [23:59:33] \U0001f697 Solicitud de Driver DRIVER_001 para CP CP_001: 43.0 kWh
+2025-12-15 23:59:33,090 - Topic driver_status_DRIVER_001 not found in cluster metadata
+2025-12-15 23:59:33,225 - [23:59:33] \U0001f4e2 Notificación a Driver DRIVER_001: RECIBIDA
+2025-12-15 23:59:33,270 - [23:59:33] \U0001f4e2 Notificación a Driver DRIVER_001: DENEGADA
+2025-12-15 23:59:33,614 - 192.168.1.43 - - [15/Dec/2025 23:59:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:35,306 - 192.168.1.43 - - [15/Dec/2025 23:59:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:36,545 - [23:59:36] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:36,548 - [23:59:36] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-15 23:59:36,548 - 192.168.1.36 - - [15/Dec/2025 23:59:36] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:59:37,605 - 192.168.1.43 - - [15/Dec/2025 23:59:37] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:39,308 - 192.168.1.43 - - [15/Dec/2025 23:59:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:39,558 - [23:59:39] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:59:39,564 - [23:59:39] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:40,626 - [23:59:40] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:59:40,632 - [23:59:40] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:41,280 - [23:59:41] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:41,283 - [23:59:41] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-15 23:59:41,283 - 192.168.1.36 - - [15/Dec/2025 23:59:41] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:59:41,629 - 192.168.1.43 - - [15/Dec/2025 23:59:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:43,304 - 192.168.1.43 - - [15/Dec/2025 23:59:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:45,618 - 192.168.1.43 - - [15/Dec/2025 23:59:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:45,973 - [23:59:45] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:45,976 - [23:59:45] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-15 23:59:45,976 - 192.168.1.36 - - [15/Dec/2025 23:59:45] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:59:47,307 - 192.168.1.43 - - [15/Dec/2025 23:59:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:49,568 - [23:59:49] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:59:49,574 - [23:59:49] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:49,611 - 192.168.1.43 - - [15/Dec/2025 23:59:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:50,634 - [23:59:50] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:59:50,640 - [23:59:50] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:50,674 - [23:59:50] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:50,677 - [23:59:50] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-15 23:59:50,677 - 192.168.1.36 - - [15/Dec/2025 23:59:50] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:59:51,307 - 192.168.1.43 - - [15/Dec/2025 23:59:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:53,609 - 192.168.1.43 - - [15/Dec/2025 23:59:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:55,304 - 192.168.1.43 - - [15/Dec/2025 23:59:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:55,394 - [23:59:55] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:59:55,398 - [23:59:55] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-15 23:59:55,398 - 192.168.1.36 - - [15/Dec/2025 23:59:55] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:59:57,602 - 192.168.1.43 - - [15/Dec/2025 23:59:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:59,313 - 192.168.1.43 - - [15/Dec/2025 23:59:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:59:59,581 - [23:59:59] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:59:59,587 - [23:59:59] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:00,088 - [00:00:00] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:00,091 - [00:00:00] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:00:00,091 - 192.168.1.36 - - [16/Dec/2025 00:00:00] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:00:00,635 - [00:00:00] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:00:00,641 - [00:00:00] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:01,601 - 192.168.1.43 - - [16/Dec/2025 00:00:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:03,306 - 192.168.1.43 - - [16/Dec/2025 00:00:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:04,849 - [00:00:04] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:04,852 - [00:00:04] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:00:04,853 - 192.168.1.36 - - [16/Dec/2025 00:00:04] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:00:05,610 - 192.168.1.43 - - [16/Dec/2025 00:00:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:07,310 - 192.168.1.43 - - [16/Dec/2025 00:00:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:09,532 - [00:00:09] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:09,535 - [00:00:09] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:00:09,535 - 192.168.1.36 - - [16/Dec/2025 00:00:09] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:00:09,589 - [00:00:09] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:00:09,595 - [00:00:09] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:09,607 - 192.168.1.43 - - [16/Dec/2025 00:00:09] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:10,645 - [00:00:10] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:00:10,650 - [00:00:10] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:11,304 - 192.168.1.43 - - [16/Dec/2025 00:00:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:13,610 - 192.168.1.43 - - [16/Dec/2025 00:00:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:14,246 - [00:00:14] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:14,249 - [00:00:14] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:00:14,249 - 192.168.1.36 - - [16/Dec/2025 00:00:14] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:00:15,305 - 192.168.1.43 - - [16/Dec/2025 00:00:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:17,610 - 192.168.1.43 - - [16/Dec/2025 00:00:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:17,922 - 192.168.1.43 - - [16/Dec/2025 00:00:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:18,234 - 192.168.1.43 - - [16/Dec/2025 00:00:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:18,536 - 192.168.1.43 - - [16/Dec/2025 00:00:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:18,783 - 192.168.1.43 - - [16/Dec/2025 00:00:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:18,846 - 192.168.1.43 - - [16/Dec/2025 00:00:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:18,931 - [00:00:18] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:18,934 - [00:00:18] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:00:18,934 - 192.168.1.36 - - [16/Dec/2025 00:00:18] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:00:19,169 - 192.168.1.43 - - [16/Dec/2025 00:00:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:19,469 - 192.168.1.43 - - [16/Dec/2025 00:00:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:19,603 - [00:00:19] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:00:19,608 - [00:00:19] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:19,711 - 192.168.1.43 - - [16/Dec/2025 00:00:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:19,787 - 192.168.1.43 - - [16/Dec/2025 00:00:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:20,093 - 192.168.1.43 - - [16/Dec/2025 00:00:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:20,402 - 192.168.1.43 - - [16/Dec/2025 00:00:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:20,650 - [00:00:20] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:00:20,656 - [00:00:20] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:20,709 - 192.168.1.43 - - [16/Dec/2025 00:00:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:21,015 - 192.168.1.43 - - [16/Dec/2025 00:00:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:21,242 - 192.168.1.43 - - [16/Dec/2025 00:00:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:21,330 - 192.168.1.43 - - [16/Dec/2025 00:00:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:21,613 - 192.168.1.43 - - [16/Dec/2025 00:00:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:21,654 - 192.168.1.43 - - [16/Dec/2025 00:00:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:21,932 - 192.168.1.43 - - [16/Dec/2025 00:00:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:21,968 - 192.168.1.43 - - [16/Dec/2025 00:00:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:22,250 - 192.168.1.43 - - [16/Dec/2025 00:00:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:22,285 - 192.168.1.43 - - [16/Dec/2025 00:00:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:23,303 - 192.168.1.43 - - [16/Dec/2025 00:00:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:23,610 - [00:00:23] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:23,612 - [00:00:23] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:00:23,613 - 192.168.1.36 - - [16/Dec/2025 00:00:23] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:00:25,609 - 192.168.1.43 - - [16/Dec/2025 00:00:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:27,312 - 192.168.1.43 - - [16/Dec/2025 00:00:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:28,323 - [00:00:28] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:28,326 - [00:00:28] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:00:28,326 - 192.168.1.36 - - [16/Dec/2025 00:00:28] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:00:29,612 - 192.168.1.43 - - [16/Dec/2025 00:00:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:29,615 - [00:00:29] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:00:29,621 - [00:00:29] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:30,657 - [00:00:30] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:00:30,662 - [00:00:30] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:31,307 - 192.168.1.43 - - [16/Dec/2025 00:00:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:32,989 - [00:00:32] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:32,992 - [00:00:32] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:00:32,992 - 192.168.1.36 - - [16/Dec/2025 00:00:32] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:00:33,613 - 192.168.1.43 - - [16/Dec/2025 00:00:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:35,307 - 192.168.1.43 - - [16/Dec/2025 00:00:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:37,613 - 192.168.1.43 - - [16/Dec/2025 00:00:37] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:37,666 - [00:00:37] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:37,669 - [00:00:37] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:00:37,669 - 192.168.1.36 - - [16/Dec/2025 00:00:37] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:00:39,307 - 192.168.1.43 - - [16/Dec/2025 00:00:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:39,627 - [00:00:39] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:00:39,633 - [00:00:39] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:40,668 - [00:00:40] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:00:40,674 - [00:00:40] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:41,617 - 192.168.1.43 - - [16/Dec/2025 00:00:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:42,370 - [00:00:42] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:42,374 - [00:00:42] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:00:42,374 - 192.168.1.36 - - [16/Dec/2025 00:00:42] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:00:43,305 - 192.168.1.43 - - [16/Dec/2025 00:00:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:45,601 - 192.168.1.43 - - [16/Dec/2025 00:00:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:47,096 - [00:00:47] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:47,099 - [00:00:47] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:00:47,099 - 192.168.1.36 - - [16/Dec/2025 00:00:47] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:00:47,308 - 192.168.1.43 - - [16/Dec/2025 00:00:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:49,602 - 192.168.1.43 - - [16/Dec/2025 00:00:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:49,636 - [00:00:49] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:00:49,642 - [00:00:49] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:50,674 - [00:00:50] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:00:50,679 - [00:00:50] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:51,312 - 192.168.1.43 - - [16/Dec/2025 00:00:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:51,761 - [00:00:51] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:51,764 - [00:00:51] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:00:51,764 - 192.168.1.36 - - [16/Dec/2025 00:00:51] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:00:53,610 - 192.168.1.43 - - [16/Dec/2025 00:00:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:55,303 - 192.168.1.43 - - [16/Dec/2025 00:00:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:56,467 - [00:00:56] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:00:56,470 - [00:00:56] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:00:56,470 - 192.168.1.36 - - [16/Dec/2025 00:00:56] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:00:57,606 - 192.168.1.43 - - [16/Dec/2025 00:00:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:59,307 - 192.168.1.43 - - [16/Dec/2025 00:00:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:00:59,648 - [00:00:59] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:00:59,654 - [00:00:59] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:00,694 - [00:01:00] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:01:00,700 - [00:01:00] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:01,162 - [00:01:01] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:01,165 - [00:01:01] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:01:01,165 - 192.168.1.36 - - [16/Dec/2025 00:01:01] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:01:01,629 - 192.168.1.43 - - [16/Dec/2025 00:01:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:03,303 - 192.168.1.43 - - [16/Dec/2025 00:01:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:05,624 - 192.168.1.43 - - [16/Dec/2025 00:01:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:05,866 - [00:01:05] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:05,869 - [00:01:05] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:01:05,869 - 192.168.1.36 - - [16/Dec/2025 00:01:05] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:01:07,310 - 192.168.1.43 - - [16/Dec/2025 00:01:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:09,603 - 192.168.1.43 - - [16/Dec/2025 00:01:09] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:09,659 - [00:01:09] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:01:09,665 - [00:01:09] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:10,531 - [00:01:10] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:10,534 - [00:01:10] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:01:10,535 - 192.168.1.36 - - [16/Dec/2025 00:01:10] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:01:10,686 - [00:01:10] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:01:10,692 - [00:01:10] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:11,304 - 192.168.1.43 - - [16/Dec/2025 00:01:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:13,617 - 192.168.1.43 - - [16/Dec/2025 00:01:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:15,212 - [00:01:15] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:15,215 - [00:01:15] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:01:15,215 - 192.168.1.36 - - [16/Dec/2025 00:01:15] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:01:15,310 - 192.168.1.43 - - [16/Dec/2025 00:01:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:17,626 - 192.168.1.43 - - [16/Dec/2025 00:01:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:17,928 - 192.168.1.43 - - [16/Dec/2025 00:01:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:18,171 - 192.168.1.43 - - [16/Dec/2025 00:01:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:18,255 - 192.168.1.43 - - [16/Dec/2025 00:01:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:18,540 - 192.168.1.43 - - [16/Dec/2025 00:01:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:18,791 - 192.168.1.43 - - [16/Dec/2025 00:01:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:18,879 - 192.168.1.43 - - [16/Dec/2025 00:01:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:19,167 - 192.168.1.43 - - [16/Dec/2025 00:01:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:19,420 - 192.168.1.43 - - [16/Dec/2025 00:01:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:19,499 - 192.168.1.43 - - [16/Dec/2025 00:01:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:19,671 - [00:01:19] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:01:19,677 - [00:01:19] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:19,793 - 192.168.1.43 - - [16/Dec/2025 00:01:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:19,913 - [00:01:19] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:19,916 - [00:01:19] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:01:19,916 - 192.168.1.36 - - [16/Dec/2025 00:01:19] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:01:20,046 - 192.168.1.43 - - [16/Dec/2025 00:01:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:20,134 - 192.168.1.43 - - [16/Dec/2025 00:01:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:20,416 - 192.168.1.43 - - [16/Dec/2025 00:01:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:20,683 - 192.168.1.43 - - [16/Dec/2025 00:01:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:20,697 - [00:01:20] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:01:20,703 - [00:01:20] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:20,760 - 192.168.1.43 - - [16/Dec/2025 00:01:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:21,042 - 192.168.1.43 - - [16/Dec/2025 00:01:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:21,307 - 192.168.1.43 - - [16/Dec/2025 00:01:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:21,383 - 192.168.1.43 - - [16/Dec/2025 00:01:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:21,675 - 192.168.1.43 - - [16/Dec/2025 00:01:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:21,928 - 192.168.1.43 - - [16/Dec/2025 00:01:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:22,005 - 192.168.1.43 - - [16/Dec/2025 00:01:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:23,311 - 192.168.1.43 - - [16/Dec/2025 00:01:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:24,633 - [00:01:24] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:24,635 - [00:01:24] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:01:24,636 - 192.168.1.36 - - [16/Dec/2025 00:01:24] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:01:25,619 - 192.168.1.43 - - [16/Dec/2025 00:01:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:27,298 - 192.168.1.43 - - [16/Dec/2025 00:01:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:29,332 - [00:01:29] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:29,335 - [00:01:29] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:01:29,335 - 192.168.1.36 - - [16/Dec/2025 00:01:29] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:01:29,711 - [00:01:29] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:01:29,721 - [00:01:29] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:29,875 - 192.168.1.43 - - [16/Dec/2025 00:01:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:30,703 - [00:01:30] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:01:30,708 - [00:01:30] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:31,575 - 192.168.1.43 - - [16/Dec/2025 00:01:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:33,888 - 192.168.1.43 - - [16/Dec/2025 00:01:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:34,087 - [00:01:34] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:34,090 - [00:01:34] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:01:34,090 - 192.168.1.36 - - [16/Dec/2025 00:01:34] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:01:35,575 - 192.168.1.43 - - [16/Dec/2025 00:01:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:37,883 - 192.168.1.43 - - [16/Dec/2025 00:01:37] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:38,768 - [00:01:38] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:38,771 - [00:01:38] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:01:38,772 - 192.168.1.36 - - [16/Dec/2025 00:01:38] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:01:39,577 - 192.168.1.43 - - [16/Dec/2025 00:01:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:39,705 - [00:01:39] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:01:39,710 - [00:01:39] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:40,706 - [00:01:40] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:01:40,711 - [00:01:40] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:41,866 - 192.168.1.43 - - [16/Dec/2025 00:01:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:43,463 - [00:01:43] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:43,467 - [00:01:43] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:01:43,467 - 192.168.1.36 - - [16/Dec/2025 00:01:43] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:01:43,559 - 192.168.1.43 - - [16/Dec/2025 00:01:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:45,896 - 192.168.1.43 - - [16/Dec/2025 00:01:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:47,569 - 192.168.1.43 - - [16/Dec/2025 00:01:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:48,155 - [00:01:48] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:48,158 - [00:01:48] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:01:48,158 - 192.168.1.36 - - [16/Dec/2025 00:01:48] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:01:49,714 - [00:01:49] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:01:49,720 - [00:01:49] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:49,872 - 192.168.1.43 - - [16/Dec/2025 00:01:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:50,704 - [00:01:50] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:01:50,710 - [00:01:50] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:51,576 - 192.168.1.43 - - [16/Dec/2025 00:01:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:52,846 - [00:01:52] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:52,849 - [00:01:52] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:01:52,849 - 192.168.1.36 - - [16/Dec/2025 00:01:52] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:01:53,891 - 192.168.1.43 - - [16/Dec/2025 00:01:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:55,562 - 192.168.1.43 - - [16/Dec/2025 00:01:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:57,518 - [00:01:57] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:01:57,521 - [00:01:57] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:01:57,521 - 192.168.1.36 - - [16/Dec/2025 00:01:57] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:01:57,882 - 192.168.1.43 - - [16/Dec/2025 00:01:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:59,576 - 192.168.1.43 - - [16/Dec/2025 00:01:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:01:59,728 - [00:01:59] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:01:59,736 - [00:01:59] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:00,716 - [00:02:00] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:02:00,722 - [00:02:00] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:01,896 - 192.168.1.43 - - [16/Dec/2025 00:02:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:02,195 - [00:02:02] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:02,198 - [00:02:02] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:02:02,198 - 192.168.1.36 - - [16/Dec/2025 00:02:02] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:02:03,561 - 192.168.1.43 - - [16/Dec/2025 00:02:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:05,885 - 192.168.1.43 - - [16/Dec/2025 00:02:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:06,921 - [00:02:06] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:06,924 - [00:02:06] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:02:06,924 - 192.168.1.36 - - [16/Dec/2025 00:02:06] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:02:07,577 - 192.168.1.43 - - [16/Dec/2025 00:02:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:09,610 - 192.168.1.43 - - [16/Dec/2025 00:02:09] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:09,739 - [00:02:09] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:02:09,745 - [00:02:09] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:10,720 - [00:02:10] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:02:10,727 - [00:02:10] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:11,559 - 192.168.1.43 - - [16/Dec/2025 00:02:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:11,608 - [00:02:11] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:11,610 - [00:02:11] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:02:11,611 - 192.168.1.36 - - [16/Dec/2025 00:02:11] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:02:13,881 - 192.168.1.43 - - [16/Dec/2025 00:02:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:15,577 - 192.168.1.43 - - [16/Dec/2025 00:02:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:16,331 - [00:02:16] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:16,335 - [00:02:16] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:02:16,335 - 192.168.1.36 - - [16/Dec/2025 00:02:16] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:02:17,888 - 192.168.1.43 - - [16/Dec/2025 00:02:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:18,182 - 192.168.1.43 - - [16/Dec/2025 00:02:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:18,450 - 192.168.1.43 - - [16/Dec/2025 00:02:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:18,515 - 192.168.1.43 - - [16/Dec/2025 00:02:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:18,812 - 192.168.1.43 - - [16/Dec/2025 00:02:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:19,070 - 192.168.1.43 - - [16/Dec/2025 00:02:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:19,144 - 192.168.1.43 - - [16/Dec/2025 00:02:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:19,433 - 192.168.1.43 - - [16/Dec/2025 00:02:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:19,716 - 192.168.1.43 - - [16/Dec/2025 00:02:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:19,748 - [00:02:19] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:02:19,753 - [00:02:19] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:19,769 - 192.168.1.43 - - [16/Dec/2025 00:02:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:20,069 - 192.168.1.43 - - [16/Dec/2025 00:02:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:20,342 - 192.168.1.43 - - [16/Dec/2025 00:02:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:20,391 - 192.168.1.43 - - [16/Dec/2025 00:02:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:20,691 - 192.168.1.43 - - [16/Dec/2025 00:02:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:20,722 - [00:02:20] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:02:20,727 - [00:02:20] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:20,982 - 192.168.1.43 - - [16/Dec/2025 00:02:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:21,020 - [00:02:21] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:21,023 - [00:02:21] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:02:21,023 - 192.168.1.36 - - [16/Dec/2025 00:02:21] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:02:21,028 - 192.168.1.43 - - [16/Dec/2025 00:02:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:21,312 - 192.168.1.43 - - [16/Dec/2025 00:02:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:21,617 - 192.168.1.43 - - [16/Dec/2025 00:02:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:21,938 - 192.168.1.43 - - [16/Dec/2025 00:02:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:22,243 - 192.168.1.43 - - [16/Dec/2025 00:02:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:22,258 - 192.168.1.43 - - [16/Dec/2025 00:02:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:22,575 - 192.168.1.43 - - [16/Dec/2025 00:02:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:23,578 - 192.168.1.43 - - [16/Dec/2025 00:02:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:25,667 - [00:02:25] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:25,671 - [00:02:25] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:02:25,671 - 192.168.1.36 - - [16/Dec/2025 00:02:25] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:02:25,884 - 192.168.1.43 - - [16/Dec/2025 00:02:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:27,581 - 192.168.1.43 - - [16/Dec/2025 00:02:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:29,764 - [00:02:29] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:02:29,770 - [00:02:29] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:29,880 - 192.168.1.43 - - [16/Dec/2025 00:02:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:30,375 - [00:02:30] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:30,377 - [00:02:30] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:02:30,378 - 192.168.1.36 - - [16/Dec/2025 00:02:30] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:02:30,730 - [00:02:30] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:02:30,735 - [00:02:30] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:31,570 - 192.168.1.43 - - [16/Dec/2025 00:02:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:33,868 - 192.168.1.43 - - [16/Dec/2025 00:02:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:35,089 - [00:02:35] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:35,091 - [00:02:35] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:02:35,091 - 192.168.1.36 - - [16/Dec/2025 00:02:35] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:02:35,564 - 192.168.1.43 - - [16/Dec/2025 00:02:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:37,879 - 192.168.1.43 - - [16/Dec/2025 00:02:37] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:39,579 - 192.168.1.43 - - [16/Dec/2025 00:02:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:39,777 - [00:02:39] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:02:39,783 - [00:02:39] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:39,841 - [00:02:39] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:39,845 - [00:02:39] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:02:39,845 - 192.168.1.36 - - [16/Dec/2025 00:02:39] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:02:40,733 - [00:02:40] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:02:40,739 - [00:02:40] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:41,879 - 192.168.1.43 - - [16/Dec/2025 00:02:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:43,570 - 192.168.1.43 - - [16/Dec/2025 00:02:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:44,517 - [00:02:44] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:44,520 - [00:02:44] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:02:44,520 - 192.168.1.36 - - [16/Dec/2025 00:02:44] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:02:45,893 - 192.168.1.43 - - [16/Dec/2025 00:02:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:47,580 - 192.168.1.43 - - [16/Dec/2025 00:02:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:49,217 - [00:02:49] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:49,220 - [00:02:49] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:02:49,220 - 192.168.1.36 - - [16/Dec/2025 00:02:49] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:02:49,787 - [00:02:49] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:02:49,793 - [00:02:49] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:49,899 - 192.168.1.43 - - [16/Dec/2025 00:02:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:50,741 - [00:02:50] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:02:50,746 - [00:02:50] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:51,577 - 192.168.1.43 - - [16/Dec/2025 00:02:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:53,879 - 192.168.1.43 - - [16/Dec/2025 00:02:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:53,911 - [00:02:53] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:53,914 - [00:02:53] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:02:53,914 - 192.168.1.36 - - [16/Dec/2025 00:02:53] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:02:55,562 - 192.168.1.43 - - [16/Dec/2025 00:02:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:57,896 - 192.168.1.43 - - [16/Dec/2025 00:02:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:58,642 - [00:02:58] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:02:58,645 - [00:02:58] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:02:58,645 - 192.168.1.36 - - [16/Dec/2025 00:02:58] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:02:59,574 - 192.168.1.43 - - [16/Dec/2025 00:02:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:02:59,799 - [00:02:59] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:02:59,805 - [00:02:59] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:00,752 - [00:03:00] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:03:00,757 - [00:03:00] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:01,862 - 192.168.1.43 - - [16/Dec/2025 00:03:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:03,357 - [00:03:03] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:03,360 - [00:03:03] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:03:03,360 - 192.168.1.36 - - [16/Dec/2025 00:03:03] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:03:03,573 - 192.168.1.43 - - [16/Dec/2025 00:03:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:05,869 - 192.168.1.43 - - [16/Dec/2025 00:03:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:07,570 - 192.168.1.43 - - [16/Dec/2025 00:03:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:08,029 - [00:03:08] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:08,032 - [00:03:08] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:03:08,032 - 192.168.1.36 - - [16/Dec/2025 00:03:08] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:03:09,813 - [00:03:09] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:03:09,819 - [00:03:09] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:10,758 - [00:03:10] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:03:10,764 - [00:03:10] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:12,733 - [00:03:12] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:12,735 - [00:03:12] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:03:12,736 - 192.168.1.36 - - [16/Dec/2025 00:03:12] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:03:17,404 - [00:03:17] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:17,407 - [00:03:17] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:03:17,407 - 192.168.1.36 - - [16/Dec/2025 00:03:17] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:03:17,877 - 192.168.1.43 - - [16/Dec/2025 00:03:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:18,190 - 192.168.1.43 - - [16/Dec/2025 00:03:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:18,521 - 192.168.1.43 - - [16/Dec/2025 00:03:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:18,825 - 192.168.1.43 - - [16/Dec/2025 00:03:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:19,149 - 192.168.1.43 - - [16/Dec/2025 00:03:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:19,467 - 192.168.1.43 - - [16/Dec/2025 00:03:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:19,785 - 192.168.1.43 - - [16/Dec/2025 00:03:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:19,825 - [00:03:19] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:03:19,831 - [00:03:19] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:20,111 - 192.168.1.43 - - [16/Dec/2025 00:03:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:20,407 - 192.168.1.43 - - [16/Dec/2025 00:03:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:20,624 - 192.168.1.43 - - [16/Dec/2025 00:03:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:20,749 - 192.168.1.43 - - [16/Dec/2025 00:03:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:20,770 - [00:03:20] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:03:20,775 - [00:03:20] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:21,053 - 192.168.1.43 - - [16/Dec/2025 00:03:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:21,258 - 192.168.1.43 - - [16/Dec/2025 00:03:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:21,370 - 192.168.1.43 - - [16/Dec/2025 00:03:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:21,590 - 192.168.1.43 - - [16/Dec/2025 00:03:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:21,701 - 192.168.1.43 - - [16/Dec/2025 00:03:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:21,909 - 192.168.1.43 - - [16/Dec/2025 00:03:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:22,033 - 192.168.1.43 - - [16/Dec/2025 00:03:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:22,115 - [00:03:22] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:22,118 - [00:03:22] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:03:22,118 - 192.168.1.36 - - [16/Dec/2025 00:03:22] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:03:22,239 - 192.168.1.43 - - [16/Dec/2025 00:03:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:22,364 - 192.168.1.43 - - [16/Dec/2025 00:03:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:03:26,801 - [00:03:26] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:26,804 - [00:03:26] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:03:26,804 - 192.168.1.36 - - [16/Dec/2025 00:03:26] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:03:29,839 - [00:03:29] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:03:29,844 - [00:03:29] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:30,777 - [00:03:30] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:03:30,782 - [00:03:30] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:31,519 - [00:03:31] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:31,522 - [00:03:31] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:03:31,522 - 192.168.1.36 - - [16/Dec/2025 00:03:31] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:03:36,222 - [00:03:36] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:36,224 - [00:03:36] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:03:36,225 - 192.168.1.36 - - [16/Dec/2025 00:03:36] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:03:39,861 - [00:03:39] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:03:39,869 - [00:03:39] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:40,779 - [00:03:40] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:03:40,784 - [00:03:40] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:40,889 - [00:03:40] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:40,892 - [00:03:40] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:03:40,892 - 192.168.1.36 - - [16/Dec/2025 00:03:40] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:03:45,583 - [00:03:45] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:45,586 - [00:03:45] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:03:45,586 - 192.168.1.36 - - [16/Dec/2025 00:03:45] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:03:49,864 - [00:03:49] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:03:49,870 - [00:03:49] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:50,259 - [00:03:50] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:50,262 - [00:03:50] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:03:50,262 - 192.168.1.36 - - [16/Dec/2025 00:03:50] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:03:50,785 - [00:03:50] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:03:50,791 - [00:03:50] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:54,957 - [00:03:54] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:54,961 - [00:03:54] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:03:54,961 - 192.168.1.36 - - [16/Dec/2025 00:03:54] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:03:59,630 - [00:03:59] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:03:59,633 - [00:03:59] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:03:59,634 - 192.168.1.36 - - [16/Dec/2025 00:03:59] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:03:59,877 - [00:03:59] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:03:59,882 - [00:03:59] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:00,795 - [00:04:00] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:04:00,800 - [00:04:00] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:04,343 - [00:04:04] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:04,346 - [00:04:04] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:04:04,346 - 192.168.1.36 - - [16/Dec/2025 00:04:04] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:04:09,071 - [00:04:09] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:09,074 - [00:04:09] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:04:09,074 - 192.168.1.36 - - [16/Dec/2025 00:04:09] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:04:09,890 - [00:04:09] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:04:09,895 - [00:04:09] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:10,804 - [00:04:10] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:04:10,809 - [00:04:10] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:13,775 - [00:04:13] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:13,778 - [00:04:13] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:04:13,778 - 192.168.1.36 - - [16/Dec/2025 00:04:13] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:04:17,574 - 192.168.1.43 - - [16/Dec/2025 00:04:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:04:17,911 - 192.168.1.43 - - [16/Dec/2025 00:04:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:04:18,233 - 192.168.1.43 - - [16/Dec/2025 00:04:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:04:18,493 - [00:04:18] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:18,497 - [00:04:18] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:04:18,497 - 192.168.1.36 - - [16/Dec/2025 00:04:18] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:04:18,566 - 192.168.1.43 - - [16/Dec/2025 00:04:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:04:18,881 - 192.168.1.43 - - [16/Dec/2025 00:04:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:04:19,210 - 192.168.1.43 - - [16/Dec/2025 00:04:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:04:19,526 - 192.168.1.43 - - [16/Dec/2025 00:04:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:04:19,858 - 192.168.1.43 - - [16/Dec/2025 00:04:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:04:19,902 - [00:04:19] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:04:19,908 - [00:04:19] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:20,186 - 192.168.1.43 - - [16/Dec/2025 00:04:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:04:20,517 - 192.168.1.43 - - [16/Dec/2025 00:04:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:04:20,811 - [00:04:20] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:04:20,816 - [00:04:20] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:20,834 - 192.168.1.43 - - [16/Dec/2025 00:04:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:04:21,141 - 192.168.1.43 - - [16/Dec/2025 00:04:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:04:21,466 - 192.168.1.43 - - [16/Dec/2025 00:04:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:04:21,785 - 192.168.1.43 - - [16/Dec/2025 00:04:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:04:22,119 - 192.168.1.43 - - [16/Dec/2025 00:04:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:04:22,447 - 192.168.1.43 - - [16/Dec/2025 00:04:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:04:22,765 - 192.168.1.43 - - [16/Dec/2025 00:04:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:04:23,093 - 192.168.1.43 - - [16/Dec/2025 00:04:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:04:23,235 - [00:04:23] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:23,238 - [00:04:23] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:04:23,238 - 192.168.1.36 - - [16/Dec/2025 00:04:23] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:04:23,418 - 192.168.1.43 - - [16/Dec/2025 00:04:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:04:23,737 - 192.168.1.43 - - [16/Dec/2025 00:04:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-16 00:04:27,930 - [00:04:27] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:27,933 - [00:04:27] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:04:27,933 - 192.168.1.36 - - [16/Dec/2025 00:04:27] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:04:29,912 - [00:04:29] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:04:29,918 - [00:04:29] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:30,824 - [00:04:30] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:04:30,829 - [00:04:30] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:32,602 - [00:04:32] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:32,604 - [00:04:32] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:04:32,605 - 192.168.1.36 - - [16/Dec/2025 00:04:32] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:04:37,317 - [00:04:37] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:37,320 - [00:04:37] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:04:37,320 - 192.168.1.36 - - [16/Dec/2025 00:04:37] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:04:39,923 - [00:04:39] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:04:39,928 - [00:04:39] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:40,835 - [00:04:40] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:04:40,842 - [00:04:40] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:42,000 - [00:04:41] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:42,003 - [00:04:42] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:04:42,003 - 192.168.1.36 - - [16/Dec/2025 00:04:42] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:04:46,684 - [00:04:46] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:46,687 - [00:04:46] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:04:46,687 - 192.168.1.36 - - [16/Dec/2025 00:04:46] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:04:49,935 - [00:04:49] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:04:49,940 - [00:04:49] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:50,844 - [00:04:50] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:04:50,850 - [00:04:50] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:51,374 - [00:04:51] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:04:51,377 - [00:04:51] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.27°C)
+2025-12-16 00:04:51,377 - 192.168.1.36 - - [16/Dec/2025 00:04:51] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-16 00:04:59,947 - [00:04:59] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:04:59,952 - [00:04:59] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:05:00,852 - [00:05:00] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-16 00:05:00,858 - [00:05:00] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-16 00:05:03,317 - [00:05:03] Monitor desconectado: CP_001
+2025-12-16 00:05:03,320 - [00:05:03] [ESTADO] CP_001 -> AVERÍA (antes: ACTIVADO). Motivo: Desconexión inesperada del CP
+2025-12-16 00:05:03,325 - [00:05:03] [INFO] CP_001 podrá reconectarse automáticamente al reiniciar su Monitor.
