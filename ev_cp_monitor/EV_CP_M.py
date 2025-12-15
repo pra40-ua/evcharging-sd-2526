@@ -104,13 +104,18 @@ def descomponer_trama_cifrada(trama_bytes: bytes) -> tuple:
     Descompone una trama, descifrándola si está cifrada.
     """
     if len(trama_bytes) < 4:
+        print(f"[CP_M] DEBUG descomponer: trama muy corta ({len(trama_bytes)} bytes)")
         return None, None
     
     lrc_recibido = trama_bytes[-1:]
     data_con_etx = trama_bytes[1:-1]
     data_bytes = data_con_etx[:-1]
     
+    # DEBUG: Mostrar estructura de la trama
+    print(f"[CP_M] DEBUG descomponer: len={len(trama_bytes)}, starts_STX={trama_bytes.startswith(STX)}, ends_ETX={data_con_etx.endswith(ETX)}")
+    
     if not (trama_bytes.startswith(STX) and data_con_etx.endswith(ETX)):
+        print(f"[CP_M] DEBUG descomponer: formato inválido STX/ETX")
         return None, None
     
     # Verificar si está cifrado
@@ -132,13 +137,16 @@ def descomponer_trama_cifrada(trama_bytes: bytes) -> tuple:
     
     lrc_calculado = calcular_lrc(data_bytes)
     if lrc_recibido != lrc_calculado:
+        print(f"[CP_M] DEBUG descomponer: LRC incorrecto (recibido={lrc_recibido.hex()}, calculado={lrc_calculado.hex()})")
         return None, None
     
     try:
         DATA = data_bytes.decode('utf-8')
         partes = DATA.split(DELIMITER)
+        print(f"[CP_M] DEBUG descomponer: DATA='{DATA[:100]}{'...' if len(DATA) > 100 else ''}', num_partes={len(partes)}")
         return partes[0], partes[1:]
-    except UnicodeDecodeError:
+    except UnicodeDecodeError as e:
+        print(f"[CP_M] DEBUG descomponer: Error decode UTF-8: {e}")
         return None, None
 
 # =================================================================
@@ -616,20 +624,31 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str) -> sock
         cod_op, campos = descomponer_trama_cifrada(respuesta_bytes)
         
         print(f"[CP_M] Recibida respuesta de Central")
+        print(f"[CP_M] DEBUG: cod_op={cod_op}, campos={campos}, len(campos)={len(campos) if campos else 0}")
 
         if cod_op == 'AUTH' and campos and campos[0] == 'OK':
             mensaje = campos[1] if len(campos) > 1 else 'Autenticación exitosa'
             
+            print(f"[CP_M] DEBUG: Procesando AUTH OK, mensaje='{mensaje}', num_campos={len(campos)}")
+            
             # Verificar si se recibió clave de cifrado (tercer campo)
+            # campos = [OK, mensaje, clave_b64] -> necesitamos campos[2]
+            print(f"[CP_M] DEBUG: Verificando clave, len(campos)={len(campos)}, campos={campos}")
             if len(campos) >= 3:
                 clave_b64 = campos[2]
+                print(f"[CP_M] DEBUG: clave_b64 recibida (primeros 20 chars): '{clave_b64[:20] if len(clave_b64) > 20 else clave_b64}...'")
                 try:
+                    global ENCRYPTION_KEY  # Declarar global para modificar la variable global
                     clave_bytes = base64.b64decode(clave_b64)
                     with ENCRYPTION_KEY_LOCK:
                         ENCRYPTION_KEY = clave_bytes
-                    print(f"[CP_M] ✓ Clave de cifrado recibida y almacenada")
+                    print(f"[CP_M] ✓ Clave de cifrado recibida y almacenada (longitud: {len(clave_bytes)} bytes)")
                 except Exception as e:
                     print(f"[CP_M] ⚠️ Error procesando clave de cifrado: {e}")
+                    import traceback
+                    traceback.print_exc()
+            else:
+                print(f"[CP_M] ⚠️ No se recibió clave de cifrado en la respuesta AUTH (esperado >= 3 campos, recibido {len(campos)})")
             
             print(f"\n{'='*70}")
             print(f"  [CP_M] ✓ REGISTRO Y AUTENTICACIÓN EXITOSOS")
