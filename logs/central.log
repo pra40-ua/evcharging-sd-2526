@@ -60571,3 +60571,214 @@ t-requests
 2025-12-15 23:30:20,400 - 192.168.1.43 - - [15/Dec/2025 23:30:20] "GET /api/status HTTP/1.1" 200 -
 2025-12-15 23:30:20,690 - 192.168.1.43 - - [15/Dec/2025 23:30:20] "GET /api/status HTTP/1.1" 200 -
 2025-12-15 23:30:20,956 - 192.168.1.43 - - [15/Dec/2025 23:30:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:32:38,406 - package: mysql.connector.plugins
+2025-12-15 23:32:38,406 - plugin_name: caching_sha2_password
+2025-12-15 23:32:38,406 - AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+2025-12-15 23:32:38,412 - [23:32:38] Modo consola simple activado
+2025-12-15 23:32:38,428 - Updating subscribed topics to: ('driver_requests',)
+2025-12-15 23:32:38,430 - Updating subscribed topics to: ('central_commands',)
+2025-12-15 23:32:38,433 - Updating subscribed topics to: ('telemetria_cp',)
+2025-12-15 23:32:38,436 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:32:38,436 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:32:38,437 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:32:38,437 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:32:38,437 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:32:38,437 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:32:38,438 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.43:5001
+2025-12-15 23:32:38,438 - [33mPress CTRL+C to quit[0m
+2025-12-15 23:32:38,462 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:32:38,463 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:32:38,644 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:32:38,644 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:32:38,644 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:32:38,644 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:32:38,644 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:32:38,644 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:32:38,644 - Starting new heartbeat thread
+2025-12-15 23:32:38,644 - Starting new heartbeat thread
+2025-12-15 23:32:38,645 - Starting new heartbeat thread
+2025-12-15 23:32:38,645 - Revoking previously assigned partitions set() for group central-control-group
+2025-12-15 23:32:38,645 - Revoking previously assigned partitions set() for group central_processing_group
+2025-12-15 23:32:38,645 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-12-15 23:32:38,645 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:32:38,645 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:32:38,646 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:32:38,646 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:32:38,646 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:32:38,646 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:32:38,646 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:32:38,646 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:32:38,646 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:32:38,746 - (Re-)joining group central-telemetry-group
+2025-12-15 23:32:38,747 - (Re-)joining group central_processing_group
+2025-12-15 23:32:38,747 - (Re-)joining group central-control-group
+2025-12-15 23:32:38,750 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:32:38,750 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:32:38,750 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:32:38,851 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:32:38,852 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:32:38,852 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:32:38,852 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:32:38,852 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:32:38,852 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:32:38,955 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:32:38,955 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:32:38,955 - (Re-)joining group central-control-group
+2025-12-15 23:32:38,955 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:32:38,955 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:32:38,955 - (Re-)joining group central_processing_group
+2025-12-15 23:32:38,955 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:32:38,955 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:32:38,956 - (Re-)joining group central-telemetry-group
+2025-12-15 23:32:38,957 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:32:38,957 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:32:38,957 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:32:39,059 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:32:39,059 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:32:39,059 - (Re-)joining group central_processing_group
+2025-12-15 23:32:39,059 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:32:39,060 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:32:39,060 - (Re-)joining group central-telemetry-group
+2025-12-15 23:32:39,059 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:32:39,060 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:32:39,060 - (Re-)joining group central-control-group
+2025-12-15 23:32:39,061 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:32:39,061 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:32:39,061 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:32:39,163 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:32:39,163 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:32:39,163 - (Re-)joining group central-telemetry-group
+2025-12-15 23:32:39,163 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:32:39,164 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:32:39,164 - (Re-)joining group central-control-group
+2025-12-15 23:32:39,163 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:32:39,164 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:32:39,164 - (Re-)joining group central_processing_group
+2025-12-15 23:32:39,165 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:32:39,165 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:32:39,165 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:32:39,267 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:32:39,268 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:32:39,268 - (Re-)joining group central-control-group
+2025-12-15 23:32:39,267 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:32:39,268 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:32:39,268 - (Re-)joining group central-telemetry-group
+2025-12-15 23:32:39,268 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:32:39,268 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:32:39,268 - (Re-)joining group central_processing_group
+2025-12-15 23:32:39,269 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:32:39,269 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:32:39,269 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:32:39,371 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:32:39,371 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:32:39,371 - (Re-)joining group central_processing_group
+2025-12-15 23:32:39,371 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:32:39,372 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:32:39,372 - (Re-)joining group central-telemetry-group
+2025-12-15 23:32:39,371 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:32:39,372 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:32:39,372 - (Re-)joining group central-control-group
+2025-12-15 23:32:42,386 - Elected group leader -- performing partition assignments using range
+2025-12-15 23:32:42,387 - Elected group leader -- performing partition assignments using range
+2025-12-15 23:32:42,388 - Elected group leader -- performing partition assignments using range
+2025-12-15 23:32:42,402 - Successfully joined group central-telemetry-group with generation 1
+2025-12-15 23:32:42,402 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)]
+2025-12-15 23:32:42,402 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2), TopicPartition(topic='telemetria_cp', partition=0)} for group central-telemetry-group
+2025-12-15 23:32:42,402 - Successfully joined group central-control-group with generation 1
+2025-12-15 23:32:42,402 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-12-15 23:32:42,403 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-12-15 23:32:42,402 - Successfully joined group central_processing_group with generation 1
+2025-12-15 23:32:42,403 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)]
+2025-12-15 23:32:42,403 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)} for group central_processing_group
+2025-12-15 23:32:45,631 - 192.168.1.43 - - [15/Dec/2025 23:32:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:32:47,633 - 192.168.1.43 - - [15/Dec/2025 23:32:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:32:49,327 - 192.168.1.43 - - [15/Dec/2025 23:32:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:32:51,633 - 192.168.1.43 - - [15/Dec/2025 23:32:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:32:53,321 - 192.168.1.43 - - [15/Dec/2025 23:32:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:32:55,633 - 192.168.1.43 - - [15/Dec/2025 23:32:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:32:57,321 - 192.168.1.43 - - [15/Dec/2025 23:32:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:32:59,618 - 192.168.1.43 - - [15/Dec/2025 23:32:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:01,327 - 192.168.1.43 - - [15/Dec/2025 23:33:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:03,623 - 192.168.1.43 - - [15/Dec/2025 23:33:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:05,324 - 192.168.1.43 - - [15/Dec/2025 23:33:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:07,641 - 192.168.1.43 - - [15/Dec/2025 23:33:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:09,322 - 192.168.1.43 - - [15/Dec/2025 23:33:09] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:11,628 - 192.168.1.43 - - [15/Dec/2025 23:33:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:13,327 - 192.168.1.43 - - [15/Dec/2025 23:33:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:15,630 - 192.168.1.43 - - [15/Dec/2025 23:33:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:17,321 - 192.168.1.43 - - [15/Dec/2025 23:33:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:17,874 - 192.168.1.43 - - [15/Dec/2025 23:33:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:18,192 - 192.168.1.43 - - [15/Dec/2025 23:33:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:18,506 - 192.168.1.43 - - [15/Dec/2025 23:33:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:18,825 - 192.168.1.43 - - [15/Dec/2025 23:33:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:19,143 - 192.168.1.43 - - [15/Dec/2025 23:33:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:19,454 - 192.168.1.43 - - [15/Dec/2025 23:33:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:19,759 - 192.168.1.43 - - [15/Dec/2025 23:33:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:20,066 - 192.168.1.43 - - [15/Dec/2025 23:33:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:20,386 - 192.168.1.43 - - [15/Dec/2025 23:33:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:20,715 - 192.168.1.43 - - [15/Dec/2025 23:33:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:21,035 - 192.168.1.43 - - [15/Dec/2025 23:33:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:21,353 - 192.168.1.43 - - [15/Dec/2025 23:33:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:21,670 - 192.168.1.43 - - [15/Dec/2025 23:33:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:21,990 - 192.168.1.43 - - [15/Dec/2025 23:33:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:22,308 - 192.168.1.43 - - [15/Dec/2025 23:33:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:22,626 - 192.168.1.43 - - [15/Dec/2025 23:33:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:22,945 - 192.168.1.43 - - [15/Dec/2025 23:33:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:23,634 - 192.168.1.43 - - [15/Dec/2025 23:33:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:25,326 - 192.168.1.43 - - [15/Dec/2025 23:33:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:27,629 - 192.168.1.43 - - [15/Dec/2025 23:33:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:29,326 - 192.168.1.43 - - [15/Dec/2025 23:33:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:31,644 - 192.168.1.43 - - [15/Dec/2025 23:33:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:32,869 - [23:33:32] \u2705 NUEVO CP: Registro inicial de CP_001.
+2025-12-15 23:33:32,888 - [23:33:32] \u26a1 CP CP_001 registrado y conectado (Madrid,ES)
+2025-12-15 23:33:32,890 - [23:33:32] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:33:32,893 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:33:32,893 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:33:32,893 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:33:32,907 - [23:33:32] Telemetría inicial publicada para CP_001
+2025-12-15 23:33:32,920 - 192.168.1.43 - - [15/Dec/2025 23:33:32] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:33,240 - 192.168.1.43 - - [15/Dec/2025 23:33:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:33,558 - 192.168.1.43 - - [15/Dec/2025 23:33:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:33,875 - 192.168.1.43 - - [15/Dec/2025 23:33:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:34,189 - 192.168.1.43 - - [15/Dec/2025 23:33:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:34,507 - 192.168.1.43 - - [15/Dec/2025 23:33:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:34,824 - 192.168.1.43 - - [15/Dec/2025 23:33:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:34,989 - [23:33:34] \u2713 AUTH OK: CP_001 autenticado con credenciales del Registry
+2025-12-15 23:33:34,998 - [23:33:34] AUTH OK enviado a CP_001 (sin BD, clave proporcionada)
+2025-12-15 23:33:35,142 - 192.168.1.43 - - [15/Dec/2025 23:33:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:35,456 - 192.168.1.43 - - [15/Dec/2025 23:33:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:35,773 - 192.168.1.43 - - [15/Dec/2025 23:33:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:35,826 - [23:33:35] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:33:35,841 - [23:33:35] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:33:35,843 - [23:33:35] [ESTADO] CP_001 -> AVERÍA (antes: ACTIVADO). Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:33:37,624 - 192.168.1.43 - - [15/Dec/2025 23:33:37] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:37,655 - [23:33:37] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:33:37,672 - [23:33:37] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:33:37,675 - [23:33:37] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:33:39,320 - 192.168.1.43 - - [15/Dec/2025 23:33:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:39,461 - [23:33:39] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:33:39,479 - [23:33:39] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:33:39,482 - [23:33:39] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:33:39,871 - [23:33:39] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:33:39,877 - [23:33:39] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:33:41,235 - [23:33:41] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:33:41,253 - [23:33:41] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:33:41,256 - [23:33:41] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:33:41,618 - 192.168.1.43 - - [15/Dec/2025 23:33:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:43,040 - [23:33:43] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:33:43,056 - [23:33:43] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:33:43,059 - [23:33:43] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:33:43,323 - 192.168.1.43 - - [15/Dec/2025 23:33:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:43,466 - [23:33:43] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:33:43,471 - [23:33:43] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:33:44,847 - [23:33:44] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:33:44,864 - [23:33:44] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:33:44,867 - [23:33:44] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:33:45,618 - 192.168.1.43 - - [15/Dec/2025 23:33:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:33:46,646 - [23:33:46] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:33:46,663 - [23:33:46] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:33:46,666 - [23:33:46] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:33:47,322 - 192.168.1.43 - - [15/Dec/2025 23:33:47] "GET /api/status HTTP/1.1" 200 -

@@ -21,7 +21,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 STX = b'\x02'
 ETX = b'\x03'
 DELIMITER = '#'
-HCK_INTERVAL = 1 # Segundos entre cada HCK
+HCK_INTERVAL = 2  # Segundos entre cada HCK (aumentado para mayor tolerancia)
 
 def calcular_lrc(data_bytes: bytes) -> bytes:
     """Calcula el Longitudinal Redundancy Check (XOR de todos los bytes)."""
@@ -766,6 +766,8 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
     """Hilo para enviar HCK al Engine cada 1 segundo y gestionar la respuesta."""
     engine_socket = None
     conexion_perdida_notificada = False
+    hck_timeout_count = 0  # Contador de timeouts consecutivos
+    MAX_HCK_TIMEOUTS = 3   # Reportar avería después de 3 timeouts consecutivos
 
     while True:
         try:
@@ -997,6 +999,9 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
             # Engine no cifra, usar descomponer_trama normal
             cod_op, campos = descomponer_trama(respuesta_bytes)
             _procesar_trama_engine(cod_op, campos, respuesta_bytes if cod_op == 'FIN' else None)
+            
+            # Respuesta recibida correctamente, resetear contador de timeouts
+            hck_timeout_count = 0
 
             # Drenar frames adicionales que pudieran haber llegado encadenados (no bloquear)
             try:
@@ -1034,11 +1039,16 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                 engine_socket.settimeout(HCK_INTERVAL * 0.8)
 
         except socket.timeout:
-            print(f"[{cp_id}] ⚠ Timeout HCK. Engine no responde. Notificando avería.")
-            notificar_averia_central(central_socket, cp_id, "Timeout de HCK")
+            hck_timeout_count += 1
+            if hck_timeout_count >= MAX_HCK_TIMEOUTS:
+                print(f"[{cp_id}] ⚠ Timeout HCK ({hck_timeout_count} consecutivos). Engine no responde. Notificando avería.")
+                notificar_averia_central(central_socket, cp_id, "Timeout de HCK")
+                hck_timeout_count = 0  # Reiniciar contador después de reportar
+            else:
+                print(f"[{cp_id}] ⚠ Timeout HCK ({hck_timeout_count}/{MAX_HCK_TIMEOUTS}). Reintentando...")
             if engine_socket:
                 engine_socket.close()
-            engine_socket = None # Forzar reconexión
+            engine_socket = None  # Forzar reconexión
             conexion_perdida_notificada = False
             
         except (ConnectionRefusedError, ConnectionResetError, BrokenPipeError, OSError) as e:
