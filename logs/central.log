@@ -61556,3 +61556,1112 @@ t-requests
 2025-12-15 23:38:38,893 - [23:38:38] Monitor desconectado: CP_001
 2025-12-15 23:38:38,897 - [23:38:38] [ESTADO] CP_001 -> AVERÍA. Motivo: Desconexión inesperada del CP
 2025-12-15 23:38:38,903 - [23:38:38] [INFO] CP_001 podrá reconectarse automáticamente al reiniciar su Monitor.
+2025-12-15 23:39:24,219 - package: mysql.connector.plugins
+2025-12-15 23:39:24,219 - plugin_name: caching_sha2_password
+2025-12-15 23:39:24,219 - AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+2025-12-15 23:39:24,226 - [23:39:24] Modo consola simple activado
+2025-12-15 23:39:24,241 - Updating subscribed topics to: ('telemetria_cp',)
+2025-12-15 23:39:24,244 - Updating subscribed topics to: ('central_commands',)
+2025-12-15 23:39:24,247 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:39:24,248 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:39:24,248 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:39:24,248 - Updating subscribed topics to: ('driver_requests',)
+2025-12-15 23:39:24,251 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:39:24,251 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:39:24,251 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:39:24,263 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.43:5001
+2025-12-15 23:39:24,263 - [33mPress CTRL+C to quit[0m
+2025-12-15 23:39:24,283 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:39:24,284 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:39:24,456 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:39:24,456 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:39:24,456 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:39:24,456 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:39:24,456 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:39:24,456 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:39:24,456 - Starting new heartbeat thread
+2025-12-15 23:39:24,456 - Starting new heartbeat thread
+2025-12-15 23:39:24,457 - Starting new heartbeat thread
+2025-12-15 23:39:24,457 - Revoking previously assigned partitions set() for group central-control-group
+2025-12-15 23:39:24,457 - Revoking previously assigned partitions set() for group central_processing_group
+2025-12-15 23:39:24,457 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-12-15 23:39:24,457 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:39:24,457 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:39:24,457 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:39:24,458 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:39:24,458 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:39:24,458 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:39:24,458 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:39:24,458 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:39:24,458 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:39:24,558 - (Re-)joining group central-control-group
+2025-12-15 23:39:24,558 - (Re-)joining group central_processing_group
+2025-12-15 23:39:24,559 - (Re-)joining group central-telemetry-group
+2025-12-15 23:39:24,559 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:39:24,560 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:39:24,562 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:39:24,563 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:39:24,562 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:39:24,664 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:39:24,664 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:39:24,664 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:39:24,664 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:39:24,665 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:39:24,665 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:39:24,665 - (Re-)joining group central-control-group
+2025-12-15 23:39:24,667 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:39:24,767 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:39:24,768 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:39:24,768 - (Re-)joining group central-telemetry-group
+2025-12-15 23:39:24,768 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:39:24,768 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:39:24,768 - (Re-)joining group central_processing_group
+2025-12-15 23:39:24,769 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:39:24,769 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:39:24,769 - (Re-)joining group central-control-group
+2025-12-15 23:39:24,769 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:39:24,769 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:39:24,770 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:39:24,873 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:39:24,873 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:39:24,873 - (Re-)joining group central_processing_group
+2025-12-15 23:39:24,873 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:39:24,873 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:39:24,873 - (Re-)joining group central-control-group
+2025-12-15 23:39:24,873 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:39:24,874 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:39:24,874 - (Re-)joining group central-telemetry-group
+2025-12-15 23:39:24,875 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:39:24,875 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:39:24,875 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:39:24,977 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:39:24,977 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:39:24,977 - (Re-)joining group central_processing_group
+2025-12-15 23:39:24,977 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:39:24,977 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:39:24,977 - (Re-)joining group central-telemetry-group
+2025-12-15 23:39:24,977 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:39:24,978 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:39:24,978 - (Re-)joining group central-control-group
+2025-12-15 23:39:24,978 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:39:24,979 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:39:24,979 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:39:25,081 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:39:25,081 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:39:25,081 - (Re-)joining group central_processing_group
+2025-12-15 23:39:25,081 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:39:25,081 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:39:25,081 - (Re-)joining group central-telemetry-group
+2025-12-15 23:39:25,081 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:39:25,082 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:39:25,082 - (Re-)joining group central-control-group
+2025-12-15 23:39:25,083 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:39:25,083 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:39:25,083 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:39:25,184 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:39:25,184 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:39:25,185 - (Re-)joining group central_processing_group
+2025-12-15 23:39:25,185 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:39:25,185 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:39:25,185 - (Re-)joining group central-control-group
+2025-12-15 23:39:25,185 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:39:25,185 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:39:25,185 - (Re-)joining group central-telemetry-group
+2025-12-15 23:39:27,237 - 192.168.1.43 - - [15/Dec/2025 23:39:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:27,711 - 192.168.1.43 - - [15/Dec/2025 23:39:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:28,168 - 192.168.1.43 - - [15/Dec/2025 23:39:28] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:28,198 - Elected group leader -- performing partition assignments using range
+2025-12-15 23:39:28,199 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:39:28,199 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:39:28,199 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:39:28,200 - Elected group leader -- performing partition assignments using range
+2025-12-15 23:39:28,200 - Elected group leader -- performing partition assignments using range
+2025-12-15 23:39:28,214 - Successfully joined group central-control-group with generation 1
+2025-12-15 23:39:28,215 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-12-15 23:39:28,215 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-12-15 23:39:28,215 - Successfully joined group central-telemetry-group with generation 1
+2025-12-15 23:39:28,215 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)]
+2025-12-15 23:39:28,215 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2), TopicPartition(topic='telemetria_cp', partition=0)} for group central-telemetry-group
+2025-12-15 23:39:28,215 - Successfully joined group central_processing_group with generation 1
+2025-12-15 23:39:28,215 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)]
+2025-12-15 23:39:28,216 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2), TopicPartition(topic='driver_requests', partition=0)} for group central_processing_group
+2025-12-15 23:39:28,499 - 192.168.1.43 - - [15/Dec/2025 23:39:28] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:28,830 - 192.168.1.43 - - [15/Dec/2025 23:39:28] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:29,163 - 192.168.1.43 - - [15/Dec/2025 23:39:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:29,494 - 192.168.1.43 - - [15/Dec/2025 23:39:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:29,827 - 192.168.1.43 - - [15/Dec/2025 23:39:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:30,160 - 192.168.1.43 - - [15/Dec/2025 23:39:30] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:30,491 - 192.168.1.43 - - [15/Dec/2025 23:39:30] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:30,821 - 192.168.1.43 - - [15/Dec/2025 23:39:30] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:31,151 - 192.168.1.43 - - [15/Dec/2025 23:39:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:31,946 - 192.168.1.43 - - [15/Dec/2025 23:39:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:33,956 - 192.168.1.43 - - [15/Dec/2025 23:39:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:35,633 - 192.168.1.43 - - [15/Dec/2025 23:39:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:37,947 - 192.168.1.43 - - [15/Dec/2025 23:39:37] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:39,641 - 192.168.1.43 - - [15/Dec/2025 23:39:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:41,936 - 192.168.1.43 - - [15/Dec/2025 23:39:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:43,639 - 192.168.1.43 - - [15/Dec/2025 23:39:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:45,946 - 192.168.1.43 - - [15/Dec/2025 23:39:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:47,638 - 192.168.1.43 - - [15/Dec/2025 23:39:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:49,944 - 192.168.1.43 - - [15/Dec/2025 23:39:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:51,633 - 192.168.1.43 - - [15/Dec/2025 23:39:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:53,945 - 192.168.1.43 - - [15/Dec/2025 23:39:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:55,641 - 192.168.1.43 - - [15/Dec/2025 23:39:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:57,947 - 192.168.1.43 - - [15/Dec/2025 23:39:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:39:59,639 - 192.168.1.43 - - [15/Dec/2025 23:39:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:01,936 - 192.168.1.43 - - [15/Dec/2025 23:40:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:03,639 - 192.168.1.43 - - [15/Dec/2025 23:40:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:05,940 - 192.168.1.43 - - [15/Dec/2025 23:40:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:07,642 - 192.168.1.43 - - [15/Dec/2025 23:40:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:09,974 - 192.168.1.43 - - [15/Dec/2025 23:40:09] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:11,642 - 192.168.1.43 - - [15/Dec/2025 23:40:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:13,962 - 192.168.1.43 - - [15/Dec/2025 23:40:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:15,631 - 192.168.1.43 - - [15/Dec/2025 23:40:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:17,887 - 192.168.1.43 - - [15/Dec/2025 23:40:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:18,175 - 192.168.1.43 - - [15/Dec/2025 23:40:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:18,437 - 192.168.1.43 - - [15/Dec/2025 23:40:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:18,516 - 192.168.1.43 - - [15/Dec/2025 23:40:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:18,785 - 192.168.1.43 - - [15/Dec/2025 23:40:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:19,061 - 192.168.1.43 - - [15/Dec/2025 23:40:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:19,127 - 192.168.1.43 - - [15/Dec/2025 23:40:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:19,404 - 192.168.1.43 - - [15/Dec/2025 23:40:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:19,692 - 192.168.1.43 - - [15/Dec/2025 23:40:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:19,751 - 192.168.1.43 - - [15/Dec/2025 23:40:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:20,027 - 192.168.1.43 - - [15/Dec/2025 23:40:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:20,327 - 192.168.1.43 - - [15/Dec/2025 23:40:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:20,380 - 192.168.1.43 - - [15/Dec/2025 23:40:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:20,638 - 192.168.1.43 - - [15/Dec/2025 23:40:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:20,944 - 192.168.1.43 - - [15/Dec/2025 23:40:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:21,250 - 192.168.1.43 - - [15/Dec/2025 23:40:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:21,312 - 192.168.1.43 - - [15/Dec/2025 23:40:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:21,557 - 192.168.1.43 - - [15/Dec/2025 23:40:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:21,649 - 192.168.1.43 - - [15/Dec/2025 23:40:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:23,961 - 192.168.1.43 - - [15/Dec/2025 23:40:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:25,630 - 192.168.1.43 - - [15/Dec/2025 23:40:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:27,945 - 192.168.1.43 - - [15/Dec/2025 23:40:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:29,644 - 192.168.1.43 - - [15/Dec/2025 23:40:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:31,944 - 192.168.1.43 - - [15/Dec/2025 23:40:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:33,633 - 192.168.1.43 - - [15/Dec/2025 23:40:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:35,948 - 192.168.1.43 - - [15/Dec/2025 23:40:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:37,631 - 192.168.1.43 - - [15/Dec/2025 23:40:37] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:39,943 - 192.168.1.43 - - [15/Dec/2025 23:40:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:41,641 - 192.168.1.43 - - [15/Dec/2025 23:40:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:43,950 - 192.168.1.43 - - [15/Dec/2025 23:40:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:45,643 - 192.168.1.43 - - [15/Dec/2025 23:40:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:45,899 - [23:40:45] \u2705 NUEVO CP: Registro inicial de CP_001.
+2025-12-15 23:40:45,918 - [23:40:45] \u26a1 CP CP_001 registrado y conectado (Madrid,ES)
+2025-12-15 23:40:45,921 - [23:40:45] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:40:45,924 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:40:45,924 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:40:45,924 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:40:45,939 - [23:40:45] Telemetría inicial publicada para CP_001
+2025-12-15 23:40:46,242 - 192.168.1.43 - - [15/Dec/2025 23:40:46] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:46,557 - 192.168.1.43 - - [15/Dec/2025 23:40:46] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:46,863 - 192.168.1.43 - - [15/Dec/2025 23:40:46] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:47,170 - 192.168.1.43 - - [15/Dec/2025 23:40:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:47,485 - 192.168.1.43 - - [15/Dec/2025 23:40:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:47,749 - 192.168.1.43 - - [15/Dec/2025 23:40:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:47,953 - 192.168.1.43 - - [15/Dec/2025 23:40:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:48,028 - [23:40:48] \u2713 AUTH OK: CP_001 autenticado con credenciales del Registry
+2025-12-15 23:40:48,036 - [23:40:48] AUTH OK enviado a CP_001 (sin BD, clave proporcionada)
+2025-12-15 23:40:48,067 - 192.168.1.43 - - [15/Dec/2025 23:40:48] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:48,257 - 192.168.1.43 - - [15/Dec/2025 23:40:48] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:48,387 - 192.168.1.43 - - [15/Dec/2025 23:40:48] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:49,281 - [23:40:49] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:40:49,287 - [23:40:49] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:40:49,645 - 192.168.1.43 - - [15/Dec/2025 23:40:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:51,944 - 192.168.1.43 - - [15/Dec/2025 23:40:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:52,776 - [23:40:52] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:40:52,783 - [23:40:52] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:40:53,633 - 192.168.1.43 - - [15/Dec/2025 23:40:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:55,945 - 192.168.1.43 - - [15/Dec/2025 23:40:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:56,869 - [23:40:56] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:40:56,886 - [23:40:56] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:40:56,890 - [23:40:56] [ESTADO] CP_001 -> AVERÍA (antes: ACTIVADO). Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:40:57,643 - 192.168.1.43 - - [15/Dec/2025 23:40:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:40:59,292 - [23:40:59] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:40:59,298 - [23:40:59] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:40:59,947 - 192.168.1.43 - - [15/Dec/2025 23:40:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:01,645 - 192.168.1.43 - - [15/Dec/2025 23:41:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:02,766 - [23:41:02] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:41:02,772 - [23:41:02] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:41:03,963 - 192.168.1.43 - - [15/Dec/2025 23:41:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:05,639 - 192.168.1.43 - - [15/Dec/2025 23:41:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:07,683 - [23:41:07] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:41:07,702 - [23:41:07] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:41:07,705 - [23:41:07] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:41:07,947 - 192.168.1.43 - - [15/Dec/2025 23:41:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:09,301 - [23:41:09] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:41:09,307 - [23:41:09] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:41:09,640 - 192.168.1.43 - - [15/Dec/2025 23:41:09] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:11,940 - 192.168.1.43 - - [15/Dec/2025 23:41:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:12,780 - [23:41:12] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:41:12,786 - [23:41:12] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:41:13,642 - 192.168.1.43 - - [15/Dec/2025 23:41:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:15,944 - 192.168.1.43 - - [15/Dec/2025 23:41:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:17,568 - 192.168.1.43 - - [15/Dec/2025 23:41:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:17,886 - 192.168.1.43 - - [15/Dec/2025 23:41:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:18,195 - 192.168.1.43 - - [15/Dec/2025 23:41:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:18,499 - [23:41:18] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:41:18,512 - 192.168.1.43 - - [15/Dec/2025 23:41:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:18,518 - [23:41:18] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:41:18,521 - [23:41:18] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:41:18,833 - 192.168.1.43 - - [15/Dec/2025 23:41:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:19,155 - 192.168.1.43 - - [15/Dec/2025 23:41:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:19,316 - [23:41:19] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:41:19,322 - [23:41:19] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:41:19,472 - 192.168.1.43 - - [15/Dec/2025 23:41:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:19,801 - 192.168.1.43 - - [15/Dec/2025 23:41:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:20,119 - 192.168.1.43 - - [15/Dec/2025 23:41:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:20,433 - 192.168.1.43 - - [15/Dec/2025 23:41:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:20,747 - 192.168.1.43 - - [15/Dec/2025 23:41:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:21,071 - 192.168.1.43 - - [15/Dec/2025 23:41:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:21,378 - 192.168.1.43 - - [15/Dec/2025 23:41:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:21,708 - 192.168.1.43 - - [15/Dec/2025 23:41:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:22,022 - 192.168.1.43 - - [15/Dec/2025 23:41:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:22,345 - 192.168.1.43 - - [15/Dec/2025 23:41:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:22,663 - 192.168.1.43 - - [15/Dec/2025 23:41:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:22,788 - [23:41:22] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:41:22,793 - [23:41:22] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:41:22,983 - 192.168.1.43 - - [15/Dec/2025 23:41:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:23,312 - 192.168.1.43 - - [15/Dec/2025 23:41:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:23,939 - 192.168.1.43 - - [15/Dec/2025 23:41:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:25,642 - 192.168.1.43 - - [15/Dec/2025 23:41:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:28,872 - 192.168.1.43 - - [15/Dec/2025 23:41:28] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:29,327 - [23:41:29] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:41:29,331 - [23:41:29] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:41:29,352 - [23:41:29] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:41:29,361 - [23:41:29] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:41:29,364 - [23:41:29] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:41:30,567 - 192.168.1.43 - - [15/Dec/2025 23:41:30] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:32,799 - [23:41:32] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:41:32,805 - [23:41:32] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:41:32,878 - 192.168.1.43 - - [15/Dec/2025 23:41:32] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:34,570 - 192.168.1.43 - - [15/Dec/2025 23:41:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:36,871 - 192.168.1.43 - - [15/Dec/2025 23:41:36] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:38,566 - 192.168.1.43 - - [15/Dec/2025 23:41:38] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:39,341 - [23:41:39] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:41:39,347 - [23:41:39] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:41:40,144 - [23:41:40] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:41:40,162 - [23:41:40] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:41:40,166 - [23:41:40] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:41:40,879 - 192.168.1.43 - - [15/Dec/2025 23:41:40] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:42,574 - 192.168.1.43 - - [15/Dec/2025 23:41:42] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:42,814 - [23:41:42] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:41:42,819 - [23:41:42] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:41:44,874 - 192.168.1.43 - - [15/Dec/2025 23:41:44] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:46,572 - 192.168.1.43 - - [15/Dec/2025 23:41:46] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:48,891 - 192.168.1.43 - - [15/Dec/2025 23:41:48] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:49,351 - [23:41:49] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:41:49,357 - [23:41:49] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:41:50,574 - 192.168.1.43 - - [15/Dec/2025 23:41:50] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:50,958 - [23:41:50] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:41:50,979 - [23:41:50] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:41:50,982 - [23:41:50] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:41:52,820 - [23:41:52] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:41:52,826 - [23:41:52] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:41:52,879 - 192.168.1.43 - - [15/Dec/2025 23:41:52] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:54,570 - 192.168.1.43 - - [15/Dec/2025 23:41:54] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:56,877 - 192.168.1.43 - - [15/Dec/2025 23:41:56] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:58,558 - 192.168.1.43 - - [15/Dec/2025 23:41:58] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:41:59,378 - [23:41:59] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:41:59,386 - [23:41:59] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:42:00,865 - 192.168.1.43 - - [15/Dec/2025 23:42:00] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:01,773 - [23:42:01] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:42:01,790 - [23:42:01] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:42:01,792 - [23:42:01] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:42:02,583 - 192.168.1.43 - - [15/Dec/2025 23:42:02] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:02,836 - [23:42:02] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:42:02,842 - [23:42:02] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:42:04,891 - 192.168.1.43 - - [15/Dec/2025 23:42:04] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:06,580 - 192.168.1.43 - - [15/Dec/2025 23:42:06] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:08,863 - 192.168.1.43 - - [15/Dec/2025 23:42:08] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:09,388 - [23:42:09] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:42:09,396 - [23:42:09] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:42:10,591 - 192.168.1.43 - - [15/Dec/2025 23:42:10] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:12,588 - [23:42:12] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:42:12,606 - [23:42:12] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:42:12,609 - [23:42:12] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:42:12,837 - [23:42:12] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:42:12,843 - [23:42:12] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:42:12,884 - 192.168.1.43 - - [15/Dec/2025 23:42:12] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:14,558 - 192.168.1.43 - - [15/Dec/2025 23:42:14] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:16,876 - 192.168.1.43 - - [15/Dec/2025 23:42:16] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:17,577 - 192.168.1.43 - - [15/Dec/2025 23:42:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:17,893 - 192.168.1.43 - - [15/Dec/2025 23:42:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:18,218 - 192.168.1.43 - - [15/Dec/2025 23:42:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:18,535 - 192.168.1.43 - - [15/Dec/2025 23:42:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:18,856 - 192.168.1.43 - - [15/Dec/2025 23:42:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:19,170 - 192.168.1.43 - - [15/Dec/2025 23:42:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:19,390 - [23:42:19] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:42:19,395 - [23:42:19] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:42:19,477 - 192.168.1.43 - - [15/Dec/2025 23:42:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:19,798 - 192.168.1.43 - - [15/Dec/2025 23:42:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:20,128 - 192.168.1.43 - - [15/Dec/2025 23:42:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:20,465 - 192.168.1.43 - - [15/Dec/2025 23:42:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:20,785 - 192.168.1.43 - - [15/Dec/2025 23:42:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:21,103 - 192.168.1.43 - - [15/Dec/2025 23:42:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:21,423 - 192.168.1.43 - - [15/Dec/2025 23:42:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:21,741 - 192.168.1.43 - - [15/Dec/2025 23:42:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:22,046 - 192.168.1.43 - - [15/Dec/2025 23:42:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:22,352 - 192.168.1.43 - - [15/Dec/2025 23:42:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:22,667 - 192.168.1.43 - - [15/Dec/2025 23:42:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:22,863 - [23:42:22] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:42:22,868 - [23:42:22] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:42:22,999 - 192.168.1.43 - - [15/Dec/2025 23:42:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:23,319 - 192.168.1.43 - - [15/Dec/2025 23:42:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:23,407 - [23:42:23] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:42:23,424 - [23:42:23] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:42:23,427 - [23:42:23] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:42:24,877 - 192.168.1.43 - - [15/Dec/2025 23:42:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:26,577 - 192.168.1.43 - - [15/Dec/2025 23:42:26] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:42:29,407 - [23:42:29] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:42:29,412 - [23:42:29] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:42:32,851 - [23:42:32] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:42:32,857 - [23:42:32] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:42:34,218 - [23:42:34] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:42:34,236 - [23:42:34] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:42:34,238 - [23:42:34] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:42:39,418 - [23:42:39] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:42:39,423 - [23:42:39] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:42:42,862 - [23:42:42] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:42:42,867 - [23:42:42] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:42:45,035 - [23:42:45] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:42:45,052 - [23:42:45] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:42:45,056 - [23:42:45] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:42:49,434 - [23:42:49] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:42:49,440 - [23:42:49] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:42:52,873 - [23:42:52] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:42:52,878 - [23:42:52] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:42:55,858 - [23:42:55] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:42:55,876 - [23:42:55] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:42:55,879 - [23:42:55] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:42:59,441 - [23:42:59] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:42:59,446 - [23:42:59] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:43:02,886 - [23:43:02] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:43:02,891 - [23:43:02] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:43:06,667 - [23:43:06] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:43:06,689 - [23:43:06] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:43:06,693 - [23:43:06] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:43:09,454 - [23:43:09] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:43:09,462 - [23:43:09] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:43:12,895 - [23:43:12] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:43:12,902 - [23:43:12] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:43:17,482 - [23:43:17] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:43:17,499 - [23:43:17] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:43:17,502 - [23:43:17] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:43:17,889 - 192.168.1.43 - - [15/Dec/2025 23:43:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:43:18,193 - 192.168.1.43 - - [15/Dec/2025 23:43:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:43:18,502 - 192.168.1.43 - - [15/Dec/2025 23:43:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:43:18,814 - 192.168.1.43 - - [15/Dec/2025 23:43:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:43:19,132 - 192.168.1.43 - - [15/Dec/2025 23:43:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:43:19,451 - 192.168.1.43 - - [15/Dec/2025 23:43:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:43:19,466 - [23:43:19] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:43:19,472 - [23:43:19] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:43:19,763 - 192.168.1.43 - - [15/Dec/2025 23:43:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:43:20,079 - 192.168.1.43 - - [15/Dec/2025 23:43:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:43:20,397 - 192.168.1.43 - - [15/Dec/2025 23:43:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:43:20,617 - 192.168.1.43 - - [15/Dec/2025 23:43:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:43:20,711 - 192.168.1.43 - - [15/Dec/2025 23:43:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:43:20,946 - 192.168.1.43 - - [15/Dec/2025 23:43:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:43:21,041 - 192.168.1.43 - - [15/Dec/2025 23:43:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:43:21,268 - 192.168.1.43 - - [15/Dec/2025 23:43:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:43:21,348 - 192.168.1.43 - - [15/Dec/2025 23:43:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:43:21,597 - 192.168.1.43 - - [15/Dec/2025 23:43:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:43:21,681 - 192.168.1.43 - - [15/Dec/2025 23:43:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:43:22,903 - [23:43:22] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:43:22,909 - [23:43:22] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:43:28,298 - [23:43:28] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:43:28,314 - [23:43:28] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:43:28,317 - [23:43:28] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:43:29,476 - [23:43:29] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:43:29,481 - [23:43:29] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:43:32,915 - [23:43:32] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:43:32,920 - [23:43:32] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:43:39,115 - [23:43:39] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:43:39,132 - [23:43:39] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:43:39,135 - [23:43:39] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:43:39,487 - [23:43:39] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:43:39,492 - [23:43:39] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:43:42,923 - [23:43:42] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:43:42,928 - [23:43:42] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:43:49,502 - [23:43:49] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:43:49,507 - [23:43:49] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:43:49,930 - [23:43:49] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:43:49,947 - [23:43:49] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:43:49,950 - [23:43:49] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:43:52,935 - [23:43:52] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:43:52,941 - [23:43:52] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:43:59,510 - [23:43:59] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:43:59,515 - [23:43:59] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:44:00,751 - [23:44:00] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:44:00,768 - [23:44:00] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:44:00,771 - [23:44:00] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:44:02,951 - [23:44:02] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:44:02,956 - [23:44:02] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:44:09,530 - [23:44:09] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:44:09,537 - [23:44:09] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:44:11,576 - [23:44:11] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:44:11,597 - [23:44:11] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:44:11,600 - [23:44:11] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:44:12,956 - [23:44:12] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:44:12,961 - [23:44:12] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:44:17,565 - 192.168.1.43 - - [15/Dec/2025 23:44:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:44:17,885 - 192.168.1.43 - - [15/Dec/2025 23:44:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:44:18,208 - 192.168.1.43 - - [15/Dec/2025 23:44:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:44:18,537 - 192.168.1.43 - - [15/Dec/2025 23:44:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:44:18,851 - 192.168.1.43 - - [15/Dec/2025 23:44:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:44:19,180 - 192.168.1.43 - - [15/Dec/2025 23:44:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:44:19,502 - 192.168.1.43 - - [15/Dec/2025 23:44:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:44:19,534 - [23:44:19] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:44:19,539 - [23:44:19] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:44:19,831 - 192.168.1.43 - - [15/Dec/2025 23:44:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:44:20,160 - 192.168.1.43 - - [15/Dec/2025 23:44:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:44:20,477 - 192.168.1.43 - - [15/Dec/2025 23:44:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:44:20,805 - 192.168.1.43 - - [15/Dec/2025 23:44:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:44:21,139 - 192.168.1.43 - - [15/Dec/2025 23:44:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:44:21,458 - 192.168.1.43 - - [15/Dec/2025 23:44:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:44:21,788 - 192.168.1.43 - - [15/Dec/2025 23:44:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:44:22,118 - 192.168.1.43 - - [15/Dec/2025 23:44:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:44:22,378 - [23:44:22] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:44:22,396 - [23:44:22] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:44:22,399 - [23:44:22] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:44:22,450 - 192.168.1.43 - - [15/Dec/2025 23:44:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:44:22,755 - 192.168.1.43 - - [15/Dec/2025 23:44:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:44:22,961 - [23:44:22] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:44:22,967 - [23:44:22] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:44:29,554 - [23:44:29] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:44:29,560 - [23:44:29] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:44:32,974 - [23:44:32] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:44:32,979 - [23:44:32] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:44:33,191 - [23:44:33] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:44:33,209 - [23:44:33] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:44:33,213 - [23:44:33] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:44:39,565 - [23:44:39] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:44:39,571 - [23:44:39] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:44:42,991 - [23:44:42] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:44:42,996 - [23:44:42] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:44:44,006 - [23:44:44] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:44:44,023 - [23:44:44] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:44:44,026 - [23:44:44] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:46:06,676 - package: mysql.connector.plugins
+2025-12-15 23:46:06,676 - plugin_name: caching_sha2_password
+2025-12-15 23:46:06,677 - AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+2025-12-15 23:46:06,683 - [23:46:06] Modo consola simple activado
+2025-12-15 23:46:06,698 - Updating subscribed topics to: ('telemetria_cp',)
+2025-12-15 23:46:06,698 - Updating subscribed topics to: ('driver_requests',)
+2025-12-15 23:46:06,703 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:46:06,704 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:46:06,704 - Updating subscribed topics to: ('central_commands',)
+2025-12-15 23:46:06,704 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:46:06,704 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:46:06,707 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:46:06,707 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:46:06,709 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.43:5001
+2025-12-15 23:46:06,709 - [33mPress CTRL+C to quit[0m
+2025-12-15 23:46:06,746 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:46:06,747 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:46:06,913 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:46:06,913 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:46:06,913 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:46:06,914 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:46:06,914 - Starting new heartbeat thread
+2025-12-15 23:46:06,913 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:46:06,914 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:46:06,914 - Revoking previously assigned partitions set() for group central-control-group
+2025-12-15 23:46:06,914 - Starting new heartbeat thread
+2025-12-15 23:46:06,914 - Starting new heartbeat thread
+2025-12-15 23:46:06,914 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:46:06,915 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-12-15 23:46:06,915 - Revoking previously assigned partitions set() for group central_processing_group
+2025-12-15 23:46:06,915 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:46:06,915 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:46:06,915 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:46:06,915 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:46:06,916 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:46:06,916 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:46:06,916 - <BrokerConnection node_id=coordinator-1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:46:06,916 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:46:07,016 - (Re-)joining group central-control-group
+2025-12-15 23:46:07,016 - (Re-)joining group central-telemetry-group
+2025-12-15 23:46:07,016 - (Re-)joining group central_processing_group
+2025-12-15 23:46:07,019 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:46:07,019 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:46:07,019 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:46:07,120 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:46:07,120 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:46:07,121 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:46:07,121 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:46:07,121 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:46:07,121 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:46:07,223 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:46:07,223 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:46:07,223 - (Re-)joining group central_processing_group
+2025-12-15 23:46:07,223 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:46:07,223 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:46:07,224 - (Re-)joining group central-control-group
+2025-12-15 23:46:07,223 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:46:07,224 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:46:07,224 - (Re-)joining group central-telemetry-group
+2025-12-15 23:46:07,225 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:46:07,225 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:46:07,225 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:46:07,326 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:46:07,327 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:46:07,327 - (Re-)joining group central_processing_group
+2025-12-15 23:46:07,327 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:46:07,327 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:46:07,327 - (Re-)joining group central-control-group
+2025-12-15 23:46:07,327 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:46:07,327 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:46:07,327 - (Re-)joining group central-telemetry-group
+2025-12-15 23:46:07,328 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:46:07,328 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:46:07,329 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:46:07,430 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:46:07,431 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:46:07,431 - (Re-)joining group central_processing_group
+2025-12-15 23:46:07,430 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:46:07,431 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:46:07,431 - (Re-)joining group central-control-group
+2025-12-15 23:46:07,431 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:46:07,431 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:46:07,431 - (Re-)joining group central-telemetry-group
+2025-12-15 23:46:07,432 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:46:07,432 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:46:07,432 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-15 23:46:07,535 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:46:07,535 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-15 23:46:07,535 - (Re-)joining group central_processing_group
+2025-12-15 23:46:07,535 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:46:07,535 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-15 23:46:07,535 - (Re-)joining group central-telemetry-group
+2025-12-15 23:46:07,535 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='192.168.1.43', port=9092, rack=None)
+2025-12-15 23:46:07,535 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-15 23:46:07,536 - (Re-)joining group central-control-group
+2025-12-15 23:46:10,549 - Elected group leader -- performing partition assignments using range
+2025-12-15 23:46:10,550 - Elected group leader -- performing partition assignments using range
+2025-12-15 23:46:10,550 - Elected group leader -- performing partition assignments using range
+2025-12-15 23:46:10,565 - Successfully joined group central_processing_group with generation 1
+2025-12-15 23:46:10,566 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)]
+2025-12-15 23:46:10,566 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)} for group central_processing_group
+2025-12-15 23:46:10,566 - Successfully joined group central-telemetry-group with generation 1
+2025-12-15 23:46:10,566 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0)]
+2025-12-15 23:46:10,566 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0)} for group central-telemetry-group
+2025-12-15 23:46:10,566 - Successfully joined group central-control-group with generation 1
+2025-12-15 23:46:10,566 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-12-15 23:46:10,567 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-12-15 23:46:14,943 - 192.168.1.43 - - [15/Dec/2025 23:46:14] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:16,959 - 192.168.1.43 - - [15/Dec/2025 23:46:16] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:17,571 - 192.168.1.43 - - [15/Dec/2025 23:46:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:17,890 - 192.168.1.43 - - [15/Dec/2025 23:46:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:18,210 - 192.168.1.43 - - [15/Dec/2025 23:46:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:18,530 - 192.168.1.43 - - [15/Dec/2025 23:46:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:18,847 - 192.168.1.43 - - [15/Dec/2025 23:46:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:19,155 - 192.168.1.43 - - [15/Dec/2025 23:46:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:19,489 - 192.168.1.43 - - [15/Dec/2025 23:46:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:19,811 - 192.168.1.43 - - [15/Dec/2025 23:46:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:20,139 - 192.168.1.43 - - [15/Dec/2025 23:46:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:20,447 - 192.168.1.43 - - [15/Dec/2025 23:46:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:20,765 - 192.168.1.43 - - [15/Dec/2025 23:46:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:21,069 - 192.168.1.43 - - [15/Dec/2025 23:46:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:21,385 - 192.168.1.43 - - [15/Dec/2025 23:46:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:21,702 - 192.168.1.43 - - [15/Dec/2025 23:46:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:22,031 - 192.168.1.43 - - [15/Dec/2025 23:46:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:22,348 - 192.168.1.43 - - [15/Dec/2025 23:46:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:22,656 - 192.168.1.43 - - [15/Dec/2025 23:46:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:22,971 - 192.168.1.43 - - [15/Dec/2025 23:46:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:23,289 - 192.168.1.43 - - [15/Dec/2025 23:46:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:23,603 - 192.168.1.43 - - [15/Dec/2025 23:46:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:24,966 - 192.168.1.43 - - [15/Dec/2025 23:46:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:26,652 - 192.168.1.43 - - [15/Dec/2025 23:46:26] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:28,968 - 192.168.1.43 - - [15/Dec/2025 23:46:28] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:30,640 - 192.168.1.43 - - [15/Dec/2025 23:46:30] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:32,960 - 192.168.1.43 - - [15/Dec/2025 23:46:32] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:34,659 - 192.168.1.43 - - [15/Dec/2025 23:46:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:36,955 - 192.168.1.43 - - [15/Dec/2025 23:46:36] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:38,653 - 192.168.1.43 - - [15/Dec/2025 23:46:38] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:40,944 - 192.168.1.43 - - [15/Dec/2025 23:46:40] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:42,644 - 192.168.1.43 - - [15/Dec/2025 23:46:42] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:44,949 - 192.168.1.43 - - [15/Dec/2025 23:46:44] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:46,643 - 192.168.1.43 - - [15/Dec/2025 23:46:46] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:48,966 - 192.168.1.43 - - [15/Dec/2025 23:46:48] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:50,650 - 192.168.1.43 - - [15/Dec/2025 23:46:50] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:52,966 - 192.168.1.43 - - [15/Dec/2025 23:46:52] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:54,659 - 192.168.1.43 - - [15/Dec/2025 23:46:54] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:56,959 - 192.168.1.43 - - [15/Dec/2025 23:46:56] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:46:58,644 - 192.168.1.43 - - [15/Dec/2025 23:46:58] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:00,963 - 192.168.1.43 - - [15/Dec/2025 23:47:00] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:02,654 - 192.168.1.43 - - [15/Dec/2025 23:47:02] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:04,945 - 192.168.1.43 - - [15/Dec/2025 23:47:04] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:06,658 - 192.168.1.43 - - [15/Dec/2025 23:47:06] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:08,950 - 192.168.1.43 - - [15/Dec/2025 23:47:08] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:10,654 - 192.168.1.43 - - [15/Dec/2025 23:47:10] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:12,958 - 192.168.1.43 - - [15/Dec/2025 23:47:12] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:14,642 - 192.168.1.43 - - [15/Dec/2025 23:47:14] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:16,957 - 192.168.1.43 - - [15/Dec/2025 23:47:16] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:17,563 - 192.168.1.43 - - [15/Dec/2025 23:47:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:17,868 - 192.168.1.43 - - [15/Dec/2025 23:47:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:18,182 - 192.168.1.43 - - [15/Dec/2025 23:47:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:18,518 - 192.168.1.43 - - [15/Dec/2025 23:47:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:18,835 - 192.168.1.43 - - [15/Dec/2025 23:47:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:19,143 - 192.168.1.43 - - [15/Dec/2025 23:47:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:19,469 - 192.168.1.43 - - [15/Dec/2025 23:47:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:19,784 - 192.168.1.43 - - [15/Dec/2025 23:47:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:20,111 - 192.168.1.43 - - [15/Dec/2025 23:47:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:20,418 - 192.168.1.43 - - [15/Dec/2025 23:47:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:20,734 - 192.168.1.43 - - [15/Dec/2025 23:47:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:21,052 - 192.168.1.43 - - [15/Dec/2025 23:47:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:21,367 - 192.168.1.43 - - [15/Dec/2025 23:47:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:21,685 - 192.168.1.43 - - [15/Dec/2025 23:47:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:22,002 - 192.168.1.43 - - [15/Dec/2025 23:47:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:22,310 - 192.168.1.43 - - [15/Dec/2025 23:47:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:22,616 - 192.168.1.43 - - [15/Dec/2025 23:47:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:22,932 - 192.168.1.43 - - [15/Dec/2025 23:47:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:23,249 - 192.168.1.43 - - [15/Dec/2025 23:47:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:23,557 - 192.168.1.43 - - [15/Dec/2025 23:47:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:24,950 - 192.168.1.43 - - [15/Dec/2025 23:47:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:26,654 - 192.168.1.43 - - [15/Dec/2025 23:47:26] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:28,966 - 192.168.1.43 - - [15/Dec/2025 23:47:28] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:30,658 - 192.168.1.43 - - [15/Dec/2025 23:47:30] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:32,949 - 192.168.1.43 - - [15/Dec/2025 23:47:32] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:33,202 - [23:47:33] \u2705 NUEVO CP: Registro inicial de CP_001.
+2025-12-15 23:47:33,224 - [23:47:33] \u26a1 CP CP_001 registrado y conectado (Madrid,ES)
+2025-12-15 23:47:33,227 - [23:47:33] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:47:33,230 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: connecting to 192.168.1.43:9092 [('192.168.1.43', 9092) IPv4]
+2025-12-15 23:47:33,231 - <BrokerConnection node_id=1 host=192.168.1.43:9092 <connecting> [IPv4 ('192.168.1.43', 9092)]>: Connection complete.
+2025-12-15 23:47:33,231 - <BrokerConnection node_id=bootstrap-0 host=192.168.1.43:9092 <connected> [IPv4 ('192.168.1.43', 9092)]>: Closing connection. 
+2025-12-15 23:47:33,247 - [23:47:33] Telemetría inicial publicada para CP_001
+2025-12-15 23:47:33,248 - 192.168.1.43 - - [15/Dec/2025 23:47:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:33,560 - 192.168.1.43 - - [15/Dec/2025 23:47:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:33,892 - 192.168.1.43 - - [15/Dec/2025 23:47:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:34,209 - 192.168.1.43 - - [15/Dec/2025 23:47:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:34,527 - 192.168.1.43 - - [15/Dec/2025 23:47:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:34,846 - 192.168.1.43 - - [15/Dec/2025 23:47:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:35,164 - 192.168.1.43 - - [15/Dec/2025 23:47:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:35,318 - [23:47:35] \u2713 AUTH OK: CP_001 autenticado con credenciales del Registry
+2025-12-15 23:47:35,328 - [23:47:35] AUTH OK enviado a CP_001 (sin BD, clave proporcionada)
+2025-12-15 23:47:35,478 - 192.168.1.43 - - [15/Dec/2025 23:47:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:35,726 - [23:47:35] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:47:35,729 - [23:47:35] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:47:35,729 - 192.168.1.36 - - [15/Dec/2025 23:47:35] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:47:35,796 - 192.168.1.43 - - [15/Dec/2025 23:47:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:36,113 - 192.168.1.43 - - [15/Dec/2025 23:47:36] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:36,421 - 192.168.1.43 - - [15/Dec/2025 23:47:36] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:36,959 - 192.168.1.43 - - [15/Dec/2025 23:47:36] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:38,651 - 192.168.1.43 - - [15/Dec/2025 23:47:38] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:39,795 - [23:47:39] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:47:39,802 - [23:47:39] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:47:40,499 - [23:47:40] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:47:40,503 - [23:47:40] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:47:40,503 - 192.168.1.36 - - [15/Dec/2025 23:47:40] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:47:40,950 - 192.168.1.43 - - [15/Dec/2025 23:47:40] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:41,741 - [23:47:41] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:47:41,747 - [23:47:41] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-15 23:47:42,642 - 192.168.1.43 - - [15/Dec/2025 23:47:42] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:44,174 - [23:47:44] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:47:44,195 - [23:47:44] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:47:44,198 - [23:47:44] [ESTADO] CP_001 -> AVERÍA (antes: ACTIVADO). Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:47:44,955 - 192.168.1.43 - - [15/Dec/2025 23:47:44] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:45,223 - [23:47:45] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:47:45,227 - [23:47:45] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:47:45,227 - 192.168.1.36 - - [15/Dec/2025 23:47:45] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:47:46,647 - 192.168.1.43 - - [15/Dec/2025 23:47:46] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:48,951 - 192.168.1.43 - - [15/Dec/2025 23:47:48] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:49,792 - [23:47:49] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:47:49,798 - [23:47:49] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:47:49,969 - [23:47:49] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:47:49,973 - [23:47:49] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:47:49,973 - 192.168.1.36 - - [15/Dec/2025 23:47:49] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:47:50,658 - 192.168.1.43 - - [15/Dec/2025 23:47:50] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:51,755 - [23:47:51] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:47:51,761 - [23:47:51] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:47:52,947 - 192.168.1.43 - - [15/Dec/2025 23:47:52] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:54,651 - 192.168.1.43 - - [15/Dec/2025 23:47:54] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:54,711 - [23:47:54] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:47:54,715 - [23:47:54] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:47:54,715 - 192.168.1.36 - - [15/Dec/2025 23:47:54] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:47:54,996 - [23:47:54] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:47:55,018 - [23:47:55] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:47:55,022 - [23:47:55] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:47:56,955 - 192.168.1.43 - - [15/Dec/2025 23:47:56] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:58,653 - 192.168.1.43 - - [15/Dec/2025 23:47:58] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:47:59,429 - [23:47:59] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:47:59,432 - [23:47:59] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:47:59,432 - 192.168.1.36 - - [15/Dec/2025 23:47:59] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:47:59,801 - [23:47:59] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:47:59,807 - [23:47:59] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:00,957 - 192.168.1.43 - - [15/Dec/2025 23:48:00] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:01,763 - [23:48:01] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:48:01,769 - [23:48:01] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:02,651 - 192.168.1.43 - - [15/Dec/2025 23:48:02] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:04,152 - [23:48:04] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:04,155 - [23:48:04] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:48:04,155 - 192.168.1.36 - - [15/Dec/2025 23:48:04] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:48:04,946 - 192.168.1.43 - - [15/Dec/2025 23:48:04] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:05,828 - [23:48:05] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:48:05,845 - [23:48:05] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:48:05,848 - [23:48:05] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:48:06,656 - 192.168.1.43 - - [15/Dec/2025 23:48:06] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:08,910 - [23:48:08] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:08,913 - [23:48:08] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:48:08,913 - 192.168.1.36 - - [15/Dec/2025 23:48:08] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:48:08,974 - 192.168.1.43 - - [15/Dec/2025 23:48:08] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:09,809 - [23:48:09] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:48:09,815 - [23:48:09] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:10,658 - 192.168.1.43 - - [15/Dec/2025 23:48:10] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:11,775 - [23:48:11] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:48:11,782 - [23:48:11] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:12,958 - 192.168.1.43 - - [15/Dec/2025 23:48:12] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:13,624 - [23:48:13] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:13,627 - [23:48:13] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:48:13,627 - 192.168.1.36 - - [15/Dec/2025 23:48:13] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:48:14,651 - 192.168.1.43 - - [15/Dec/2025 23:48:14] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:16,654 - [23:48:16] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:48:16,672 - [23:48:16] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:48:16,675 - [23:48:16] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:48:16,951 - 192.168.1.43 - - [15/Dec/2025 23:48:16] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:17,564 - 192.168.1.43 - - [15/Dec/2025 23:48:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:17,876 - 192.168.1.43 - - [15/Dec/2025 23:48:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:18,184 - 192.168.1.43 - - [15/Dec/2025 23:48:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:18,379 - [23:48:18] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:18,382 - [23:48:18] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:48:18,383 - 192.168.1.36 - - [15/Dec/2025 23:48:18] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:48:18,508 - 192.168.1.43 - - [15/Dec/2025 23:48:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:18,842 - 192.168.1.43 - - [15/Dec/2025 23:48:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:19,157 - 192.168.1.43 - - [15/Dec/2025 23:48:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:19,480 - 192.168.1.43 - - [15/Dec/2025 23:48:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:19,810 - 192.168.1.43 - - [15/Dec/2025 23:48:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:19,819 - [23:48:19] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:48:19,824 - [23:48:19] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:20,141 - 192.168.1.43 - - [15/Dec/2025 23:48:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:20,459 - 192.168.1.43 - - [15/Dec/2025 23:48:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:20,777 - 192.168.1.43 - - [15/Dec/2025 23:48:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:21,098 - 192.168.1.43 - - [15/Dec/2025 23:48:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:21,414 - 192.168.1.43 - - [15/Dec/2025 23:48:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:21,731 - 192.168.1.43 - - [15/Dec/2025 23:48:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:21,797 - [23:48:21] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:48:21,806 - [23:48:21] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:22,050 - 192.168.1.43 - - [15/Dec/2025 23:48:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:22,369 - 192.168.1.43 - - [15/Dec/2025 23:48:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:22,685 - 192.168.1.43 - - [15/Dec/2025 23:48:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:22,989 - 192.168.1.43 - - [15/Dec/2025 23:48:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:23,086 - [23:48:23] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:23,090 - [23:48:23] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:48:23,090 - 192.168.1.36 - - [15/Dec/2025 23:48:23] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:48:23,304 - 192.168.1.43 - - [15/Dec/2025 23:48:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:23,623 - 192.168.1.43 - - [15/Dec/2025 23:48:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:24,946 - 192.168.1.43 - - [15/Dec/2025 23:48:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:26,665 - 192.168.1.43 - - [15/Dec/2025 23:48:26] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:27,490 - [23:48:27] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:48:27,509 - [23:48:27] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:48:27,512 - [23:48:27] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:48:27,840 - [23:48:27] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:27,843 - [23:48:27] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:48:27,843 - 192.168.1.36 - - [15/Dec/2025 23:48:27] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:48:28,948 - 192.168.1.43 - - [15/Dec/2025 23:48:28] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:29,313 - 192.168.1.43 - - [15/Dec/2025 23:48:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:29,826 - [23:48:29] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:48:29,832 - [23:48:29] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:30,496 - 192.168.1.43 - - [15/Dec/2025 23:48:30] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:31,570 - 192.168.1.43 - - [15/Dec/2025 23:48:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:31,808 - [23:48:31] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:48:31,815 - [23:48:31] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:31,887 - 192.168.1.43 - - [15/Dec/2025 23:48:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:32,207 - 192.168.1.43 - - [15/Dec/2025 23:48:32] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:32,553 - [23:48:32] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:32,557 - [23:48:32] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:48:32,558 - 192.168.1.36 - - [15/Dec/2025 23:48:32] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:48:33,865 - 192.168.1.43 - - [15/Dec/2025 23:48:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:34,179 - 192.168.1.43 - - [15/Dec/2025 23:48:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:34,440 - 192.168.1.43 - - [15/Dec/2025 23:48:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:35,572 - 192.168.1.43 - - [15/Dec/2025 23:48:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:35,903 - 192.168.1.43 - - [15/Dec/2025 23:48:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:36,222 - 192.168.1.43 - - [15/Dec/2025 23:48:36] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:37,304 - [23:48:37] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:37,307 - [23:48:37] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:48:37,308 - 192.168.1.36 - - [15/Dec/2025 23:48:37] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:48:37,881 - 192.168.1.43 - - [15/Dec/2025 23:48:37] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:38,182 - 192.168.1.43 - - [15/Dec/2025 23:48:38] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:38,325 - [23:48:38] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:48:38,343 - [23:48:38] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:48:38,347 - [23:48:38] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:48:38,450 - 192.168.1.43 - - [15/Dec/2025 23:48:38] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:39,572 - 192.168.1.43 - - [15/Dec/2025 23:48:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:39,832 - [23:48:39] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:48:39,838 - [23:48:39] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:39,879 - 192.168.1.43 - - [15/Dec/2025 23:48:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:40,190 - 192.168.1.43 - - [15/Dec/2025 23:48:40] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:41,821 - [23:48:41] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:48:41,827 - [23:48:41] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:41,889 - 192.168.1.43 - - [15/Dec/2025 23:48:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:42,075 - [23:48:42] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:42,078 - [23:48:42] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:48:42,079 - 192.168.1.36 - - [15/Dec/2025 23:48:42] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:48:42,192 - 192.168.1.43 - - [15/Dec/2025 23:48:42] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:42,460 - 192.168.1.43 - - [15/Dec/2025 23:48:42] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:43,561 - 192.168.1.43 - - [15/Dec/2025 23:48:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:43,886 - 192.168.1.43 - - [15/Dec/2025 23:48:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:44,207 - 192.168.1.43 - - [15/Dec/2025 23:48:44] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:45,886 - 192.168.1.43 - - [15/Dec/2025 23:48:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:46,203 - 192.168.1.43 - - [15/Dec/2025 23:48:46] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:46,468 - 192.168.1.43 - - [15/Dec/2025 23:48:46] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:46,832 - [23:48:46] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:46,835 - [23:48:46] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:48:46,836 - 192.168.1.36 - - [15/Dec/2025 23:48:46] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:48:47,566 - 192.168.1.43 - - [15/Dec/2025 23:48:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:47,871 - 192.168.1.43 - - [15/Dec/2025 23:48:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:48,178 - 192.168.1.43 - - [15/Dec/2025 23:48:48] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:49,150 - [23:48:49] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:48:49,166 - [23:48:49] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:48:49,168 - [23:48:49] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:48:49,846 - [23:48:49] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:48:49,854 - [23:48:49] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:49,882 - 192.168.1.43 - - [15/Dec/2025 23:48:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:50,176 - 192.168.1.43 - - [15/Dec/2025 23:48:50] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:50,458 - 192.168.1.43 - - [15/Dec/2025 23:48:50] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:51,571 - 192.168.1.43 - - [15/Dec/2025 23:48:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:51,594 - [23:48:51] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:51,597 - [23:48:51] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:48:51,597 - 192.168.1.36 - - [15/Dec/2025 23:48:51] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:48:51,831 - [23:48:51] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:48:51,837 - [23:48:51] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:51,893 - 192.168.1.43 - - [15/Dec/2025 23:48:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:52,227 - 192.168.1.43 - - [15/Dec/2025 23:48:52] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:53,876 - 192.168.1.43 - - [15/Dec/2025 23:48:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:54,202 - 192.168.1.43 - - [15/Dec/2025 23:48:54] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:54,456 - 192.168.1.43 - - [15/Dec/2025 23:48:54] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:55,577 - 192.168.1.43 - - [15/Dec/2025 23:48:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:55,901 - 192.168.1.43 - - [15/Dec/2025 23:48:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:56,219 - 192.168.1.43 - - [15/Dec/2025 23:48:56] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:56,372 - [23:48:56] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:56,375 - [23:48:56] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:48:56,375 - 192.168.1.36 - - [15/Dec/2025 23:48:56] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:48:57,883 - 192.168.1.43 - - [15/Dec/2025 23:48:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:58,189 - 192.168.1.43 - - [15/Dec/2025 23:48:58] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:58,448 - 192.168.1.43 - - [15/Dec/2025 23:48:58] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:59,567 - 192.168.1.43 - - [15/Dec/2025 23:48:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:59,854 - [23:48:59] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:48:59,862 - [23:48:59] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:48:59,889 - 192.168.1.43 - - [15/Dec/2025 23:48:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:48:59,982 - [23:48:59] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:48:59,999 - [23:48:59] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:49:00,003 - [23:48:59] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:49:00,204 - 192.168.1.43 - - [15/Dec/2025 23:49:00] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:01,115 - [23:49:01] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:01,118 - [23:49:01] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:49:01,118 - 192.168.1.36 - - [15/Dec/2025 23:49:01] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:49:01,844 - [23:49:01] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:49:01,850 - [23:49:01] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:01,880 - 192.168.1.43 - - [15/Dec/2025 23:49:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:02,191 - 192.168.1.43 - - [15/Dec/2025 23:49:02] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:02,459 - 192.168.1.43 - - [15/Dec/2025 23:49:02] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:03,576 - 192.168.1.43 - - [15/Dec/2025 23:49:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:03,893 - 192.168.1.43 - - [15/Dec/2025 23:49:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:04,221 - 192.168.1.43 - - [15/Dec/2025 23:49:04] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:05,865 - 192.168.1.43 - - [15/Dec/2025 23:49:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:05,891 - [23:49:05] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:05,894 - [23:49:05] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:49:05,894 - 192.168.1.36 - - [15/Dec/2025 23:49:05] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:49:06,171 - 192.168.1.43 - - [15/Dec/2025 23:49:06] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:06,439 - 192.168.1.43 - - [15/Dec/2025 23:49:06] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:07,572 - 192.168.1.43 - - [15/Dec/2025 23:49:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:07,890 - 192.168.1.43 - - [15/Dec/2025 23:49:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:08,208 - 192.168.1.43 - - [15/Dec/2025 23:49:08] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:09,862 - [23:49:09] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:49:09,868 - [23:49:09] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:09,881 - 192.168.1.43 - - [15/Dec/2025 23:49:09] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:10,181 - 192.168.1.43 - - [15/Dec/2025 23:49:10] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:10,451 - 192.168.1.43 - - [15/Dec/2025 23:49:10] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:10,595 - [23:49:10] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:10,599 - [23:49:10] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:49:10,599 - 192.168.1.36 - - [15/Dec/2025 23:49:10] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:49:10,808 - [23:49:10] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:49:10,825 - [23:49:10] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:49:10,829 - [23:49:10] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:49:11,563 - 192.168.1.43 - - [15/Dec/2025 23:49:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:11,851 - [23:49:11] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:49:11,857 - [23:49:11] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:11,876 - 192.168.1.43 - - [15/Dec/2025 23:49:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:12,182 - 192.168.1.43 - - [15/Dec/2025 23:49:12] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:13,870 - 192.168.1.43 - - [15/Dec/2025 23:49:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:14,190 - 192.168.1.43 - - [15/Dec/2025 23:49:14] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:14,437 - 192.168.1.43 - - [15/Dec/2025 23:49:14] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:15,327 - [23:49:15] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:15,330 - [23:49:15] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:49:15,330 - 192.168.1.36 - - [15/Dec/2025 23:49:15] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:49:15,577 - 192.168.1.43 - - [15/Dec/2025 23:49:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:15,885 - 192.168.1.43 - - [15/Dec/2025 23:49:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:16,193 - 192.168.1.43 - - [15/Dec/2025 23:49:16] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:17,868 - 192.168.1.43 - - [15/Dec/2025 23:49:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:18,193 - 192.168.1.43 - - [15/Dec/2025 23:49:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:18,490 - 192.168.1.43 - - [15/Dec/2025 23:49:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:18,733 - 192.168.1.43 - - [15/Dec/2025 23:49:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:18,821 - 192.168.1.43 - - [15/Dec/2025 23:49:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:19,120 - 192.168.1.43 - - [15/Dec/2025 23:49:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:19,351 - 192.168.1.43 - - [15/Dec/2025 23:49:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:19,433 - 192.168.1.43 - - [15/Dec/2025 23:49:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:19,761 - 192.168.1.43 - - [15/Dec/2025 23:49:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:19,871 - [23:49:19] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:49:19,877 - [23:49:19] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:20,067 - 192.168.1.43 - - [15/Dec/2025 23:49:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:20,077 - [23:49:20] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:20,081 - [23:49:20] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:49:20,081 - 192.168.1.36 - - [15/Dec/2025 23:49:20] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:49:20,391 - 192.168.1.43 - - [15/Dec/2025 23:49:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:20,689 - 192.168.1.43 - - [15/Dec/2025 23:49:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:20,895 - 192.168.1.43 - - [15/Dec/2025 23:49:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:21,009 - 192.168.1.43 - - [15/Dec/2025 23:49:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:21,317 - 192.168.1.43 - - [15/Dec/2025 23:49:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:21,627 - 192.168.1.43 - - [15/Dec/2025 23:49:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:21,638 - [23:49:21] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:49:21,655 - [23:49:21] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:49:21,657 - [23:49:21] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:49:21,869 - [23:49:21] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:49:21,875 - [23:49:21] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:21,944 - 192.168.1.43 - - [15/Dec/2025 23:49:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:22,174 - 192.168.1.43 - - [15/Dec/2025 23:49:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:22,267 - 192.168.1.43 - - [15/Dec/2025 23:49:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:22,490 - 192.168.1.43 - - [15/Dec/2025 23:49:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:22,585 - 192.168.1.43 - - [15/Dec/2025 23:49:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:22,818 - 192.168.1.43 - - [15/Dec/2025 23:49:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:22,890 - 192.168.1.43 - - [15/Dec/2025 23:49:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:23,139 - 192.168.1.43 - - [15/Dec/2025 23:49:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:23,576 - 192.168.1.43 - - [15/Dec/2025 23:49:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:23,887 - 192.168.1.43 - - [15/Dec/2025 23:49:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:24,212 - 192.168.1.43 - - [15/Dec/2025 23:49:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:24,820 - [23:49:24] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:24,823 - [23:49:24] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:49:24,823 - 192.168.1.36 - - [15/Dec/2025 23:49:24] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:49:25,877 - 192.168.1.43 - - [15/Dec/2025 23:49:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:26,190 - 192.168.1.43 - - [15/Dec/2025 23:49:26] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:26,417 - 192.168.1.43 - - [15/Dec/2025 23:49:26] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:27,566 - 192.168.1.43 - - [15/Dec/2025 23:49:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:27,872 - 192.168.1.43 - - [15/Dec/2025 23:49:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:28,177 - 192.168.1.43 - - [15/Dec/2025 23:49:28] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:29,528 - [23:49:29] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:29,531 - [23:49:29] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:49:29,531 - 192.168.1.36 - - [15/Dec/2025 23:49:29] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:49:29,881 - 192.168.1.43 - - [15/Dec/2025 23:49:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:29,885 - [23:49:29] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:49:29,891 - [23:49:29] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:30,191 - 192.168.1.43 - - [15/Dec/2025 23:49:30] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:49:31,876 - [23:49:31] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:49:31,883 - [23:49:31] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:32,468 - [23:49:32] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:49:32,485 - [23:49:32] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:49:32,488 - [23:49:32] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:49:34,249 - [23:49:34] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:34,253 - [23:49:34] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:49:34,253 - 192.168.1.36 - - [15/Dec/2025 23:49:34] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:49:38,991 - [23:49:38] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:38,994 - [23:49:38] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:49:38,994 - 192.168.1.36 - - [15/Dec/2025 23:49:38] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:49:39,891 - [23:49:39] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:49:39,898 - [23:49:39] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:41,889 - [23:49:41] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:49:41,895 - [23:49:41] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:43,295 - [23:49:43] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:49:43,311 - [23:49:43] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:49:43,314 - [23:49:43] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:49:43,754 - [23:49:43] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:43,757 - [23:49:43] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:49:43,757 - 192.168.1.36 - - [15/Dec/2025 23:49:43] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:49:48,510 - [23:49:48] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:48,513 - [23:49:48] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:49:48,514 - 192.168.1.36 - - [15/Dec/2025 23:49:48] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:49:49,902 - [23:49:49] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:49:49,908 - [23:49:49] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:51,900 - [23:49:51] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:49:51,906 - [23:49:51] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:53,240 - [23:49:53] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:53,243 - [23:49:53] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:49:53,243 - 192.168.1.36 - - [15/Dec/2025 23:49:53] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:49:54,138 - [23:49:54] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:49:54,153 - [23:49:54] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:49:54,156 - [23:49:54] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:49:58,024 - [23:49:58] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:49:58,029 - [23:49:58] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:49:58,029 - 192.168.1.36 - - [15/Dec/2025 23:49:58] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:49:59,907 - [23:49:59] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:49:59,915 - [23:49:59] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:50:01,915 - [23:50:01] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:50:01,921 - [23:50:01] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:50:02,905 - [23:50:02] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:50:02,908 - [23:50:02] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:50:02,909 - 192.168.1.36 - - [15/Dec/2025 23:50:02] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:50:04,956 - [23:50:04] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:50:04,972 - [23:50:04] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:50:04,975 - [23:50:04] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:50:07,654 - [23:50:07] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:50:07,657 - [23:50:07] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:50:07,657 - 192.168.1.36 - - [15/Dec/2025 23:50:07] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:50:09,918 - [23:50:09] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:50:09,923 - [23:50:09] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:50:11,926 - [23:50:11] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:50:11,932 - [23:50:11] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:50:12,464 - [23:50:12] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:50:12,467 - [23:50:12] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:50:12,468 - 192.168.1.36 - - [15/Dec/2025 23:50:12] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:50:15,787 - [23:50:15] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:50:15,803 - [23:50:15] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:50:15,805 - [23:50:15] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:50:17,242 - [23:50:17] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:50:17,245 - [23:50:17] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.44°C)
+2025-12-15 23:50:17,245 - 192.168.1.36 - - [15/Dec/2025 23:50:17] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:50:17,577 - 192.168.1.43 - - [15/Dec/2025 23:50:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:50:17,892 - 192.168.1.43 - - [15/Dec/2025 23:50:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:50:18,209 - 192.168.1.43 - - [15/Dec/2025 23:50:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:50:18,516 - 192.168.1.43 - - [15/Dec/2025 23:50:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:50:18,833 - 192.168.1.43 - - [15/Dec/2025 23:50:18] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:50:19,162 - 192.168.1.43 - - [15/Dec/2025 23:50:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:50:19,492 - 192.168.1.43 - - [15/Dec/2025 23:50:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:50:19,808 - 192.168.1.43 - - [15/Dec/2025 23:50:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:50:19,922 - [23:50:19] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:50:19,927 - [23:50:19] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:50:20,117 - 192.168.1.43 - - [15/Dec/2025 23:50:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:50:20,448 - 192.168.1.43 - - [15/Dec/2025 23:50:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:50:20,769 - 192.168.1.43 - - [15/Dec/2025 23:50:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:50:21,101 - 192.168.1.43 - - [15/Dec/2025 23:50:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:50:21,416 - 192.168.1.43 - - [15/Dec/2025 23:50:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:50:21,746 - 192.168.1.43 - - [15/Dec/2025 23:50:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:50:21,939 - [23:50:21] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:50:21,945 - [23:50:21] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:50:21,980 - [23:50:21] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:50:21,983 - [23:50:21] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:50:21,983 - 192.168.1.36 - - [15/Dec/2025 23:50:21] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:50:22,067 - 192.168.1.43 - - [15/Dec/2025 23:50:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:50:22,389 - 192.168.1.43 - - [15/Dec/2025 23:50:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:50:22,708 - 192.168.1.43 - - [15/Dec/2025 23:50:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:50:23,029 - 192.168.1.43 - - [15/Dec/2025 23:50:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-15 23:50:26,625 - [23:50:26] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:50:26,644 - [23:50:26] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:50:26,647 - [23:50:26] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:50:26,756 - [23:50:26] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:50:26,759 - [23:50:26] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:50:26,759 - 192.168.1.36 - - [15/Dec/2025 23:50:26] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:50:29,935 - [23:50:29] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:50:29,941 - [23:50:29] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:50:31,460 - [23:50:31] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:50:31,463 - [23:50:31] \u2713 CP CP_001 restaurado tras alerta climatológica (T=8.28°C)
+2025-12-15 23:50:31,464 - 192.168.1.36 - - [15/Dec/2025 23:50:31] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-15 23:50:31,950 - [23:50:31] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:50:31,956 - [23:50:31] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:50:37,445 - [23:50:37] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:50:37,462 - [23:50:37] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:50:37,465 - [23:50:37] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:50:39,945 - [23:50:39] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:50:39,952 - [23:50:39] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:50:41,962 - [23:50:41] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:50:41,968 - [23:50:41] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-15 23:50:48,276 - [23:50:48] \U0001f4e8 MENSAJE de CP_001: [AVR] Campos=['CP_001', 'Timeout de HCK']
+2025-12-15 23:50:48,293 - [23:50:48] \u26a0\ufe0f Avería reportada por CP_001: CP_001 (Timeout de HCK)
+2025-12-15 23:50:48,297 - [23:50:48] [ESTADO] CP_001 -> AVERÍA. Motivo: CP_001 (Timeout de HCK)
+2025-12-15 23:50:49,966 - [23:50:49] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-15 23:50:49,972 - [23:50:49] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO

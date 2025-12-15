@@ -212,7 +212,7 @@ def enviar_orden_a_engine(engine_ip: str, engine_port: int, orden: str, cp_id: s
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.settimeout(2)
             s.connect((engine_ip, engine_port))
-            trama_cmd = construir_trama('CMD', [orden])
+            trama_cmd = construir_trama('CMD', [orden], cifrar=False)  # Engine no usa cifrado
             s.sendall(trama_cmd)
 
             resp = s.recv(1024)
@@ -816,7 +816,7 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                         driver_id = param1
                         kw_deseados = param2
                         campos_auth = [driver_id, str(kw_deseados) if kw_deseados else '0']
-                        trama_auth = construir_trama('AUTH_REQ', campos_auth)
+                        trama_auth = construir_trama('AUTH_REQ', campos_auth, cifrar=False)  # Engine no usa cifrado
                         engine_socket.sendall(trama_auth)
                         print(f"[{cp_id}] 📤 AUTH_REQ enviado al Engine (Driver: {driver_id}, kW: {kw_deseados})")
                         # El Engine procesará el AUTH_REQ internamente y responderá con ACK
@@ -839,7 +839,7 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                         campos_cmd.append(str(param1))
                         if param2:
                             campos_cmd.append(str(param2))
-                    trama_cmd = construir_trama('CMD', campos_cmd)
+                    trama_cmd = construir_trama('CMD', campos_cmd, cifrar=False)  # Engine no usa cifrado
                     engine_socket.sendall(trama_cmd)
                     resp_cmd = engine_socket.recv(1024)
                     
@@ -879,8 +879,8 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                         pass
                     raise
 
-            # 3. Enviar HCK
-            trama_hck = construir_trama('HCK', [cp_id])
+            # 3. Enviar HCK (NO cifrado - comunicación local con Engine)
+            trama_hck = construir_trama('HCK', [cp_id], cifrar=False)
             engine_socket.sendall(trama_hck)
             
             # 4. Recibir y procesar todas las respuestas disponibles (puede llegar más de una trama)
