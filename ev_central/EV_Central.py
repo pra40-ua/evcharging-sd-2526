@@ -1443,9 +1443,13 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                             'mensaje': 'Solicitud recibida. Validando disponibilidad del CP...'
                         })
 
-                        # Paso 2: Validar contra BD
+                        # Paso 2: Validar contra BD (intentar reconectar si es necesario)
                         if not (db_connection and db_connection.is_connected()):
-                            print("[CENTRAL] BD no disponible; denegando solicitud.")
+                            print("[CENTRAL] BD no conectada, intentando reconectar...")
+                            db_connection = _asegurar_conexion_bd(db_connection)
+                        
+                        if not (db_connection and db_connection.is_connected()):
+                            print("[CENTRAL] BD no disponible tras intento de reconexión; denegando solicitud.")
                             notificar_driver(id_driver, 'DENEGADA', {
                                 'motivo': 'BD no disponible; no es posible validar CP'
                             })
