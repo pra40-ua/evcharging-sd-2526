@@ -488,7 +488,7 @@ def autenticar_en_registry(username: str, password: str) -> bool:
 #                    FUNCIONES DE REGISTRO CON CENTRAL
 # =================================================================
 
-def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str) -> socket.socket:
+def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, engine_ip: str = None, engine_port: int = None) -> socket.socket:
     """Conecta al EV_Central y realiza el registro. Retorna el socket conectado."""
     
     # Solicitar localización al usuario si no está configurada
@@ -653,6 +653,29 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str) -> sock
                     with ENCRYPTION_KEY_LOCK:
                         ENCRYPTION_KEY = clave_bytes
                     print(f"[CP_M] ✓ Clave de cifrado recibida y almacenada (longitud: {len(clave_bytes)} bytes)")
+                    
+                    # Enviar clave al Engine para cifrado de mensajes Kafka
+                    if engine_ip and engine_port:
+                        try:
+                            print(f"[CP_M] Enviando clave de cifrado al Engine en {engine_ip}:{engine_port}...")
+                            trama_set_key = construir_trama('SET_KEY', [clave_b64], cifrar=False)
+                            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as engine_socket:
+                                engine_socket.settimeout(2)
+                                engine_socket.connect((engine_ip, engine_port))
+                                engine_socket.sendall(trama_set_key)
+                                resp_key = engine_socket.recv(1024)
+                                if resp_key:
+                                    cod_resp, campos_resp = descomponer_trama(resp_key)
+                                    if cod_resp == 'ACK' and len(campos_resp) > 0 and campos_resp[0] == 'KEY_OK':
+                                        print(f"[CP_M] ✓ Clave de cifrado enviada al Engine correctamente")
+                                    else:
+                                        print(f"[CP_M] ⚠️ Engine respondió con error al recibir clave: {campos_resp[0] if campos_resp else 'UNKNOWN'}")
+                        except Exception as e:
+                            print(f"[CP_M] ⚠️ Error enviando clave al Engine: {e}")
+                            print(f"[CP_M]   El Engine no podrá cifrar mensajes de Kafka hasta recibir la clave")
+                            print(f"[CP_M]   Se intentará enviar la clave en el siguiente ciclo HCK")
+                    else:
+                        print(f"[CP_M] ⚠️ engine_ip/engine_port no disponibles. No se puede enviar clave al Engine.")
                 except Exception as e:
                     print(f"[CP_M] ⚠️ Error procesando clave de cifrado: {e}")
                     import traceback
@@ -1100,7 +1123,7 @@ def main():
     central_socket = None
     try:
         # 1. Registro en la Central
-        central_socket = conectar_y_registrar(args.central_ip, args.central_port, args.cp_id)
+        central_socket = conectar_y_registrar(args.central_ip, args.central_port, args.cp_id, args.engine_ip, args.engine_port)
 
         # 2. Hilo de escucha de comandos de la Central
         central_listener_thread = threading.Thread(

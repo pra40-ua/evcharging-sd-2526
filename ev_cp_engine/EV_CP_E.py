@@ -25,6 +25,8 @@ import urllib.request
 import urllib.error
 import webbrowser
 import requests
+import base64
+from cryptography.fernet import Fernet
 
 # Importaciones para la interfaz web
 from flask import Flask, render_template, jsonify, request, make_response, redirect
@@ -47,6 +49,7 @@ def initialize_producer(broker: str):
             value_serializer=lambda v: json.dumps(v).encode('utf-8')
         )
         print(f"[KAFKA PRODUCER] Productor de Telemetría inicializado en {broker}.")
+        print(f"[KAFKA PRODUCER] ⚠️ Esperando clave de cifrado del Monitor...")
     except Exception as e:
         print(f"[KAFKA PRODUCER] ERROR al inicializar el Productor de Telemetría: {e}")
         TELEMETRY_PRODUCER = None
@@ -95,7 +98,8 @@ def generar_y_enviar_telemetria(cp_id: str, estado_carga: str, kw_entregados: fl
         driver_id_sesion = None
         tiene_sesion = False
 
-    telemetria_msg = {
+    # Preparar mensaje en texto plano
+    telemetria_msg_plain = {
         'cp_id': cp_id,
         'timestamp': time.time(),
         'estado_carga': estado_final,
@@ -110,6 +114,40 @@ def generar_y_enviar_telemetria(cp_id: str, estado_carga: str, kw_entregados: fl
     }
 
     try:
+        # Cifrar el mensaje si hay clave disponible
+        with KAFKA_ENCRYPTION_KEY_LOCK:
+            encryption_key = KAFKA_ENCRYPTION_KEY
+        
+        if encryption_key:
+            try:
+                # Convertir mensaje a JSON y cifrarlo
+                mensaje_json = json.dumps(telemetria_msg_plain)
+                fernet = Fernet(encryption_key)
+                mensaje_cifrado = fernet.encrypt(mensaje_json.encode('utf-8'))
+                
+                # Estructura: cp_id fuera del cifrado, payload cifrado
+                telemetria_msg = {
+                    'cp_id': cp_id,  # Identificador fuera del cifrado
+                    'payload': base64.b64encode(mensaje_cifrado).decode('utf-8')  # Mensaje cifrado
+                }
+                
+                # Reset contador de errores si cifrado exitoso
+                KAFKA_ENCRYPTION_ERROR_COUNT = 0
+            except Exception as e:
+                # Error al cifrar - incrementar contador y mostrar error
+                KAFKA_ENCRYPTION_ERROR_COUNT += 1
+                print(f"[{cp_id}] ❌ ERROR cifrando mensaje para Kafka: {e}")
+                print(f"[{cp_id}] ⚠️ Errores consecutivos de cifrado: {KAFKA_ENCRYPTION_ERROR_COUNT}")
+                if KAFKA_ENCRYPTION_ERROR_COUNT >= 3:
+                    print(f"[{cp_id}] 🚨 INCIDENCIA: Clave de cifrado inválida o corrupta")
+                # Intentar enviar sin cifrar como fallback (no recomendado en producción)
+                telemetria_msg = telemetria_msg_plain
+        else:
+            # No hay clave - enviar sin cifrar (modo compatibilidad)
+            if KAFKA_ENCRYPTION_ERROR_COUNT == 0:
+                print(f"[{cp_id}] ⚠️ No hay clave de cifrado. Enviando mensaje sin cifrar.")
+            telemetria_msg = telemetria_msg_plain
+        
         # Envía el mensaje de forma asíncrona
         future = TELEMETRY_PRODUCER.send(TOPIC_TELEMETRY, value=telemetria_msg)
         # Opcional: Para verificar el envío (bloqueante, no recomendado en bucle rápido)
@@ -246,6 +284,11 @@ ENGINE_CP_ID = None
 # Estado de avería simulada (para responder KO en HCK)
 SIMULAR_AVERIA = False
 SIMULAR_AVERIA_LOCK = threading.Lock()
+
+# Clave de cifrado para mensajes de Kafka (recibida del Monitor)
+KAFKA_ENCRYPTION_KEY = None
+KAFKA_ENCRYPTION_KEY_LOCK = threading.Lock()
+KAFKA_ENCRYPTION_ERROR_COUNT = 0  # Contador de errores de cifrado
 
 # Flask app para interfaz web (configurar rutas absolutas para templates)
 import os as os_flask
@@ -478,6 +521,28 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                 respuesta = construir_trama('HCK_RESP', [status])
                 conn.sendall(respuesta)
                 # HCK es muy frecuente, no mostrar para no saturar la pantalla
+            elif cod_op == 'SET_KEY':
+                # Nuevo mensaje: Monitor envía la clave de cifrado para Kafka
+                # SET_KEY#<clave_b64>
+                global KAFKA_ENCRYPTION_KEY, KAFKA_ENCRYPTION_ERROR_COUNT
+                try:
+                    if len(campos) >= 1:
+                        clave_b64 = campos[0]
+                        clave_bytes = base64.b64decode(clave_b64)
+                        with KAFKA_ENCRYPTION_KEY_LOCK:
+                            KAFKA_ENCRYPTION_KEY = clave_bytes
+                            KAFKA_ENCRYPTION_ERROR_COUNT = 0  # Reset contador de errores
+                        print(f"[{cp_id}] ✓ Clave de cifrado Kafka recibida y almacenada")
+                        respuesta = construir_trama('ACK', ['KEY_OK'])
+                        conn.sendall(respuesta)
+                    else:
+                        print(f"[{cp_id}] ⚠️ SET_KEY recibido sin clave")
+                        respuesta = construir_trama('ACK', ['KEY_ERROR'])
+                        conn.sendall(respuesta)
+                except Exception as e:
+                    print(f"[{cp_id}] ⚠️ Error procesando SET_KEY: {e}")
+                    respuesta = construir_trama('ACK', ['KEY_ERROR'])
+                    conn.sendall(respuesta)
             elif cod_op == 'AUTH_REQ':
                 # Nuevo mensaje: Central autorizó un driver, pero NO inicia automáticamente
                 # AUTH_REQ#<driver_id>#<kw_objetivo>
@@ -1679,8 +1744,8 @@ def panel_local():
 
 @app.route('/api/status')
 def api_status():
-    """Devuelve el estado actual del engine."""
-    global TARGET_KWH, CURRENT_DRIVER_ID, ENGINE_CP_ID, ACTIVE_MONITOR_CONN, ESTADO_FLUJO
+    """Endpoint que devuelve el estado actual del Engine."""
+    global KAFKA_ENCRYPTION_KEY, KAFKA_ENCRYPTION_ERROR_COUNT, TARGET_KWH, CURRENT_DRIVER_ID, ENGINE_CP_ID, ACTIVE_MONITOR_CONN, ESTADO_FLUJO
     
     print(f"[WEB API] ⭐ /api/status llamado")
     
@@ -1745,6 +1810,13 @@ def api_status():
     estado['driver_actual'] = driver_actual
     estado['objetivo_kwh'] = objetivo_kwh
     estado['estado_flujo'] = estado_flujo_actual
+    
+    # Agregar información de cifrado Kafka
+    with KAFKA_ENCRYPTION_KEY_LOCK:
+        estado['kafka_encryption_key_available'] = KAFKA_ENCRYPTION_KEY is not None
+        estado['kafka_encryption_errors'] = KAFKA_ENCRYPTION_ERROR_COUNT
+        if KAFKA_ENCRYPTION_ERROR_COUNT > 0:
+            estado['kafka_encryption_warning'] = f'⚠️ {KAFKA_ENCRYPTION_ERROR_COUNT} error(es) de cifrado consecutivo(s)'
     
     # Debug: imprimir valores finales que se van a enviar
     print(f"[WEB API] ✅ Enviando respuesta JSON: estado_flujo={estado_flujo_actual}, driver={driver_actual}, objetivo={objetivo_kwh}")

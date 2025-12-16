@@ -134,6 +134,7 @@
         .status-pendiente-confirmacion-central { background: #007bff; color: white; animation: pulse 2s infinite; }
         .status-fuera_de_servicio { background: #6610f2; color: white; }
         .status-fuera-de-servicio { background: #6610f2; color: white; }
+        .status-error-descifrado { background: #dc3545; color: white; animation: pulse 2s infinite; }
         
         .btn-control {
             padding: 6px 12px;
@@ -742,14 +743,28 @@
             
             cps.forEach(cp => {
                 const estadoRaw = (cp.estado || 'DESCONOCIDO').toUpperCase();
-                // Regla UX: mostrar REPOSO como ACTIVADO (conectado y disponible)
-                const estado = (estadoRaw === 'REPOSO') ? 'ACTIVADO' : estadoRaw;
-                const estadoClass = 'status-' + estado.toLowerCase().replace('í', 'i').replace('-', '-');
+                // Verificar si hay error de descifrado
+                const errorDescifrado = cp.error_descifrado || false;
+                
+                // Si hay error de descifrado, mostrar estado especial
+                let estado, estadoClass;
+                if (errorDescifrado || estadoRaw === 'ERROR_DESCIFRADO') {
+                    estado = 'ERROR DE CIFRADO';
+                    estadoClass = 'status-error-descifrado';
+                } else {
+                    // Regla UX: mostrar REPOSO como ACTIVADO (conectado y disponible)
+                    estado = (estadoRaw === 'REPOSO') ? 'ACTIVADO' : estadoRaw;
+                    estadoClass = 'status-' + estado.toLowerCase().replace('í', 'i').replace('-', '-');
+                }
                 const tieneSesion = cp.tiene_sesion_activa || false;
                 
             html += '<tr>';
             html += `<td><strong>${cp.cp_id}</strong></td>`;
-            html += `<td><span class="status-badge ${estadoClass}">${estado}</span></td>`;
+            html += `<td><span class="status-badge ${estadoClass}">${estado}</span>`;
+            if (errorDescifrado) {
+                html += `<br><small style="color: #dc3545; font-size: 10px;">⚠️ Clave de cifrado incorrecta</small>`;
+            }
+            html += `</td>`;
             
             html += `<td>${(cp.energia_kwh || 0).toFixed(2)}</td>`;
             html += `<td>${(cp.potencia_kw || 0).toFixed(2)}</td>`;

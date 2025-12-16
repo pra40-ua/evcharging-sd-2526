@@ -963,14 +963,73 @@ def consumir_telemetria_kafka(broker_list: str):
             for _tp, batch in records.items():
                 for message in batch:
                     # Aquí 'message.value' es el diccionario de Python gracias al deserializador
-                    telemetria = message.value
-                    cp_id = telemetria.get('cp_id', 'UNKNOWN')
+                    mensaje_recibido = message.value
+                    cp_id = mensaje_recibido.get('cp_id', 'UNKNOWN')
 
                     # Validar que el CP esté REGISTRADO/CONECTADO por socket
                     with CONEXIONES_ACTIVAS_LOCK:
                         conectado = cp_id in CONEXIONES_ACTIVAS
                     if not conectado:
                         continue
+                    
+                    # --- DESCIFRAR MENSAJE SI ESTÁ CIFRADO ---
+                    telemetria = None
+                    error_descifrado = False
+                    
+                    # Verificar si el mensaje tiene formato cifrado (tiene 'payload')
+                    if 'payload' in mensaje_recibido:
+                        # Mensaje cifrado: descifrar usando la clave del CP
+                        try:
+                            payload_cifrado_b64 = mensaje_recibido['payload']
+                            payload_cifrado = base64.b64decode(payload_cifrado_b64)
+                            
+                            # Obtener clave de cifrado del CP
+                            clave_cifrado = obtener_clave_cifrado_cp(cp_id, None)
+                            if not clave_cifrado:
+                                raise Exception(f"No hay clave de cifrado para {cp_id}")
+                            
+                            # Descifrar usando Fernet
+                            fernet = Fernet(clave_cifrado)
+                            mensaje_descifrado = fernet.decrypt(payload_cifrado)
+                            telemetria = json.loads(mensaje_descifrado.decode('utf-8'))
+                            
+                            # Reset contador de errores si descifrado exitoso
+                            # (el contador se maneja en el except)
+                            
+                        except Exception as e:
+                            # Error al descifrar - clave incorrecta o mensaje corrupto
+                            error_descifrado = True
+                            print(f"\n[CENTRAL] ╔═══════════════════════════════════════════╗")
+                            print(f"[CENTRAL] ║  🚨 INCIDENCIA DE COMUNICACIÓN            ║")
+                            print(f"[CENTRAL] ╚═══════════════════════════════════════════╝")
+                            print(f"[CENTRAL]    CP: {cp_id}")
+                            print(f"[CENTRAL]    Error: No se pudo descifrar mensaje de Kafka")
+                            print(f"[CENTRAL]    Causa: {str(e)}")
+                            print(f"[CENTRAL]    Posible discrepancia en clave de cifrado")
+                            print(f"[CENTRAL] ═══════════════════════════════════════════\n")
+                            
+                            registrar_evento(f"🚨 INCIDENCIA: Error descifrando mensaje de {cp_id} - Clave incorrecta o corrupta", "error")
+                            
+                            # Registrar en auditoría
+                            try:
+                                db_conn = globals().get('_DB_CONN_FOR_CONSUMER')
+                                if db_conn and db_conn.is_connected():
+                                    registrar_auditoria(
+                                        accion="ERROR_DESCIFRADO_KAFKA",
+                                        cp_id=cp_id,
+                                        origen_ip="kafka",
+                                        descripcion=f"Error descifrando mensaje de Kafka: {str(e)}",
+                                        resultado="ERROR",
+                                        db_connection=db_conn
+                                    )
+                            except Exception:
+                                pass
+                            
+                            # Continuar con el siguiente mensaje
+                            continue
+                    else:
+                        # Mensaje sin cifrar (modo compatibilidad)
+                        telemetria = mensaje_recibido
 
                     # --- Almacenar telemetría en estructura global ---
                     # Asegurar timestamp presente para heartbeat/TUI

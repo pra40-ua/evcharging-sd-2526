@@ -23,6 +23,8 @@ from datetime import datetime
 from collections import defaultdict
 import argparse
 import mysql.connector
+import base64
+from cryptography.fernet import Fernet
 
 app = Flask(__name__)
 CORS(app)
@@ -74,6 +76,72 @@ WEATHER_ALERTS_LOCK = threading.Lock()
 # Productor Kafka para enviar comandos
 KAFKA_PRODUCER = None
 KAFKA_PRODUCER_LOCK = threading.Lock()
+
+# Cache de claves de cifrado por CP (para evitar consultas repetidas a BD)
+ENCRYPTION_KEYS_CACHE = {}  # cp_id -> bytes
+ENCRYPTION_KEYS_CACHE_LOCK = threading.Lock()
+
+# =================================================================
+#                    FUNCIONES DE CIFRADO
+# =================================================================
+
+def obtener_clave_cifrado_cp(cp_id: str) -> bytes:
+    """
+    Obtiene la clave de cifrado para un CP desde la base de datos.
+    Usa cache para evitar consultas repetidas.
+    
+    Returns:
+        Clave de cifrado Fernet (bytes) o None si no está disponible
+    """
+    # Verificar cache primero
+    with ENCRYPTION_KEYS_CACHE_LOCK:
+        if cp_id in ENCRYPTION_KEYS_CACHE:
+            return ENCRYPTION_KEYS_CACHE[cp_id]
+    
+    # Si no está en cache, buscar en BD
+    if not CONFIG.get('db_config'):
+        return None
+    
+    try:
+        # Parsear configuración de BD
+        parts = CONFIG['db_config'].split(':')
+        if len(parts) != 5:
+            return None
+        
+        host, port, user, password, database = parts
+        
+        # Conectar a BD
+        connection = mysql.connector.connect(
+            host=host,
+            port=int(port),
+            user=user,
+            password=password,
+            database=database
+        )
+        
+        if connection.is_connected():
+            cursor = connection.cursor(dictionary=True)
+            cursor.execute("""
+                SELECT encryption_key FROM cp_encryption_keys 
+                WHERE cp_id = %s AND activo = TRUE
+            """, (cp_id,))
+            resultado = cursor.fetchone()
+            cursor.close()
+            connection.close()
+            
+            if resultado:
+                # Cargar clave desde BD
+                key_b64 = resultado['encryption_key']
+                key_bytes = base64.b64decode(key_b64)
+                # Almacenar en cache
+                with ENCRYPTION_KEYS_CACHE_LOCK:
+                    ENCRYPTION_KEYS_CACHE[cp_id] = key_bytes
+                return key_bytes
+            
+    except Exception as e:
+        print(f"[DASHBOARD] ⚠️ Error obteniendo clave de cifrado para {cp_id}: {e}")
+    
+    return None
 
 # =================================================================
 #                    CONSUMIDOR KAFKA (TELEMETRÍA)
@@ -221,8 +289,68 @@ def consumir_telemetria(broker: str):
                     for topic_partition, messages in records.items():
                         for message in messages:
                             mensaje_count += 1
-                            telemetria = message.value
-                            cp_id = telemetria.get('cp_id', 'UNKNOWN')
+                            mensaje_recibido = message.value
+                            cp_id = mensaje_recibido.get('cp_id', 'UNKNOWN')
+                            
+                            # --- DESCIFRAR MENSAJE SI ESTÁ CIFRADO ---
+                            telemetria = None
+                            error_descifrado = False
+                            
+                            # Verificar si el mensaje tiene formato cifrado (tiene 'payload')
+                            if 'payload' in mensaje_recibido:
+                                # Mensaje cifrado: descifrar usando la clave del CP
+                                try:
+                                    payload_cifrado_b64 = mensaje_recibido['payload']
+                                    payload_cifrado = base64.b64decode(payload_cifrado_b64)
+                                    
+                                    # Obtener clave de cifrado del CP
+                                    clave_cifrado = obtener_clave_cifrado_cp(cp_id)
+                                    if not clave_cifrado:
+                                        raise Exception(f"No hay clave de cifrado para {cp_id} en BD")
+                                    
+                                    # Descifrar usando Fernet
+                                    fernet = Fernet(clave_cifrado)
+                                    mensaje_descifrado = fernet.decrypt(payload_cifrado)
+                                    telemetria = json.loads(mensaje_descifrado.decode('utf-8'))
+                                    
+                                except Exception as e:
+                                    # Error al descifrar - clave incorrecta o mensaje corrupto
+                                    error_descifrado = True
+                                    print(f"\n[DASHBOARD] ╔══════════════════════════════════════════")
+                                    print(f"[DASHBOARD] ║  🚨 INCIDENCIA DE COMUNICACIÓN")
+                                    print(f"[DASHBOARD] ╚══════════════════════════════════════════")
+                                    print(f"[DASHBOARD]    CP: {cp_id}")
+                                    print(f"[DASHBOARD]    Error: No se pudo descifrar mensaje de Kafka")
+                                    print(f"[DASHBOARD]    Causa: {str(e)}")
+                                    print(f"[DASHBOARD]    Posible discrepancia en clave de cifrado")
+                                    print(f"[DASHBOARD] ═══════════════════════════════════════════\n")
+                                    
+                                    registrar_evento(f"🚨 INCIDENCIA: Error descifrando mensaje de {cp_id} - Clave incorrecta o corrupta", 'error')
+                                    
+                                    # Marcar CP con error de descifrado en el estado
+                                    with CPS_STATE_LOCK:
+                                        if cp_id not in CPS_STATE:
+                                            CPS_STATE[cp_id] = {
+                                                'cp_id': cp_id,
+                                                'estado': 'ERROR_DESCIFRADO',
+                                                'ultima_actualizacion': time.time(),
+                                                'error_descifrado': True
+                                            }
+                                        else:
+                                            CPS_STATE[cp_id]['error_descifrado'] = True
+                                            CPS_STATE[cp_id]['ultima_actualizacion'] = time.time()
+                                    
+                                    # Emitir evento de error vía WebSocket
+                                    emitir_actualizacion_cp(cp_id, {
+                                        'error': 'Error descifrando mensaje',
+                                        'mensaje': f'Clave de cifrado incorrecta o corrupta para {cp_id}'
+                                    }, 'error_descifrado')
+                                    
+                                    # Continuar con el siguiente mensaje
+                                    continue
+                            else:
+                                # Mensaje sin cifrar (modo compatibilidad)
+                                telemetria = mensaje_recibido
                             
                             # Log cada mensaje recibido con datos detallados
                             kw = telemetria.get('kw_entregados', 0) or telemetria.get('energia_total', 0)
@@ -230,6 +358,13 @@ def consumir_telemetria(broker: str):
                             tiempo = telemetria.get('tiempo_carga_s', 0)
                             estado = telemetria.get('estado_carga', telemetria.get('estado', 'N/D'))
                             averia_flag = telemetria.get('averia_activa', False)
+                            
+                            # Si había error de descifrado previo y ahora se descifró correctamente, limpiar el error
+                            with CPS_STATE_LOCK:
+                                if cp_id in CPS_STATE and CPS_STATE[cp_id].get('error_descifrado'):
+                                    CPS_STATE[cp_id]['error_descifrado'] = False
+                                    print(f"[DASHBOARD] ✓ Recuperación: Mensaje de {cp_id} descifrado correctamente")
+                                    registrar_evento(f"✓ Recuperación: Comunicación con {cp_id} restaurada", 'ok')
                             
                             # Log especial para averías
                             if 'AVERI' in str(estado).upper() or averia_flag:
@@ -262,7 +397,8 @@ def consumir_telemetria(broker: str):
                                         'ubicacion': telemetria.get('ubicacion', 'Sin ubicación'),
                                         'precio_kwh': telemetria.get('precio_kwh', 0.0),
                                         'tiene_sesion_activa': telemetria.get('tiene_sesion_activa', False),
-                                        'driver_id_sesion': telemetria.get('driver_id_sesion', None)
+                                        'driver_id_sesion': telemetria.get('driver_id_sesion', None),
+                                        'error_descifrado': False  # Inicializar sin error
                                     }
                                     # Registrar evento solo si es un CP nuevo
                                     estado_inicial = CPS_STATE[cp_id]['estado']
