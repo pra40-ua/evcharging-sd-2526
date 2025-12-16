@@ -707,12 +707,54 @@
                     // Actualizar tabla de CPs
                     actualizarTablaCPs(data.cps);
                     
+                    // Verificar y mostrar errores del sistema
+                    if (data.error_central) {
+                        mostrarNotificacionTiempoReal({
+                            tipo: 'error',
+                            icono: '❌',
+                            titulo: 'ERROR DE CONEXIÓN',
+                            mensaje: data.error_central.mensaje || 'Imposible conectar con Central',
+                            detalles: 'Verifica que la Central esté ejecutándose'
+                        });
+                    }
+                    
+                    // Verificar errores por CP
+                    data.cps.forEach(cp => {
+                        if (cp.error_sistema) {
+                            mostrarNotificacionTiempoReal({
+                                tipo: 'error',
+                                icono: '⚠️',
+                                titulo: `ERROR: ${cp.cp_id}`,
+                                mensaje: cp.error_sistema.mensaje || 'Error de sistema',
+                                detalles: `Tipo: ${cp.error_sistema.tipo || 'desconocido'}`
+                            });
+                        }
+                        if (cp.error_openweather) {
+                            mostrarNotificacionTiempoReal({
+                                tipo: 'error',
+                                icono: '🌡️',
+                                titulo: `ERROR CLIMA: ${cp.cp_id}`,
+                                mensaje: cp.error_openweather.mensaje || 'Imposible acceder al clima. Conexión con Openweather no disponible',
+                                detalles: 'Verifica la conexión con OpenWeather API'
+                            });
+                        }
+                    });
+                    
                     // Actualizar timestamp
                     const now = new Date();
                     document.getElementById('last-update').textContent = 
                         'Última actualización: ' + now.toLocaleTimeString('es-ES');
                 })
-                .catch(error => console.error('Error actualizando dashboard:', error));
+                .catch(error => {
+                    console.error('Error actualizando dashboard:', error);
+                    mostrarNotificacionTiempoReal({
+                        tipo: 'error',
+                        icono: '❌',
+                        titulo: 'ERROR DE CONEXIÓN',
+                        mensaje: 'Error actualizando dashboard: ' + error,
+                        detalles: 'Verifica la conexión con el servidor'
+                    });
+                });
             
             // Actualizar eventos
             fetch('/api/events')
@@ -745,11 +787,16 @@
                 const estadoRaw = (cp.estado || 'DESCONOCIDO').toUpperCase();
                 // Verificar si hay error de descifrado
                 const errorDescifrado = cp.error_descifrado || false;
+                const errorSistema = cp.error_sistema;
                 
                 // Si hay error de descifrado, mostrar estado especial
                 let estado, estadoClass;
                 if (errorDescifrado || estadoRaw === 'ERROR_DESCIFRADO') {
                     estado = 'ERROR DE CIFRADO';
+                    estadoClass = 'status-error-descifrado';
+                } else if (errorSistema) {
+                    // Mostrar error específico del sistema
+                    estado = errorSistema.tipo === 'conexion_cp' ? 'ERROR CONEXIÓN' : 'ERROR SISTEMA';
                     estadoClass = 'status-error-descifrado';
                 } else {
                     // Regla UX: mostrar REPOSO como ACTIVADO (conectado y disponible)
@@ -764,6 +811,9 @@
             if (errorDescifrado) {
                 html += `<br><small style="color: #dc3545; font-size: 10px;">⚠️ Clave de cifrado incorrecta</small>`;
             }
+            if (errorSistema) {
+                html += `<br><small style="color: #dc3545; font-size: 10px;">❌ ${errorSistema.mensaje || 'Error de sistema'}</small>`;
+            }
             html += `</td>`;
             
             html += `<td>${(cp.energia_kwh || 0).toFixed(2)}</td>`;
@@ -774,7 +824,10 @@
             // Columna de clima (después de energía)
             const alertaClima = cp.alerta_clima || false;
             const temperatura = cp.temperatura;
-            if (temperatura !== undefined && temperatura !== null) {
+            const errorOpenweather = cp.error_openweather;
+            if (errorOpenweather) {
+                html += `<td><span style="color: #dc3545; font-weight: bold;">❌ Error</span><br><small style="color: #dc3545; font-size: 10px;">${errorOpenweather.mensaje || 'Conexión con Openweather no disponible'}</small></td>`;
+            } else if (temperatura !== undefined && temperatura !== null) {
                 const tempStr = temperatura.toFixed(1);
                 if (alertaClima) {
                     html += `<td><span style="color: #dc3545; font-weight: bold;">⚠️ ${tempStr}°C</span><br><small style="color: #dc3545;">ALERTA ACTIVA</small></td>`;

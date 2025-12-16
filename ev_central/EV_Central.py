@@ -1725,8 +1725,11 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                             registrar_evento(f"Driver {id_driver} en cola para {cp_id} (posición {posicion})", "info")
                             continue
                         elif estado_inferior in estados_no_disponibles:
+                            mensaje_error = f'CP {cp_id} no disponible. CP fuera de servicio'
+                            print(f"[CENTRAL] ❌ {mensaje_error}")
+                            registrar_evento(f"❌ {mensaje_error}", "error")
                             notificar_driver(id_driver, 'DENEGADA', {
-                                'motivo': f'CP {cp_id} no disponible: {estado_cp}'
+                                'motivo': mensaje_error
                             })
                             continue
                         else:
@@ -1748,9 +1751,11 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                             cp_socket = CONEXIONES_ACTIVAS.get(cp_id)
 
                         if not cp_socket:
-                            print(f"[CENTRAL] CP {cp_id} no está conectado por socket")
+                            mensaje_error = f'Imposible conectar con CP {cp_id}. Mensajes no comprensibles'
+                            print(f"[CENTRAL] ❌ {mensaje_error}")
+                            registrar_evento(f"❌ {mensaje_error}", "error")
                             notificar_driver(id_driver, 'DENEGADA', {
-                                'motivo': f'CP {cp_id} desconectado'
+                                'motivo': mensaje_error
                             })
                             continue
 
@@ -1905,7 +1910,9 @@ def descomponer_trama(trama_bytes: bytes, cp_id: str = None) -> tuple:
         # Obtener clave de cifrado
         clave = obtener_clave_cifrado_cp(cp_id, None)
         if not clave:
-            print(f"[CENTRAL] ⚠️ ERROR: No se pudo descifrar mensaje de {cp_id}. Clave posiblemente revocada.")
+            mensaje_error = f"Imposible conectar con CP {cp_id}. Mensajes no comprensibles"
+            print(f"[CENTRAL] ❌ {mensaje_error}")
+            registrar_evento(f"❌ {mensaje_error}", "error")
             return None, None
         
         try:
@@ -1914,7 +1921,9 @@ def descomponer_trama(trama_bytes: bytes, cp_id: str = None) -> tuple:
             data_cifrado = data_bytes[3:]  # Quitar prefijo 'ENC'
             data_bytes = fernet.decrypt(data_cifrado)
         except Exception as e:
-            print(f"[CENTRAL] ⚠️ ERROR: No se pudo descifrar mensaje de {cp_id}. Clave posiblemente revocada.")
+            mensaje_error = f"Imposible conectar con CP {cp_id}. Mensajes no comprensibles"
+            print(f"[CENTRAL] ❌ {mensaje_error}")
+            registrar_evento(f"❌ {mensaje_error}", "error")
             return None, None
         
     # 4. Decodificar y parsear DATA
@@ -1927,7 +1936,10 @@ def descomponer_trama(trama_bytes: bytes, cp_id: str = None) -> tuple:
         
         return cod_op, campos
     except UnicodeDecodeError:
-        print("[CENTRAL] Error: No se pudo decodificar la DATA.")
+        mensaje_error = f"Imposible conectar con CP {cp_id if cp_id else 'desconocido'}. Mensajes no comprensibles"
+        print(f"[CENTRAL] ❌ {mensaje_error}")
+        if cp_id:
+            registrar_evento(f"❌ {mensaje_error}", "error")
         return None, None
 
 # =================================================================
@@ -2502,6 +2514,13 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
 
         # El primer mensaje REG no está cifrado (aún no hay clave)
         cod_op, campos = descomponer_trama(trama_bytes, cp_id=None)
+
+        if cod_op is None or campos is None:
+            mensaje_error = f"Imposible conectar con CP. Mensajes no comprensibles"
+            print(f"[CENTRAL] ❌ {mensaje_error}")
+            registrar_evento(f"❌ {mensaje_error}", "error")
+            conn.close()
+            return
 
         if cod_op == 'REG' and len(campos) >= 3:
             cp_id = campos[0]

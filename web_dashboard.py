@@ -85,6 +85,12 @@ ENCRYPTION_KEYS_CACHE_LOCK = threading.Lock()
 CP_RECOVERY_STATE = {}  # cp_id -> {'last_error_time': float, 'recovery_reported': bool}
 CP_RECOVERY_STATE_LOCK = threading.Lock()
 
+# Errores específicos por CP y sistema
+ERRORES_SISTEMA = {}  # cp_id -> {'tipo': str, 'mensaje': str, 'timestamp': float}
+ERRORES_SISTEMA_LOCK = threading.Lock()
+ERRORES_OPENWEATHER = {}  # cp_id -> {'mensaje': str, 'timestamp': float}
+ERRORES_OPENWEATHER_LOCK = threading.Lock()
+
 # =================================================================
 #                    FUNCIONES DE CIFRADO
 # =================================================================
@@ -572,9 +578,28 @@ def consumir_telemetria(broker: str):
                                         'tiene_sesion': tiene_sesion
                                     }, 'estado_cambiado')
                                     
+                                    # Detectar errores específicos en el estado
+                                    if 'NO DISPONIBLE' in estado_carga.upper() or 'FUERA DE SERVICIO' in estado_carga.upper():
+                                        mensaje_error = f"CP {cp_id} no disponible. CP fuera de servicio"
+                                        with ERRORES_SISTEMA_LOCK:
+                                            ERRORES_SISTEMA[cp_id] = {
+                                                'tipo': 'cp_no_disponible',
+                                                'mensaje': mensaje_error,
+                                                'timestamp': time.time()
+                                            }
+                                        registrar_evento(f"❌ {mensaje_error}", 'error')
+                                    
                                     if 'FUERA_DE_SERVICIO' in estado_carga.upper() or 'FUERA DE SERVICIO' in estado_carga.upper():
                                         print(f"[DASHBOARD] ⚠️⚠️⚠️ CAMBIO A FUERA DE SERVICIO: {cp_id} → {estado_carga} ⚠️⚠️⚠️")
                                         print(f"[DASHBOARD]    Alerta climatológica activa - CP no disponible")
+                                        mensaje_error = f"CP {cp_id} no disponible. CP fuera de servicio"
+                                        with ERRORES_SISTEMA_LOCK:
+                                            ERRORES_SISTEMA[cp_id] = {
+                                                'tipo': 'cp_no_disponible',
+                                                'mensaje': mensaje_error,
+                                                'timestamp': time.time()
+                                            }
+                                        registrar_evento(f"❌ {mensaje_error}", 'error')
                                     elif 'AVERI' in estado_carga.upper():
                                         print(f"[DASHBOARD] ⚠️⚠️⚠️ CAMBIO A AVERÍA: {cp_id} → {estado_carga} ⚠️⚠️⚠️")
                                     elif 'PENDIENTE_CONFIRMACION_CENTRAL' in estado_carga.upper():
@@ -769,8 +794,16 @@ def api_status():
             with WEATHER_ALERTS_LOCK:
                 WEATHER_ALERTS.update(alertas_central)
     except Exception as e:
-        # Si no se puede conectar a Central, usar alertas locales
-        pass
+        # Si no se puede conectar a Central, registrar error
+        mensaje_error = "Imposible conectar con Central"
+        with ERRORES_SISTEMA_LOCK:
+            ERRORES_SISTEMA['central'] = {
+                'tipo': 'conexion_central',
+                'mensaje': mensaje_error,
+                'timestamp': time.time()
+            }
+        print(f"[DASHBOARD] ❌ {mensaje_error}")
+        registrar_evento(f"❌ {mensaje_error}", 'error')
     
     # Enriquecer con telemetría y clima (extraer campos para el frontend)
     with TELEMETRIA_LOCK:
@@ -805,13 +838,34 @@ def api_status():
                 cp['alerta_clima'] = alerta.get('activa', False)
                 cp['temperatura'] = alerta.get('temperatura')
                 cp['timestamp_alerta'] = alerta.get('timestamp')
+            
+            # Agregar errores específicos del CP
+            with ERRORES_SISTEMA_LOCK:
+                if cp_id in ERRORES_SISTEMA:
+                    cp['error_sistema'] = ERRORES_SISTEMA[cp_id]
+                else:
+                    cp['error_sistema'] = None
+            
+            # Agregar errores de OpenWeather
+            with ERRORES_OPENWEATHER_LOCK:
+                if cp_id in ERRORES_OPENWEATHER:
+                    cp['error_openweather'] = ERRORES_OPENWEATHER[cp_id]
+                else:
+                    cp['error_openweather'] = None
+    
+    # Agregar errores globales del sistema
+    with ERRORES_SISTEMA_LOCK:
+        errores_globales = {k: v for k, v in ERRORES_SISTEMA.items() if k != 'central'}
+        error_central = ERRORES_SISTEMA.get('central')
     
     return jsonify({
         'status': 'ok',
         'timestamp': datetime.now().isoformat(),
         'stats': stats_copy,
         'cps': cps_list,
-        'alertas_clima': dict(WEATHER_ALERTS)
+        'alertas_clima': dict(WEATHER_ALERTS),
+        'errores_sistema': errores_globales,
+        'error_central': error_central
     })
 
 

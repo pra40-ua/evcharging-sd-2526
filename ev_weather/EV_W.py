@@ -91,13 +91,16 @@ def obtener_temperatura(ciudad_pais: str) -> Optional[float]:
             return None
             
     except requests.exceptions.Timeout:
-        print(f"[EV_W] ⚠️ Timeout consultando OpenWeather para {ciudad_pais}")
+        mensaje_error = f"Imposible acceder al clima. Conexión con Openweather no disponible"
+        print(f"[EV_W] ❌ {mensaje_error}")
         return None
     except requests.exceptions.RequestException as e:
-        print(f"[EV_W] ❌ Error de conexión consultando OpenWeather: {e}")
+        mensaje_error = f"Imposible acceder al clima. Conexión con Openweather no disponible"
+        print(f"[EV_W] ❌ {mensaje_error}")
         return None
     except Exception as e:
-        print(f"[EV_W] ❌ Error inesperado consultando clima: {e}")
+        mensaje_error = f"Imposible acceder al clima. Conexión con Openweather no disponible"
+        print(f"[EV_W] ❌ {mensaje_error}")
         return None
 
 def notificar_alerta_central(cp_id: str, temperatura: float, activar: bool) -> bool:

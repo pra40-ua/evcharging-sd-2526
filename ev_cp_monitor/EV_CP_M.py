@@ -148,7 +148,8 @@ def descomponer_trama_cifrada(trama_bytes: bytes) -> tuple:
         print(f"[CP_M] DEBUG descomponer: DATA='{DATA[:100]}{'...' if len(DATA) > 100 else ''}', num_partes={len(partes)}")
         return partes[0], partes[1:]
     except UnicodeDecodeError as e:
-        print(f"[CP_M] DEBUG descomponer: Error decode UTF-8: {e}")
+        mensaje_error = "Mensajes con central no comprensibles"
+        print(f"[CP_M] ❌ {mensaje_error}")
         return None, None
 
 # =================================================================
@@ -211,7 +212,8 @@ def notificar_averia_central(central_socket: socket.socket, cp_id: str, motivo: 
     try:
         # Verificar si el socket está cerrado
         if central_socket is None:
-            print(f"[{cp_id}] ⚠️ Socket de Central no disponible. No se puede notificar avería.")
+            mensaje_error = f"Imposible conectar con Central"
+            print(f"[{cp_id}] ❌ {mensaje_error}")
             return
         
         # Intentar enviar el estado de AVERÍA (se cifrará automáticamente si hay clave)
@@ -325,7 +327,8 @@ def verificar_registry_disponible(base_url: str) -> bool:
             traceback.print_exc()
             continue
     
-    print(f"[CP_M] ❌ Registry no disponible en ninguna de las URLs probadas")
+    mensaje_error = "Registry no responde"
+    print(f"[CP_M] ❌ {mensaje_error}")
     print(f"[CP_M]   URLs probadas: {', '.join(urls_a_probar)}")
     print(f"[CP_M]   Verifica que el Registry esté ejecutándose")
     print(f"[CP_M]   Prueba manualmente: curl -k https://localhost:6000/api/health")
@@ -352,7 +355,8 @@ def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
     # Verificar que el Registry esté disponible antes de intentar registrar
     print(f"[CP_M] Verificando disponibilidad del Registry en {base_url}...")
     if not verificar_registry_disponible(base_url):
-        print(f"[CP_M] ❌ Registry no disponible. No se puede registrar.")
+        mensaje_error = "Registry no responde"
+        print(f"[CP_M] ❌ {mensaje_error}")
         print(f"[CP_M]   Asegúrate de ejecutar INICIAR_REGISTRY_PC_B.bat primero")
         return False, None, None
     
@@ -776,8 +780,9 @@ def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, 
                         if central_socket:
                             central_socket.sendall(resp)
                             print(f"[{cp_id}] ✓ AUTH_RESP enviado a Central (cifrado). Esperando acción del operador del Engine...")
-                        else:
-                            print(f"[{cp_id}] ⚠️ Socket de Central no disponible. No se puede enviar AUTH_RESP.")
+                    else:
+                        mensaje_error = f"Imposible conectar con Central"
+                        print(f"[{cp_id}] ❌ {mensaje_error}")
                     except (OSError, BrokenPipeError, ConnectionResetError) as e:
                         print(f"[{cp_id}] ⚠️ Error enviando AUTH_RESP a Central: {e}. Conexión perdida.")
                 except Exception as e:
@@ -812,7 +817,8 @@ def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, 
                         central_socket.sendall(trama_state)
                         print(f"[{cp_id}] STATE inmediato enviado a Central (cifrado): {nuevo_estado}")
                     else:
-                        print(f"[{cp_id}] ⚠️ Socket de Central no disponible. No se puede enviar STATE.")
+                        mensaje_error = f"Imposible conectar con Central"
+                        print(f"[{cp_id}] ❌ {mensaje_error}")
                 except (OSError, BrokenPipeError, ConnectionResetError) as e:
                     print(f"[{cp_id}] ⚠️ Error enviando STATE a Central: {e}. Conexión perdida.")
                 except Exception as e:
@@ -928,7 +934,8 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                         try:
                             socket_central = obtener_socket_central()
                             if socket_central is None:
-                                print(f"[{cp_id}] ⚠️ Socket de Central no disponible. No se puede reenviar FIN.")
+                                mensaje_error = f"Imposible conectar con Central"
+                                print(f"[{cp_id}] ❌ {mensaje_error}")
                             else:
                                 # Descomponer y reconstruir cifrado para Central
                                 cod_fin_cmd, campos_fin_cmd = descomponer_trama(resp_cmd)
@@ -989,7 +996,8 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                     try:
                         socket_central = obtener_socket_central()
                         if socket_central is None:
-                            print(f"[{cp_id}] ⚠️ Socket de Central no disponible. No se puede reenviar FIN.")
+                            mensaje_error = f"Imposible conectar con Central"
+                            print(f"[{cp_id}] ❌ {mensaje_error}")
                             return
                         
                         print(f"[{cp_id}] 📩 Trama FIN recibida del Engine. Reenviando a Central...")
@@ -1015,7 +1023,8 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                     try:
                         socket_central = obtener_socket_central()
                         if socket_central is None:
-                            print(f"[{cp_id}] ⚠️ Socket de Central no disponible. No se puede reenviar READY_TO_START.")
+                            mensaje_error = f"Imposible conectar con Central"
+                            print(f"[{cp_id}] ❌ {mensaje_error}")
                             return
                         
                         engine_cp_id = args[0] if len(args) > 0 else cp_id
@@ -1033,7 +1042,8 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                     try:
                         # Verificar si el socket está disponible antes de enviar
                         if central_socket is None:
-                            print(f"[{cp_id}] ⚠️ Socket de Central no disponible. No se puede reenviar AVR_CLR.")
+                            mensaje_error = f"Imposible conectar con Central"
+                            print(f"[{cp_id}] ❌ {mensaje_error}")
                             return
                         
                         # Reenviar a Central cifrado: AVR_CLR#cp_id#motivo#codigo
@@ -1049,7 +1059,8 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                     try:
                         socket_central = obtener_socket_central()
                         if socket_central is None:
-                            print(f"[{cp_id}] ⚠️ Socket de Central no disponible. No se puede reenviar REQUEST_STOP.")
+                            mensaje_error = f"Imposible conectar con Central"
+                            print(f"[{cp_id}] ❌ {mensaje_error}")
                             return
                         
                         engine_cp_id = args[0] if len(args) > 0 else cp_id
@@ -1069,7 +1080,8 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                     try:
                         socket_central = obtener_socket_central()
                         if socket_central is None:
-                            print(f"[{cp_id}] ⚠️ Socket de Central no disponible. No se puede reenviar STATE.")
+                            mensaje_error = f"Imposible conectar con Central"
+                            print(f"[{cp_id}] ❌ {mensaje_error}")
                             return
                         
                         estado = args[1] if len(args) > 1 else 'ACTIVADO'
@@ -1100,7 +1112,8 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                 try:
                     socket_central = obtener_socket_central()
                     if socket_central is None:
-                        print(f"[{cp_id}] ⚠️ Socket de Central no disponible. No se puede reenviar FIN.")
+                        mensaje_error = f"Imposible conectar con Central"
+                        print(f"[{cp_id}] ❌ {mensaje_error}")
                     else:
                         # Descomponer para obtener campos, luego reconstruir cifrado
                         cod_fin, campos_fin = descomponer_trama(respuesta_bytes)
@@ -1141,7 +1154,8 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                         try:
                             socket_central = obtener_socket_central()
                             if socket_central is None:
-                                print(f"[{cp_id}] ⚠️ Socket de Central no disponible. No se puede reenviar FIN.")
+                                mensaje_error = f"Imposible conectar con Central"
+                                print(f"[{cp_id}] ❌ {mensaje_error}")
                             else:
                                 # Descomponer para obtener campos, luego reconstruir cifrado
                                 cod_fin_extra, campos_fin_extra = descomponer_trama(extra)
