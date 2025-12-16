@@ -180,6 +180,10 @@ REGISTRY_API_KEY = os.getenv('REGISTRY_API_KEY', 'ev-registry-api-key-2024-secur
 ENCRYPTION_KEY = None
 ENCRYPTION_KEY_LOCK = threading.Lock()
 
+# Estado del socket de Central (para evitar usar socket cerrado)
+CENTRAL_SOCKET_AVAILABLE = True
+CENTRAL_SOCKET_LOCK = threading.Lock()
+
 # URL de EV_Registry
 # Según la guía, el Registry debe usar HTTPS obligatoriamente
 REGISTRY_URL_ENV = os.getenv('REGISTRY_URL', '')
@@ -200,17 +204,45 @@ else:
 #                       LÓGICA DE COMUNICACIÓN CENTRAL
 # =================================================================
 
+def enviar_seguro_a_central(central_socket: socket.socket, trama: bytes, cp_id: str, descripcion: str = "mensaje") -> bool:
+    """
+    Envía una trama al socket de Central de forma segura, verificando que el socket esté disponible.
+    
+    Returns:
+        True si se envió correctamente, False si el socket está cerrado o hubo error.
+    """
+    global CENTRAL_SOCKET_AVAILABLE
+    
+    # Verificar si el socket está disponible antes de intentar enviar
+    with CENTRAL_SOCKET_LOCK:
+        if not CENTRAL_SOCKET_AVAILABLE:
+            # Socket ya está cerrado, no intentar enviar
+            return False
+    
+    try:
+        central_socket.sendall(trama)
+        return True
+    except (OSError, BrokenPipeError, ConnectionResetError) as e:
+        # Socket cerrado o conexión perdida
+        with CENTRAL_SOCKET_LOCK:
+            CENTRAL_SOCKET_AVAILABLE = False
+        return False
+    except Exception as e:
+        # Otros errores
+        errno = getattr(e, 'errno', None)
+        if errno == 9:  # Bad file descriptor
+            with CENTRAL_SOCKET_LOCK:
+                CENTRAL_SOCKET_AVAILABLE = False
+        return False
+
 def notificar_averia_central(central_socket: socket.socket, cp_id: str, motivo: str):
     """Envía un mensaje AVR (Avería/Estado ROJO) a la Central (cifrado si hay clave)."""
-    try:
-        # Enviar el estado de AVERÍA (se cifrará automáticamente si hay clave)
-        trama_averia = construir_trama('AVR', [cp_id, motivo], cifrar=True)
-        central_socket.sendall(trama_averia)
+    trama_averia = construir_trama('AVR', [cp_id, motivo], cifrar=True)
+    if enviar_seguro_a_central(central_socket, trama_averia, cp_id, "AVR"):
         print(f"[{cp_id}] -> ENVIADO AVR a Central. Motivo: {motivo}")
-
-    except Exception as e:
-        print(f"[{cp_id}] ERROR al notificar avería a la Central: {e}. Conexión perdida.")
-        # La conexión con Central está caída. El hilo de escucha ya debería manejar esto.
+    else:
+        # Solo mostrar el error la primera vez (evitar spam)
+        pass  # El error ya se maneja en enviar_seguro_a_central
 
 
 def enviar_orden_a_engine(engine_ip: str, engine_port: int, orden: str, cp_id: str) -> None:
@@ -695,6 +727,11 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, engine_
             print(f"[CP_M]   Mensaje: {mensaje}")
             print(f"{'='*70}\n")
             
+            # Restablecer el flag de disponibilidad del socket cuando se establece una conexión exitosa
+            global CENTRAL_SOCKET_AVAILABLE
+            with CENTRAL_SOCKET_LOCK:
+                CENTRAL_SOCKET_AVAILABLE = True
+            
             return client_socket 
         else:
             raise Exception(f"Fallo de autenticación. Respuesta inválida o AUTH#FAIL. Cod={cod_op}, Campos={campos}")
@@ -792,7 +829,13 @@ def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, 
     except Exception as e:
         print(f"[{cp_id}] Error en hilo de escucha de Central: {e}")
     finally:
-        central_socket.close()
+        global CENTRAL_SOCKET_AVAILABLE
+        with CENTRAL_SOCKET_LOCK:
+            CENTRAL_SOCKET_AVAILABLE = False
+        try:
+            central_socket.close()
+        except Exception:
+            pass
 
 
 def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: socket.socket, cp_id: str):
@@ -884,8 +927,8 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                             cod_fin_cmd, campos_fin_cmd = descomponer_trama(resp_cmd)
                             if cod_fin_cmd == 'FIN':
                                 trama_fin_cifrada = construir_trama('FIN', campos_fin_cmd, cifrar=True)
-                                central_socket.sendall(trama_fin_cifrada)
-                                print(f"[{cp_id}] 📤 Trama FIN reenviada a Central con éxito (cifrado).")
+                                if enviar_seguro_a_central(central_socket, trama_fin_cifrada, cp_id, "FIN"):
+                                    print(f"[{cp_id}] 📤 Trama FIN reenviada a Central con éxito (cifrado).")
                         except Exception as e:
                             print(f"[{cp_id}] ❌ ERROR al reenviar FIN a Central: {e}")
                             import traceback
@@ -934,15 +977,20 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                         print(f"[{cp_id}] 📩 Trama FIN recibida del Engine. Reenviando a Central...")
                         if trama_completa is not None:
                             # Reenviar la trama completa original (con STX, ETX y LRC)
-                            central_socket.sendall(trama_completa)
-                            print(f"[{cp_id}] 📤 Trama FIN reenviada a Central con éxito.")
+                            # Nota: La trama del Engine no está cifrada, pero debemos cifrarla para Central
+                            # Descomponer y reconstruir cifrada
+                            cod_fin, campos_fin = descomponer_trama(trama_completa)
+                            if cod_fin == 'FIN':
+                                trama_fin_cifrada = construir_trama('FIN', campos_fin, cifrar=True)
+                                if enviar_seguro_a_central(central_socket, trama_fin_cifrada, cp_id, "FIN"):
+                                    print(f"[{cp_id}] 📤 Trama FIN reenviada a Central con éxito (cifrado).")
                         else:
                             # Fallback: reconstruir si no tenemos la trama original (cifrado)
                             print(f"[{cp_id}] ⚠️ Advertencia: Reconstruyendo FIN (trama original no disponible)")
                             print(f"[{cp_id}]   Campos FIN: {args}")
                             trama_fin = construir_trama('FIN', args, cifrar=True)
-                            central_socket.sendall(trama_fin)
-                            print(f"[{cp_id}] ✅ FIN enviado exitosamente a Central (cifrado)")
+                            if enviar_seguro_a_central(central_socket, trama_fin, cp_id, "FIN"):
+                                print(f"[{cp_id}] ✅ FIN enviado exitosamente a Central (cifrado)")
                     except Exception as e:
                         print(f"[{cp_id}] ❌ ERROR al reenviar FIN a Central: {e}")
                         import traceback
@@ -954,22 +1002,17 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                         driver_id = args[1] if len(args) > 1 else 'UNKNOWN'
                         print(f"[{cp_id}] 📩 READY_TO_START recibido del Engine (Driver: {driver_id})")
                         trama = construir_trama('READY_TO_START', [engine_cp_id, driver_id], cifrar=True)
-                        central_socket.sendall(trama)
-                        print(f"[{cp_id}] 📤 READY_TO_START reenviado a Central (cifrado)")
+                        if enviar_seguro_a_central(central_socket, trama, cp_id, "READY_TO_START"):
+                            print(f"[{cp_id}] 📤 READY_TO_START reenviado a Central (cifrado)")
                     except Exception as e:
                         print(f"[{cp_id}] Error procesando READY_TO_START: {e}")
                     return
                 if cod == 'AVR_CLR':
                     try:
                         # Reenviar a Central cifrado: AVR_CLR#cp_id#motivo#codigo
-                        if trama_completa:
-                            # Si tenemos la trama original del Engine, reconstruirla cifrada
-                            trama_cifrada = construir_trama('AVR_CLR', args, cifrar=True)
-                            central_socket.sendall(trama_cifrada)
-                        else:
-                            trama_cifrada = construir_trama('AVR_CLR', args, cifrar=True)
-                            central_socket.sendall(trama_cifrada)
-                        print(f"[{cp_id}] 📤 AVR_CLR reenviado a Central (cifrado)")
+                        trama_cifrada = construir_trama('AVR_CLR', args, cifrar=True)
+                        if enviar_seguro_a_central(central_socket, trama_cifrada, cp_id, "AVR_CLR"):
+                            print(f"[{cp_id}] 📤 AVR_CLR reenviado a Central (cifrado)")
                     except Exception as e:
                         print(f"[{cp_id}] Error reenviando AVR_CLR a Central: {e}")
                     return
@@ -981,8 +1024,8 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                         segundos = args[3] if len(args) > 3 else '0'
                         print(f"[{cp_id}] 📩 REQUEST_STOP recibido del Engine (Driver: {driver_id}, {kw_actual} kWh)")
                         trama = construir_trama('REQUEST_STOP', [engine_cp_id, driver_id, kw_actual, segundos], cifrar=True)
-                        central_socket.sendall(trama)
-                        print(f"[{cp_id}] 📤 REQUEST_STOP reenviado a Central (cifrado)")
+                        if enviar_seguro_a_central(central_socket, trama, cp_id, "REQUEST_STOP"):
+                            print(f"[{cp_id}] 📤 REQUEST_STOP reenviado a Central (cifrado)")
                     except Exception as e:
                         print(f"[{cp_id}] Error procesando REQUEST_STOP: {e}")
                     return
@@ -992,7 +1035,8 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                         print(f"[{cp_id}] STATE desde Engine: {estado}.")
                         print(f"[{cp_id}] Avisando a Central del estado: {estado}.")
                         trama_state = construir_trama('STATE', [cp_id, estado], cifrar=True)
-                        central_socket.sendall(trama_state)
+                        if enviar_seguro_a_central(central_socket, trama_state, cp_id, "STATE"):
+                            pass  # Mensaje de éxito ya se muestra en enviar_seguro_a_central si es necesario
                     except Exception as e:
                         print(f"[{cp_id}] Error reenviando STATE a Central: {e}")
                     return
@@ -1016,8 +1060,8 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                     cod_fin, campos_fin = descomponer_trama(respuesta_bytes)
                     if cod_fin == 'FIN':
                         trama_fin_cifrada = construir_trama('FIN', campos_fin, cifrar=True)
-                        central_socket.sendall(trama_fin_cifrada)
-                        print(f"[{cp_id}] 📤 Trama FIN reenviada a Central con éxito (cifrado).")
+                        if enviar_seguro_a_central(central_socket, trama_fin_cifrada, cp_id, "FIN"):
+                            print(f"[{cp_id}] 📤 Trama FIN reenviada a Central con éxito (cifrado).")
                 except Exception as e:
                     print(f"[{cp_id}] ❌ ERROR al reenviar FIN a Central: {e}")
                     import traceback
@@ -1051,8 +1095,8 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                             cod_fin_extra, campos_fin_extra = descomponer_trama(extra)
                             if cod_fin_extra == 'FIN':
                                 trama_fin_cifrada = construir_trama('FIN', campos_fin_extra, cifrar=True)
-                                central_socket.sendall(trama_fin_cifrada)
-                                print(f"[{cp_id}] 📤 Trama FIN reenviada a Central con éxito (cifrado).")
+                                if enviar_seguro_a_central(central_socket, trama_fin_cifrada, cp_id, "FIN"):
+                                    print(f"[{cp_id}] 📤 Trama FIN reenviada a Central con éxito (cifrado).")
                         except Exception as e:
                             print(f"[{cp_id}] ❌ ERROR al reenviar FIN a Central: {e}")
                             import traceback
