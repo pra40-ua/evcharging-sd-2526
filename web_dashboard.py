@@ -293,14 +293,33 @@ def consumir_telemetria(broker: str):
                                     'ESPERANDO_CONFIRMACION_FIN'
                                 }
                                 
+                                # Estados críticos que tienen máxima prioridad (no pueden ser sobrescritos por estados menos importantes)
+                                estados_criticos = {
+                                    'FUERA_DE_SERVICIO', 'FUERA DE SERVICIO',
+                                    'AVERIADO', 'AVERÍA', 'AVERIA'
+                                }
+                                
                                 # Determinar qué estado usar
                                 estado_anterior_upper = estado_anterior.upper()
                                 estado_recibido_upper = estado_carga_recibido.upper()
                                 
+                                # Si el estado recibido es crítico, usarlo directamente (máxima prioridad)
+                                if estado_recibido_upper in estados_criticos:
+                                    estado_carga = estado_carga_recibido
+                                    print(f"[DASHBOARD] Estado crítico recibido para {cp_id}: {estado_carga_recibido}")
                                 # Si el estado recibido es interactivo, usarlo directamente (prioridad)
-                                if estado_recibido_upper in estados_interactivos:
+                                elif estado_recibido_upper in estados_interactivos:
                                     estado_carga = estado_carga_recibido
                                     print(f"[DASHBOARD] Estado interactivo recibido para {cp_id}: {estado_carga_recibido}")
+                                # Si el estado anterior es crítico, preservarlo (no puede ser sobrescrito por estados menos importantes)
+                                elif estado_anterior_upper in estados_criticos:
+                                    if estado_recibido_upper not in estados_criticos:
+                                        # Preservar estado crítico, no degradar
+                                        estado_carga = estado_anterior
+                                        print(f"[DASHBOARD] Preservando estado crítico {estado_anterior} para {cp_id} (telemetría reporta {estado_carga_recibido})")
+                                    else:
+                                        # El nuevo estado también es crítico, usarlo
+                                        estado_carga = estado_carga_recibido
                                 # Si el estado anterior es interactivo y el recibido es ACTIVADO/REPOSO, preservar el interactivo
                                 elif estado_anterior_upper in estados_interactivos:
                                     if estado_recibido_upper in ('ACTIVADO', 'REPOSO', 'IDLE', 'READY'):
@@ -311,7 +330,7 @@ def consumir_telemetria(broker: str):
                                         # El nuevo estado es más avanzado (ej: SUMINISTRANDO), usarlo
                                         estado_carga = estado_carga_recibido
                                 else:
-                                    # Estado anterior no es interactivo, usar el recibido
+                                    # Estado anterior no es interactivo ni crítico, usar el recibido
                                     estado_carga = estado_carga_recibido
                                 
                                 # Extraer datos clave de telemetría para debug
@@ -344,7 +363,10 @@ def consumir_telemetria(broker: str):
                                         'tiene_sesion': tiene_sesion
                                     }, 'estado_cambiado')
                                     
-                                    if 'AVERI' in estado_carga.upper():
+                                    if 'FUERA_DE_SERVICIO' in estado_carga.upper() or 'FUERA DE SERVICIO' in estado_carga.upper():
+                                        print(f"[DASHBOARD] ⚠️⚠️⚠️ CAMBIO A FUERA DE SERVICIO: {cp_id} → {estado_carga} ⚠️⚠️⚠️")
+                                        print(f"[DASHBOARD]    Alerta climatológica activa - CP no disponible")
+                                    elif 'AVERI' in estado_carga.upper():
                                         print(f"[DASHBOARD] ⚠️⚠️⚠️ CAMBIO A AVERÍA: {cp_id} → {estado_carga} ⚠️⚠️⚠️")
                                     elif 'PENDIENTE_CONFIRMACION_CENTRAL' in estado_carga.upper():
                                         print(f"\n[DASHBOARD] ╔══════════════════════════════════════════")

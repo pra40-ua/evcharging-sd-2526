@@ -506,14 +506,21 @@ def api_weather_alert():
             except Exception as e:
                 print(f"[CENTRAL] ⚠️ Error guardando alerta en BD: {e}")
         
-        # Si hay alerta activa y el CP está suministrando, enviar STOP
+        # Si hay alerta activa, cambiar estado a FUERA_DE_SERVICIO inmediatamente
         if alerta_activa:
             with CP_ESTADO_LOCK:
                 estado_cp = CP_ESTADO.get(cp_id, '')
             
-            if estado_cp == 'SUMINISTRANDO':
-                # El suministro finalizará con normalidad y luego el CP pasará a "fuera de servicio"
-                registrar_evento(f"⚠️ Alerta climatológica activa para {cp_id} (T={temperatura}°C). Suministro finalizará normalmente.", "warn")
+            # Cambiar estado a FUERA_DE_SERVICIO inmediatamente (incluso si está suministrando)
+            try:
+                cambiar_estado_cp(cp_id, 'FUERA_DE_SERVICIO', db_conn)
+                registrar_evento(f"⚠️ CP {cp_id} fuera de servicio por alerta climatológica (T={temperatura}°C)", "warn")
+            except Exception as e:
+                print(f"[CENTRAL] ⚠️ Error cambiando estado a FUERA_DE_SERVICIO: {e}")
+            
+            # Si está suministrando, enviar STOP para detener el suministro inmediatamente
+            if estado_cp == 'SUMINISTRANDO' or estado_cp == 'CARGANDO':
+                registrar_evento(f"⚠️ Alerta climatológica activa para {cp_id} (T={temperatura}°C). Deteniendo suministro activo.", "warn")
                 # Enviar STOP para que finalice el suministro actual
                 try:
                     with CONEXIONES_ACTIVAS_LOCK:
@@ -526,18 +533,68 @@ def api_weather_alert():
                         registrar_evento(f"📤 STOP enviado a {cp_id} por alerta climatológica", "warn")
                 except Exception as e:
                     print(f"[CENTRAL] ⚠️ Error enviando STOP a {cp_id}: {e}")
-            else:
-                # Cambiar estado a fuera de servicio
-                try:
-                    cambiar_estado_cp(cp_id, 'FUERA_DE_SERVICIO', db_conn)
-                    registrar_evento(f"⚠️ CP {cp_id} fuera de servicio por alerta climatológica (T={temperatura}°C)", "warn")
-                except Exception:
-                    pass
+            
+            # Publicar telemetría actualizada para que el dashboard refleje el cambio
+            try:
+                with TELEMETRIA_ACTUAL_LOCK:
+                    telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                telemetria_actualizada = {
+                    **telemetria_actual,
+                    'cp_id': cp_id,
+                    'estado': 'FUERA_DE_SERVICIO',
+                    'estado_carga': 'FUERA_DE_SERVICIO',
+                    'timestamp': time.time(),
+                    'alerta_clima_activa': True,
+                    'temperatura': temperatura
+                }
+                with TELEMETRIA_ACTUAL_LOCK:
+                    TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
+                if KAFKA_PRODUCER:
+                    KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                    KAFKA_PRODUCER.flush(timeout=1)
+                    print(f"[CENTRAL] Telemetría publicada para {cp_id}: FUERA_DE_SERVICIO (alerta climatológica)")
+            except Exception as e:
+                print(f"[CENTRAL] ⚠️ Error publicando telemetría de alerta: {e}")
         else:
             # Alerta desactivada, restaurar operación
             try:
                 cambiar_estado_cp(cp_id, 'ACTIVADO', db_conn)
                 registrar_evento(f"✓ CP {cp_id} restaurado tras alerta climatológica (T={temperatura}°C)", "ok")
+                
+                # Enviar señal STATE al Monitor para notificar que el CP vuelve a estar ACTIVADO
+                try:
+                    with CONEXIONES_ACTIVAS_LOCK:
+                        conn = CONEXIONES_ACTIVAS.get(cp_id)
+                    if conn:
+                        # Enviar STATE cifrado al Monitor para notificar el cambio a ACTIVADO
+                        trama_state = construir_trama('STATE', [cp_id, 'ACTIVADO'], cp_id=cp_id, cifrar=True)
+                        conn.sendall(trama_state)
+                        print(f"[CENTRAL] 📤 STATE ACTIVADO enviado a {cp_id} (alerta climatológica desactivada)")
+                        registrar_evento(f"📤 STATE ACTIVADO enviado a {cp_id} tras desactivar alerta climatológica", "ok")
+                except Exception as e:
+                    print(f"[CENTRAL] ⚠️ Error enviando STATE a {cp_id}: {e}")
+                
+                # Publicar telemetría actualizada para que el dashboard refleje el cambio
+                try:
+                    with TELEMETRIA_ACTUAL_LOCK:
+                        telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                    telemetria_actualizada = {
+                        **telemetria_actual,
+                        'cp_id': cp_id,
+                        'estado': 'ACTIVADO',
+                        'estado_carga': 'ACTIVADO',
+                        'timestamp': time.time(),
+                        'alerta_clima_activa': False,
+                        'temperatura': temperatura
+                    }
+                    with TELEMETRIA_ACTUAL_LOCK:
+                        TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
+                    if KAFKA_PRODUCER:
+                        KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                        KAFKA_PRODUCER.flush(timeout=1)
+                        print(f"[CENTRAL] Telemetría publicada para {cp_id}: ACTIVADO (alerta climatológica desactivada)")
+                except Exception as e:
+                    print(f"[CENTRAL] ⚠️ Error publicando telemetría de restauración: {e}")
             except Exception:
                 pass
         
@@ -1510,7 +1567,8 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.con
                         
                         # Estados que indican no disponible (denegar)
                         estados_no_disponibles = {
-                            'parado', 'averiado', 'avería', 'desconectado', 'desconectada'
+                            'parado', 'averiado', 'avería', 'desconectado', 'desconectada',
+                            'fuera_de_servicio', 'fuera de servicio', 'FUERA_DE_SERVICIO'
                         }
                         
                         if estado_inferior in estados_validos:
