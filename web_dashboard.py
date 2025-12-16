@@ -312,8 +312,19 @@ def consumir_telemetria(broker: str):
                                     estado_carga = estado_carga_recibido
                                     print(f"[DASHBOARD] Estado interactivo recibido para {cp_id}: {estado_carga_recibido}")
                                 # Si el estado anterior es crítico, preservarlo (no puede ser sobrescrito por estados menos importantes)
+                                # EXCEPCIÓN: Si el anterior es FUERA_DE_SERVICIO y el recibido es ACTIVADO, permitir el cambio
+                                # (significa que Central explícitamente restauró el CP tras quitar alerta climatológica)
                                 elif estado_anterior_upper in estados_criticos:
-                                    if estado_recibido_upper not in estados_criticos:
+                                    # Verificar si la alerta climatológica está desactivada en la telemetría
+                                    alerta_clima_activa = telemetria.get('alerta_clima_activa', True)  # Por defecto True si no se especifica
+                                    
+                                    if (estado_anterior_upper in ('FUERA_DE_SERVICIO', 'FUERA DE SERVICIO') and 
+                                        estado_recibido_upper == 'ACTIVADO' and 
+                                        not alerta_clima_activa):
+                                        # Permitir cambio explícito de FUERA_DE_SERVICIO a ACTIVADO (restauración tras alerta)
+                                        estado_carga = estado_carga_recibido
+                                        print(f"[DASHBOARD] ✅ Restaurando {cp_id} de FUERA_DE_SERVICIO a ACTIVADO (alerta climatológica desactivada)")
+                                    elif estado_recibido_upper not in estados_criticos:
                                         # Preservar estado crítico, no degradar
                                         estado_carga = estado_anterior
                                         print(f"[DASHBOARD] Preservando estado crítico {estado_anterior} para {cp_id} (telemetría reporta {estado_carga_recibido})")

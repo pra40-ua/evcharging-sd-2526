@@ -171,6 +171,11 @@ REGISTRY_CREDENTIALS = {
 }
 REGISTRY_CREDENTIALS_LOCK = threading.Lock()
 
+# API Key compartida para autenticación con EV_Registry
+# Debe coincidir con la API key configurada en EV_Registry
+# Se puede configurar mediante variable de entorno REGISTRY_API_KEY
+REGISTRY_API_KEY = os.getenv('REGISTRY_API_KEY', 'ev-registry-api-key-2024-secure')
+
 # Clave de cifrado recibida de Central
 ENCRYPTION_KEY = None
 ENCRYPTION_KEY_LOCK = threading.Lock()
@@ -366,7 +371,10 @@ def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
         # Intentar POST primero (método preferido)
         try:
             print(f"[CP_M] Enviando POST a {url}...")
-            response = requests.post(url, json=payload, timeout=10, verify=False)
+            headers = {
+                'X-API-Key': REGISTRY_API_KEY
+            }
+            response = requests.post(url, json=payload, headers=headers, timeout=10, verify=False)
             print(f"[CP_M] Respuesta recibida: HTTP {response.status_code}")
         except requests.exceptions.SSLError as ssl_err:
             # Si hay error SSL específico, mostrar mensaje más claro

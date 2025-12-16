@@ -14,6 +14,7 @@ import hashlib
 import secrets
 import threading
 from datetime import datetime
+from functools import wraps
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import ssl
@@ -31,6 +32,41 @@ DB_CONFIG = {}
 
 # Puerto del servidor
 REGISTRY_PORT = 6000
+
+# API Key compartida para autenticación de aplicaciones externas (Monitores)
+# Se puede configurar mediante variable de entorno REGISTRY_API_KEY
+# Por defecto, usa una clave predefinida (en producción debería ser más segura)
+SHARED_API_KEY = os.getenv('REGISTRY_API_KEY', 'ev-registry-api-key-2024-secure')
+
+# =================================================================
+#                    MIDDLEWARE DE AUTENTICACIÓN
+# =================================================================
+
+def require_api_key(f):
+    """
+    Decorador que valida el header X-API-Key en las peticiones.
+    Protege los endpoints de registro y baja de peticiones no autorizadas.
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        api_key = request.headers.get('X-API-Key')
+        
+        if not api_key:
+            return jsonify({
+                'status': 'error',
+                'message': 'X-API-Key header requerido'
+            }), 401
+        
+        if api_key != SHARED_API_KEY:
+            print(f"[EV_Registry] ❌ Intento de acceso no autorizado con API key inválida")
+            return jsonify({
+                'status': 'error',
+                'message': 'API key inválida'
+            }), 401
+        
+        return f(*args, **kwargs)
+    
+    return decorated_function
 
 # =================================================================
 #                    FUNCIONES DE BASE DE DATOS
@@ -154,6 +190,7 @@ def generar_credenciales() -> tuple:
 # =================================================================
 
 @app.route('/api/register', methods=['POST'])
+@require_api_key
 def registrar_cp():
     """
     Registra un nuevo CP en el sistema.
@@ -350,6 +387,7 @@ def registrar_cp():
 # =================================================================
 
 @app.route('/register/cp', methods=['POST', 'PUT'])
+@require_api_key
 def registrar_cp_guia():
     """
     Registra un nuevo CP en el sistema (endpoint según guía).
@@ -358,6 +396,7 @@ def registrar_cp_guia():
     return registrar_cp()
 
 @app.route('/register/cp/<cp_id>', methods=['DELETE'])
+@require_api_key
 def dar_baja_cp_guia(cp_id):
     """
     Da de baja un CP del sistema (endpoint según guía).
@@ -441,6 +480,7 @@ def consultar_cp(cp_id):
 # =================================================================
 
 @app.route('/api/unregister/<cp_id>', methods=['DELETE'])
+@require_api_key
 def dar_baja_cp(cp_id):
     """
     Da de baja un CP del sistema.
@@ -753,6 +793,7 @@ def main():
     print(f"  BD: {args.db_host}:{args.db_port}/{args.db_name}")
     print(f"  Puerto: {REGISTRY_PORT}")
     print(f"  SSL: {'Habilitado' if args.ssl else 'Deshabilitado'}")
+    print(f"  API Key: {SHARED_API_KEY[:20]}... (configurada)")
     print("="*70)
     print()
     
