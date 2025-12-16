@@ -2037,11 +2037,21 @@ def api_simular_averia():
 def api_recuperar_averia():
     """Recupera el CP de una avería: desactiva avería local y notifica a Central via Monitor."""
     global SIMULAR_AVERIA, ACTIVE_MONITOR_CONN, ENGINE_CP_ID
+    global kw_acumulados_global, segundos_global, CURRENT_DRIVER_ID, TARGET_KWH, ESTADO_FLUJO, CHARGING_FLAG
     cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
     
     print(f"\n{'='*70}")
     print(f"  [{cp_id}] 🔧 RECUPERACIÓN DE AVERÍA SOLICITADA")
     print(f"{'='*70}\n")
+    
+    # Verificar si había un suministro activo antes de recuperar
+    tenia_suministro_activo = False
+    with STATE_LOCK, SESSION_LOCK, ESTADO_FLUJO_LOCK:
+        tenia_suministro_activo = CHARGING_FLAG.is_set() or ESTADO_FLUJO == 'CARGANDO'
+        kw_acum = kw_acumulados_global
+        segs = segundos_global
+        driver_id = CURRENT_DRIVER_ID
+        objetivo = TARGET_KWH
     
     # Verificar estado actual de avería
     averia_anterior = False
@@ -2050,12 +2060,36 @@ def api_recuperar_averia():
         SIMULAR_AVERIA = False
         print(f"[{cp_id}] ✓ Avería desactivada localmente (estado anterior: {averia_anterior})")
     
+    # Si había suministro activo, detenerlo y preparar FIN
+    if tenia_suministro_activo:
+        print(f"[{cp_id}] ⚠️ Detectado suministro activo durante recuperación de avería. Deteniendo suministro...")
+        with STATE_LOCK:
+            CHARGING_FLAG.clear()
+            if 'TELEMETRY_STOP_EVENT' in globals() and TELEMETRY_STOP_EVENT:
+                try:
+                    TELEMETRY_STOP_EVENT.set()
+                except Exception:
+                    pass
+        with ESTADO_FLUJO_LOCK:
+            ESTADO_FLUJO = 'REPOSO'
+        
+        # Enviar telemetría final
+        generar_y_enviar_telemetria(
+            cp_id=cp_id,
+            estado_carga='REPOSO',
+            kw_entregados=kw_acum,
+            tiempo_carga_s=segs,
+            potencia_kw=0.0
+        )
+    
     # Notificar a Central a través del Monitor
     notificacion_enviada = False
     try:
         if ACTIVE_MONITOR_CONN is None:
             print(f"[{cp_id}] ⚠️ No hay conexión con el Monitor para notificar la recuperación")
             print(f"[{cp_id}] ✅ Avería desactivada localmente. El CP volverá a responder OK a los chequeos de salud")
+            if tenia_suministro_activo:
+                print(f"[{cp_id}] ⚠️ Suministro detenido localmente pero no se pudo enviar FIN (sin conexión con Monitor)")
             print(f"{'='*70}\n")
             # Aunque no haya conexión con el Monitor, la avería se desactivó correctamente
             respuesta = jsonify({
@@ -2063,9 +2097,47 @@ def api_recuperar_averia():
                 'mensaje': 'Recuperación completada. Avería desactivada localmente. No se pudo notificar a Central (sin conexión con Monitor)',
                 'averia_anterior': averia_anterior,
                 'averia_actual': False,
-                'notificacion_central': False
+                'notificacion_central': False,
+                'suministro_detenido': tenia_suministro_activo
             })
         else:
+            # Si había suministro activo, enviar FIN con los datos del suministro interrumpido
+            if tenia_suministro_activo and driver_id and driver_id != 'UNKNOWN':
+                try:
+                    precio_kwh = 0.48
+                    importe = round(kw_acum * precio_kwh, 2)
+                    tx_id = globals().get('CURRENT_TX_ID') or f"TX-{cp_id}-{int(time.time())}"
+                    motivo = 'Avería recuperada - suministro finalizado'
+                    
+                    trama_fin = construir_trama('FIN', [
+                        cp_id,
+                        driver_id,
+                        f"{kw_acum:.2f}",
+                        f"{importe:.2f}",
+                        str(segs),
+                        motivo,
+                        tx_id
+                    ])
+                    ACTIVE_MONITOR_CONN.sendall(trama_fin)
+                    print(f"[{cp_id}] ✅ FIN enviado tras recuperación de avería. kWh={kw_acum:.2f}, €={importe:.2f}, dur_s={segs}, tx={tx_id}")
+                    
+                    # Limpiar estado persistido si existe
+                    limpiar_estado_persistido(cp_id)
+                    
+                    # Resetear variables de sesión
+                    with SESSION_LOCK:
+                        TARGET_KWH = None
+                        CURRENT_DRIVER_ID = 'UNKNOWN'
+                        CURRENT_TX_ID = None
+                        SESSION_START_TS = None
+                    
+                    # Resetear contadores
+                    with STATE_LOCK:
+                        kw_acumulados_global = 0.0
+                        segundos_global = 0
+                except Exception as e:
+                    print(f"[{cp_id}] ⚠️ Error enviando FIN tras recuperación: {e}")
+            
             # AVR_CLR#<cp_id>#<motivo>#<codigo>
             trama = construir_trama('AVR_CLR', [cp_id, 'RECUPERADA', 'OK'])
             ACTIVE_MONITOR_CONN.sendall(trama)
@@ -2078,7 +2150,8 @@ def api_recuperar_averia():
                 'mensaje': 'Recuperación completada. Avería desactivada y notificada a Central. Estado volverá a ACTIVADO',
                 'averia_anterior': averia_anterior,
                 'averia_actual': False,
-                'notificacion_central': True
+                'notificacion_central': True,
+                'suministro_detenido': tenia_suministro_activo
             })
         
         # Evitar cacheo de la respuesta
@@ -2359,21 +2432,21 @@ def main():
     print(f"[EV_CP_E] Hilo de telemetría periódica iniciado (reporta estado cada 10s)")
 
     try:
-    # Guardar CP_ID global para el menú/estado
-    globals()['ENGINE_CP_ID'] = args.cp_id
-    
-    # Inicializar persistencia y recuperar estado si existe
-    inicializar_persistencia(args.cp_id)
-    estado_persistido = recuperar_estado_suministro(args.cp_id)
-    if estado_persistido:
-        print(f"[{args.cp_id}] 🔄 Estado persistido encontrado. Restaurando...")
-        if restaurar_estado_desde_persistencia(args.cp_id, estado_persistido):
-            print(f"[{args.cp_id}] ✅ Estado restaurado. Al reconectar el Monitor, se enviará FIN con los datos del suministro interrumpido.")
-        else:
-            print(f"[{args.cp_id}] ⚠️ Error restaurando estado. Continuando sin estado persistido.")
-            limpiar_estado_persistido(args.cp_id)
-    
-    # Iniciar servidor web en hilo separado
+        # Guardar CP_ID global para el menú/estado
+        globals()['ENGINE_CP_ID'] = args.cp_id
+        
+        # Inicializar persistencia y recuperar estado si existe
+        inicializar_persistencia(args.cp_id)
+        estado_persistido = recuperar_estado_suministro(args.cp_id)
+        if estado_persistido:
+            print(f"[{args.cp_id}] 🔄 Estado persistido encontrado. Restaurando...")
+            if restaurar_estado_desde_persistencia(args.cp_id, estado_persistido):
+                print(f"[{args.cp_id}] ✅ Estado restaurado. Al reconectar el Monitor, se enviará FIN con los datos del suministro interrumpido.")
+            else:
+                print(f"[{args.cp_id}] ⚠️ Error restaurando estado. Continuando sin estado persistido.")
+                limpiar_estado_persistido(args.cp_id)
+        
+        # Iniciar servidor web en hilo separado
         web_thread = threading.Thread(target=iniciar_servidor_web, args=(WEB_PORT,), daemon=True)
         web_thread.start()
         print(f"[ENGINE] Interfaz web disponible en http://localhost:{WEB_PORT}")
