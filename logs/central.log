@@ -88598,3 +88598,86 @@ t-requests
 2025-12-17 00:23:03,165 - 192.168.1.36 - - [17/Dec/2025 00:23:03] "POST /api/weather_alert HTTP/1.1" 200 -
 2025-12-17 00:23:04,281 - 192.168.1.43 - - [17/Dec/2025 00:23:04] "GET /api/status HTTP/1.1" 200 -
 2025-12-17 00:23:05,989 - 192.168.1.43 - - [17/Dec/2025 00:23:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:07,850 - [00:23:07] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-17 00:23:07,853 - [00:23:07] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:23:07,859 - 192.168.1.36 - - [17/Dec/2025 00:23:07] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:23:08,284 - 192.168.1.43 - - [17/Dec/2025 00:23:08] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:09,990 - 192.168.1.43 - - [17/Dec/2025 00:23:09] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:12,283 - 192.168.1.43 - - [17/Dec/2025 00:23:12] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:12,597 - [00:23:12] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-17 00:23:12,601 - [00:23:12] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:23:12,608 - 192.168.1.36 - - [17/Dec/2025 00:23:12] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:23:13,987 - 192.168.1.43 - - [17/Dec/2025 00:23:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:16,276 - 192.168.1.43 - - [17/Dec/2025 00:23:16] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:17,334 - [00:23:17] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-17 00:23:17,338 - [00:23:17] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:23:17,344 - 192.168.1.36 - - [17/Dec/2025 00:23:17] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:23:17,989 - 192.168.1.43 - - [17/Dec/2025 00:23:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:20,282 - 192.168.1.43 - - [17/Dec/2025 00:23:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:21,968 - 192.168.1.43 - - [17/Dec/2025 00:23:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:22,083 - [00:23:22] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-17 00:23:22,087 - [00:23:22] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:23:22,093 - 192.168.1.36 - - [17/Dec/2025 00:23:22] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:23:24,285 - 192.168.1.43 - - [17/Dec/2025 00:23:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:25,984 - 192.168.1.43 - - [17/Dec/2025 00:23:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:26,832 - [00:23:26] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-17 00:23:26,836 - [00:23:26] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:23:26,841 - 192.168.1.36 - - [17/Dec/2025 00:23:26] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:23:28,292 - 192.168.1.43 - - [17/Dec/2025 00:23:28] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:29,968 - 192.168.1.43 - - [17/Dec/2025 00:23:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:31,582 - [00:23:31] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-17 00:23:31,590 - [00:23:31] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:23:31,598 - 192.168.1.36 - - [17/Dec/2025 00:23:31] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:23:32,293 - 192.168.1.43 - - [17/Dec/2025 00:23:32] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:32,992 - 192.168.1.43 - - [17/Dec/2025 00:23:32] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:33,309 - 192.168.1.43 - - [17/Dec/2025 00:23:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:33,636 - 192.168.1.43 - - [17/Dec/2025 00:23:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:33,957 - 192.168.1.43 - - [17/Dec/2025 00:23:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:34,283 - 192.168.1.43 - - [17/Dec/2025 00:23:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:34,612 - 192.168.1.43 - - [17/Dec/2025 00:23:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:34,930 - 192.168.1.43 - - [17/Dec/2025 00:23:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:36,280 - 192.168.1.43 - - [17/Dec/2025 00:23:36] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:36,293 - [00:23:36] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-17 00:23:36,297 - [00:23:36] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:23:36,303 - 192.168.1.36 - - [17/Dec/2025 00:23:36] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:23:37,970 - 192.168.1.43 - - [17/Dec/2025 00:23:37] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:40,299 - 192.168.1.43 - - [17/Dec/2025 00:23:40] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:41,025 - [00:23:41] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-17 00:23:41,030 - [00:23:41] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:23:41,035 - 192.168.1.36 - - [17/Dec/2025 00:23:41] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:23:41,994 - 192.168.1.43 - - [17/Dec/2025 00:23:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:44,300 - 192.168.1.43 - - [17/Dec/2025 00:23:44] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:45,801 - [00:23:45] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-17 00:23:45,805 - [00:23:45] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:23:45,811 - 192.168.1.36 - - [17/Dec/2025 00:23:45] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:23:45,984 - 192.168.1.43 - - [17/Dec/2025 00:23:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:48,297 - 192.168.1.43 - - [17/Dec/2025 00:23:48] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:49,986 - 192.168.1.43 - - [17/Dec/2025 00:23:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:50,560 - [00:23:50] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-17 00:23:50,564 - [00:23:50] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:23:50,570 - 192.168.1.36 - - [17/Dec/2025 00:23:50] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:23:52,306 - 192.168.1.43 - - [17/Dec/2025 00:23:52] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:53,992 - 192.168.1.43 - - [17/Dec/2025 00:23:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:55,323 - [00:23:55] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-17 00:23:55,326 - [00:23:55] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:23:55,332 - 192.168.1.36 - - [17/Dec/2025 00:23:55] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:23:56,300 - 192.168.1.43 - - [17/Dec/2025 00:23:56] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:23:57,992 - 192.168.1.43 - - [17/Dec/2025 00:23:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:24:00,068 - [00:24:00] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-17 00:24:00,071 - [00:24:00] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:24:00,077 - 192.168.1.36 - - [17/Dec/2025 00:24:00] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:24:04,784 - [00:24:04] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-17 00:24:04,788 - [00:24:04] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:24:04,793 - 192.168.1.36 - - [17/Dec/2025 00:24:04] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:24:09,540 - [00:24:09] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-17 00:24:09,543 - [00:24:09] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:24:09,549 - 192.168.1.36 - - [17/Dec/2025 00:24:09] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:24:14,264 - [00:24:14] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-17 00:24:14,267 - [00:24:14] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:24:14,272 - 192.168.1.36 - - [17/Dec/2025 00:24:14] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:24:18,991 - [00:24:18] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-17 00:24:18,994 - [00:24:18] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:24:18,999 - 192.168.1.36 - - [17/Dec/2025 00:24:18] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:24:23,713 - [00:24:23] [IGNORADO] CP_001: en AVERÍA \u2192 se ignora cambio a ACTIVADO
+2025-12-17 00:24:23,716 - [00:24:23] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:24:23,722 - 192.168.1.36 - - [17/Dec/2025 00:24:23] "POST /api/weather_alert HTTP/1.1" 200 -
