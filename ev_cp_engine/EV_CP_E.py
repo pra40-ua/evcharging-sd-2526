@@ -711,7 +711,6 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
             elif cod_op == 'AUTH_REQ':
                 # Nuevo mensaje: Central autorizó un driver, pero NO inicia automáticamente
                 # AUTH_REQ#<driver_id>#<kw_objetivo>
-                global TARGET_KWH, CURRENT_DRIVER_ID, ESTADO_FLUJO
                 try:
                     driver_id = campos[0] if len(campos) > 0 else 'UNKNOWN'
                     kw_objetivo = campos[1] if len(campos) > 1 else '0'

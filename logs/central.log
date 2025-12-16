@@ -87690,3 +87690,196 @@ t-requests
 2025-12-17 00:13:52,278 - 192.168.1.43 - - [17/Dec/2025 00:13:52] "GET /api/status HTTP/1.1" 200 -
 2025-12-17 00:13:53,985 - 192.168.1.43 - - [17/Dec/2025 00:13:53] "GET /api/status HTTP/1.1" 200 -
 2025-12-17 00:13:56,279 - 192.168.1.43 - - [17/Dec/2025 00:13:56] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:13:57,973 - 192.168.1.43 - - [17/Dec/2025 00:13:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:14:33,308 - 192.168.1.43 - - [17/Dec/2025 00:14:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:14:33,624 - 192.168.1.43 - - [17/Dec/2025 00:14:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:14:33,956 - 192.168.1.43 - - [17/Dec/2025 00:14:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:14:34,272 - 192.168.1.43 - - [17/Dec/2025 00:14:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:14:34,495 - 192.168.1.43 - - [17/Dec/2025 00:14:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:14:34,603 - 192.168.1.43 - - [17/Dec/2025 00:14:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:14:34,826 - 192.168.1.43 - - [17/Dec/2025 00:14:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:15:22,957 - [00:15:22] \u2705 NUEVO CP: Registro inicial de CP_001.
+2025-12-17 00:15:22,980 - [00:15:22] \u26a1 CP CP_001 registrado y conectado (Madrid,ES)
+2025-12-17 00:15:22,982 - [00:15:22] [ESTADO] CP_001 -> ACTIVADO (antes: DESCONECTADO).
+2025-12-17 00:15:22,994 - [00:15:22] Telemetría inicial publicada para CP_001
+2025-12-17 00:15:23,015 - 192.168.1.43 - - [17/Dec/2025 00:15:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:15:23,350 - 192.168.1.43 - - [17/Dec/2025 00:15:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:15:23,680 - 192.168.1.43 - - [17/Dec/2025 00:15:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:15:24,011 - 192.168.1.43 - - [17/Dec/2025 00:15:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:15:24,344 - 192.168.1.43 - - [17/Dec/2025 00:15:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:15:24,675 - 192.168.1.43 - - [17/Dec/2025 00:15:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:15:25,007 - 192.168.1.43 - - [17/Dec/2025 00:15:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:15:25,077 - [00:15:25] \u2713 AUTH OK: CP_001 autenticado con credenciales del Registry
+2025-12-17 00:15:25,103 - [00:15:25] AUTH OK enviado a CP_001 (clave de cifrado proporcionada)
+2025-12-17 00:15:26,603 - [00:15:26] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:15:26,606 - [00:15:26] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:15:26,611 - [00:15:26] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:15:26,617 - 192.168.1.36 - - [17/Dec/2025 00:15:26] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:15:26,652 - [00:15:26] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:15:26,657 - [00:15:26] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:15:31,329 - [00:15:31] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:15:31,332 - [00:15:31] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:15:31,338 - [00:15:31] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:15:31,342 - 192.168.1.36 - - [17/Dec/2025 00:15:31] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:15:31,371 - [00:15:31] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:15:31,376 - [00:15:31] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:15:31,431 - [00:15:31] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:15:31,440 - [00:15:31] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:15:33,294 - 192.168.1.43 - - [17/Dec/2025 00:15:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:15:33,624 - 192.168.1.43 - - [17/Dec/2025 00:15:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:15:33,940 - 192.168.1.43 - - [17/Dec/2025 00:15:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:15:34,259 - 192.168.1.43 - - [17/Dec/2025 00:15:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:15:34,508 - 192.168.1.43 - - [17/Dec/2025 00:15:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:15:34,588 - 192.168.1.43 - - [17/Dec/2025 00:15:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:15:34,840 - 192.168.1.43 - - [17/Dec/2025 00:15:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:15:36,071 - [00:15:36] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:15:36,074 - [00:15:36] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:15:36,080 - [00:15:36] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:15:36,086 - 192.168.1.36 - - [17/Dec/2025 00:15:36] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:15:36,141 - [00:15:36] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:15:36,147 - [00:15:36] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:15:40,797 - [00:15:40] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:15:40,800 - [00:15:40] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:15:40,806 - [00:15:40] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:15:40,811 - 192.168.1.36 - - [17/Dec/2025 00:15:40] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:15:40,845 - [00:15:40] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:15:40,851 - [00:15:40] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:15:41,367 - [00:15:41] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:15:41,372 - [00:15:41] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:15:45,518 - [00:15:45] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:15:45,521 - [00:15:45] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:15:45,526 - [00:15:45] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:15:45,531 - 192.168.1.36 - - [17/Dec/2025 00:15:45] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:15:45,568 - [00:15:45] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:15:45,574 - [00:15:45] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:15:50,227 - [00:15:50] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:15:50,230 - [00:15:50] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:15:50,236 - [00:15:50] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:15:50,241 - 192.168.1.36 - - [17/Dec/2025 00:15:50] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:15:50,275 - [00:15:50] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:15:50,281 - [00:15:50] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:15:51,378 - [00:15:51] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:15:51,384 - [00:15:51] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:15:54,937 - [00:15:54] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:15:54,941 - [00:15:54] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:15:54,946 - [00:15:54] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:15:54,951 - 192.168.1.36 - - [17/Dec/2025 00:15:54] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:15:54,984 - [00:15:54] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:15:54,989 - [00:15:54] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:15:59,672 - [00:15:59] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:15:59,675 - [00:15:59] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:15:59,681 - [00:15:59] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:15:59,686 - 192.168.1.36 - - [17/Dec/2025 00:15:59] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:15:59,722 - [00:15:59] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:15:59,730 - [00:15:59] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:01,390 - [00:16:01] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:16:01,396 - [00:16:01] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:04,404 - [00:16:04] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:04,408 - [00:16:04] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:16:04,416 - [00:16:04] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:16:04,423 - 192.168.1.36 - - [17/Dec/2025 00:16:04] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:16:04,469 - [00:16:04] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:16:04,476 - [00:16:04] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:09,153 - [00:16:09] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:09,156 - [00:16:09] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:16:09,163 - [00:16:09] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:16:09,169 - 192.168.1.36 - - [17/Dec/2025 00:16:09] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:16:09,210 - [00:16:09] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:16:09,218 - [00:16:09] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:11,403 - [00:16:11] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:16:11,409 - [00:16:11] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:13,905 - [00:16:13] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:13,908 - [00:16:13] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:16:13,916 - [00:16:13] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:16:13,922 - 192.168.1.36 - - [17/Dec/2025 00:16:13] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:16:13,967 - [00:16:13] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:16:13,974 - [00:16:13] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:18,698 - [00:16:18] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:18,701 - [00:16:18] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:16:18,708 - [00:16:18] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:16:18,714 - 192.168.1.36 - - [17/Dec/2025 00:16:18] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:16:18,750 - [00:16:18] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:16:18,755 - [00:16:18] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:21,416 - [00:16:21] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:16:21,422 - [00:16:21] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:23,437 - [00:16:23] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:23,440 - [00:16:23] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:16:23,447 - [00:16:23] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:16:23,452 - 192.168.1.36 - - [17/Dec/2025 00:16:23] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:16:23,491 - [00:16:23] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:16:23,496 - [00:16:23] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:28,173 - [00:16:28] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:28,176 - [00:16:28] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:16:28,183 - [00:16:28] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:16:28,189 - 192.168.1.36 - - [17/Dec/2025 00:16:28] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:16:28,227 - [00:16:28] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:16:28,234 - [00:16:28] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:31,480 - [00:16:31] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:16:31,487 - [00:16:31] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:32,890 - [00:16:32] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:32,894 - [00:16:32] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:16:32,900 - [00:16:32] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:16:32,906 - 192.168.1.36 - - [17/Dec/2025 00:16:32] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:16:32,960 - [00:16:32] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:16:32,967 - [00:16:32] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:32,987 - 192.168.1.43 - - [17/Dec/2025 00:16:32] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:16:33,304 - 192.168.1.43 - - [17/Dec/2025 00:16:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:16:33,631 - 192.168.1.43 - - [17/Dec/2025 00:16:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:16:33,960 - 192.168.1.43 - - [17/Dec/2025 00:16:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:16:34,268 - 192.168.1.43 - - [17/Dec/2025 00:16:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:16:34,592 - 192.168.1.43 - - [17/Dec/2025 00:16:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:16:34,911 - 192.168.1.43 - - [17/Dec/2025 00:16:34] "GET /api/status HTTP/1.1" 200 -
+2025-12-17 00:16:37,629 - [00:16:37] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:37,632 - [00:16:37] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:16:37,638 - [00:16:37] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:16:37,643 - 192.168.1.36 - - [17/Dec/2025 00:16:37] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:16:37,693 - [00:16:37] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:16:37,699 - [00:16:37] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:41,446 - [00:16:41] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:16:41,454 - [00:16:41] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:42,354 - [00:16:42] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:42,359 - [00:16:42] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:16:42,366 - [00:16:42] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:16:42,373 - 192.168.1.36 - - [17/Dec/2025 00:16:42] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:16:42,416 - [00:16:42] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:16:42,423 - [00:16:42] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:47,101 - [00:16:47] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:47,105 - [00:16:47] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:16:47,112 - [00:16:47] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:16:47,118 - 192.168.1.36 - - [17/Dec/2025 00:16:47] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:16:47,162 - [00:16:47] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:16:47,168 - [00:16:47] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:51,455 - [00:16:51] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:16:51,462 - [00:16:51] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:51,837 - [00:16:51] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:51,841 - [00:16:51] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:16:51,847 - [00:16:51] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:16:51,852 - 192.168.1.36 - - [17/Dec/2025 00:16:51] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:16:51,889 - [00:16:51] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:16:51,895 - [00:16:51] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:56,559 - [00:16:56] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:16:56,562 - [00:16:56] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:16:56,569 - [00:16:56] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:16:56,575 - 192.168.1.36 - - [17/Dec/2025 00:16:56] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:16:56,614 - [00:16:56] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:16:56,620 - [00:16:56] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:17:01,305 - [00:17:01] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:17:01,309 - [00:17:01] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:17:01,316 - [00:17:01] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:17:01,322 - 192.168.1.36 - - [17/Dec/2025 00:17:01] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:17:01,366 - [00:17:01] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:17:01,373 - [00:17:01] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:17:01,467 - [00:17:01] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:17:01,473 - [00:17:01] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:17:06,027 - [00:17:06] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:17:06,030 - [00:17:06] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:17:06,035 - [00:17:06] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:17:06,041 - 192.168.1.36 - - [17/Dec/2025 00:17:06] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:17:06,076 - [00:17:06] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:17:06,081 - [00:17:06] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:17:10,747 - [00:17:10] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-17 00:17:10,751 - [00:17:10] \u2713 CP CP_001 restaurado tras alerta climatológica (T=9.25°C)
+2025-12-17 00:17:10,761 - [00:17:10] \U0001f4e4 STATE ACTIVADO enviado a CP_001 tras desactivar alerta climatológica
+2025-12-17 00:17:10,768 - 192.168.1.36 - - [17/Dec/2025 00:17:10] "POST /api/weather_alert HTTP/1.1" 200 -
+2025-12-17 00:17:10,816 - [00:17:10] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
+2025-12-17 00:17:10,824 - [00:17:10] [ESTADO] CP_001 -> ACTIVADO.
