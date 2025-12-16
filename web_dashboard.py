@@ -81,6 +81,10 @@ KAFKA_PRODUCER_LOCK = threading.Lock()
 ENCRYPTION_KEYS_CACHE = {}  # cp_id -> bytes
 ENCRYPTION_KEYS_CACHE_LOCK = threading.Lock()
 
+# Estado de recuperación por CP (para evitar mensajes repetitivos)
+CP_RECOVERY_STATE = {}  # cp_id -> {'last_error_time': float, 'recovery_reported': bool}
+CP_RECOVERY_STATE_LOCK = threading.Lock()
+
 # =================================================================
 #                    FUNCIONES DE CIFRADO
 # =================================================================
@@ -299,33 +303,91 @@ def consumir_telemetria(broker: str):
                             # Verificar si el mensaje tiene formato cifrado (tiene 'payload')
                             if 'payload' in mensaje_recibido:
                                 # Mensaje cifrado: descifrar usando la clave del CP
+                                # Primero verificar si hay clave disponible antes de intentar descifrar
+                                clave_cifrado = obtener_clave_cifrado_cp(cp_id)
+                                
+                                if not clave_cifrado:
+                                    # No hay clave disponible - puede ser que el mensaje se envió antes de que la clave estuviera disponible
+                                    # O que el Engine está enviando mensajes cifrados sin tener la clave
+                                    # En este caso, simplemente ignorar el mensaje silenciosamente (modo compatibilidad)
+                                    # Solo mostrar error la primera vez
+                                    ahora = time.time()
+                                    mostrar_advertencia = False
+                                    with CP_RECOVERY_STATE_LOCK:
+                                        recovery_state = CP_RECOVERY_STATE.get(cp_id, {})
+                                        last_warning_time = recovery_state.get('last_no_key_warning', 0)
+                                        
+                                        # Solo mostrar advertencia si han pasado más de 30 segundos desde la última
+                                        if ahora - last_warning_time > 30.0:
+                                            mostrar_advertencia = True
+                                            recovery_state['last_no_key_warning'] = ahora
+                                            CP_RECOVERY_STATE[cp_id] = recovery_state
+                                    
+                                    if mostrar_advertencia:
+                                        print(f"[DASHBOARD] ⚠️ Mensaje cifrado recibido de {cp_id} pero no hay clave disponible en BD (modo compatibilidad)")
+                                    
+                                    # Continuar con el siguiente mensaje sin procesar este
+                                    continue
+                                
+                                # Hay clave disponible - intentar descifrar
                                 try:
                                     payload_cifrado_b64 = mensaje_recibido['payload']
                                     payload_cifrado = base64.b64decode(payload_cifrado_b64)
-                                    
-                                    # Obtener clave de cifrado del CP
-                                    clave_cifrado = obtener_clave_cifrado_cp(cp_id)
-                                    if not clave_cifrado:
-                                        raise Exception(f"No hay clave de cifrado para {cp_id} en BD")
                                     
                                     # Descifrar usando Fernet
                                     fernet = Fernet(clave_cifrado)
                                     mensaje_descifrado = fernet.decrypt(payload_cifrado)
                                     telemetria = json.loads(mensaje_descifrado.decode('utf-8'))
                                     
+                                    # Si llegamos aquí, el descifrado fue exitoso
+                                    # Verificar si había un error previo para reportar recuperación (solo una vez)
+                                    with CP_RECOVERY_STATE_LOCK:
+                                        recovery_state = CP_RECOVERY_STATE.get(cp_id, {})
+                                        if recovery_state.get('last_error_time') and not recovery_state.get('recovery_reported'):
+                                            # Hubo un error previo y no se ha reportado la recuperación
+                                            CP_RECOVERY_STATE[cp_id] = {
+                                                'last_error_time': None,
+                                                'recovery_reported': True,
+                                                'last_no_key_warning': recovery_state.get('last_no_key_warning', 0)
+                                            }
+                                            print(f"[DASHBOARD] ✓ Recuperación: Mensaje de {cp_id} descifrado correctamente")
+                                            registrar_evento(f"✓ Recuperación: Comunicación con {cp_id} restaurada", 'ok')
+                                    
+                                    # Limpiar error de descifrado en el estado
+                                    with CPS_STATE_LOCK:
+                                        if cp_id in CPS_STATE and CPS_STATE[cp_id].get('error_descifrado'):
+                                            CPS_STATE[cp_id]['error_descifrado'] = False
+                                    
                                 except Exception as e:
                                     # Error al descifrar - clave incorrecta o mensaje corrupto
                                     error_descifrado = True
-                                    print(f"\n[DASHBOARD] ╔══════════════════════════════════════════")
-                                    print(f"[DASHBOARD] ║  🚨 INCIDENCIA DE COMUNICACIÓN")
-                                    print(f"[DASHBOARD] ╚══════════════════════════════════════════")
-                                    print(f"[DASHBOARD]    CP: {cp_id}")
-                                    print(f"[DASHBOARD]    Error: No se pudo descifrar mensaje de Kafka")
-                                    print(f"[DASHBOARD]    Causa: {str(e)}")
-                                    print(f"[DASHBOARD]    Posible discrepancia en clave de cifrado")
-                                    print(f"[DASHBOARD] ═══════════════════════════════════════════\n")
                                     
-                                    registrar_evento(f"🚨 INCIDENCIA: Error descifrando mensaje de {cp_id} - Clave incorrecta o corrupta", 'error')
+                                    # Solo mostrar error si no se ha mostrado recientemente (evitar spam)
+                                    ahora = time.time()
+                                    mostrar_error = False
+                                    with CP_RECOVERY_STATE_LOCK:
+                                        recovery_state = CP_RECOVERY_STATE.get(cp_id, {})
+                                        last_error_time = recovery_state.get('last_error_time', 0)
+                                        
+                                        # Solo mostrar error si han pasado más de 10 segundos desde el último
+                                        if ahora - last_error_time > 10.0:
+                                            mostrar_error = True
+                                            CP_RECOVERY_STATE[cp_id] = {
+                                                'last_error_time': ahora,
+                                                'recovery_reported': False
+                                            }
+                                    
+                                    if mostrar_error:
+                                        print(f"\n[DASHBOARD] ╔══════════════════════════════════════════")
+                                        print(f"[DASHBOARD] ║  🚨 INCIDENCIA DE COMUNICACIÓN")
+                                        print(f"[DASHBOARD] ╚══════════════════════════════════════════")
+                                        print(f"[DASHBOARD]    CP: {cp_id}")
+                                        print(f"[DASHBOARD]    Error: No se pudo descifrar mensaje de Kafka")
+                                        print(f"[DASHBOARD]    Causa: {str(e)}")
+                                        print(f"[DASHBOARD]    Posible discrepancia en clave de cifrado")
+                                        print(f"[DASHBOARD] ═══════════════════════════════════════════\n")
+                                        
+                                        registrar_evento(f"🚨 INCIDENCIA: Error descifrando mensaje de {cp_id} - Clave incorrecta o corrupta", 'error')
                                     
                                     # Marcar CP con error de descifrado en el estado
                                     with CPS_STATE_LOCK:
@@ -340,17 +402,24 @@ def consumir_telemetria(broker: str):
                                             CPS_STATE[cp_id]['error_descifrado'] = True
                                             CPS_STATE[cp_id]['ultima_actualizacion'] = time.time()
                                     
-                                    # Emitir evento de error vía WebSocket
-                                    emitir_actualizacion_cp(cp_id, {
-                                        'error': 'Error descifrando mensaje',
-                                        'mensaje': f'Clave de cifrado incorrecta o corrupta para {cp_id}'
-                                    }, 'error_descifrado')
+                                    # Emitir evento de error vía WebSocket (solo si es nuevo)
+                                    if mostrar_error:
+                                        emitir_actualizacion_cp(cp_id, {
+                                            'error': 'Error descifrando mensaje',
+                                            'mensaje': f'Clave de cifrado incorrecta o corrupta para {cp_id}'
+                                        }, 'error_descifrado')
                                     
                                     # Continuar con el siguiente mensaje
                                     continue
                             else:
                                 # Mensaje sin cifrar (modo compatibilidad)
                                 telemetria = mensaje_recibido
+                                
+                                # Si el mensaje no está cifrado pero esperábamos que lo estuviera,
+                                # limpiar cualquier estado de error previo
+                                with CPS_STATE_LOCK:
+                                    if cp_id in CPS_STATE and CPS_STATE[cp_id].get('error_descifrado'):
+                                        CPS_STATE[cp_id]['error_descifrado'] = False
                             
                             # Log cada mensaje recibido con datos detallados
                             kw = telemetria.get('kw_entregados', 0) or telemetria.get('energia_total', 0)
@@ -358,13 +427,6 @@ def consumir_telemetria(broker: str):
                             tiempo = telemetria.get('tiempo_carga_s', 0)
                             estado = telemetria.get('estado_carga', telemetria.get('estado', 'N/D'))
                             averia_flag = telemetria.get('averia_activa', False)
-                            
-                            # Si había error de descifrado previo y ahora se descifró correctamente, limpiar el error
-                            with CPS_STATE_LOCK:
-                                if cp_id in CPS_STATE and CPS_STATE[cp_id].get('error_descifrado'):
-                                    CPS_STATE[cp_id]['error_descifrado'] = False
-                                    print(f"[DASHBOARD] ✓ Recuperación: Mensaje de {cp_id} descifrado correctamente")
-                                    registrar_evento(f"✓ Recuperación: Comunicación con {cp_id} restaurada", 'ok')
                             
                             # Log especial para averías
                             if 'AVERI' in str(estado).upper() or averia_flag:

@@ -281,6 +281,113 @@ ESTADO_FLUJO_LOCK = threading.Lock()
 ACTIVE_MONITOR_CONN: socket.socket | None = None
 ENGINE_CP_ID = None
 
+# Persistencia del estado del suministro
+PERSIST_DIR = 'estado_engine'
+PERSIST_FILE = None  # Se inicializará según cp_id
+
+# =================================================================
+#                    FUNCIONES DE PERSISTENCIA
+# =================================================================
+
+def inicializar_persistencia(cp_id: str):
+    """Inicializa el archivo de persistencia para un CP."""
+    global PERSIST_FILE
+    if not os.path.exists(PERSIST_DIR):
+        os.makedirs(PERSIST_DIR)
+    PERSIST_FILE = os.path.join(PERSIST_DIR, f'{cp_id}_estado.json')
+
+def guardar_estado_suministro(cp_id: str):
+    """Guarda el estado actual del suministro en un archivo JSON."""
+    if not PERSIST_FILE:
+        inicializar_persistencia(cp_id)
+    
+    try:
+        with STATE_LOCK, SESSION_LOCK, ESTADO_FLUJO_LOCK:
+            estado_data = {
+                'cp_id': cp_id,
+                'kw_acumulados': kw_acumulados_global,
+                'segundos': segundos_global,
+                'driver_id': CURRENT_DRIVER_ID,
+                'target_kwh': TARGET_KWH,
+                'tx_id': CURRENT_TX_ID,
+                'session_start_ts': SESSION_START_TS,
+                'estado_flujo': ESTADO_FLUJO,
+                'cargando': CHARGING_FLAG.is_set(),
+                'timestamp': time.time()
+            }
+        
+        with open(PERSIST_FILE, 'w', encoding='utf-8') as f:
+            json.dump(estado_data, f, indent=2)
+        print(f"[{cp_id}] 💾 Estado del suministro guardado en {PERSIST_FILE}")
+    except Exception as e:
+        print(f"[{cp_id}] ⚠️ Error guardando estado: {e}")
+
+def recuperar_estado_suministro(cp_id: str) -> dict | None:
+    """Recupera el estado del suministro desde un archivo JSON si existe."""
+    if not PERSIST_FILE:
+        inicializar_persistencia(cp_id)
+    
+    if not os.path.exists(PERSIST_FILE):
+        return None
+    
+    try:
+        with open(PERSIST_FILE, 'r', encoding='utf-8') as f:
+            estado_data = json.load(f)
+        
+        # Verificar que el estado no sea muy antiguo (más de 1 día)
+        timestamp = estado_data.get('timestamp', 0)
+        if time.time() - timestamp > 86400:  # 1 día
+            print(f"[{cp_id}] ⚠️ Estado persistido muy antiguo (>1 día), ignorando")
+            os.remove(PERSIST_FILE)
+            return None
+        
+        print(f"[{cp_id}] 📂 Estado del suministro recuperado desde {PERSIST_FILE}")
+        return estado_data
+    except Exception as e:
+        print(f"[{cp_id}] ⚠️ Error recuperando estado: {e}")
+        return None
+
+def limpiar_estado_persistido(cp_id: str):
+    """Elimina el archivo de estado persistido."""
+    if not PERSIST_FILE:
+        inicializar_persistencia(cp_id)
+    
+    try:
+        if os.path.exists(PERSIST_FILE):
+            os.remove(PERSIST_FILE)
+            print(f"[{cp_id}] 🗑️ Estado persistido eliminado")
+    except Exception as e:
+        print(f"[{cp_id}] ⚠️ Error eliminando estado persistido: {e}")
+
+def restaurar_estado_desde_persistencia(cp_id: str, estado_data: dict):
+    """Restaura el estado del suministro desde los datos persistidos."""
+    global kw_acumulados_global, segundos_global, CURRENT_DRIVER_ID, TARGET_KWH
+    global CURRENT_TX_ID, SESSION_START_TS, ESTADO_FLUJO
+    
+    try:
+        with STATE_LOCK:
+            kw_acumulados_global = estado_data.get('kw_acumulados', 0.0)
+            segundos_global = estado_data.get('segundos', 0)
+            if estado_data.get('cargando', False):
+                CHARGING_FLAG.set()
+            else:
+                CHARGING_FLAG.clear()
+        
+        with SESSION_LOCK:
+            CURRENT_DRIVER_ID = estado_data.get('driver_id', 'UNKNOWN')
+            TARGET_KWH = estado_data.get('target_kwh')
+            CURRENT_TX_ID = estado_data.get('tx_id')
+            SESSION_START_TS = estado_data.get('session_start_ts')
+        
+        with ESTADO_FLUJO_LOCK:
+            ESTADO_FLUJO = estado_data.get('estado_flujo', 'REPOSO')
+        
+        print(f"[{cp_id}] ✅ Estado restaurado: {kw_acumulados_global} kWh, {segundos_global}s, Driver: {CURRENT_DRIVER_ID}")
+        return True
+    except Exception as e:
+        print(f"[{cp_id}] ⚠️ Error restaurando estado: {e}")
+        return False
+
 # Estado de avería simulada (para responder KO en HCK)
 SIMULAR_AVERIA = False
 SIMULAR_AVERIA_LOCK = threading.Lock()
@@ -355,6 +462,7 @@ def bucle_telemetria(cp_id: str, stop_event: threading.Event):
     """Emite telemetría de SUMINISTRANDO únicamente mientras dure la sesión (START..STOP)."""
     global kw_acumulados_global, segundos_global
     print(f"[{cp_id}] Bucle de telemetría de SUMINISTRANDO iniciado.")
+    contador_guardado = 0  # Contador para guardar cada 10 segundos
     while not stop_event.is_set():
         time.sleep(1)
         with STATE_LOCK:
@@ -379,6 +487,14 @@ def bucle_telemetria(cp_id: str, stop_event: threading.Event):
             tiempo_carga_s=secs,
             potencia_kw=potencia
         )
+        # Guardar estado periódicamente (cada 10 segundos) para persistencia
+        contador_guardado += 1
+        if contador_guardado >= 10:
+            contador_guardado = 0
+            try:
+                guardar_estado_suministro(cp_id)
+            except Exception as e:
+                print(f"[{cp_id}] ⚠️ Error guardando estado durante telemetría: {e}")
         # Auto-stop cuando se alcance el objetivo
         try:
             objetivo = globals()['TARGET_KWH']
@@ -430,6 +546,8 @@ def bucle_telemetria(cp_id: str, stop_event: threading.Event):
                 
                 # Resetear contadores para la próxima sesión
                 print(f"[{cp_id}] Contadores reseteados. Listo para nuevo servicio.")
+                # Limpiar estado persistido tras finalizar correctamente
+                limpiar_estado_persistido(cp_id)
         except Exception as e:
             print(f"[{cp_id}] No se pudo enviar FIN a Monitor: {e}")
         
@@ -500,6 +618,53 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
         globals()['ACTIVE_MONITOR_CONN'] = conn
     except Exception:
         pass
+    
+    # Verificar si hay un estado persistido de un suministro interrumpido
+    # Si existe, enviar FIN inmediatamente con los datos del suministro
+    estado_persistido = recuperar_estado_suministro(cp_id)
+    if estado_persistido and estado_persistido.get('cargando', False):
+        print(f"[{cp_id}] 🔄 Detectado estado persistido de suministro interrumpido. Enviando FIN...")
+        try:
+            kw_final = estado_persistido.get('kw_acumulados', 0.0)
+            secs_final = estado_persistido.get('segundos', 0)
+            driver_id = estado_persistido.get('driver_id', 'UNKNOWN')
+            tx_id = estado_persistido.get('tx_id', f"TX-{cp_id}-{int(time.time())}")
+            precio_kwh = 0.48
+            importe = round(kw_final * precio_kwh, 2)
+            motivo = 'Recuperación tras caída del Engine'
+            
+            trama_fin = construir_trama('FIN', [
+                cp_id,
+                driver_id,
+                f"{kw_final:.2f}",
+                f"{importe:.2f}",
+                str(secs_final),
+                motivo,
+                tx_id
+            ])
+            conn.sendall(trama_fin)
+            print(f"[{cp_id}] ✅ FIN enviado a Monitor (recuperación). kWh={kw_final}, €={importe}, dur_s={secs_final}, tx={tx_id}")
+            
+            # Limpiar estado persistido tras enviar FIN
+            limpiar_estado_persistido(cp_id)
+            
+            # Resetear contadores locales
+            with STATE_LOCK:
+                kw_acumulados_global = 0.0
+                segundos_global = 0
+                CHARGING_FLAG.clear()
+            with SESSION_LOCK:
+                TARGET_KWH = None
+                CURRENT_DRIVER_ID = 'UNKNOWN'
+                CURRENT_TX_ID = None
+                SESSION_START_TS = None
+            with ESTADO_FLUJO_LOCK:
+                ESTADO_FLUJO = 'REPOSO'
+            
+            print(f"[{cp_id}] ✅ Estado restaurado tras recuperación. Listo para nuevo servicio.")
+        except Exception as e:
+            print(f"[{cp_id}] ⚠️ Error enviando FIN tras recuperación: {e}")
+    
     try:
         while True:
             # Esperar la trama HCK
@@ -738,6 +903,9 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                         # Resetear variables de sesión
                         TARGET_KWH = None
                         CURRENT_DRIVER_ID = 'UNKNOWN'
+                        
+                        # Limpiar estado persistido tras finalizar correctamente
+                        limpiar_estado_persistido(cp_id)
                         
                     except Exception as e:
                         print(f"[{cp_id}] ✗ Error enviando FIN tras STOP: {e}")
@@ -2191,10 +2359,21 @@ def main():
     print(f"[EV_CP_E] Hilo de telemetría periódica iniciado (reporta estado cada 10s)")
 
     try:
-        # Guardar CP_ID global para el menú/estado
-        globals()['ENGINE_CP_ID'] = args.cp_id
-        
-        # Iniciar servidor web en hilo separado
+    # Guardar CP_ID global para el menú/estado
+    globals()['ENGINE_CP_ID'] = args.cp_id
+    
+    # Inicializar persistencia y recuperar estado si existe
+    inicializar_persistencia(args.cp_id)
+    estado_persistido = recuperar_estado_suministro(args.cp_id)
+    if estado_persistido:
+        print(f"[{args.cp_id}] 🔄 Estado persistido encontrado. Restaurando...")
+        if restaurar_estado_desde_persistencia(args.cp_id, estado_persistido):
+            print(f"[{args.cp_id}] ✅ Estado restaurado. Al reconectar el Monitor, se enviará FIN con los datos del suministro interrumpido.")
+        else:
+            print(f"[{args.cp_id}] ⚠️ Error restaurando estado. Continuando sin estado persistido.")
+            limpiar_estado_persistido(args.cp_id)
+    
+    # Iniciar servidor web en hilo separado
         web_thread = threading.Thread(target=iniciar_servidor_web, args=(WEB_PORT,), daemon=True)
         web_thread.start()
         print(f"[ENGINE] Interfaz web disponible en http://localhost:{WEB_PORT}")

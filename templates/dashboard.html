@@ -821,12 +821,20 @@
                     html += `<br><button class="btn-control" onclick="desconectarMonitor('${cp.cp_id}')" style="background: #6c757d; margin-top: 4px; font-size: 11px;">🔌 Desconectar Monitor</button>`;
                 } else if (estado === 'ACTIVADO') {
                     // Si hay una sesión marcada pero el estado figura como ACTIVADO (p.ej. por telemetría/heartbeat),
-                    // ofrecer la acción de PREPARAR SUMINISTRO igualmente
-                    if (tieneSesion) {
+                    // verificar si realmente se está suministrando (energía > 0) antes de ofrecer PREPARAR SUMINISTRO
+                    const energiaKwh = cp.energia_kwh || 0;
+                    const potenciaKw = cp.potencia_kw || 0;
+                    const estaSuministrando = energiaKwh > 0 || potenciaKw > 0;
+                    
+                    if (tieneSesion && !estaSuministrando) {
+                        // Hay sesión pero no se está suministrando - ofrecer preparar suministro
                         const driver = cp.driver_id_sesion || 'Driver';
                         html += `<button class="btn-control btn-start" onclick="prepararSuministro('${cp.cp_id}')" style="background: #007bff; animation: pulse 2s infinite;">🚀 PREPARAR SUMINISTRO (${driver})</button>`;
+                    } else if (tieneSesion && estaSuministrando) {
+                        // Hay sesión y se está suministrando - mostrar estado de suministro aunque el estado sea ACTIVADO
+                        html += '<span style="color: #17a2b8; font-size: 12px;">⚡ Suministrando...</span>';
                     } else {
-                        // CP disponible
+                        // CP disponible sin sesión
                         html += '<span style="color: #999; font-size: 12px;">💤 Disponible</span>';
                     }
                     html += `<br><button class="btn-control" onclick="desconectarMonitor('${cp.cp_id}')" style="background: #6c757d; margin-top: 4px; font-size: 11px;">🔌 Desconectar Monitor</button>`;

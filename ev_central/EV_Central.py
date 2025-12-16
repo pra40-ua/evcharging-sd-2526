@@ -1387,20 +1387,94 @@ def consumir_comandos_control_kafka(broker_list: str):
                                 else:
                                     print(f"[CENTRAL] {cp_id} no tiene socket activo")
                             
-                            # Marcar CP como DESCONECTADO (sin cerrar sesión)
-                            # La sesión se mantiene porque el Engine sigue suministrando
+                            # Verificar si hay un suministro activo antes de desconectar
+                            with TELEMETRIA_ACTUAL_LOCK:
+                                telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                            estado_telemetria = telemetria_actual.get('estado', '').upper()
+                            tiene_sesion_activa = telemetria_actual.get('tiene_sesion_activa', False)
+                            
+                            # Si hay suministro activo, finalizarlo y enviar ticket al driver
+                            if tiene_sesion_activa or estado_telemetria in ('SUMINISTRANDO', 'CARGANDO'):
+                                print(f"[CENTRAL] ⚠️ Monitor de {cp_id} desconectado durante suministro activo. Finalizando suministro...")
+                                
+                                # Obtener información del driver y energía suministrada
+                                with CP_SESION_DRIVER_ID_LOCK:
+                                    driver_id = CP_SESION_DRIVER_ID.get(cp_id)
+                                
+                                if driver_id and driver_id != 'UNKNOWN':
+                                    # Calcular energía entregada desde telemetría
+                                    energia = (
+                                        telemetria_actual.get('energia_total')
+                                        if 'energia_total' in telemetria_actual
+                                        else telemetria_actual.get('kw_entregados', 0.0)
+                                    )
+                                    try:
+                                        energia_val = float(energia)
+                                    except Exception:
+                                        energia_val = 0.0
+                                    
+                                    # Calcular duración
+                                    tiempo_carga_s = telemetria_actual.get('tiempo_carga_s', 0)
+                                    try:
+                                        duracion_seg = int(tiempo_carga_s)
+                                    except Exception:
+                                        duracion_seg = 0
+                                    
+                                    # Calcular importe usando precio del CP
+                                    with CP_PRECIO_KWH_LOCK:
+                                        precio_kwh = CP_PRECIO_KWH.get(cp_id, 0.48)
+                                    try:
+                                        precio_val = float(precio_kwh)
+                                    except Exception:
+                                        precio_val = 0.48
+                                    
+                                    importe = round(energia_val * precio_val, 2)
+                                    
+                                    # Generar tx_id
+                                    tx_id = f"TX-{cp_id}-{int(time.time())}"
+                                    
+                                    # Crear ticket
+                                    detalle_ticket = {
+                                        'cp_id': cp_id,
+                                        'energia_kwh': energia_val,
+                                        'importe_eur': importe,
+                                        'duracion_seg': duracion_seg,
+                                        'motivo': 'Monitor desconectado - suministro finalizado',
+                                        'tx_id': tx_id
+                                    }
+                                    
+                                    # Enviar ticket al driver
+                                    notificar_driver(driver_id, 'TICKET_FINAL', detalle_ticket)
+                                    registrar_evento(f"✅ Ticket enviado a {driver_id} por desconexión de Monitor en {cp_id}: {energia_val} kWh, {importe} €", "ok")
+                                    print(f"[CENTRAL] ✅ Ticket enviado a {driver_id} por desconexión de Monitor. Energía: {energia_val} kWh, Importe: {importe} €")
+                                    
+                                    # Limpiar sesión
+                                    with CP_SESION_DRIVER_ID_LOCK:
+                                        if cp_id in CP_SESION_DRIVER_ID:
+                                            del CP_SESION_DRIVER_ID[cp_id]
+                                    with CP_SESION_OBJETIVO_KWH_LOCK:
+                                        if cp_id in CP_SESION_OBJETIVO_KWH:
+                                            del CP_SESION_OBJETIVO_KWH[cp_id]
+                                    
+                                    # Resetear telemetría de sesión
+                                    telemetria_actual['tiene_sesion_activa'] = False
+                                    telemetria_actual['driver_id_sesion'] = None
+                                    telemetria_actual['kw_entregados'] = 0.0
+                                    telemetria_actual['energia_total'] = 0.0
+                                    telemetria_actual['tiempo_carga_s'] = 0
+                                    
+                                    registrar_evento(f"🛑 Suministro finalizado en {cp_id} debido a desconexión del Monitor", "warn")
+                            
+                            # Marcar CP como DESCONECTADO
                             cambiar_estado_cp(cp_id, 'DESCONECTADO', None)
                             
                             # Publicar telemetría actualizada para que el dashboard web refleje el cambio
-                            with TELEMETRIA_ACTUAL_LOCK:
-                                telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
                             telemetria_actualizada = {
                                 **telemetria_actual,
                                 'cp_id': cp_id,
                                 'estado': 'DESCONECTADO',
                                 'estado_carga': 'DESCONECTADO',
                                 'timestamp': time.time()
-                                # Mantener energía y otros datos para que la sesión no se pierda
                             }
                             with TELEMETRIA_ACTUAL_LOCK:
                                 TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
@@ -1409,16 +1483,13 @@ def consumir_comandos_control_kafka(broker_list: str):
                                 KAFKA_PRODUCER.flush(timeout=1)
                                 print(f"[CENTRAL] ✓ Telemetría DESCONECTADO publicada para {cp_id}")
                             
-                            # NO cerrar sesión (mantener driver_id y objetivo_kwh)
-                            # NO enviar ticket al driver (el Engine seguirá suministrando)
-                            
                             # BLOQUEAR reconexión automática del Monitor
                             with CP_MONITOR_BLOQUEADO_LOCK:
                                 CP_MONITOR_BLOQUEADO.add(cp_id)
                                 print(f"[CENTRAL] {cp_id} BLOQUEADO para reconexión automática")
                             
-                            registrar_evento(f"✓ Monitor de {cp_id} desconectado. Engine sigue suministrando.", "info")
-                            print(f"[CENTRAL] Monitor de {cp_id} desconectado. La sesión continúa (Engine sigue activo)")
+                            registrar_evento(f"✓ Monitor de {cp_id} desconectado. CP no admitirá nuevos suministros.", "info")
+                            print(f"[CENTRAL] Monitor de {cp_id} desconectado. CP marcado como DESCONECTADO y no admitirá nuevos suministros.")
                             
                         except Exception as e:
                             print(f"[CENTRAL] Error desconectando monitor de {cp_id}: {e}")
@@ -3277,14 +3348,110 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
     finally:
         if cp_id != "Desconocido":
             registrar_evento(f"Monitor desconectado: {cp_id}")
-        # --- LÓGICA DB: Marcar el CP como AVERÍA ante desconexión inesperada ---
-        if cp_id != "Desconocido" and db_connection and db_connection.is_connected():
-            actualizar_estado_cp(db_connection, cp_id, "Averiado")
-        try:
-            if cp_id != "Desconocido":
-                cambiar_estado_cp(cp_id, 'AVERÍA', db_connection, motivo='Desconexión inesperada del CP')
-        except Exception:
-            pass
+            
+            # Verificar si hay un suministro activo antes de desconectar
+            with TELEMETRIA_ACTUAL_LOCK:
+                telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+            estado_telemetria = telemetria_actual.get('estado', '').upper()
+            tiene_sesion_activa = telemetria_actual.get('tiene_sesion_activa', False)
+            
+            # Si hay suministro activo, finalizarlo y enviar ticket al driver
+            if tiene_sesion_activa or estado_telemetria in ('SUMINISTRANDO', 'CARGANDO'):
+                print(f"[CENTRAL] ⚠️ Monitor de {cp_id} desconectado inesperadamente durante suministro activo. Finalizando suministro...")
+                
+                # Obtener información del driver y energía suministrada
+                with CP_SESION_DRIVER_ID_LOCK:
+                    driver_id = CP_SESION_DRIVER_ID.get(cp_id)
+                
+                if driver_id and driver_id != 'UNKNOWN':
+                    # Calcular energía entregada desde telemetría
+                    energia = (
+                        telemetria_actual.get('energia_total')
+                        if 'energia_total' in telemetria_actual
+                        else telemetria_actual.get('kw_entregados', 0.0)
+                    )
+                    try:
+                        energia_val = float(energia)
+                    except Exception:
+                        energia_val = 0.0
+                    
+                    # Calcular duración
+                    tiempo_carga_s = telemetria_actual.get('tiempo_carga_s', 0)
+                    try:
+                        duracion_seg = int(tiempo_carga_s)
+                    except Exception:
+                        duracion_seg = 0
+                    
+                    # Calcular importe usando precio del CP
+                    with CP_PRECIO_KWH_LOCK:
+                        precio_kwh = CP_PRECIO_KWH.get(cp_id, 0.48)
+                    try:
+                        precio_val = float(precio_kwh)
+                    except Exception:
+                        precio_val = 0.48
+                    
+                    importe = round(energia_val * precio_val, 2)
+                    
+                    # Generar tx_id
+                    tx_id = f"TX-{cp_id}-{int(time.time())}"
+                    
+                    # Crear ticket
+                    detalle_ticket = {
+                        'cp_id': cp_id,
+                        'energia_kwh': energia_val,
+                        'importe_eur': importe,
+                        'duracion_seg': duracion_seg,
+                        'motivo': 'Monitor desconectado - suministro finalizado',
+                        'tx_id': tx_id
+                    }
+                    
+                    # Enviar ticket al driver
+                    notificar_driver(driver_id, 'TICKET_FINAL', detalle_ticket)
+                    registrar_evento(f"✅ Ticket enviado a {driver_id} por desconexión inesperada de Monitor en {cp_id}: {energia_val} kWh, {importe} €", "ok")
+                    print(f"[CENTRAL] ✅ Ticket enviado a {driver_id} por desconexión inesperada de Monitor. Energía: {energia_val} kWh, Importe: {importe} €")
+                    
+                    # Limpiar sesión
+                    with CP_SESION_DRIVER_ID_LOCK:
+                        if cp_id in CP_SESION_DRIVER_ID:
+                            del CP_SESION_DRIVER_ID[cp_id]
+                    with CP_SESION_OBJETIVO_KWH_LOCK:
+                        if cp_id in CP_SESION_OBJETIVO_KWH:
+                            del CP_SESION_OBJETIVO_KWH[cp_id]
+                    
+                    # Resetear telemetría de sesión
+                    telemetria_actual['tiene_sesion_activa'] = False
+                    telemetria_actual['driver_id_sesion'] = None
+                    telemetria_actual['kw_entregados'] = 0.0
+                    telemetria_actual['energia_total'] = 0.0
+                    telemetria_actual['tiempo_carga_s'] = 0
+                    
+                    registrar_evento(f"🛑 Suministro finalizado en {cp_id} debido a desconexión inesperada del Monitor", "warn")
+            
+            # Marcar el CP como DESCONECTADO (no AVERIADO, porque es el Monitor quien se desconectó, no el Engine)
+            if db_connection and db_connection.is_connected():
+                actualizar_estado_cp(db_connection, cp_id, "Desconectado")
+            try:
+                cambiar_estado_cp(cp_id, 'DESCONECTADO', db_connection, motivo='Desconexión inesperada del Monitor')
+            except Exception:
+                pass
+            
+            # Publicar telemetría actualizada
+            telemetria_actualizada = {
+                **telemetria_actual,
+                'cp_id': cp_id,
+                'estado': 'DESCONECTADO',
+                'estado_carga': 'DESCONECTADO',
+                'timestamp': time.time()
+            }
+            with TELEMETRIA_ACTUAL_LOCK:
+                TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
+            if KAFKA_PRODUCER:
+                try:
+                    KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                    KAFKA_PRODUCER.flush(timeout=1)
+                    print(f"[CENTRAL] ✓ Telemetría DESCONECTADO publicada para {cp_id}")
+                except Exception:
+                    pass
         
         if cp_id in CONEXIONES_ACTIVAS:
             with CONEXIONES_ACTIVAS_LOCK:

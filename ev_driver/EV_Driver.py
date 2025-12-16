@@ -58,9 +58,9 @@ def consumir_notificaciones_driver(driver_id: str, broker: str, procesar_ticket_
         consumer = KafkaConsumer(
             topic,
             bootstrap_servers=[broker],
-            auto_offset_reset='latest',  # Solo mensajes nuevos si es primera vez
+            auto_offset_reset='earliest',  # Leer desde el inicio para recuperar mensajes pendientes al reconectar
             enable_auto_commit=True,
-            group_id=f'driver-{driver_id}-group',
+            group_id=f'driver-{driver_id}-group',  # Permite recuperar mensajes no consumidos al reconectar
             value_deserializer=lambda m: json.loads(m.decode('utf-8')),
             api_version=(2, 8, 0)
         )
