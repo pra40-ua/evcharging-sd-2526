@@ -17,6 +17,8 @@ from datetime import datetime
 from typing import Dict, List, Optional
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import mysql.connector
+from mysql.connector import Error
 
 # =================================================================
 #                    CONFIGURACIÓN GLOBAL
@@ -42,6 +44,62 @@ CENTRAL_API_URL: Optional[str] = None
 
 # Intervalo de consulta (4 segundos según especificación)
 CHECK_INTERVAL = 4
+
+# Configuración de base de datos para auditoría
+DB_CONFIG = {
+    'host': os.getenv('DB_HOST', '127.0.0.1'),
+    'port': int(os.getenv('DB_PORT', '3306')),
+    'user': os.getenv('DB_USER', 'root'),
+    'password': os.getenv('DB_PASSWORD', 'root'),
+    'database': os.getenv('DB_NAME', 'evcharging')
+}
+
+# =================================================================
+#                    FUNCIONES DE AUDITORÍA
+# =================================================================
+
+def obtener_conexion_bd():
+    """Obtiene una conexión a la base de datos para auditoría."""
+    try:
+        connection = mysql.connector.connect(
+            host=DB_CONFIG['host'],
+            port=DB_CONFIG['port'],
+            user=DB_CONFIG['user'],
+            password=DB_CONFIG['password'],
+            database=DB_CONFIG['database'],
+            ssl_disabled=True
+        )
+        return connection
+    except Error as e:
+        print(f"[EV_W] ⚠️ Error conectando a BD para auditoría: {e}")
+        return None
+
+def registrar_auditoria(accion: str, cp_id: str = None, origen_ip: str = None, 
+                        descripcion: str = None, resultado: str = "OK") -> None:
+    """
+    Registra un evento de auditoría en la base de datos.
+    
+    Args:
+        accion: Tipo de acción (ej: "ALERTA_CLIMA", "REGISTRO_LOCALIZACION", etc.)
+        cp_id: ID del CP (opcional)
+        origen_ip: IP de origen (opcional)
+        descripcion: Descripción detallada del evento
+        resultado: Resultado de la acción ("OK", "ERROR", etc.)
+    """
+    try:
+        connection = obtener_conexion_bd()
+        if connection and connection.is_connected():
+            cursor = connection.cursor()
+            cursor.execute("""
+                INSERT INTO audit_log (fecha_hora, origen_ip, cp_id, accion, descripcion, resultado)
+                VALUES (NOW(), %s, %s, %s, %s, %s)
+            """, (origen_ip, cp_id, accion, descripcion, resultado))
+            connection.commit()
+            cursor.close()
+            connection.close()
+    except Exception as e:
+        # No fallar si hay error en auditoría, solo log
+        print(f"[EV_W] ⚠️ Error registrando auditoría: {e}")
 
 # =================================================================
 #                    FUNCIONES DE CLIMA
@@ -181,6 +239,15 @@ def procesar_localizacion(cp_id: str, ciudad_pais: str):
             if notificar_alerta_central(cp_id, temperatura, True):
                 with ALERTAS_LOCK:
                     ALERTAS_ACTIVAS[cp_id] = True
+                
+                # Registrar auditoría
+                registrar_auditoria(
+                    accion="ALERTA_CLIMA",
+                    cp_id=cp_id,
+                    origen_ip=None,
+                    descripcion=f"Alerta climatológica ACTIVADA para {cp_id} en {ciudad_pais}. Temperatura: {temperatura:.1f}°C (< 0°C)",
+                    resultado="OK"
+                )
         else:
             # Alerta ya activa, enviar temperatura actualizada a Central
             print(f"[EV_W] Alerta activa para {cp_id}: T={temperatura:.1f}°C")
@@ -199,6 +266,15 @@ def procesar_localizacion(cp_id: str, ciudad_pais: str):
             if notificar_alerta_central(cp_id, temperatura, False):
                 with ALERTAS_LOCK:
                     ALERTAS_ACTIVAS[cp_id] = False
+                
+                # Registrar auditoría
+                registrar_auditoria(
+                    accion="ALERTA_CLIMA",
+                    cp_id=cp_id,
+                    origen_ip=None,
+                    descripcion=f"Alerta climatológica DESACTIVADA para {cp_id} en {ciudad_pais}. Temperatura: {temperatura:.1f}°C (>= 0°C)",
+                    resultado="OK"
+                )
         else:
             # Sin alerta, pero siempre enviar temperatura a Central para el dashboard
             print(f"[EV_W] {cp_id} ({ciudad_pais}): T={temperatura:.1f}°C - OK")
@@ -283,6 +359,15 @@ def añadir_localizacion():
             print(f"[EV_W]   Temperatura actual: {temp:.1f}°C")
         else:
             print(f"[EV_W]   ⚠️ No se pudo obtener temperatura. Verifique la localización.")
+        
+        # Registrar auditoría
+        registrar_auditoria(
+            accion="REGISTRO_LOCALIZACION",
+            cp_id=cp_id,
+            origen_ip=None,
+            descripcion=f"Localización añadida manualmente desde menú: {ciudad_pais}. Temperatura actual: {temp:.1f}°C" if temp else f"Localización añadida manualmente desde menú: {ciudad_pais}",
+            resultado="OK"
+        )
             
     except KeyboardInterrupt:
         print("\n[EV_W] Operación cancelada")
@@ -301,6 +386,15 @@ def eliminar_localizacion():
             if cp_id in LOCALIZACIONES:
                 ciudad_pais = LOCALIZACIONES.pop(cp_id)
                 print(f"[EV_W] ✓ Localización eliminada: {cp_id} -> {ciudad_pais}")
+                
+                # Registrar auditoría
+                registrar_auditoria(
+                    accion="ELIMINACION_LOCALIZACION",
+                    cp_id=cp_id,
+                    origen_ip=None,
+                    descripcion=f"Localización eliminada: {ciudad_pais}",
+                    resultado="OK"
+                )
                 
                 # También eliminar alerta si existe
                 with ALERTAS_LOCK:
@@ -419,6 +513,15 @@ def api_register_cp():
         if temp is not None:
             print(f"[EV_W]   Temperatura actual: {temp:.1f}°C")
         
+        # Registrar auditoría
+        registrar_auditoria(
+            accion="REGISTRO_LOCALIZACION",
+            cp_id=cp_id,
+            origen_ip=request.remote_addr,
+            descripcion=f"Localización registrada para {cp_id}: {localizacion}. Temperatura actual: {temp:.1f}°C" if temp else f"Localización registrada para {cp_id}: {localizacion}",
+            resultado="OK"
+        )
+        
         return jsonify({
             'status': 'ok',
             'cp_id': cp_id,
@@ -460,6 +563,15 @@ def api_update_location(cp_id):
                 
                 # Consultar temperatura inmediatamente
                 temp = obtener_temperatura(nueva_localizacion)
+                
+                # Registrar auditoría
+                registrar_auditoria(
+                    accion="ACTUALIZACION_LOCALIZACION",
+                    cp_id=cp_id,
+                    origen_ip=request.remote_addr,
+                    descripcion=f"Localización actualizada para {cp_id}: {nueva_localizacion}. Temperatura actual: {temp:.1f}°C" if temp else f"Localización actualizada para {cp_id}: {nueva_localizacion}",
+                    resultado="OK"
+                )
                 
                 return jsonify({
                     'status': 'ok',

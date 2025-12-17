@@ -59,6 +59,16 @@ def require_api_key(f):
         
         if api_key != SHARED_API_KEY:
             print(f"[EV_Registry] ❌ Intento de acceso no autorizado con API key inválida")
+            
+            # Registrar auditoría de intento no autorizado
+            registrar_auditoria(
+                accion="ACCESO_NO_AUTORIZADO",
+                cp_id=None,
+                origen_ip=request.remote_addr,
+                descripcion=f"Intento de acceso con API key inválida",
+                resultado="DENEGADO"
+            )
+            
             return jsonify({
                 'status': 'error',
                 'message': 'API key inválida'
@@ -147,6 +157,37 @@ def inicializar_tablas():
         if connection:
             connection.close()
         return False
+
+# =================================================================
+#                    FUNCIONES DE AUDITORÍA
+# =================================================================
+
+def registrar_auditoria(accion: str, cp_id: str = None, origen_ip: str = None, 
+                        descripcion: str = None, resultado: str = "OK") -> None:
+    """
+    Registra un evento de auditoría en la base de datos.
+    
+    Args:
+        accion: Tipo de acción (ej: "REGISTRO_CP", "BAJA_CP", "AUTENTICACION", etc.)
+        cp_id: ID del CP (opcional)
+        origen_ip: IP de origen (opcional)
+        descripcion: Descripción detallada del evento
+        resultado: Resultado de la acción ("OK", "ERROR", "DENEGADO", etc.)
+    """
+    try:
+        connection = obtener_conexion_bd()
+        if connection and connection.is_connected():
+            cursor = connection.cursor()
+            cursor.execute("""
+                INSERT INTO audit_log (fecha_hora, origen_ip, cp_id, accion, descripcion, resultado)
+                VALUES (NOW(), %s, %s, %s, %s, %s)
+            """, (origen_ip, cp_id, accion, descripcion, resultado))
+            connection.commit()
+            cursor.close()
+            connection.close()
+    except Exception as e:
+        # No fallar si hay error en auditoría, solo log
+        print(f"[EV_Registry] ⚠️ Error registrando auditoría: {e}")
 
 # =================================================================
 #                    FUNCIONES DE SEGURIDAD
@@ -276,6 +317,15 @@ def registrar_cp():
                     
                     print(f"[EV_Registry] ✓ Credenciales regeneradas para CP {cp_id}")
                     
+                    # Registrar auditoría
+                    registrar_auditoria(
+                        accion="REGENERACION_CREDENCIALES",
+                        cp_id=cp_id,
+                        origen_ip=request.remote_addr,
+                        descripcion=f"Credenciales regeneradas para CP {cp_id} ya registrado",
+                        resultado="OK"
+                    )
+                    
                     return jsonify({
                         'status': 'ok',
                         'cp_id': cp_id,
@@ -326,6 +376,16 @@ def registrar_cp():
                         connection.close()
                         
                         print(f"[EV_Registry] ✓ CP {cp_id} reactivado con nuevas credenciales")
+                        
+                        # Registrar auditoría
+                        registrar_auditoria(
+                            accion="REACTIVACION_CP",
+                            cp_id=cp_id,
+                            origen_ip=request.remote_addr,
+                            descripcion=f"CP {cp_id} reactivado y credenciales generadas",
+                            resultado="OK"
+                        )
+                        
                         return jsonify({
                             'status': 'ok',
                             'cp_id': cp_id,
@@ -354,6 +414,15 @@ def registrar_cp():
             connection.close()
             
             print(f"[EV_Registry] ✓ CP {cp_id} registrado correctamente")
+            
+            # Registrar auditoría
+            registrar_auditoria(
+                accion="REGISTRO_CP",
+                cp_id=cp_id,
+                origen_ip=request.remote_addr,
+                descripcion=f"CP {cp_id} registrado correctamente. Ubicación: {ubicacion}",
+                resultado="OK"
+            )
             
             return jsonify({
                 'status': 'ok',
@@ -534,6 +603,15 @@ def dar_baja_cp(cp_id):
             
             print(f"[EV_Registry] ✓ CP {cp_id} dado de baja")
             
+            # Registrar auditoría
+            registrar_auditoria(
+                accion="BAJA_CP",
+                cp_id=cp_id,
+                origen_ip=request.remote_addr,
+                descripcion=f"CP {cp_id} dado de baja correctamente",
+                resultado="OK"
+            )
+            
             return jsonify({
                 'status': 'ok',
                 'cp_id': cp_id,
@@ -616,6 +694,16 @@ def autenticar_cp():
                 cursor.close()
                 connection.close()
                 print(f"[EV_Registry] ❌ Intento de autenticación fallido: usuario no encontrado")
+                
+                # Registrar auditoría de intento fallido
+                registrar_auditoria(
+                    accion="AUTENTICACION",
+                    cp_id=None,
+                    origen_ip=request.remote_addr,
+                    descripcion=f"Intento de autenticación fallido: usuario no encontrado (username: {username[:10]}...)",
+                    resultado="DENEGADO"
+                )
+                
                 return jsonify({
                     'status': 'error',
                     'message': 'Credenciales inválidas'
@@ -626,6 +714,16 @@ def autenticar_cp():
                 cursor.close()
                 connection.close()
                 print(f"[EV_Registry] ❌ Intento de autenticación fallido: CP inactivo")
+                
+                # Registrar auditoría de intento fallido
+                registrar_auditoria(
+                    accion="AUTENTICACION",
+                    cp_id=creds.get('cp_id'),
+                    origen_ip=request.remote_addr,
+                    descripcion=f"Intento de autenticación fallido: CP inactivo (dado de baja)",
+                    resultado="DENEGADO"
+                )
+                
                 return jsonify({
                     'status': 'error',
                     'message': 'CP dado de baja'
@@ -652,6 +750,15 @@ def autenticar_cp():
                 
                 print(f"[EV_Registry] ✓ Autenticación exitosa para {cp_id}")
                 
+                # Registrar auditoría
+                registrar_auditoria(
+                    accion="AUTENTICACION",
+                    cp_id=cp_id,
+                    origen_ip=request.remote_addr,
+                    descripcion=f"Autenticación exitosa para CP {cp_id}",
+                    resultado="OK"
+                )
+                
                 return jsonify({
                     'status': 'ok',
                     'cp_id': cp_id,
@@ -661,6 +768,16 @@ def autenticar_cp():
                 cursor.close()
                 connection.close()
                 print(f"[EV_Registry] ❌ Intento de autenticación fallido: password incorrecto")
+                
+                # Registrar auditoría de intento fallido
+                registrar_auditoria(
+                    accion="AUTENTICACION",
+                    cp_id=creds.get('cp_id') if creds else None,
+                    origen_ip=request.remote_addr,
+                    descripcion=f"Intento de autenticación fallido: password incorrecto (username: {username[:10]}...)",
+                    resultado="DENEGADO"
+                )
+                
                 return jsonify({
                     'status': 'error',
                     'message': 'Credenciales inválidas'

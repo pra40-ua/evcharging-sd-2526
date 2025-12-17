@@ -10,6 +10,8 @@ import os
 import json
 from cryptography.fernet import Fernet
 import urllib3
+import mysql.connector
+from mysql.connector import Error
 
 # Deshabilitar advertencias SSL para certificados autofirmados
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -202,6 +204,62 @@ else:
     # Si se especifica HTTP, cambiarlo a HTTPS (Registry solo escucha HTTPS)
     if REGISTRY_URL.startswith('http://') and not REGISTRY_URL.startswith('https://'):
         REGISTRY_URL = REGISTRY_URL.replace('http://', 'https://', 1)
+
+# Configuración de base de datos para auditoría
+DB_CONFIG = {
+    'host': os.getenv('DB_HOST', '127.0.0.1'),
+    'port': int(os.getenv('DB_PORT', '3306')),
+    'user': os.getenv('DB_USER', 'root'),
+    'password': os.getenv('DB_PASSWORD', 'root'),
+    'database': os.getenv('DB_NAME', 'evcharging')
+}
+
+# =================================================================
+#                    FUNCIONES DE AUDITORÍA
+# =================================================================
+
+def obtener_conexion_bd():
+    """Obtiene una conexión a la base de datos para auditoría."""
+    try:
+        connection = mysql.connector.connect(
+            host=DB_CONFIG['host'],
+            port=DB_CONFIG['port'],
+            user=DB_CONFIG['user'],
+            password=DB_CONFIG['password'],
+            database=DB_CONFIG['database'],
+            ssl_disabled=True
+        )
+        return connection
+    except Error as e:
+        print(f"[CP_M] ⚠️ Error conectando a BD para auditoría: {e}")
+        return None
+
+def registrar_auditoria(accion: str, cp_id: str = None, origen_ip: str = None, 
+                        descripcion: str = None, resultado: str = "OK") -> None:
+    """
+    Registra un evento de auditoría en la base de datos.
+    
+    Args:
+        accion: Tipo de acción (ej: "CONEXION_CENTRAL", "REGISTRO_REGISTRY", etc.)
+        cp_id: ID del CP (opcional)
+        origen_ip: IP de origen (opcional)
+        descripcion: Descripción detallada del evento
+        resultado: Resultado de la acción ("OK", "ERROR", etc.)
+    """
+    try:
+        connection = obtener_conexion_bd()
+        if connection and connection.is_connected():
+            cursor = connection.cursor()
+            cursor.execute("""
+                INSERT INTO audit_log (fecha_hora, origen_ip, cp_id, accion, descripcion, resultado)
+                VALUES (NOW(), %s, %s, %s, %s, %s)
+            """, (origen_ip, cp_id, accion, descripcion, resultado))
+            connection.commit()
+            cursor.close()
+            connection.close()
+    except Exception as e:
+        # No fallar si hay error en auditoría, solo log
+        print(f"[CP_M] ⚠️ Error registrando auditoría: {e}")
 
 # =================================================================
 #                       LÓGICA DE COMUNICACIÓN CENTRAL
@@ -562,12 +620,31 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, engine_
         if not success or not username or not password:
             print(f"[CP_M] ❌ ERROR: No se pudo registrar/autenticar en EV_Registry")
             print(f"[CP_M] ⚠️ Continuando sin credenciales (modo compatibilidad)...")
+            
+            # Registrar auditoría de error
+            registrar_auditoria(
+                accion="REGISTRO_REGISTRY",
+                cp_id=cp_id,
+                origen_ip=None,
+                descripcion=f"Error al registrar/autenticar CP {cp_id} en EV_Registry",
+                resultado="ERROR"
+            )
+            
             username = None
             password = None
         else:
             print(f"[CP_M] ✓ Registro exitoso en EV_Registry")
             print(f"[CP_M]   Username: {username}")
             print(f"[CP_M]   Password: {password[:10]}... (mostrando primeros 10 caracteres)")
+            
+            # Registrar auditoría de registro exitoso
+            registrar_auditoria(
+                accion="REGISTRO_REGISTRY",
+                cp_id=cp_id,
+                origen_ip=None,
+                descripcion=f"CP {cp_id} registrado/autenticado exitosamente en EV_Registry",
+                resultado="OK"
+            )
     
     print(f"{'='*70}\n")
 
@@ -712,8 +789,25 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, engine_
             print(f"[CP_M]   Mensaje: {mensaje}")
             print(f"{'='*70}\n")
             
+            # Registrar auditoría de conexión exitosa
+            registrar_auditoria(
+                accion="CONEXION_CENTRAL",
+                cp_id=cp_id,
+                origen_ip=central_ip,
+                descripcion=f"Conexión exitosa con EV_Central. CP {cp_id} autenticado y activado",
+                resultado="OK"
+            )
+            
             return client_socket 
         else:
+            # Registrar auditoría de fallo de autenticación
+            registrar_auditoria(
+                accion="CONEXION_CENTRAL",
+                cp_id=cp_id,
+                origen_ip=central_ip,
+                descripcion=f"Fallo de autenticación con EV_Central. Respuesta: {cod_op}",
+                resultado="ERROR"
+            )
             raise Exception(f"Fallo de autenticación. Respuesta inválida o AUTH#FAIL. Cod={cod_op}, Campos={campos}")
 
     except Exception as e:
@@ -741,6 +835,16 @@ def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, 
             trama_bytes = central_socket.recv(4096)  # Aumentar buffer para mensajes cifrados
             if not trama_bytes:
                 print(f"[{cp_id}] Central cerró la conexión. Socket de comando cerrado.")
+                
+                # Registrar auditoría de desconexión
+                registrar_auditoria(
+                    accion="DESCONEXION_CENTRAL",
+                    cp_id=cp_id,
+                    origen_ip=None,
+                    descripcion=f"Conexión con EV_Central cerrada por el servidor",
+                    resultado="OK"
+                )
+                
                 # Limpiar referencia global
                 with CENTRAL_SOCKET_LOCK:
                     CENTRAL_SOCKET = None

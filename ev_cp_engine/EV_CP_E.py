@@ -27,6 +27,8 @@ import webbrowser
 import requests
 import base64
 from cryptography.fernet import Fernet
+import mysql.connector
+from mysql.connector import Error
 
 # Importaciones para la interfaz web
 from flask import Flask, render_template, jsonify, request, make_response, redirect
@@ -36,8 +38,64 @@ from flask_cors import CORS
 KAFKA_SERVER = os.getenv('KAFKA_SERVER', '127.0.0.1:9092')
 TOPIC_TELEMETRY = 'telemetria_cp'
 
+# Configuración de base de datos para auditoría
+DB_CONFIG = {
+    'host': os.getenv('DB_HOST', '127.0.0.1'),
+    'port': int(os.getenv('DB_PORT', '3306')),
+    'user': os.getenv('DB_USER', 'root'),
+    'password': os.getenv('DB_PASSWORD', 'root'),
+    'database': os.getenv('DB_NAME', 'evcharging')
+}
+
 # Definición del Productor de Kafka (inicialización perezosa)
 TELEMETRY_PRODUCER = None
+
+# =================================================================
+#                    FUNCIONES DE AUDITORÍA
+# =================================================================
+
+def obtener_conexion_bd():
+    """Obtiene una conexión a la base de datos para auditoría."""
+    try:
+        connection = mysql.connector.connect(
+            host=DB_CONFIG['host'],
+            port=DB_CONFIG['port'],
+            user=DB_CONFIG['user'],
+            password=DB_CONFIG['password'],
+            database=DB_CONFIG['database'],
+            ssl_disabled=True
+        )
+        return connection
+    except Error as e:
+        print(f"[ENGINE] ⚠️ Error conectando a BD para auditoría: {e}")
+        return None
+
+def registrar_auditoria(accion: str, cp_id: str = None, origen_ip: str = None, 
+                        descripcion: str = None, resultado: str = "OK") -> None:
+    """
+    Registra un evento de auditoría en la base de datos.
+    
+    Args:
+        accion: Tipo de acción (ej: "INICIO_SUMINISTRO", "FIN_SUMINISTRO", "AVERIA", etc.)
+        cp_id: ID del CP (opcional)
+        origen_ip: IP de origen (opcional)
+        descripcion: Descripción detallada del evento
+        resultado: Resultado de la acción ("OK", "ERROR", etc.)
+    """
+    try:
+        connection = obtener_conexion_bd()
+        if connection and connection.is_connected():
+            cursor = connection.cursor()
+            cursor.execute("""
+                INSERT INTO audit_log (fecha_hora, origen_ip, cp_id, accion, descripcion, resultado)
+                VALUES (NOW(), %s, %s, %s, %s, %s)
+            """, (origen_ip, cp_id, accion, descripcion, resultado))
+            connection.commit()
+            cursor.close()
+            connection.close()
+    except Exception as e:
+        # No fallar si hay error en auditoría, solo log
+        print(f"[ENGINE] ⚠️ Error registrando auditoría: {e}")
 
 def initialize_producer(broker: str):
     global TELEMETRY_PRODUCER
@@ -824,6 +882,16 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                         ESTADO_FLUJO = 'CARGANDO'
                     
                     print(f"[{cp_id}] ⚡ CARGA INICIADA - Estado: LISTO_PARA_INICIAR → CARGANDO")
+                    
+                    # Registrar auditoría
+                    registrar_auditoria(
+                        accion="INICIO_SUMINISTRO",
+                        cp_id=cp_id,
+                        origen_ip=None,
+                        descripcion=f"Inicio de suministro confirmado por Central. Driver: {driver_id}, Objetivo: {kw_objetivo} kWh" if kw_objetivo else f"Inicio de suministro confirmado por Central. Driver: {driver_id}",
+                        resultado="OK"
+                    )
+                    
                     info_ack = 'START_OK'
                     if kw_objetivo is not None:
                         info_ack = f"START_OK {kw_objetivo}kWh"
@@ -854,6 +922,18 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                         ESTADO_FLUJO = 'REPOSO'
                     
                     print(f"[{cp_id}] 🛑 CARGA DETENIDA - Estado: ESPERANDO_CONFIRMACION_FIN → REPOSO")
+                    
+                    # Obtener driver_id antes de limpiar
+                    driver_id_final = globals().get('CURRENT_DRIVER_ID', 'UNKNOWN')
+                    
+                    # Registrar auditoría
+                    registrar_auditoria(
+                        accion="FIN_SUMINISTRO",
+                        cp_id=cp_id,
+                        origen_ip=None,
+                        descripcion=f"Fin de suministro confirmado por Central. Driver: {driver_id_final}, Energía: {kw_final:.2f} kWh, Tiempo: {secs_final}s",
+                        resultado="OK"
+                    )
                     
                     # Enviar telemetría final en REPOSO
                     generar_y_enviar_telemetria(
@@ -1695,6 +1775,16 @@ def _enviar_ready_to_start_interno() -> tuple[bool, str]:
         trama = construir_trama('READY_TO_START', [cp_id, driver_id])
         globals()['ACTIVE_MONITOR_CONN'].sendall(trama)
         print(f"[{cp_id}] 📤 READY_TO_START enviado a Monitor (Driver: {driver_id}) [CLI]")
+        
+        # Registrar auditoría
+        registrar_auditoria(
+            accion="SOLICITUD_INICIO_SUMINISTRO",
+            cp_id=cp_id,
+            origen_ip=None,
+            descripcion=f"Solicitud de inicio de suministro enviada a Central. Driver: {driver_id}",
+            resultado="OK"
+        )
+        
         return True, 'Señal enviada a Central. Esperando confirmación...'
     except Exception as e:
         with ESTADO_FLUJO_LOCK:
@@ -2020,11 +2110,29 @@ def api_simular_averia():
         print(f"  Motivo: {motivo}")
         print(f"{'='*70}\n")
         mensaje = f"Avería simulada activada: {motivo}"
+        
+        # Registrar auditoría
+        registrar_auditoria(
+            accion="AVERIA_SIMULADA",
+            cp_id=cp_id,
+            origen_ip=request.remote_addr if hasattr(request, 'remote_addr') else None,
+            descripcion=f"Avería simulada activada. Motivo: {motivo}",
+            resultado="OK"
+        )
     else:
         print(f"\n{'='*70}")
         print(f"  [{cp_id}] ✓ AVERÍA SIMULADA DESACTIVADA")
         print(f"{'='*70}\n")
         mensaje = "Avería simulada desactivada"
+        
+        # Registrar auditoría
+        registrar_auditoria(
+            accion="RECUPERACION_AVERIA",
+            cp_id=cp_id,
+            origen_ip=request.remote_addr if hasattr(request, 'remote_addr') else None,
+            descripcion="Avería simulada desactivada",
+            resultado="OK"
+        )
     
     return jsonify({
         'status': 'ok',
@@ -2144,6 +2252,15 @@ def api_recuperar_averia():
             print(f"[{cp_id}] ✅ Recuperación completada. El CP volverá a estado ACTIVADO")
             print(f"{'='*70}\n")
             notificacion_enviada = True
+            
+            # Registrar auditoría
+            registrar_auditoria(
+                accion="RECUPERACION_AVERIA",
+                cp_id=cp_id,
+                origen_ip=request.remote_addr if hasattr(request, 'remote_addr') else None,
+                descripcion=f"Recuperación de avería completada. Suministro detenido: {tenia_suministro_activo}",
+                resultado="OK"
+            )
             respuesta = jsonify({
                 'status': 'ok',
                 'mensaje': 'Recuperación completada. Avería desactivada y notificada a Central. Estado volverá a ACTIVADO',
@@ -2226,6 +2343,15 @@ def api_iniciar_suministro():
         
         print(f"[{cp_id}] 📤 READY_TO_START enviado a Monitor (Driver: {driver_id})")
         
+        # Registrar auditoría
+        registrar_auditoria(
+            accion="SOLICITUD_INICIO_SUMINISTRO",
+            cp_id=cp_id,
+            origen_ip=request.remote_addr if hasattr(request, 'remote_addr') else None,
+            descripcion=f"Solicitud de inicio de suministro enviada a Central. Driver: {driver_id}",
+            resultado="OK"
+        )
+        
         return jsonify({
             'status': 'ok',
             'mensaje': 'Señal enviada a Central. Esperando confirmación...',
@@ -2283,6 +2409,15 @@ def api_solicitar_fin():
         ACTIVE_MONITOR_CONN.sendall(trama)
         
         print(f"[{cp_id}] 📤 REQUEST_STOP enviado a Monitor")
+        
+        # Registrar auditoría
+        registrar_auditoria(
+            accion="SOLICITUD_FIN_SUMINISTRO",
+            cp_id=cp_id,
+            origen_ip=request.remote_addr if hasattr(request, 'remote_addr') else None,
+            descripcion=f"Solicitud de fin de suministro enviada a Central. Driver: {driver_id}, Energía actual: {kw_actual:.2f} kWh, Tiempo: {segundos}s",
+            resultado="OK"
+        )
         
         return jsonify({
             'status': 'ok',
