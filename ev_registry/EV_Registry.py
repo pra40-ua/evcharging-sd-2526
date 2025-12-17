@@ -874,7 +874,7 @@ def main():
     global DB_CONFIG, REGISTRY_PORT
     
     parser = argparse.ArgumentParser(description="EV_Registry - Registro de Puntos de Carga")
-    parser.add_argument("--db-host", type=str, default="127.0.0.1",
+    parser.add_argument("--db-host", type=str, default="192.168.1.43",
                         help="Host de la base de datos")
     parser.add_argument("--db-port", type=int, default=3306,
                         help="Puerto de la base de datos")

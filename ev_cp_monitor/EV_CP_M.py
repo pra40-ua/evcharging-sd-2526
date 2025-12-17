@@ -207,7 +207,7 @@ else:
 
 # Configuración de base de datos para auditoría
 DB_CONFIG = {
-    'host': os.getenv('DB_HOST', '127.0.0.1'),
+    'host': os.getenv('DB_HOST', '192.168.1.43'),
     'port': int(os.getenv('DB_PORT', '3306')),
     'user': os.getenv('DB_USER', 'root'),
     'password': os.getenv('DB_PASSWORD', 'root'),
@@ -884,9 +884,9 @@ def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, 
                         if central_socket:
                             central_socket.sendall(resp)
                             print(f"[{cp_id}] ✓ AUTH_RESP enviado a Central (cifrado). Esperando acción del operador del Engine...")
-                    else:
-                        mensaje_error = f"Imposible conectar con Central"
-                        print(f"[{cp_id}] ❌ {mensaje_error}")
+                        else:
+                            mensaje_error = f"Imposible conectar con Central"
+                            print(f"[{cp_id}] ❌ {mensaje_error}")
                     except (OSError, BrokenPipeError, ConnectionResetError) as e:
                         print(f"[{cp_id}] ⚠️ Error enviando AUTH_RESP a Central: {e}. Conexión perdida.")
                 except Exception as e:

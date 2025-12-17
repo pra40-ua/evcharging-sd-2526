@@ -47,7 +47,7 @@ CHECK_INTERVAL = 4
 
 # Configuración de base de datos para auditoría
 DB_CONFIG = {
-    'host': os.getenv('DB_HOST', '127.0.0.1'),
+    'host': os.getenv('DB_HOST', '192.168.1.43'),
     'port': int(os.getenv('DB_PORT', '3306')),
     'user': os.getenv('DB_USER', 'root'),
     'password': os.getenv('DB_PASSWORD', 'root'),

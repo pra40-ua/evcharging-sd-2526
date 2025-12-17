@@ -206,3 +206,6 @@ Con Registry en PC_A, todo funcionará correctamente porque Central y Registry e
 
 
 
+
+
+
