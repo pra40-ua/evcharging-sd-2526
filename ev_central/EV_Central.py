@@ -239,6 +239,7 @@ def obtener_clave_cifrado_cp(cp_id: str, db_connection = None) -> bytes:
     with CP_ENCRYPTION_KEYS_LOCK:
         CP_ENCRYPTION_KEYS[cp_id] = nueva_clave
     
+    print(f"[CENTRAL] 🔑 Nueva clave de cifrado Fernet generada para CP {cp_id}")
     return nueva_clave
 
 def cifrar_mensaje(mensaje: bytes, clave: bytes) -> bytes:
