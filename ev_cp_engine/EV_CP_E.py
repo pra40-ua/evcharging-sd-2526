@@ -175,6 +175,7 @@ def generar_y_enviar_telemetria(cp_id: str, estado_carga: str, kw_entregados: fl
 
     try:
         # Cifrar el mensaje si hay clave disponible
+        global KAFKA_ENCRYPTION_ERROR_COUNT
         with KAFKA_ENCRYPTION_KEY_LOCK:
             encryption_key = KAFKA_ENCRYPTION_KEY
         
@@ -674,10 +675,7 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
     print(f"  [{cp_id}] 🔗 MONITOR CONECTADO desde {addr[0]}:{addr[1]}")
     print(f"{'='*70}\n")
     # Guardar conexión activa para permitir al menú enviar señales de 'enchufado'
-    try:
-        globals()['ACTIVE_MONITOR_CONN'] = conn
-    except Exception:
-        pass
+    ACTIVE_MONITOR_CONN = conn
     
     # Verificar si hay un estado persistido de un suministro interrumpido
     # Si existe, enviar FIN inmediatamente con los datos del suministro
@@ -1007,6 +1005,8 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
     except Exception as e:
         print(f"[ENGINE] Error en bucle de conexión con Monitor: {e}")
     finally:
+        # Limpiar conexión activa cuando se cierra
+        ACTIVE_MONITOR_CONN = None
         conn.close()
         print("[ENGINE] Conexión con Monitor cerrada.")
 
@@ -2136,9 +2136,13 @@ def api_simular_averia():
             resultado="OK"
         )
     
+    # Leer el estado actual después de modificarlo
+    with SIMULAR_AVERIA_LOCK:
+        estado_actual = SIMULAR_AVERIA
+    
     return jsonify({
         'status': 'ok',
-        'averia_activa': SIMULAR_AVERIA,
+        'averia_activa': estado_actual,
         'mensaje': mensaje
     })
 
@@ -2166,8 +2170,11 @@ def api_recuperar_averia():
     averia_anterior = False
     with SIMULAR_AVERIA_LOCK:
         averia_anterior = SIMULAR_AVERIA
-        SIMULAR_AVERIA = False
-        print(f"[{cp_id}] ✓ Avería desactivada localmente (estado anterior: {averia_anterior})")
+        if averia_anterior:
+            SIMULAR_AVERIA = False
+            print(f"[{cp_id}] ✓ Avería desactivada localmente (estado anterior: activa)")
+        else:
+            print(f"[{cp_id}] ⚠️ No había avería activa para recuperar")
     
     # Si había suministro activo, detenerlo y preparar FIN
     if tenia_suministro_activo:
@@ -2195,15 +2202,16 @@ def api_recuperar_averia():
     notificacion_enviada = False
     try:
         if ACTIVE_MONITOR_CONN is None:
-            print(f"[{cp_id}] ⚠️ No hay conexión con el Monitor para notificar la recuperación")
-            print(f"[{cp_id}] ✅ Avería desactivada localmente. El CP volverá a responder OK a los chequeos de salud")
-            if tenia_suministro_activo:
-                print(f"[{cp_id}] ⚠️ Suministro detenido localmente pero no se pudo enviar FIN (sin conexión con Monitor)")
+            if averia_anterior:
+                print(f"[{cp_id}] ⚠️ No hay conexión con el Monitor para notificar la recuperación a Central")
+                print(f"[{cp_id}] ✅ Avería desactivada localmente. El CP volverá a responder OK a los chequeos de salud")
+                if tenia_suministro_activo:
+                    print(f"[{cp_id}] ⚠️ Suministro detenido localmente pero no se pudo enviar FIN (sin conexión con Monitor)")
             print(f"{'='*70}\n")
-            # Aunque no haya conexión con el Monitor, la avería se desactivó correctamente
+            # Aunque no haya conexión con el Monitor, la avería se desactivó correctamente (si estaba activa)
             respuesta = jsonify({
-                'status': 'ok',
-                'mensaje': 'Recuperación completada. Avería desactivada localmente. No se pudo notificar a Central (sin conexión con Monitor)',
+                'status': 'ok' if averia_anterior else 'warning',
+                'mensaje': 'Avería desactivada localmente. No se pudo notificar a Central (sin conexión con Monitor)' if averia_anterior else 'No había avería activa para recuperar',
                 'averia_anterior': averia_anterior,
                 'averia_actual': False,
                 'notificacion_central': False,
@@ -2608,6 +2616,7 @@ def main():
         print(f"[EV_CP_E] Servidor escuchando en TCP (:{args.port}). Esperando Monitor...")
         
         # Bucle para aceptar conexiones (reconexión automática)
+        global ACTIVE_MONITOR_CONN
         while True:
             try:
                 conn, addr = server_socket.accept()
@@ -2615,7 +2624,8 @@ def main():
                 conn.settimeout(None)
                 print(f"[EV_CP_E] Monitor conectado desde {addr[0]}:{addr[1]}")
                 handle_monitor_connection(conn, addr, args.cp_id)
-                # Si la conexión se cierra, volver a esperar
+                # Si la conexión se cierra, limpiar conexión activa y volver a esperar
+                ACTIVE_MONITOR_CONN = None
                 print(f"[EV_CP_E] Conexión cerrada. Esperando nueva conexión del Monitor...")
             except socket.timeout:
                 # Timeout de accept(), seguir esperando

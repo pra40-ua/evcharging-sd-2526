@@ -344,11 +344,10 @@ def verificar_registry_disponible(base_url: str) -> bool:
             current_host = match.group(1)
             urls_a_probar.append(base_url.replace(current_host, 'host.docker.internal'))
     
-    # Intentar con cada URL
+    # Intentar con cada URL (silenciosamente hasta encontrar una que funcione)
     for url_intento in urls_a_probar:
         health_url_intento = f"{url_intento}/api/health"
         try:
-            print(f"[CP_M] Intentando conectar a {health_url_intento}...")
             # Aumentar timeout y asegurar que verify=False esté configurado
             response = requests.get(
                 health_url_intento, 
@@ -356,7 +355,6 @@ def verificar_registry_disponible(base_url: str) -> bool:
                 verify=False,
                 allow_redirects=True
             )
-            print(f"[CP_M] Respuesta recibida: HTTP {response.status_code}")
             if response.status_code == 200:
                 print(f"[CP_M] ✓ Registry disponible en {url_intento}")
                 # Si la URL que funcionó es diferente a la original, actualizar
@@ -366,32 +364,17 @@ def verificar_registry_disponible(base_url: str) -> bool:
                     global REGISTRY_URL
                     REGISTRY_URL = url_intento
                 return True
-            else:
-                print(f"[CP_M] ⚠️ Registry responde pero con código {response.status_code}")
-                print(f"[CP_M]   Respuesta: {response.text[:200]}")
-        except requests.exceptions.SSLError as ssl_err:
-            print(f"[CP_M] ⚠️ Error SSL con {url_intento}: {ssl_err}")
-            import traceback
-            traceback.print_exc()
-            continue
-        except requests.exceptions.ConnectionError as conn_err:
-            print(f"[CP_M] ⚠️ No se pudo conectar a {url_intento}")
-            print(f"[CP_M]   Error: {str(conn_err)[:200]}")
-            continue
-        except requests.exceptions.Timeout:
-            print(f"[CP_M] ⚠️ Timeout al conectar a {url_intento}")
-            continue
-        except Exception as e:
-            print(f"[CP_M] ⚠️ Error verificando {url_intento}: {e}")
-            import traceback
-            traceback.print_exc()
+            # Si la respuesta no es 200, continuar silenciosamente con la siguiente URL
+        except (requests.exceptions.SSLError, requests.exceptions.ConnectionError, 
+                requests.exceptions.Timeout, Exception):
+            # Continuar silenciosamente con la siguiente URL sin mostrar errores
             continue
     
     mensaje_error = "Registry no responde"
     print(f"[CP_M] ❌ {mensaje_error}")
     print(f"[CP_M]   URLs probadas: {', '.join(urls_a_probar)}")
     print(f"[CP_M]   Verifica que el Registry esté ejecutándose")
-            print(f"[CP_M]   Prueba manualmente: curl -k https://localhost:8000/api/health")
+    print(f"[CP_M]   Prueba manualmente: curl -k https://localhost:8000/api/health")
     return False
 
 def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
@@ -413,7 +396,7 @@ def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
             base_url = f'https://{base_url}'
     
     # Verificar que el Registry esté disponible antes de intentar registrar
-    print(f"[CP_M] Verificando disponibilidad del Registry en {base_url}...")
+    # Verificar disponibilidad del Registry (prueba múltiples URLs automáticamente)
     if not verificar_registry_disponible(base_url):
         mensaje_error = "Registry no responde"
         print(f"[CP_M] ❌ {mensaje_error}")
@@ -437,9 +420,6 @@ def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
         'ubicacion': ubicacion
     }
     
-    print(f"[CP_M] Intentando registrar en Registry: {url}")
-    print(f"[CP_M] Payload: cp_id={cp_id}, ubicacion={ubicacion}")
-    
     try:
         # Usar HTTPS obligatoriamente (con verify=False para certificados autofirmados)
         # Según la guía, el cifrado del canal es obligatorio
@@ -447,12 +427,10 @@ def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
         
         # Intentar POST primero (método preferido)
         try:
-            print(f"[CP_M] Enviando POST a {url}...")
             headers = {
                 'X-API-Key': REGISTRY_API_KEY
             }
             response = requests.post(url, json=payload, headers=headers, timeout=10, verify=False)
-            print(f"[CP_M] Respuesta recibida: HTTP {response.status_code}")
         except requests.exceptions.SSLError as ssl_err:
             # Si hay error SSL específico, mostrar mensaje más claro
             print(f"[CP_M] ❌ Error SSL al conectar con EV_Registry: {ssl_err}")
@@ -635,10 +613,7 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, engine_
             username = None
             password = None
         else:
-            print(f"[CP_M] ✓ Registro exitoso en EV_Registry")
-            print(f"[CP_M]   Username: {username}")
-            print(f"[CP_M]   Password: {password[:10]}... (mostrando primeros 10 caracteres)")
-            
+            # El mensaje de éxito ya se mostró en registrar_en_registry, solo registrar auditoría
             # Registrar auditoría de registro exitoso
             registrar_auditoria(
                 accion="REGISTRO_REGISTRY",

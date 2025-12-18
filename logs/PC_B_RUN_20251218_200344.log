@@ -1,0 +1,9 @@
+============================================================ 
+ LOG DE EJECUCION - PC_B_RUN.bat 
+ Fecha/Hora: dj. 18/12/2025 20:03:44,36 
+============================================================ 
+ 
+Docker version 28.2.2, build e6534b4
+[DEBUG] Verificando si Registry está corriendo localmente en puerto 8000... 
+[DEBUG] Registry local detectado (HTTPS) - usando host.docker.internal 
+[DEBUG] REGISTRY_URL final:  

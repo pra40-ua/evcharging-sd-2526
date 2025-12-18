@@ -1,0 +1,160 @@
+============================================================ 
+ LOG DE EJECUCION - PC_B_RUN.bat 
+ Fecha/Hora: dj. 18/12/2025 19:38:39,66 
+============================================================ 
+ 
+Docker version 28.2.2, build e6534b4
+[DEBUG] Verificando si Registry está corriendo localmente en puerto 8000... 
+[DEBUG] Registry local detectado (HTTPS) - usando host.docker.internal 
+[DEBUG] REGISTRY_URL final:  
+[DEBUG] Directorio actual: C:\Users\alumno\Downloads\evcharging-sd-2526 
+[DEBUG] Verificando existencia de OPENWEATHER_API_KEY.txt... 
+[DEBUG] Ruta completa buscada: C:\Users\alumno\Downloads\evcharging-sd-2526\OPENWEATHER_API_KEY.txt 
+[DEBUG] Archivo OPENWEATHER_API_KEY.txt encontrado 
+[DEBUG] Contenido leido del archivo: 54076819eadd372702b599c788eb370f 
+[DEBUG] Longitud de la API Key: 
+54076819eadd372702b599c788eb370f 
+[DEBUG] Verificando que la API Key no este vacia... 
+[DEBUG] Valor de OPENWEATHER_API_KEY: "54076819eadd372702b599c788eb370f" 
+[DEBUG] Verificando que la API Key fue leida correctamente... 
+[DEBUG] Valor de OPENWEATHER_API_KEY: "54076819eadd372702b599c788eb370f" 
+[DEBUG] API Key validada: tiene contenido 
+[DEBUG] Verificando Python... 
+[DEBUG] Python encontrado 
+[DEBUG] Verificando ev_weather\EV_W.py... 
+[DEBUG] Archivo ev_weather\EV_W.py encontrado 
+[DEBUG] Llegando a :launch_weather 
+[DEBUG] API Key leida correctamente: 54076819ea... 
+[DEBUG] Iniciando lanzamiento de EV_Weather... 
+[DEBUG] Creando script temporal... 
+[DEBUG] Ruta del script temporal: C:\Users\alumno\AppData\Local\Temp\ev_weather_launch_18075.bat 
+[DEBUG] Variables temporales configuradas 
+[DEBUG] Escribiendo contenido del script temporal... 
+[DEBUG] Ruta completa: C:\Users\alumno\AppData\Local\Temp\ev_weather_launch_18075.bat 
+[DEBUG] Directorio del proyecto: C:\Users\alumno\Downloads\evcharging-sd-2526 
+[DEBUG] Resultado de creacion del script: 0 
+[DEBUG] Script temporal creado exitosamente 
+[DEBUG] Script temporal: C:\Users\alumno\AppData\Local\Temp\ev_weather_launch_18075.bat 
+[DEBUG] API Key: 54076819ea... 
+[DEBUG] Central URL: http://172.21.42.2:5001/api 
+[DEBUG] Comando START ejecutado exitosamente 
+[DEBUG] EV_Weather lanzado, continuando al MENU... 
+[DEBUG] Llegando al MENU 
+ 
+============================================================ 
+[MODO] MULTIPLES CPS SELECCIONADO 
+============================================================ 
+[INPUT] Usuario ingreso: NUM_CPS=1 
+[VALIDADO] NUM_CPS final: 1 
+[BUILD] Iniciando construccion de imagenes 
+[BUILD] Fecha/Hora: dj. 18/12/2025 19:38:53,18 
+ 
+[BUILD] Ejecutando: docker build -t ev_engine:local -f ev_cp_engine/Dockerfile . 
+[BUILD] ---- INICIO OUTPUT DOCKER BUILD ENGINE ---- 
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 580B 0.0s done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 1.2s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/python:3.10-slim
+#4 DONE 0.7s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 275B done
+#5 DONE 0.0s
+
+#6 [1/6] FROM docker.io/library/python:3.10-slim@sha256:fb1feae978f1729094eb0405e5f9564e55b2b3b24db3261d30ba4f22c5001a8a
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 141.69kB 0.1s done
+#7 DONE 0.1s
+
+#8 [2/6] WORKDIR /app
+#8 CACHED
+
+#9 [3/6] COPY requirements.txt ./
+#9 CACHED
+
+#10 [4/6] RUN pip install --no-cache-dir -r requirements.txt
+#10 CACHED
+
+#11 [5/6] COPY ev_cp_engine/ ev_cp_engine/
+#11 DONE 0.0s
+
+#12 [6/6] COPY ev_common/ ev_common/
+#12 DONE 0.1s
+
+#13 exporting to image
+#13 exporting layers 0.0s done
+#13 writing image sha256:79b2d56f03da2c79be3e69ec039e403620888450105e9c78db44e2d8940a5d7a done
+#13 naming to docker.io/library/ev_engine:local done
+#13 DONE 0.1s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/00v3q28hjp41p3n1wa228a8ii
+[BUILD] ---- FIN OUTPUT DOCKER BUILD ENGINE ---- 
+[BUILD] Resultado (errorlevel): 0 
+[BUILD OK] ev_engine construido exitosamente 
+[BUILD] Ejecutando: docker build -t ev_monitor:local -f ev_cp_monitor/Dockerfile . 
+[BUILD] ---- INICIO OUTPUT DOCKER BUILD MONITOR ---- 
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 DONE 0.0s
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 615B 0.0s done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 0.3s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/python:3.10-slim
+#4 DONE 0.2s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 275B 0.0s done
+#5 DONE 0.0s
+
+#6 [1/6] FROM docker.io/library/python:3.10-slim@sha256:fb1feae978f1729094eb0405e5f9564e55b2b3b24db3261d30ba4f22c5001a8a
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 70.25kB 0.1s done
+#7 DONE 0.1s
+
+#8 [2/6] WORKDIR /app
+#8 CACHED
+
+#9 [3/6] COPY requirements.txt ./
+#9 CACHED
+
+#10 [4/6] RUN pip install --no-cache-dir -r requirements.txt
+#10 CACHED
+
+#11 [5/6] COPY ev_cp_monitor/ ev_cp_monitor/
+#11 DONE 0.0s
+
+#12 [6/6] COPY ev_common/ ev_common/
+#12 DONE 0.0s
+
+#13 exporting to image
+#13 exporting layers 0.1s done
+#13 writing image sha256:ec48423467f16b04707ea14beda1851774030f2e682602652e9246ca26bc65d3 done
+#13 naming to docker.io/library/ev_monitor:local done
+#13 DONE 0.1s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/61asihodbd8gfdrj3h26mnol8
+[BUILD] ---- FIN OUTPUT DOCKER BUILD MONITOR ---- 
+[BUILD] Resultado (errorlevel): 0 
+[BUILD OK] ev_monitor construido exitosamente 

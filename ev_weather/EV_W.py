@@ -161,7 +161,7 @@ def obtener_temperatura(ciudad_pais: str) -> Optional[float]:
         print(f"[EV_W] ❌ {mensaje_error}")
         return None
 
-def notificar_alerta_central(cp_id: str, temperatura: float, activar: bool) -> bool:
+def notificar_alerta_central(cp_id: str, temperatura: float, activar: bool, mostrar_mensaje: bool = True) -> bool:
     """
     Notifica una alerta climatológica a EV_Central vía API REST.
     
@@ -169,12 +169,14 @@ def notificar_alerta_central(cp_id: str, temperatura: float, activar: bool) -> b
         cp_id: ID del punto de carga
         temperatura: Temperatura actual
         activar: True para activar alerta, False para desactivar
+        mostrar_mensaje: Si False, no muestra mensajes de éxito (útil para actualizaciones rutinarias)
     
     Returns:
         True si la notificación fue exitosa, False en caso contrario
     """
     if not CENTRAL_API_URL:
-        print("[EV_W] ERROR: URL de Central no configurada")
+        if mostrar_mensaje:
+            print("[EV_W] ERROR: URL de Central no configurada")
         return False
     
     try:
@@ -189,16 +191,23 @@ def notificar_alerta_central(cp_id: str, temperatura: float, activar: bool) -> b
         response = requests.post(url, json=payload, timeout=5)
         
         if response.status_code == 200:
-            print(f"[EV_W] ✓ Alerta {'activada' if activar else 'desactivada'} notificada a Central para {cp_id} (T={temperatura:.1f}°C)")
+            if mostrar_mensaje:
+                print(f"[EV_W] ✓ Alerta {'activada' if activar else 'desactivada'} notificada a Central para {cp_id} (T={temperatura:.1f}°C)")
             return True
         else:
-            print(f"[EV_W] ⚠️ Error notificando alerta a Central: HTTP {response.status_code} - {response.text[:100]}")
+            # Solo mostrar errores HTTP si mostrar_mensaje es True
+            if mostrar_mensaje:
+                print(f"[EV_W] ⚠️ Error notificando alerta a Central: HTTP {response.status_code} - {response.text[:100]}")
             return False
             
     except requests.exceptions.RequestException as e:
-        print(f"[EV_W] ❌ Error de conexión notificando a Central: {e}")
+        # Solo mostrar errores de conexión si mostrar_mensaje es True
+        # Los timeouts intermitentes son normales y no necesitan mostrarse siempre
+        if mostrar_mensaje:
+            print(f"[EV_W] ❌ Error de conexión notificando a Central: {e}")
         return False
     except Exception as e:
+        # Errores inesperados siempre se muestran
         print(f"[EV_W] ❌ Error inesperado notificando alerta: {e}")
         return False
 
@@ -278,8 +287,8 @@ def procesar_localizacion(cp_id: str, ciudad_pais: str):
         else:
             # Sin alerta, pero siempre enviar temperatura a Central para el dashboard
             print(f"[EV_W] {cp_id} ({ciudad_pais}): T={temperatura:.1f}°C - OK")
-            # Enviar temperatura sin alerta para que se muestre en el dashboard
-            notificar_alerta_central(cp_id, temperatura, False)
+            # Enviar temperatura sin alerta para que se muestre en el dashboard (silenciosamente)
+            notificar_alerta_central(cp_id, temperatura, False, mostrar_mensaje=False)
 
 def bucle_monitoreo_clima():
     """
