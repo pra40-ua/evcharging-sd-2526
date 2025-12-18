@@ -85,7 +85,7 @@ echo.
 echo [INFO] Configuracion:
 echo   - Base de datos en PC_A: !CENTRAL_IP_BD!:3306
 echo   - Database: evcharging
-echo   - Puerto Registry: 6000
+echo   - Puerto Registry: 8000
 echo.
 echo Verificando que MySQL en PC_A esta accesible ^(!CENTRAL_IP_BD!:3306^)...
 echo ^(Esto puede tardar unos segundos^)
@@ -164,10 +164,10 @@ if !USE_SSL! equ 1 (
     echo [INFO] Conectandose a BD en PC_A: !CENTRAL_IP_BD!:3306
     echo [INFO] El Registry compartira la BD con EV_Central para sincronizar CPs
     echo.
-    start "EV_Registry_PC_B" cmd /k "!PYTHON_CMD! ev_registry\EV_Registry.py --db-host !CENTRAL_IP_BD! --db-port 3306 --db-user root --db-password root --db-name evcharging --port 6000 --ssl --ssl-cert certificados\registry_cert.pem --ssl-key certificados\registry_key.pem"
-    echo [OK] EV_Registry iniciado en PC_B con HTTPS ^(puerto 6000^)
-    echo   - API REST: https://localhost:6000/register/cp
-    echo   - Health Check: https://localhost:6000/api/health
+    start "EV_Registry_PC_B" cmd /k "!PYTHON_CMD! ev_registry\EV_Registry.py --db-host !CENTRAL_IP_BD! --db-port 3306 --db-user root --db-password root --db-name evcharging --port 8000 --ssl --ssl-cert certificados\registry_cert.pem --ssl-key certificados\registry_key.pem"
+    echo [OK] EV_Registry iniciado en PC_B con HTTPS ^(puerto 8000^)
+    echo   - API REST: https://localhost:8000/register/cp
+    echo   - Health Check: https://localhost:8000/api/health
     echo   - Conectado a BD en PC_A: !CENTRAL_IP_BD!:3306
     goto :registry_started
 )
@@ -202,7 +202,7 @@ echo [CONFIGURACION]
 echo   - Ubicacion: PC_B ^(este ordenador^)
 echo   - Puerto: 6000
 echo   - Protocolo: HTTPS ^(SSL obligatorio - cifrado del canal^)
-echo   - API REST Base: https://localhost:6000/register/cp
+echo   - API REST Base: https://localhost:8000/register/cp
 echo   - Base de datos: !CENTRAL_IP_BD!:3306/evcharging ^(en PC_A - conexion remota^)
 echo   - Compartida con: EV_Central en PC_A para validacion de credenciales
 echo.
@@ -244,10 +244,10 @@ echo   - EV_Central y EV_Registry comparten la misma BD para sincronizar informa
 echo.
 echo [VERIFICAR CONEXION]
 echo   Desde otro terminal, prueba:
-echo   curl -k https://localhost:6000/api/health
+echo   curl -k https://localhost:8000/api/health
 echo.
 echo   Para probar registro de CP:
-echo   curl -k -X POST https://localhost:6000/register/cp ^
+echo   curl -k -X POST https://localhost:8000/register/cp ^
 echo     -H "Content-Type: application/json" ^
 echo     -d "{\"cp_id\":\"CP001\",\"ubicacion\":\"C/Mayor, 45, Madrid\"}"
 echo.
@@ -265,7 +265,7 @@ echo NOTA: Deja esta ventana abierta ^(Registry debe seguir corriendo^)
 echo.
 echo [VERIFICAR QUE FUNCIONA]
 echo   Antes de ejecutar PC_B_RUN.bat, puedes verificar Registry desde otra terminal:
-echo   curl -k https://localhost:6000/api/health
+echo   curl -k https://localhost:8000/api/health
 echo.
 echo Presiona cualquier tecla para cerrar esta ventana...
 echo ^(ADVERTENCIA: Si cierras esta ventana, Registry se detendra^)

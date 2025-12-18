@@ -197,7 +197,7 @@ if REGISTRY_URL_ENV:
 else:
     # Por defecto, usar localhost (funciona mejor que 127.0.0.1 en algunos sistemas)
     # Usar HTTPS (obligatorio según guía)
-    REGISTRY_URL = os.getenv('REGISTRY_URL_HTTPS', 'https://localhost:6000')
+    REGISTRY_URL = os.getenv('REGISTRY_URL_HTTPS', 'https://localhost:8000')
     # Asegurar que use HTTPS
     if not REGISTRY_URL.startswith(('http://', 'https://')):
         REGISTRY_URL = f'https://{REGISTRY_URL}'
@@ -206,8 +206,10 @@ else:
         REGISTRY_URL = REGISTRY_URL.replace('http://', 'https://', 1)
 
 # Configuración de base de datos para auditoría
+# Si está en Docker con --network evnet, usar 'mysql' como host
+# Si está en el host, usar '127.0.0.1' o la IP del servidor MySQL
 DB_CONFIG = {
-    'host': os.getenv('DB_HOST', '192.168.1.43'),
+    'host': os.getenv('DB_HOST', 'mysql'),  # Por defecto 'mysql' para contenedores en red evnet
     'port': int(os.getenv('DB_PORT', '3306')),
     'user': os.getenv('DB_USER', 'root'),
     'password': os.getenv('DB_PASSWORD', 'root'),
@@ -389,7 +391,7 @@ def verificar_registry_disponible(base_url: str) -> bool:
     print(f"[CP_M] ❌ {mensaje_error}")
     print(f"[CP_M]   URLs probadas: {', '.join(urls_a_probar)}")
     print(f"[CP_M]   Verifica que el Registry esté ejecutándose")
-    print(f"[CP_M]   Prueba manualmente: curl -k https://localhost:6000/api/health")
+            print(f"[CP_M]   Prueba manualmente: curl -k https://localhost:8000/api/health")
     return False
 
 def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
@@ -461,7 +463,7 @@ def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
             # Error de conexión (puerto cerrado, host no alcanzable, etc.)
             print(f"[CP_M] ❌ Error de conexión con EV_Registry: {conn_err}")
             print(f"[CP_M]   Verifica que el Registry esté ejecutándose en {base_url}")
-            print(f"[CP_M]   El Registry debe estar escuchando en HTTPS (puerto 6000)")
+            print(f"[CP_M]   El Registry debe estar escuchando en HTTPS (puerto 8000)")
             return False, None, None
         
         if response.status_code in (200, 201):

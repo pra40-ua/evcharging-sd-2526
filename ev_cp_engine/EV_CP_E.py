@@ -39,8 +39,10 @@ KAFKA_SERVER = os.getenv('KAFKA_SERVER', '127.0.0.1:9092')
 TOPIC_TELEMETRY = 'telemetria_cp'
 
 # Configuración de base de datos para auditoría
+# Si está en Docker sin red compartida, usar 'host.docker.internal'
+# Si está en el host, usar '127.0.0.1' o la IP del servidor MySQL
 DB_CONFIG = {
-    'host': os.getenv('DB_HOST', '192.168.1.43'),
+    'host': os.getenv('DB_HOST', 'host.docker.internal'),  # Por defecto para contenedores sin red compartida
     'port': int(os.getenv('DB_PORT', '3306')),
     'user': os.getenv('DB_USER', 'root'),
     'password': os.getenv('DB_PASSWORD', 'root'),

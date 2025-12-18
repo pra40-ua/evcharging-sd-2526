@@ -11,7 +11,7 @@ services:
       - KAFKA_NODE_ID=1
       - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.1.43:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://172.21.42.2:9092
       - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
       - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
       - KAFKA_LOG_DIRS=/tmp/kraft-combined-logs
@@ -29,7 +29,7 @@ services:
 
   # MySQL para persistencia (opcional)
   mysql:
-    image: mysql:8
+    image: mysql:5.7
     container_name: mysql
     ports:
       - "3306:3306"
@@ -39,6 +39,7 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./db/init.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - ./db/02_permissions.sql:/docker-entrypoint-initdb.d/02_permissions.sql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
       interval: 10s
