@@ -4,7 +4,7 @@ EV_Registry - Módulo de Registro de Puntos de Carga
 Permite registrar, dar de baja y autenticar CPs en el sistema.
 
 Uso:
-    python EV_Registry.py --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password root --db-name evcharging --port 6000
+    python EV_Registry.py --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password root --db-name evcharging --port 6001
 """
 
 import mysql.connector
@@ -31,7 +31,7 @@ CORS(app)
 DB_CONFIG = {}
 
 # Puerto del servidor
-REGISTRY_PORT = 6000
+REGISTRY_PORT = 6001
 
 # API Key compartida para autenticación de aplicaciones externas (Monitores)
 # Se puede configurar mediante variable de entorno REGISTRY_API_KEY
@@ -884,8 +884,8 @@ def main():
                         help="Contraseña de la base de datos")
     parser.add_argument("--db-name", type=str, default="evcharging",
                         help="Nombre de la base de datos")
-    parser.add_argument("--port", type=int, default=6000,
-                        help="Puerto del servidor (default: 6000)")
+    parser.add_argument("--port", type=int, default=6001,
+                        help="Puerto del servidor (default: 6001)")
     parser.add_argument("--ssl", action='store_true',
                         help="Habilitar HTTPS (requiere certificados)")
     parser.add_argument("--ssl-cert", type=str, default="certificados/registry_cert.pem",

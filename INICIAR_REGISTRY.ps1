@@ -19,7 +19,7 @@ if (Test-Path "central_ip.txt") {
 Write-Host "[INFO] Configuración:" -ForegroundColor Yellow
 Write-Host "  - Base de datos: ${CENTRAL_IP_BD}:3306"
 Write-Host "  - Base de datos: evcharging"
-Write-Host "  - Puerto Registry: 6000"
+Write-Host "  - Puerto Registry: 6001"
 Write-Host ""
 
 # Verificar si hay certificados SSL
@@ -30,22 +30,22 @@ if (Test-Path $certPath) {
     if (Test-Path $keyPath) {
         Write-Host "[INFO] Certificados SSL encontrados. Iniciando con HTTPS..." -ForegroundColor Green
         Write-Host ""
-        Start-Process -FilePath "python" -ArgumentList "ev_registry\EV_Registry.py", "--db-host", $CENTRAL_IP_BD, "--db-port", "3306", "--db-user", "root", "--db-password", "root", "--db-name", "evcharging", "--port", "6000", "--ssl", "--ssl-cert", $certPath, "--ssl-key", $keyPath -WindowStyle Normal
-        Write-Host "[OK] EV_Registry iniciado con HTTPS (puerto 6000)" -ForegroundColor Green
-        Write-Host "  - API REST: https://localhost:6000/api" -ForegroundColor Cyan
+        Start-Process -FilePath "python" -ArgumentList "ev_registry\EV_Registry.py", "--db-host", $CENTRAL_IP_BD, "--db-port", "3306", "--db-user", "root", "--db-password", "root", "--db-name", "evcharging", "--port", "6001", "--ssl", "--ssl-cert", $certPath, "--ssl-key", $keyPath -WindowStyle Normal
+        Write-Host "[OK] EV_Registry iniciado con HTTPS (puerto 6001)" -ForegroundColor Green
+        Write-Host "  - API REST: https://localhost:6001/api" -ForegroundColor Cyan
     } else {
         Write-Host "[INFO] Certificado encontrado pero falta la clave. Iniciando con HTTP..." -ForegroundColor Yellow
-        Start-Process -FilePath "python" -ArgumentList "ev_registry\EV_Registry.py", "--db-host", $CENTRAL_IP_BD, "--db-port", "3306", "--db-user", "root", "--db-password", "root", "--db-name", "evcharging", "--port", "6000" -WindowStyle Normal
-        Write-Host "[OK] EV_Registry iniciado con HTTP (puerto 6000)" -ForegroundColor Green
-        Write-Host "  - API REST: http://localhost:6000/api" -ForegroundColor Cyan
+        Start-Process -FilePath "python" -ArgumentList "ev_registry\EV_Registry.py", "--db-host", $CENTRAL_IP_BD, "--db-port", "3306", "--db-user", "root", "--db-password", "root", "--db-name", "evcharging", "--port", "6001" -WindowStyle Normal
+        Write-Host "[OK] EV_Registry iniciado con HTTP (puerto 6001)" -ForegroundColor Green
+        Write-Host "  - API REST: http://localhost:6001/api" -ForegroundColor Cyan
     }
 } else {
     Write-Host "[INFO] No se encontraron certificados SSL. Iniciando con HTTP..." -ForegroundColor Yellow
     Write-Host "[ADVERTENCIA] Para usar HTTPS, ejecuta: generar_certificados_ssl.bat" -ForegroundColor Yellow
     Write-Host ""
-    Start-Process -FilePath "python" -ArgumentList "ev_registry\EV_Registry.py", "--db-host", $CENTRAL_IP_BD, "--db-port", "3306", "--db-user", "root", "--db-password", "root", "--db-name", "evcharging", "--port", "6000" -WindowStyle Normal
-    Write-Host "[OK] EV_Registry iniciado con HTTP (puerto 6000)" -ForegroundColor Green
-    Write-Host "  - API REST: http://localhost:6000/api" -ForegroundColor Cyan
+    Start-Process -FilePath "python" -ArgumentList "ev_registry\EV_Registry.py", "--db-host", $CENTRAL_IP_BD, "--db-port", "3306", "--db-user", "root", "--db-password", "root", "--db-name", "evcharging", "--port", "6001" -WindowStyle Normal
+    Write-Host "[OK] EV_Registry iniciado con HTTP (puerto 6001)" -ForegroundColor Green
+    Write-Host "  - API REST: http://localhost:6001/api" -ForegroundColor Cyan
 }
 
 Write-Host ""

@@ -104,7 +104,7 @@ WEATHER_ALERTS = {}  # cp_id -> {'activa': bool, 'temperatura': float, 'timestam
 WEATHER_ALERTS_LOCK = threading.Lock()
 
 # Configuración de EV_Registry
-REGISTRY_URL = os.getenv('REGISTRY_URL', 'http://127.0.0.1:6000/api')
+REGISTRY_URL = os.getenv('REGISTRY_URL', 'http://127.0.0.1:6001/api')
 
 # Flask app para API REST
 API_APP = Flask(__name__)

@@ -69,7 +69,7 @@ echo   Si esa ventana muestra errores, no se cerrara automaticamente.
 echo ------------------------------------------------------------------------
 
 REM Comando para lanzar Python.
-start "EV_Registry (PC A)" cmd /k "python ev_registry\EV_Registry.py --db-host !DB_HOST! --db-port !DB_PORT! --db-user !DB_USER! --db-password !DB_PASS! --db-name !DB_NAME! --port 6000 !SSL_CMD!"
+start "EV_Registry (PC A)" cmd /k "python ev_registry\EV_Registry.py --db-host !DB_HOST! --db-port !DB_PORT! --db-user !DB_USER! --db-password !DB_PASS! --db-name !DB_NAME! --port 6001 !SSL_CMD!"
 
 echo [EXITO] Script finalizado. Revisa la nueva ventana.
 pause

@@ -14,8 +14,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY EV_Registry.py .
 
 # Exponer puerto
-EXPOSE 6000
+EXPOSE 6001
 
 # Ejecutar
-CMD ["python", "EV_Registry.py", "--db-host", "mysql", "--db-port", "3306", "--db-user", "root", "--db-password", "root", "--db-name", "evcharging", "--port", "6000"]
+CMD ["python", "EV_Registry.py", "--db-host", "mysql", "--db-port", "3306", "--db-user", "root", "--db-password", "root", "--db-name", "evcharging", "--port", "6001"]
 
