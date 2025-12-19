@@ -156,22 +156,25 @@ if %errorlevel% neq 0 (
 )
 
 REM ============================================================
-REM  PASO 2.5: LIMPIAR BASE DE DATOS
+REM  PASO 2.5: RESET COMPLETO DE BASE DE DATOS
 REM ============================================================
 echo ============================================================
-echo [2.5/4] LIMPIANDO BASE DE DATOS
+echo [2.5/4] RESETEANDO BASE DE DATOS
 echo ============================================================
 echo.
-echo Eliminando datos anteriores de la base de datos...
+echo Recreando base de datos y configurando permisos...
+echo (Esto asegura que los permisos esten correctos para Docker)
 echo.
 
-REM Limpiar todas las tablas usando TRUNCATE
-docker exec mysql mysql -u root -proot evcharging -e "SET FOREIGN_KEY_CHECKS=0; TRUNCATE TABLE charging_points; TRUNCATE TABLE telemetria_log; TRUNCATE TABLE cp_encryption_keys; TRUNCATE TABLE audit_log; TRUNCATE TABLE weather_alerts; SET FOREIGN_KEY_CHECKS=1;" >nul 2>&1
+REM Ejecutar script de reset completo de la base de datos
+type db\reset_database.sql | docker exec -i mysql mysql -u root -proot >nul 2>&1
 
 if %errorlevel% equ 0 (
-    echo [OK] Base de datos limpiada exitosamente.
+    echo [OK] Base de datos recreada y permisos configurados correctamente.
 ) else (
-    echo [ADVERTENCIA] No se pudo limpiar la base de datos completamente.
+    echo [ADVERTENCIA] No se pudo resetear la base de datos completamente.
+    echo Intentando limpiar datos existentes...
+    docker exec mysql mysql -u root -proot evcharging -e "SET FOREIGN_KEY_CHECKS=0; TRUNCATE TABLE charging_points; TRUNCATE TABLE telemetria_log; TRUNCATE TABLE cp_encryption_keys; TRUNCATE TABLE audit_log; TRUNCATE TABLE weather_alerts; SET FOREIGN_KEY_CHECKS=1;" >nul 2>&1
     echo Continuando de todas formas...
 )
 echo.

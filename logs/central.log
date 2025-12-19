@@ -94860,3 +94860,487 @@ t-requests
 2025-12-17 22:57:06,518 - 192.168.1.36 - - [17/Dec/2025 22:57:06] "POST /api/weather_alert HTTP/1.1" 200 -
 2025-12-17 22:57:06,568 - [22:57:06] \U0001f4ca Telemetría de CP_001: est=ACTIVADO, E=0.00, P=0.0
 2025-12-17 22:57:06,574 - [22:57:06] [ESTADO] CP_001 -> ACTIVADO.
+2025-12-19 09:11:05,247 - package: mysql.connector.plugins
+2025-12-19 09:11:05,247 - plugin_name: caching_sha2_password
+2025-12-19 09:11:05,247 - AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+2025-12-19 09:11:05,261 - Updating subscribed topics to: ('telemetria_cp',)
+2025-12-19 09:11:05,262 - Updating subscribed topics to: ('central_commands',)
+2025-12-19 09:11:05,262 - Updating subscribed topics to: ('driver_requests',)
+2025-12-19 09:11:05,262 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:11:05,263 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:11:05,264 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:11:05,264 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:11:05,264 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:11:05,265 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:11:05,265 - [09:11:05] Modo consola simple activado
+2025-12-19 09:11:05,323 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:11:05,324 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:11:05,480 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:11:05,480 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:11:05,480 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-19 09:11:05,480 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:11:05,481 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-19 09:11:05,481 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-19 09:11:05,481 - Starting new heartbeat thread
+2025-12-19 09:11:05,481 - Starting new heartbeat thread
+2025-12-19 09:11:05,481 - Starting new heartbeat thread
+2025-12-19 09:11:05,481 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-12-19 09:11:05,481 - Revoking previously assigned partitions set() for group central_processing_group
+2025-12-19 09:11:05,481 - Revoking previously assigned partitions set() for group central-control-group
+2025-12-19 09:11:05,482 - <BrokerConnection node_id=coordinator-1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:11:05,482 - <BrokerConnection node_id=coordinator-1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:11:05,482 - <BrokerConnection node_id=coordinator-1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:11:05,482 - <BrokerConnection node_id=coordinator-1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:11:05,482 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connected> [IPv4 ('172.20.53.3', 9092)]>: Closing connection. 
+2025-12-19 09:11:05,483 - <BrokerConnection node_id=coordinator-1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:11:05,483 - <BrokerConnection node_id=coordinator-1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:11:05,483 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connected> [IPv4 ('172.20.53.3', 9092)]>: Closing connection. 
+2025-12-19 09:11:05,483 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connected> [IPv4 ('172.20.53.3', 9092)]>: Closing connection. 
+2025-12-19 09:11:05,583 - (Re-)joining group central-telemetry-group
+2025-12-19 09:11:05,584 - (Re-)joining group central_processing_group
+2025-12-19 09:11:05,584 - (Re-)joining group central-control-group
+2025-12-19 09:11:05,592 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:11:05,593 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:11:05,593 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:11:05,695 - <BrokerConnection node_id=1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:11:05,695 - <BrokerConnection node_id=1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:11:05,695 - <BrokerConnection node_id=1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:11:05,695 - <BrokerConnection node_id=1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:11:05,695 - <BrokerConnection node_id=1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:11:05,795 - <BrokerConnection node_id=1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:11:05,802 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:11:05,802 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:11:05,803 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-19 09:11:05,803 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-19 09:11:05,803 - (Re-)joining group central_processing_group
+2025-12-19 09:11:05,804 - (Re-)joining group central-telemetry-group
+2025-12-19 09:11:05,809 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:11:05,809 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:11:05,899 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:11:05,900 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-19 09:11:05,900 - (Re-)joining group central-control-group
+2025-12-19 09:11:05,903 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:11:05,913 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:11:05,914 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:11:05,914 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-19 09:11:05,914 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-19 09:11:05,914 - (Re-)joining group central_processing_group
+2025-12-19 09:11:05,914 - (Re-)joining group central-telemetry-group
+2025-12-19 09:11:05,917 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:11:05,917 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:11:06,007 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:11:06,007 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-19 09:11:06,008 - (Re-)joining group central-control-group
+2025-12-19 09:11:06,021 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:11:06,022 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:11:06,022 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-19 09:11:06,022 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-19 09:11:06,022 - (Re-)joining group central_processing_group
+2025-12-19 09:11:06,023 - (Re-)joining group central-telemetry-group
+2025-12-19 09:11:06,129 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://172.20.53.3:5001
+2025-12-19 09:11:06,129 - [33mPress CTRL+C to quit[0m
+2025-12-19 09:11:09,030 - Elected group leader -- performing partition assignments using range
+2025-12-19 09:11:09,032 - Elected group leader -- performing partition assignments using range
+2025-12-19 09:11:09,033 - Elected group leader -- performing partition assignments using range
+2025-12-19 09:11:09,055 - Successfully joined group central-telemetry-group with generation 1
+2025-12-19 09:11:09,055 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)]
+2025-12-19 09:11:09,055 - Successfully joined group central-control-group with generation 1
+2025-12-19 09:11:09,055 - Successfully joined group central_processing_group with generation 1
+2025-12-19 09:11:09,055 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)} for group central-telemetry-group
+2025-12-19 09:11:09,056 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-12-19 09:11:09,056 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)]
+2025-12-19 09:11:09,056 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-12-19 09:11:09,056 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=2), TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1)} for group central_processing_group
+2025-12-19 09:11:13,179 - 172.20.53.3 - - [19/Dec/2025 09:11:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:15,185 - 172.20.53.3 - - [19/Dec/2025 09:11:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:16,869 - 172.20.53.3 - - [19/Dec/2025 09:11:16] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:19,174 - 172.20.53.3 - - [19/Dec/2025 09:11:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:20,881 - 172.20.53.3 - - [19/Dec/2025 09:11:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:23,188 - 172.20.53.3 - - [19/Dec/2025 09:11:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:24,876 - 172.20.53.3 - - [19/Dec/2025 09:11:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:27,193 - 172.20.53.3 - - [19/Dec/2025 09:11:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:28,880 - 172.20.53.3 - - [19/Dec/2025 09:11:28] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:31,202 - 172.20.53.3 - - [19/Dec/2025 09:11:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:32,866 - 172.20.53.3 - - [19/Dec/2025 09:11:32] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:35,197 - 172.20.53.3 - - [19/Dec/2025 09:11:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:36,878 - 172.20.53.3 - - [19/Dec/2025 09:11:36] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:39,210 - 172.20.53.3 - - [19/Dec/2025 09:11:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:40,889 - 172.20.53.3 - - [19/Dec/2025 09:11:40] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:43,196 - 172.20.53.3 - - [19/Dec/2025 09:11:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:44,887 - 172.20.53.3 - - [19/Dec/2025 09:11:44] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:47,190 - 172.20.53.3 - - [19/Dec/2025 09:11:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:48,888 - 172.20.53.3 - - [19/Dec/2025 09:11:48] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:51,198 - 172.20.53.3 - - [19/Dec/2025 09:11:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:52,880 - 172.20.53.3 - - [19/Dec/2025 09:11:52] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:55,200 - 172.20.53.3 - - [19/Dec/2025 09:11:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:56,882 - 172.20.53.3 - - [19/Dec/2025 09:11:56] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:11:59,203 - 172.20.53.3 - - [19/Dec/2025 09:11:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:00,877 - 172.20.53.3 - - [19/Dec/2025 09:12:00] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:03,195 - 172.20.53.3 - - [19/Dec/2025 09:12:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:04,879 - 172.20.53.3 - - [19/Dec/2025 09:12:04] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:07,204 - 172.20.53.3 - - [19/Dec/2025 09:12:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:08,877 - 172.20.53.3 - - [19/Dec/2025 09:12:08] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:11,182 - 172.20.53.3 - - [19/Dec/2025 09:12:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:12,877 - 172.20.53.3 - - [19/Dec/2025 09:12:12] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:15,216 - 172.20.53.3 - - [19/Dec/2025 09:12:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:16,884 - 172.20.53.3 - - [19/Dec/2025 09:12:16] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:19,208 - 172.20.53.3 - - [19/Dec/2025 09:12:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:20,887 - 172.20.53.3 - - [19/Dec/2025 09:12:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:23,181 - 172.20.53.3 - - [19/Dec/2025 09:12:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:24,878 - 172.20.53.3 - - [19/Dec/2025 09:12:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:27,214 - 172.20.53.3 - - [19/Dec/2025 09:12:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:28,885 - 172.20.53.3 - - [19/Dec/2025 09:12:28] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:31,194 - 172.20.53.3 - - [19/Dec/2025 09:12:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:32,877 - 172.20.53.3 - - [19/Dec/2025 09:12:32] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:35,206 - 172.20.53.3 - - [19/Dec/2025 09:12:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:36,889 - 172.20.53.3 - - [19/Dec/2025 09:12:36] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:39,187 - 172.20.53.3 - - [19/Dec/2025 09:12:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:40,882 - 172.20.53.3 - - [19/Dec/2025 09:12:40] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:43,192 - 172.20.53.3 - - [19/Dec/2025 09:12:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:44,874 - 172.20.53.3 - - [19/Dec/2025 09:12:44] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:47,187 - 172.20.53.3 - - [19/Dec/2025 09:12:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:48,883 - 172.20.53.3 - - [19/Dec/2025 09:12:48] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:51,190 - 172.20.53.3 - - [19/Dec/2025 09:12:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:52,874 - 172.20.53.3 - - [19/Dec/2025 09:12:52] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:55,194 - 172.20.53.3 - - [19/Dec/2025 09:12:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:56,875 - 172.20.53.3 - - [19/Dec/2025 09:12:56] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:12:59,172 - 172.20.53.3 - - [19/Dec/2025 09:12:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:00,891 - 172.20.53.3 - - [19/Dec/2025 09:13:00] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:03,220 - 172.20.53.3 - - [19/Dec/2025 09:13:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:04,897 - 172.20.53.3 - - [19/Dec/2025 09:13:04] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:07,190 - 172.20.53.3 - - [19/Dec/2025 09:13:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:08,889 - 172.20.53.3 - - [19/Dec/2025 09:13:08] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:11,196 - 172.20.53.3 - - [19/Dec/2025 09:13:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:12,889 - 172.20.53.3 - - [19/Dec/2025 09:13:12] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:15,193 - 172.20.53.3 - - [19/Dec/2025 09:13:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:16,889 - 172.20.53.3 - - [19/Dec/2025 09:13:16] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:19,197 - 172.20.53.3 - - [19/Dec/2025 09:13:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:20,874 - 172.20.53.3 - - [19/Dec/2025 09:13:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:23,192 - 172.20.53.3 - - [19/Dec/2025 09:13:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:24,874 - 172.20.53.3 - - [19/Dec/2025 09:13:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:27,182 - 172.20.53.3 - - [19/Dec/2025 09:13:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:28,874 - 172.20.53.3 - - [19/Dec/2025 09:13:28] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:31,204 - 172.20.53.3 - - [19/Dec/2025 09:13:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:32,889 - 172.20.53.3 - - [19/Dec/2025 09:13:32] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:35,195 - 172.20.53.3 - - [19/Dec/2025 09:13:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:36,873 - 172.20.53.3 - - [19/Dec/2025 09:13:36] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:39,190 - 172.20.53.3 - - [19/Dec/2025 09:13:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:40,873 - 172.20.53.3 - - [19/Dec/2025 09:13:40] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:43,194 - 172.20.53.3 - - [19/Dec/2025 09:13:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:44,879 - 172.20.53.3 - - [19/Dec/2025 09:13:44] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:47,205 - 172.20.53.3 - - [19/Dec/2025 09:13:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:48,875 - 172.20.53.3 - - [19/Dec/2025 09:13:48] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:51,183 - 172.20.53.3 - - [19/Dec/2025 09:13:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:52,881 - 172.20.53.3 - - [19/Dec/2025 09:13:52] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:55,200 - 172.20.53.3 - - [19/Dec/2025 09:13:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:56,881 - 172.20.53.3 - - [19/Dec/2025 09:13:56] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:13:59,183 - 172.20.53.3 - - [19/Dec/2025 09:13:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:00,880 - 172.20.53.3 - - [19/Dec/2025 09:14:00] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:03,184 - 172.20.53.3 - - [19/Dec/2025 09:14:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:04,876 - 172.20.53.3 - - [19/Dec/2025 09:14:04] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:07,195 - 172.20.53.3 - - [19/Dec/2025 09:14:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:08,878 - 172.20.53.3 - - [19/Dec/2025 09:14:08] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:11,185 - 172.20.53.3 - - [19/Dec/2025 09:14:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:12,880 - 172.20.53.3 - - [19/Dec/2025 09:14:12] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:15,181 - 172.20.53.3 - - [19/Dec/2025 09:14:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:16,892 - 172.20.53.3 - - [19/Dec/2025 09:14:16] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:19,197 - 172.20.53.3 - - [19/Dec/2025 09:14:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:20,887 - 172.20.53.3 - - [19/Dec/2025 09:14:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:23,198 - 172.20.53.3 - - [19/Dec/2025 09:14:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:24,877 - 172.20.53.3 - - [19/Dec/2025 09:14:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:27,204 - 172.20.53.3 - - [19/Dec/2025 09:14:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:28,879 - 172.20.53.3 - - [19/Dec/2025 09:14:28] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:31,202 - 172.20.53.3 - - [19/Dec/2025 09:14:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:32,890 - 172.20.53.3 - - [19/Dec/2025 09:14:32] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:35,196 - 172.20.53.3 - - [19/Dec/2025 09:14:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:36,866 - 172.20.53.3 - - [19/Dec/2025 09:14:36] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:39,192 - 172.20.53.3 - - [19/Dec/2025 09:14:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:40,892 - 172.20.53.3 - - [19/Dec/2025 09:14:40] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:43,201 - 172.20.53.3 - - [19/Dec/2025 09:14:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:44,867 - 172.20.53.3 - - [19/Dec/2025 09:14:44] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:47,183 - 172.20.53.3 - - [19/Dec/2025 09:14:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:48,875 - 172.20.53.3 - - [19/Dec/2025 09:14:48] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:51,180 - 172.20.53.3 - - [19/Dec/2025 09:14:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:52,869 - 172.20.53.3 - - [19/Dec/2025 09:14:52] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:55,205 - 172.20.53.3 - - [19/Dec/2025 09:14:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:56,879 - 172.20.53.3 - - [19/Dec/2025 09:14:56] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:14:59,181 - 172.20.53.3 - - [19/Dec/2025 09:14:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:00,890 - 172.20.53.3 - - [19/Dec/2025 09:15:00] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:03,191 - 172.20.53.3 - - [19/Dec/2025 09:15:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:04,878 - 172.20.53.3 - - [19/Dec/2025 09:15:04] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:07,198 - 172.20.53.3 - - [19/Dec/2025 09:15:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:08,879 - 172.20.53.3 - - [19/Dec/2025 09:15:08] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:11,194 - 172.20.53.3 - - [19/Dec/2025 09:15:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:12,879 - 172.20.53.3 - - [19/Dec/2025 09:15:12] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:15,189 - 172.20.53.3 - - [19/Dec/2025 09:15:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:16,878 - 172.20.53.3 - - [19/Dec/2025 09:15:16] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:19,200 - 172.20.53.3 - - [19/Dec/2025 09:15:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:20,883 - 172.20.53.3 - - [19/Dec/2025 09:15:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:23,215 - 172.20.53.3 - - [19/Dec/2025 09:15:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:24,883 - 172.20.53.3 - - [19/Dec/2025 09:15:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:27,179 - 172.20.53.3 - - [19/Dec/2025 09:15:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:28,875 - 172.20.53.3 - - [19/Dec/2025 09:15:28] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:31,181 - 172.20.53.3 - - [19/Dec/2025 09:15:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:32,876 - 172.20.53.3 - - [19/Dec/2025 09:15:32] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:35,199 - 172.20.53.3 - - [19/Dec/2025 09:15:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:36,888 - 172.20.53.3 - - [19/Dec/2025 09:15:36] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:39,182 - 172.20.53.3 - - [19/Dec/2025 09:15:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:40,889 - 172.20.53.3 - - [19/Dec/2025 09:15:40] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:43,182 - 172.20.53.3 - - [19/Dec/2025 09:15:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:44,873 - 172.20.53.3 - - [19/Dec/2025 09:15:44] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:47,181 - 172.20.53.3 - - [19/Dec/2025 09:15:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:48,877 - 172.20.53.3 - - [19/Dec/2025 09:15:48] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:51,184 - 172.20.53.3 - - [19/Dec/2025 09:15:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:52,876 - 172.20.53.3 - - [19/Dec/2025 09:15:52] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:55,194 - 172.20.53.3 - - [19/Dec/2025 09:15:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:56,890 - 172.20.53.3 - - [19/Dec/2025 09:15:56] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:15:59,199 - 172.20.53.3 - - [19/Dec/2025 09:15:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:00,866 - 172.20.53.3 - - [19/Dec/2025 09:16:00] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:03,182 - 172.20.53.3 - - [19/Dec/2025 09:16:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:04,878 - 172.20.53.3 - - [19/Dec/2025 09:16:04] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:05,405 - <BrokerConnection node_id=1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:16:05,405 - <BrokerConnection node_id=1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:16:05,406 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connected> [IPv4 ('172.20.53.3', 9092)]>: Closing connection. 
+2025-12-19 09:16:07,207 - 172.20.53.3 - - [19/Dec/2025 09:16:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:08,875 - 172.20.53.3 - - [19/Dec/2025 09:16:08] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:11,181 - 172.20.53.3 - - [19/Dec/2025 09:16:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:12,877 - 172.20.53.3 - - [19/Dec/2025 09:16:12] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:15,190 - 172.20.53.3 - - [19/Dec/2025 09:16:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:16,874 - 172.20.53.3 - - [19/Dec/2025 09:16:16] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:19,187 - 172.20.53.3 - - [19/Dec/2025 09:16:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:20,881 - 172.20.53.3 - - [19/Dec/2025 09:16:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:23,188 - 172.20.53.3 - - [19/Dec/2025 09:16:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:24,903 - 172.20.53.3 - - [19/Dec/2025 09:16:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:27,193 - 172.20.53.3 - - [19/Dec/2025 09:16:27] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:28,884 - 172.20.53.3 - - [19/Dec/2025 09:16:28] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:31,184 - 172.20.53.3 - - [19/Dec/2025 09:16:31] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:32,881 - 172.20.53.3 - - [19/Dec/2025 09:16:32] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:35,199 - 172.20.53.3 - - [19/Dec/2025 09:16:35] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:36,890 - 172.20.53.3 - - [19/Dec/2025 09:16:36] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:39,195 - 172.20.53.3 - - [19/Dec/2025 09:16:39] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:40,876 - 172.20.53.3 - - [19/Dec/2025 09:16:40] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:43,206 - 172.20.53.3 - - [19/Dec/2025 09:16:43] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:44,876 - 172.20.53.3 - - [19/Dec/2025 09:16:44] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:47,196 - 172.20.53.3 - - [19/Dec/2025 09:16:47] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:48,893 - 172.20.53.3 - - [19/Dec/2025 09:16:48] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:51,198 - 172.20.53.3 - - [19/Dec/2025 09:16:51] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:52,897 - 172.20.53.3 - - [19/Dec/2025 09:16:52] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:55,206 - 172.20.53.3 - - [19/Dec/2025 09:16:55] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:56,881 - 172.20.53.3 - - [19/Dec/2025 09:16:56] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:16:59,209 - 172.20.53.3 - - [19/Dec/2025 09:16:59] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:17:00,875 - 172.20.53.3 - - [19/Dec/2025 09:17:00] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:17:03,184 - 172.20.53.3 - - [19/Dec/2025 09:17:03] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:17:04,880 - 172.20.53.3 - - [19/Dec/2025 09:17:04] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:17:07,194 - 172.20.53.3 - - [19/Dec/2025 09:17:07] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:17:08,877 - 172.20.53.3 - - [19/Dec/2025 09:17:08] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:17:11,198 - 172.20.53.3 - - [19/Dec/2025 09:17:11] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:17:12,877 - 172.20.53.3 - - [19/Dec/2025 09:17:12] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:17:15,209 - 172.20.53.3 - - [19/Dec/2025 09:17:15] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:17:16,880 - 172.20.53.3 - - [19/Dec/2025 09:17:16] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:17:19,205 - 172.20.53.3 - - [19/Dec/2025 09:17:19] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:17:20,881 - 172.20.53.3 - - [19/Dec/2025 09:17:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:17:23,196 - 172.20.53.3 - - [19/Dec/2025 09:17:23] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:17:24,878 - 172.20.53.3 - - [19/Dec/2025 09:17:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:20:20,649 - package: mysql.connector.plugins
+2025-12-19 09:20:20,649 - plugin_name: caching_sha2_password
+2025-12-19 09:20:20,650 - AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+2025-12-19 09:20:20,667 - Updating subscribed topics to: ('telemetria_cp',)
+2025-12-19 09:20:20,667 - Updating subscribed topics to: ('driver_requests',)
+2025-12-19 09:20:20,668 - Updating subscribed topics to: ('central_commands',)
+2025-12-19 09:20:20,669 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:20:20,669 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:20:20,670 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:20:20,670 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:20:20,671 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:20:20,671 - [09:20:20] Modo consola simple activado
+2025-12-19 09:20:20,672 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:20:20,722 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:20:20,723 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:20:20,886 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:20:20,887 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-19 09:20:20,887 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:20:20,887 - Starting new heartbeat thread
+2025-12-19 09:20:20,887 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-19 09:20:20,888 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:20:20,888 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-19 09:20:20,888 - Starting new heartbeat thread
+2025-12-19 09:20:20,889 - Starting new heartbeat thread
+2025-12-19 09:20:20,889 - Revoking previously assigned partitions set() for group central-control-group
+2025-12-19 09:20:20,889 - Revoking previously assigned partitions set() for group central-telemetry-group
+2025-12-19 09:20:20,889 - Revoking previously assigned partitions set() for group central_processing_group
+2025-12-19 09:20:20,891 - <BrokerConnection node_id=coordinator-1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:20:20,891 - <BrokerConnection node_id=coordinator-1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:20:20,891 - <BrokerConnection node_id=coordinator-1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:20:20,893 - <BrokerConnection node_id=coordinator-1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:20:20,893 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connected> [IPv4 ('172.20.53.3', 9092)]>: Closing connection. 
+2025-12-19 09:20:20,993 - <BrokerConnection node_id=coordinator-1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:20:20,995 - (Re-)joining group central_processing_group
+2025-12-19 09:20:20,995 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connected> [IPv4 ('172.20.53.3', 9092)]>: Closing connection. 
+2025-12-19 09:20:20,995 - <BrokerConnection node_id=coordinator-1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:20:20,996 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connected> [IPv4 ('172.20.53.3', 9092)]>: Closing connection. 
+2025-12-19 09:20:20,997 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:20:20,997 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:20:20,999 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:20:21,097 - (Re-)joining group central-telemetry-group
+2025-12-19 09:20:21,098 - (Re-)joining group central-control-group
+2025-12-19 09:20:21,099 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:20:21,099 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:20:21,100 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:20:21,100 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:20:21,104 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:20:21,105 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:20:21,105 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:20:21,106 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-19 09:20:21,106 - (Re-)joining group central_processing_group
+2025-12-19 09:20:21,112 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:20:21,214 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:20:21,214 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:20:21,214 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-19 09:20:21,215 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-19 09:20:21,215 - (Re-)joining group central-control-group
+2025-12-19 09:20:21,215 - (Re-)joining group central-telemetry-group
+2025-12-19 09:20:21,218 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:20:21,218 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:20:21,218 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:20:21,218 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-19 09:20:21,218 - (Re-)joining group central_processing_group
+2025-12-19 09:20:21,220 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:20:21,326 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:20:21,327 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:20:21,328 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:20:21,328 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-19 09:20:21,328 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-19 09:20:21,329 - (Re-)joining group central-control-group
+2025-12-19 09:20:21,329 - (Re-)joining group central_processing_group
+2025-12-19 09:20:21,328 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-19 09:20:21,330 - (Re-)joining group central-telemetry-group
+2025-12-19 09:20:21,331 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:20:21,333 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:20:21,333 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:20:21,435 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:20:21,435 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-19 09:20:21,435 - (Re-)joining group central-control-group
+2025-12-19 09:20:21,437 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:20:21,437 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:20:21,437 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-19 09:20:21,437 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-19 09:20:21,438 - (Re-)joining group central-telemetry-group
+2025-12-19 09:20:21,438 - (Re-)joining group central_processing_group
+2025-12-19 09:20:21,439 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:20:21,445 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:20:21,445 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:20:21,528 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://172.20.53.3:5001
+2025-12-19 09:20:21,529 - [33mPress CTRL+C to quit[0m
+2025-12-19 09:20:21,544 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:20:21,544 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-19 09:20:21,544 - (Re-)joining group central-control-group
+2025-12-19 09:20:21,546 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:20:21,548 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:20:21,549 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:20:21,549 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-19 09:20:21,549 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-19 09:20:21,549 - (Re-)joining group central_processing_group
+2025-12-19 09:20:21,549 - (Re-)joining group central-telemetry-group
+2025-12-19 09:20:21,551 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:20:21,551 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2025-12-19 09:20:21,649 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:20:21,649 - Discovered coordinator coordinator-1 for group central-control-group
+2025-12-19 09:20:21,649 - (Re-)joining group central-control-group
+2025-12-19 09:20:21,657 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:20:21,658 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='172.20.53.3', port=9092, rack=None)
+2025-12-19 09:20:21,658 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2025-12-19 09:20:21,659 - Discovered coordinator coordinator-1 for group central_processing_group
+2025-12-19 09:20:21,659 - (Re-)joining group central-telemetry-group
+2025-12-19 09:20:21,659 - (Re-)joining group central_processing_group
+2025-12-19 09:20:22,252 - 172.20.53.3 - - [19/Dec/2025 09:20:22] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:20:24,237 - 172.20.53.3 - - [19/Dec/2025 09:20:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:20:24,683 - Elected group leader -- performing partition assignments using range
+2025-12-19 09:20:24,684 - <BrokerConnection node_id=1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:20:24,685 - <BrokerConnection node_id=1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:20:24,685 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connected> [IPv4 ('172.20.53.3', 9092)]>: Closing connection. 
+2025-12-19 09:20:24,686 - Elected group leader -- performing partition assignments using range
+2025-12-19 09:20:24,688 - <BrokerConnection node_id=1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:20:24,689 - <BrokerConnection node_id=1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:20:24,689 - Elected group leader -- performing partition assignments using range
+2025-12-19 09:20:24,690 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connected> [IPv4 ('172.20.53.3', 9092)]>: Closing connection. 
+2025-12-19 09:20:24,693 - <BrokerConnection node_id=1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: connecting to 172.20.53.3:9092 [('172.20.53.3', 9092) IPv4]
+2025-12-19 09:20:24,694 - <BrokerConnection node_id=1 host=172.20.53.3:9092 <connecting> [IPv4 ('172.20.53.3', 9092)]>: Connection complete.
+2025-12-19 09:20:24,694 - <BrokerConnection node_id=bootstrap-0 host=172.20.53.3:9092 <connected> [IPv4 ('172.20.53.3', 9092)]>: Closing connection. 
+2025-12-19 09:20:24,719 - Successfully joined group central-control-group with generation 1
+2025-12-19 09:20:24,719 - Successfully joined group central_processing_group with generation 1
+2025-12-19 09:20:24,720 - Successfully joined group central-telemetry-group with generation 1
+2025-12-19 09:20:24,720 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2025-12-19 09:20:24,720 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0)]
+2025-12-19 09:20:24,720 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0)]
+2025-12-19 09:20:24,720 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2025-12-19 09:20:24,720 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=0)} for group central_processing_group
+2025-12-19 09:20:24,720 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0)} for group central-telemetry-group
+2025-12-19 09:20:25,913 - 172.20.53.3 - - [19/Dec/2025 09:20:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:20:28,240 - 172.20.53.3 - - [19/Dec/2025 09:20:28] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:20:29,923 - 172.20.53.3 - - [19/Dec/2025 09:20:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:20:32,218 - 172.20.53.3 - - [19/Dec/2025 09:20:32] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:20:33,914 - 172.20.53.3 - - [19/Dec/2025 09:20:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:20:36,230 - 172.20.53.3 - - [19/Dec/2025 09:20:36] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:20:37,912 - 172.20.53.3 - - [19/Dec/2025 09:20:37] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:20:40,238 - 172.20.53.3 - - [19/Dec/2025 09:20:40] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:20:41,920 - 172.20.53.3 - - [19/Dec/2025 09:20:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:20:44,226 - 172.20.53.3 - - [19/Dec/2025 09:20:44] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:20:45,920 - 172.20.53.3 - - [19/Dec/2025 09:20:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:20:48,240 - 172.20.53.3 - - [19/Dec/2025 09:20:48] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:20:49,912 - 172.20.53.3 - - [19/Dec/2025 09:20:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:20:52,216 - 172.20.53.3 - - [19/Dec/2025 09:20:52] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:20:53,916 - 172.20.53.3 - - [19/Dec/2025 09:20:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:20:56,231 - 172.20.53.3 - - [19/Dec/2025 09:20:56] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:20:57,925 - 172.20.53.3 - - [19/Dec/2025 09:20:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:00,208 - 172.20.53.3 - - [19/Dec/2025 09:21:00] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:01,908 - 172.20.53.3 - - [19/Dec/2025 09:21:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:04,224 - 172.20.53.3 - - [19/Dec/2025 09:21:04] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:05,915 - 172.20.53.3 - - [19/Dec/2025 09:21:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:08,210 - 172.20.53.3 - - [19/Dec/2025 09:21:08] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:09,908 - 172.20.53.3 - - [19/Dec/2025 09:21:09] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:12,222 - 172.20.53.3 - - [19/Dec/2025 09:21:12] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:13,911 - 172.20.53.3 - - [19/Dec/2025 09:21:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:16,224 - 172.20.53.3 - - [19/Dec/2025 09:21:16] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:17,922 - 172.20.53.3 - - [19/Dec/2025 09:21:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:20,232 - 172.20.53.3 - - [19/Dec/2025 09:21:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:21,910 - 172.20.53.3 - - [19/Dec/2025 09:21:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:24,226 - 172.20.53.3 - - [19/Dec/2025 09:21:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:25,910 - 172.20.53.3 - - [19/Dec/2025 09:21:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:28,226 - 172.20.53.3 - - [19/Dec/2025 09:21:28] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:29,922 - 172.20.53.3 - - [19/Dec/2025 09:21:29] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:32,233 - 172.20.53.3 - - [19/Dec/2025 09:21:32] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:33,909 - 172.20.53.3 - - [19/Dec/2025 09:21:33] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:36,232 - 172.20.53.3 - - [19/Dec/2025 09:21:36] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:37,914 - 172.20.53.3 - - [19/Dec/2025 09:21:37] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:40,239 - 172.20.53.3 - - [19/Dec/2025 09:21:40] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:41,922 - 172.20.53.3 - - [19/Dec/2025 09:21:41] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:44,231 - 172.20.53.3 - - [19/Dec/2025 09:21:44] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:45,922 - 172.20.53.3 - - [19/Dec/2025 09:21:45] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:48,229 - 172.20.53.3 - - [19/Dec/2025 09:21:48] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:49,914 - 172.20.53.3 - - [19/Dec/2025 09:21:49] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:52,239 - 172.20.53.3 - - [19/Dec/2025 09:21:52] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:53,914 - 172.20.53.3 - - [19/Dec/2025 09:21:53] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:56,231 - 172.20.53.3 - - [19/Dec/2025 09:21:56] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:21:57,922 - 172.20.53.3 - - [19/Dec/2025 09:21:57] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:22:00,231 - 172.20.53.3 - - [19/Dec/2025 09:22:00] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:22:01,920 - 172.20.53.3 - - [19/Dec/2025 09:22:01] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:22:04,233 - 172.20.53.3 - - [19/Dec/2025 09:22:04] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:22:05,908 - 172.20.53.3 - - [19/Dec/2025 09:22:05] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:22:08,224 - 172.20.53.3 - - [19/Dec/2025 09:22:08] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:22:09,911 - 172.20.53.3 - - [19/Dec/2025 09:22:09] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:22:12,231 - 172.20.53.3 - - [19/Dec/2025 09:22:12] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:22:13,922 - 172.20.53.3 - - [19/Dec/2025 09:22:13] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:22:16,237 - 172.20.53.3 - - [19/Dec/2025 09:22:16] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:22:17,922 - 172.20.53.3 - - [19/Dec/2025 09:22:17] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:22:20,241 - 172.20.53.3 - - [19/Dec/2025 09:22:20] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:22:21,922 - 172.20.53.3 - - [19/Dec/2025 09:22:21] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:22:24,227 - 172.20.53.3 - - [19/Dec/2025 09:22:24] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:22:25,914 - 172.20.53.3 - - [19/Dec/2025 09:22:25] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:22:28,223 - 172.20.53.3 - - [19/Dec/2025 09:22:28] "GET /api/status HTTP/1.1" 200 -
+2025-12-19 09:22:29,913 - 172.20.53.3 - - [19/Dec/2025 09:22:29] "GET /api/status HTTP/1.1" 200 -

@@ -1,8 +1,35 @@
--- Configurar permisos para root desde cualquier host (necesario para Docker)
-CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY 'root';
+-- Script para eliminar y recrear completamente la base de datos y usuario
+-- Ejecutar: docker exec -i mysql mysql -u root -proot < db/reset_database.sql
+-- O desde PowerShell: Get-Content db\reset_database.sql | docker exec -i mysql mysql -u root -proot
+
+-- Eliminar base de datos si existe
+DROP DATABASE IF EXISTS evcharging;
+
+-- Eliminar base de datos si existe
+DROP DATABASE IF EXISTS evcharging;
+
+-- Crear base de datos
+CREATE DATABASE evcharging CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+-- Crear o actualizar usuario root@% para conexiones desde Docker
+-- Intentar crear, si ya existe se actualizará con ALTER USER después
+DROP USER IF EXISTS 'root'@'%';
+CREATE USER 'root'@'%' IDENTIFIED BY 'root';
+
+-- Actualizar contraseña de root@localhost
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';
+
+-- Otorgar todos los privilegios
 GRANT ALL PRIVILEGES ON evcharging.* TO 'root'@'%';
+GRANT ALL PRIVILEGES ON evcharging.* TO 'root'@'localhost';
+
+-- Aplicar cambios
 FLUSH PRIVILEGES;
 
+-- Usar la base de datos
+USE evcharging;
+
+-- Crear todas las tablas necesarias
 CREATE TABLE IF NOT EXISTS charging_points (
   id INT AUTO_INCREMENT PRIMARY KEY,
   cp_id VARCHAR(50) UNIQUE,
@@ -56,3 +83,8 @@ CREATE TABLE IF NOT EXISTS weather_alerts (
   INDEX idx_cp_id (cp_id),
   INDEX idx_alerta_activa (alerta_activa)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Verificar que todo se creó correctamente
+SELECT 'Base de datos y tablas creadas correctamente' AS resultado;
+SHOW TABLES;
+
