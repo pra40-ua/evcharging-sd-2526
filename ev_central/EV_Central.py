@@ -994,6 +994,62 @@ STX = b'\x02'
 ETX = b'\x03'
 DELIMITER = '#'
 TELEMETRIA_TOPIC = 'telemetria_cp'
+
+def _extraer_tramas_desde_buffer(rx_buffer: bytes) -> tuple[list, bytes]:
+    """
+    Extrae tramas completas del buffer TCP.
+    Formato: STX + DATA + ETX + LRC
+
+    Nota: el DATA cifrado usa Fernet (base64 urlsafe) con prefijo 'ENC', por lo que
+    el byte ETX (0x03) no debería aparecer dentro del DATA.
+    """
+    if not rx_buffer:
+        return [], b''
+
+    frames = []
+    buf = rx_buffer
+
+    while True:
+        # Buscar inicio de trama
+        stx_idx = buf.find(STX)
+        if stx_idx < 0:
+            # No hay STX: descartar todo
+            return frames, b''
+        if stx_idx > 0:
+            # Descartar basura antes de STX
+            buf = buf[stx_idx:]
+
+        # Buscar ETX tras STX
+        etx_idx = buf.find(ETX, 1)
+        if etx_idx < 0:
+            # No hay ETX todavía: esperar más datos
+            return frames, buf
+
+        # Necesitamos también el LRC (1 byte) después del ETX
+        if len(buf) < etx_idx + 2:
+            return frames, buf
+
+        frame = buf[:etx_idx + 2]  # incluye STX..ETX..LRC
+        frames.append(frame)
+        buf = buf[etx_idx + 2:]
+
+        if not buf:
+            return frames, b''
+
+def _validar_trama_lrc_y_formato(trama_bytes: bytes) -> bool:
+    """Valida STX/ETX y LRC sin descifrar (LRC se calcula sobre DATA original)."""
+    try:
+        if not trama_bytes or len(trama_bytes) < 4:
+            return False
+        # STX al inicio, ETX justo antes del LRC
+        if not (trama_bytes.startswith(STX) and trama_bytes[-2:-1] == ETX):
+            return False
+        data_bytes = trama_bytes[1:-2]   # DATA (posible ENC+fernet)
+        lrc_recibido = trama_bytes[-1:]
+        lrc_calculado = calcular_lrc(data_bytes)
+        return lrc_recibido == lrc_calculado
+    except Exception:
+        return False
 DRIVER_REQUESTS_TOPIC = 'driver_requests'
 CENTRAL_COMMANDS_TOPIC = 'central_commands'
 
@@ -2673,9 +2729,9 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
     try:
         # Establecer timeout para permitir cierre limpio
         conn.settimeout(1.0)
+        rx_buffer = b''
 
         # --- 1. REGISTRO Y AUTENTICACIÓN (Primer intercambio) ---
-        trama_bytes = b''
         while True:
             # Verificar si se solicita el apagado antes de bloquear
             with SHUTDOWN_LOCK:
@@ -2683,11 +2739,20 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                     print(f"[CENTRAL] Apagado solicitado antes de registro, cerrando conexión con {addr[0]}:{addr[1]}...")
                     return
             try:
-                trama_bytes = conn.recv(1024)
+                chunk = conn.recv(2048)
             except socket.timeout:
                 continue
-            if not trama_bytes:
+            if not chunk:
                 raise ConnectionResetError("Conexión cerrada por el cliente antes del registro.")
+            rx_buffer += chunk
+            frames, rx_buffer = _extraer_tramas_desde_buffer(rx_buffer)
+            if not frames:
+                continue
+            # Solo se procesa la primera trama como REG; el resto queda para el bucle permanente
+            trama_bytes = frames[0]
+            if len(frames) > 1:
+                # Reinyectar el resto al buffer para procesarlo después
+                rx_buffer = b''.join(frames[1:]) + rx_buffer
             break
 
         # El primer mensaje REG no está cifrado (aún no hay clave)
@@ -3019,6 +3084,8 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
 
         # --- 2. BUCLE DE COMUNICACIÓN PERMANENTE ---
         print(f"[CENTRAL] Hilo {cp_id} iniciando bucle de escucha permanente.")
+        lrc_errors_consecutivos = 0
+        decrypt_errors_consecutivos = 0
         while True:
             # Verificar si se solicita el apagado
             with SHUTDOWN_LOCK:
@@ -3026,38 +3093,66 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                     print(f"[CENTRAL] Apagado solicitado, cerrando conexión con {cp_id}...")
                     break
             
-            # Ahora el hilo espera por comandos síncronos (AVR, telemetría síncrona, etc.)
+            # Leer datos TCP y extraer tramas completas
             try:
-                trama_bytes = conn.recv(4096)  # Aumentar buffer para mensajes cifrados
+                chunk = conn.recv(4096)
             except socket.timeout:
                 continue
-            if not trama_bytes:
-                # El CP cerró la conexión
+
+            if not chunk:
                 print(f"[CENTRAL] Conexión con CP {cp_id} cerrada por el cliente.")
                 break
+
+            rx_buffer += chunk
+            frames, rx_buffer = _extraer_tramas_desde_buffer(rx_buffer)
+            if not frames:
+                continue
+
+            for trama_bytes in frames:
+                # Después del REG, todos los mensajes deben estar cifrados
+                cod_op, campos = descomponer_trama(trama_bytes, cp_id=cp_id)
+
+                if not cod_op and trama_bytes:
+                    # Distinguir LRC/FORMATO vs descifrado para no tumbar la conexión por fragmentación
+                    es_enc = (len(trama_bytes) >= 4 and trama_bytes[1:4] == b'ENC') or (b'ENC' in trama_bytes)
+                    lrc_ok = _validar_trama_lrc_y_formato(trama_bytes)
+
+                    if not lrc_ok:
+                        lrc_errors_consecutivos += 1
+                        decrypt_errors_consecutivos = 0
+                        if lrc_errors_consecutivos >= 3:
+                            print(f"[CENTRAL] ⚠️ Demasiados errores LRC consecutivos con {cp_id}. Cerrando conexión.")
+                            break
+                        # Trama corrupta/partial: descartar y seguir
+                        continue
+
+                    # LRC ok pero no se pudo parsear/descifrar => probable clave mala
+                    if es_enc:
+                        decrypt_errors_consecutivos += 1
+                        lrc_errors_consecutivos = 0
+                        print(f"[CENTRAL] ⚠️ ERROR: No se pudo descifrar mensaje de {cp_id}. Clave posiblemente revocada.")
+                        registrar_evento(f"🔑 ERROR: No se pudo descifrar mensaje de {cp_id}. Clave revocada o inválida.", "warn")
+                        registrar_auditoria(
+                            accion="ERROR_CIFRADO",
+                            cp_id=cp_id,
+                            origen_ip=addr[0] if addr else None,
+                            descripcion="Mensaje cifrado recibido pero no se pudo descifrar. Clave posiblemente revocada.",
+                            resultado="ERROR",
+                            db_connection=db_connection
+                        )
+                        if decrypt_errors_consecutivos >= 2:
+                            print(f"[CENTRAL] Cerrando conexión con {cp_id} para forzar reautenticación...")
+                            break
+                        continue
+
+                    # No cifrado (o trama rara) y no parseable: descartar
+                    continue
+
+                # Si llegamos aquí, la trama fue OK
+                lrc_errors_consecutivos = 0
+                decrypt_errors_consecutivos = 0
             
-            # Después del REG, todos los mensajes deben estar cifrados
-            cod_op, campos = descomponer_trama(trama_bytes, cp_id=cp_id)
-            
-            # Si no se pudo descifrar (clave revocada o inválida)
-            if not cod_op and trama_bytes:
-                # Verificar si el mensaje estaba cifrado pero no se pudo descifrar
-                if b'ENC' in trama_bytes:
-                    print(f"[CENTRAL] ⚠️ ERROR: No se pudo descifrar mensaje de {cp_id}. Clave posiblemente revocada.")
-                    registrar_evento(f"🔑 ERROR: No se pudo descifrar mensaje de {cp_id}. Clave revocada o inválida.", "warn")
-                    registrar_auditoria(
-                        accion="ERROR_CIFRADO",
-                        cp_id=cp_id,
-                        origen_ip=addr[0] if addr else None,
-                        descripcion="Mensaje cifrado recibido pero no se pudo descifrar. Clave posiblemente revocada.",
-                        resultado="ERROR",
-                        db_connection=db_connection
-                    )
-                    # Cerrar conexión para forzar reautenticación
-                    print(f"[CENTRAL] Cerrando conexión con {cp_id} para forzar reautenticación...")
-                    break
-            
-            if cod_op:
+                if cod_op:
                 # Evitar saturar consola: modo resumido por defecto (configurable por env)
                 if (not CENTRAL_VERBOSE_MESSAGES) and (cod_op in CENTRAL_NOISY_OPS):
                     try:
@@ -3085,14 +3180,14 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                     print(f"[CENTRAL]    Código Operación: {cod_op}")
                     print(f"[CENTRAL]    Campos: {campos}")
                     print(f"[CENTRAL] ========================================")
-                # Manejo de tramas específicas desde el CP
-                if cod_op == 'AUTH_RESP' and len(campos) >= 2:
+                    # Manejo de tramas específicas desde el CP
+                    if cod_op == 'AUTH_RESP' and len(campos) >= 2:
                     # Esperado: AUTH_RESP#<driver_id>#<OK|KO>#<mensaje?>
                     try:
                         driver_id = campos[0]
                         resultado = campos[1].upper()
                         mensaje = campos[2] if len(campos) >= 3 else ''
-                        if resultado == 'OK':
+                            if resultado == 'OK':
                             registrar_evento(f"[CONTROL] Confirmación síncrona de {cp_id}: AUTH_ACK#OK.")
                             # DEPRECADO: NO notificar "AUTORIZADO" aquí - se notificará tras confirmar inicio
                             # El driver debe esperar a que el operador del Engine inicie el suministro
