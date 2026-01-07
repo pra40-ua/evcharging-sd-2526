@@ -3485,6 +3485,9 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                 decrypt_errors_consecutivos = 0
             
                 if cod_op:
+                    # Debug: mostrar código de operación recibido
+                    if cod_op == 'AVR_CLR':
+                        print(f"[CENTRAL] [DEBUG] cod_op recibido: '{cod_op}' (tipo: {type(cod_op)}, len: {len(cod_op) if cod_op else 0})")
                     # Evitar saturar consola: modo resumido por defecto (configurable por env)
                     if (not CENTRAL_VERBOSE_MESSAGES) and (cod_op in CENTRAL_NOISY_OPS):
                         try:
@@ -4060,6 +4063,8 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
 
             else:
                 print(f"[CENTRAL] Trama inválida de {cp_id}.")
+                print(f"[CENTRAL] [DEBUG] cod_op recibido: '{cod_op}' (tipo: {type(cod_op)})")
+                print(f"[CENTRAL] [DEBUG] campos recibidos: {campos}")
 
     except ConnectionResetError:
         print(f"[CENTRAL] Conexión con {cp_id} perdida inesperadamente (Reset).")

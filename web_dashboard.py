@@ -518,18 +518,32 @@ def consumir_telemetria(broker: str):
                                     estado_carga = estado_carga_recibido
                                     print(f"[DASHBOARD] Estado crítico recibido para {cp_id}: {estado_carga_recibido}")
                                 # PRIORIDAD 2: Si el estado anterior es crítico, preservarlo (no puede ser sobrescrito por estados menos importantes)
-                                # EXCEPCIÓN: Si el anterior es FUERA_DE_SERVICIO y el recibido es ACTIVADO, permitir el cambio
-                                # (significa que Central explícitamente restauró el CP tras quitar alerta climatológica)
+                                # EXCEPCIONES: Permitir cambio explícito cuando Central restaura el CP
                                 elif estado_anterior_upper in estados_criticos:
                                     # Verificar si la alerta climatológica está desactivada en la telemetría
                                     alerta_clima_activa = telemetria.get('alerta_clima_activa', True)  # Por defecto True si no se especifica
+                                    # Verificar si la avería está desactivada en la telemetría
+                                    averia_activa = telemetria.get('averia_activa', True)  # Por defecto True si no se especifica
                                     
+                                    # EXCEPCIÓN 1: FUERA_DE_SERVICIO → ACTIVADO cuando alerta climatológica desactivada
                                     if (estado_anterior_upper in ('FUERA_DE_SERVICIO', 'FUERA DE SERVICIO') and 
                                         estado_recibido_upper == 'ACTIVADO' and 
                                         not alerta_clima_activa):
                                         # Permitir cambio explícito de FUERA_DE_SERVICIO a ACTIVADO (restauración tras alerta)
                                         estado_carga = estado_carga_recibido
                                         print(f"[DASHBOARD] ✅ Restaurando {cp_id} de FUERA_DE_SERVICIO a ACTIVADO (alerta climatológica desactivada)")
+                                        # Limpiar error de sistema cuando el CP vuelve a estar operativo
+                                        with ERRORES_SISTEMA_LOCK:
+                                            if cp_id in ERRORES_SISTEMA:
+                                                del ERRORES_SISTEMA[cp_id]
+                                                print(f"[DASHBOARD] ✅ Error de sistema limpiado para {cp_id}")
+                                    # EXCEPCIÓN 2: AVERIADO/AVERÍA → ACTIVADO cuando avería desactivada
+                                    elif (estado_anterior_upper in ('AVERIADO', 'AVERÍA', 'AVERIA') and 
+                                          estado_recibido_upper == 'ACTIVADO' and 
+                                          not averia_activa):
+                                        # Permitir cambio explícito de AVERIADO a ACTIVADO (recuperación de avería)
+                                        estado_carga = estado_carga_recibido
+                                        print(f"[DASHBOARD] ✅ Restaurando {cp_id} de {estado_anterior} a ACTIVADO (avería desactivada)")
                                         # Limpiar error de sistema cuando el CP vuelve a estar operativo
                                         with ERRORES_SISTEMA_LOCK:
                                             if cp_id in ERRORES_SISTEMA:
