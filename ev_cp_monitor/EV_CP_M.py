@@ -191,7 +191,10 @@ ENCRYPTION_KEY_LOCK = threading.Lock()
 # Según la guía, el Registry debe usar HTTPS obligatoriamente
 REGISTRY_URL_ENV = os.getenv('REGISTRY_URL', '')
 if REGISTRY_URL_ENV:
-    REGISTRY_URL = REGISTRY_URL_ENV
+    # Normalizar: si viene con sufijo /api, quitarlo para evitar /api/api/...
+    REGISTRY_URL = REGISTRY_URL_ENV.rstrip('/')
+    if REGISTRY_URL.lower().endswith('/api'):
+        REGISTRY_URL = REGISTRY_URL[:-4]
 else:
     # Por defecto, usar localhost (funciona mejor que 127.0.0.1 en algunos sistemas)
     # Usar HTTPS (obligatorio según guía)
@@ -529,46 +532,39 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, engine_
     precio_kwh = "0.48"
     client_socket = None
 
-    # ====== PASO 1: REGISTRO/AUTENTICACIÓN EN EV_Registry ======
+    # ====== PASO 1: COMPROBACIÓN DE EV_Registry (SIN AUTENTICACIÓN) ======
     print(f"\n{'='*70}")
-    print(f"  [CP_M] PASO 1: REGISTRO/AUTENTICACIÓN EN EV_Registry")
+    print(f"  [CP_M] PASO 1: COMPROBACIÓN DE EV_Registry (sin autenticación)")
     print(f"{'='*70}")
-    
+
+    # Verificar disponibilidad del Registry y consultar información pública del CP (si existe)
+    try:
+        base_url = REGISTRY_URL.rstrip('/')
+        print(f"[CP_M] Verificando disponibilidad del Registry en {base_url}...")
+        if verificar_registry_disponible(base_url):
+            # Consultar endpoint público del CP (cualquiera puede consultarlo)
+            try:
+                url_consulta = f"{REGISTRY_URL.rstrip('/')}/register/cp/{cp_id}"
+                print(f"[CP_M] Consultando información pública del CP en: {url_consulta}")
+                resp = requests.get(url_consulta, timeout=5, verify=False)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    print(f"[CP_M] ✓ CP encontrado en Registry: activo={data.get('activo')}, ubicacion='{data.get('ubicacion')}'")
+                elif resp.status_code == 404:
+                    print(f"[CP_M] ⚠️ CP {cp_id} no existe en Registry (consulta pública). Continuando sin registro.")
+                else:
+                    print(f"[CP_M] ⚠️ Respuesta inesperada de Registry al consultar CP: HTTP {resp.status_code}")
+            except Exception as e:
+                print(f"[CP_M] ⚠️ No se pudo consultar CP en Registry (consulta pública): {e}")
+        else:
+            print(f"[CP_M] ⚠️ Registry no disponible. Continuando sin interacción con Registry.")
+    except Exception as e:
+        print(f"[CP_M] ⚠️ Error en comprobación de Registry: {e}")
+
+    # No se usan credenciales desde ahora: autenticación deshabilitada
     username = None
     password = None
-    
-    # Verificar si ya tenemos credenciales almacenadas
-    with REGISTRY_CREDENTIALS_LOCK:
-        if REGISTRY_CREDENTIALS.get('username') and REGISTRY_CREDENTIALS.get('password'):
-            username = REGISTRY_CREDENTIALS['username']
-            password = REGISTRY_CREDENTIALS['password']
-            print(f"[CP_M] ✓ Credenciales de Registry encontradas en memoria")
-            print(f"[CP_M]   Username: {username}")
-            print(f"[CP_M]   Intentando autenticación con Registry...")
-            
-            # Intentar autenticar con las credenciales existentes
-            if autenticar_en_registry(username, password):
-                print(f"[CP_M] ✓ Autenticación exitosa con Registry usando credenciales existentes")
-            else:
-                print(f"[CP_M] ⚠️ Autenticación fallida. Intentando registro nuevo...")
-                username = None
-                password = None
-    
-    # Si no hay credenciales o la autenticación falló, registrar nuevo CP
-    if not username or not password:
-        print(f"[CP_M] Registrando CP {cp_id} en EV_Registry...")
-        success, username, password = registrar_en_registry(cp_id, ubicacion_cp)
-        
-        if not success or not username or not password:
-            print(f"[CP_M] ❌ ERROR: No se pudo registrar/autenticar en EV_Registry")
-            print(f"[CP_M] ⚠️ Continuando sin credenciales (modo compatibilidad)...")
-            username = None
-            password = None
-        else:
-            print(f"[CP_M] ✓ Registro exitoso en EV_Registry")
-            print(f"[CP_M]   Username: {username}")
-            print(f"[CP_M]   Password: {password[:10]}... (mostrando primeros 10 caracteres)")
-    
+
     print(f"{'='*70}\n")
 
     try:
@@ -622,21 +618,14 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, engine_
         # Quitar timeout para la comunicación posterior
         client_socket.settimeout(None)
 
-        # ====== PASO 2: ENVIAR REG CON CREDENCIALES DEL REGISTRY ======
+        # ====== PASO 2: ENVIAR REG A CENTRAL (sin autenticación) ======
         print(f"\n{'='*70}")
-        print(f"  [CP_M] PASO 2: ENVIANDO REG A CENTRAL CON CREDENCIALES")
+        print(f"  [CP_M] PASO 2: ENVIANDO REG A CENTRAL (sin autenticación)")
         print(f"{'='*70}")
         
         # Construir mensaje REG con credenciales si están disponibles
         campos_reg = [cp_id, ubicacion_cp, precio_kwh]
-        if username and password:
-            campos_reg.extend([username, password])
-            print(f"[CP_M] ✓ Enviando REG con credenciales del Registry:")
-            print(f"[CP_M]   CP_ID: {cp_id}")
-            print(f"[CP_M]   Username: {username}")
-            print(f"[CP_M]   Password: {password[:10]}... (enviado completo)")
-        else:
-            print(f"[CP_M] ⚠️ Enviando REG sin credenciales (modo compatibilidad)")
+        print(f"[CP_M] Enviando REG sin credenciales (autenticación deshabilitada)")
         
         print(f"{'='*70}\n")
         
@@ -776,15 +765,15 @@ def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, 
                     
                     # Responder a la Central con autorización OK (cifrado)
                     resp = construir_trama('AUTH_RESP', [driver_id, 'OK', 'Autorizacion concedida'], cifrar=True)
-                    try:
-                        if central_socket:
+                    if central_socket:
+                        try:
                             central_socket.sendall(resp)
                             print(f"[{cp_id}] ✓ AUTH_RESP enviado a Central (cifrado). Esperando acción del operador del Engine...")
+                        except (OSError, BrokenPipeError, ConnectionResetError) as e:
+                            print(f"[{cp_id}] ⚠️ Error enviando AUTH_RESP a Central: {e}. Conexión perdida.")
                     else:
                         mensaje_error = f"Imposible conectar con Central"
                         print(f"[{cp_id}] ❌ {mensaje_error}")
-                    except (OSError, BrokenPipeError, ConnectionResetError) as e:
-                        print(f"[{cp_id}] ⚠️ Error enviando AUTH_RESP a Central: {e}. Conexión perdida.")
                 except Exception as e:
                     print(f"[{cp_id}] Error procesando AUTH_REQ: {e}")
                 continue
@@ -810,19 +799,17 @@ def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, 
                 except Exception as e:
                     print(f"[{cp_id}] No se pudo encolar la orden {cod_op}: {e}")
                 # Notificar inmediatamente a la Central el estado administrativo (cifrado)
-                try:
-                    nuevo_estado = 'PARADO' if cod_op == 'STOP' else 'ACTIVADO'
-                    trama_state = construir_trama('STATE', [cp_id, nuevo_estado], cifrar=True)
-                    if central_socket:
+                nuevo_estado = 'PARADO' if cod_op == 'STOP' else 'ACTIVADO'
+                trama_state = construir_trama('STATE', [cp_id, nuevo_estado], cifrar=True)
+                if central_socket:
+                    try:
                         central_socket.sendall(trama_state)
                         print(f"[{cp_id}] STATE inmediato enviado a Central (cifrado): {nuevo_estado}")
-                    else:
-                        mensaje_error = f"Imposible conectar con Central"
-                        print(f"[{cp_id}] ❌ {mensaje_error}")
-                except (OSError, BrokenPipeError, ConnectionResetError) as e:
-                    print(f"[{cp_id}] ⚠️ Error enviando STATE a Central: {e}. Conexión perdida.")
-                except Exception as e:
-                    print(f"[{cp_id}] Error enviando STATE a Central: {e}")
+                    except (OSError, BrokenPipeError, ConnectionResetError) as e:
+                        print(f"[{cp_id}] ⚠️ Error enviando STATE a Central: {e}. Conexión perdida.")
+                else:
+                    mensaje_error = f"Imposible conectar con Central"
+                    print(f"[{cp_id}] ❌ {mensaje_error}")
 
             else:
                  # Manejo de otros códigos, como AVR, o tramas inesperadas

@@ -103,8 +103,11 @@ CP_ENCRYPTION_KEYS_LOCK = threading.Lock()
 WEATHER_ALERTS = {}  # cp_id -> {'activa': bool, 'temperatura': float, 'timestamp': float}
 WEATHER_ALERTS_LOCK = threading.Lock()
 
-# Configuración de EV_Registry
-REGISTRY_URL = os.getenv('REGISTRY_URL', 'http://127.0.0.1:6000/api')
+# Configuración de EV_Registry (enforzar HTTPS)
+REGISTRY_URL = os.getenv('REGISTRY_URL', 'https://127.0.0.1:6000/api')
+# Normalizar: si por error viene con http://, forzar https://
+if REGISTRY_URL.startswith('http://'):
+    REGISTRY_URL = 'https://' + REGISTRY_URL[len('http://'):]
 
 # Flask app para API REST
 API_APP = Flask(__name__)

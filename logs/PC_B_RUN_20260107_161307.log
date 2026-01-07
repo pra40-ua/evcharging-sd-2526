@@ -1,0 +1,229 @@
+============================================================ 
+ LOG DE EJECUCION - PC_B_RUN.bat 
+ Fecha/Hora: dc. 07/01/2026 16:13:07,75 
+============================================================ 
+ 
+Docker version 28.2.2, build e6534b4
+[DEBUG] Verificando si Registry está corriendo localmente en puerto 6000... 
+[DEBUG] Registry local detectado (HTTPS) - usando host.docker.internal 
+[DEBUG] REGISTRY_URL final:  
+[DEBUG] Directorio actual: C:\Users\alumno\Downloads\evcharging-sd-2526 
+[DEBUG] Verificando existencia de OPENWEATHER_API_KEY.txt... 
+[DEBUG] Ruta completa buscada: C:\Users\alumno\Downloads\evcharging-sd-2526\OPENWEATHER_API_KEY.txt 
+[DEBUG] Archivo OPENWEATHER_API_KEY.txt encontrado 
+[DEBUG] Contenido leido del archivo: 54076819eadd372702b599c788eb370f 
+[DEBUG] Longitud de la API Key: 
+54076819eadd372702b599c788eb370f 
+[DEBUG] Verificando que la API Key no este vacia... 
+[DEBUG] Valor de OPENWEATHER_API_KEY: "54076819eadd372702b599c788eb370f" 
+[DEBUG] Verificando que la API Key fue leida correctamente... 
+[DEBUG] Valor de OPENWEATHER_API_KEY: "54076819eadd372702b599c788eb370f" 
+[DEBUG] API Key validada: tiene contenido 
+[DEBUG] Verificando Python... 
+[DEBUG] Python encontrado 
+[DEBUG] Verificando ev_weather\EV_W.py... 
+[DEBUG] Archivo ev_weather\EV_W.py encontrado 
+[DEBUG] Llegando a :launch_weather 
+[DEBUG] API Key leida correctamente: 54076819ea... 
+[DEBUG] Iniciando lanzamiento de EV_Weather... 
+[DEBUG] Creando script temporal... 
+[DEBUG] Ruta del script temporal: C:\Users\alumno\AppData\Local\Temp\ev_weather_launch_17397.bat 
+[DEBUG] Variables temporales configuradas 
+[DEBUG] Escribiendo contenido del script temporal... 
+[DEBUG] Ruta completa: C:\Users\alumno\AppData\Local\Temp\ev_weather_launch_17397.bat 
+[DEBUG] Directorio del proyecto: C:\Users\alumno\Downloads\evcharging-sd-2526 
+[DEBUG] Resultado de creacion del script: 0 
+[DEBUG] Script temporal creado exitosamente 
+[DEBUG] Script temporal: C:\Users\alumno\AppData\Local\Temp\ev_weather_launch_17397.bat 
+[DEBUG] API Key: 54076819ea... 
+[DEBUG] Central URL: http://172.21.42.15:5001/api 
+[DEBUG] Comando START ejecutado exitosamente 
+[DEBUG] EV_Weather lanzado, continuando al MENU... 
+[DEBUG] Llegando al MENU 
+ 
+============================================================ 
+[MODO] MULTIPLES CPS SELECCIONADO 
+============================================================ 
+[INPUT] Usuario ingreso: NUM_CPS=1 
+[VALIDADO] NUM_CPS final: 1 
+[BUILD] Iniciando construccion de imagenes 
+[BUILD] Fecha/Hora: dc. 07/01/2026 16:13:17,18 
+ 
+[BUILD] Ejecutando: docker build -t ev_engine:local -f ev_cp_engine/Dockerfile . 
+[BUILD] ---- INICIO OUTPUT DOCKER BUILD ENGINE ---- 
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 580B done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 1.0s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/python:3.10-slim
+#4 DONE 0.5s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 275B done
+#5 DONE 0.0s
+
+#6 [1/6] FROM docker.io/library/python:3.10-slim@sha256:7b68a5fa7cf0d20b4cedb1dc9a134fdd394fe27edbc4c2519756c91d21df2313
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 135.82kB 0.0s done
+#7 DONE 0.0s
+
+#8 [2/6] WORKDIR /app
+#8 CACHED
+
+#9 [3/6] COPY requirements.txt ./
+#9 CACHED
+
+#10 [4/6] RUN pip install --no-cache-dir -r requirements.txt
+#10 CACHED
+
+#11 [5/6] COPY ev_cp_engine/ ev_cp_engine/
+#11 DONE 0.0s
+
+#12 [6/6] COPY ev_common/ ev_common/
+#12 DONE 0.0s
+
+#13 exporting to image
+#13 exporting layers
+#13 exporting layers 0.0s done
+#13 writing image sha256:1513ae504adc34486554cbd2ecae74eec4c766cdc6676ae524c92ab91ea23ee1 done
+#13 naming to docker.io/library/ev_engine:local done
+#13 DONE 0.1s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/leho2udi277xqvsgfq8osi30s
+[BUILD] ---- FIN OUTPUT DOCKER BUILD ENGINE ---- 
+[BUILD] Resultado (errorlevel): 0 
+[BUILD OK] ev_engine construido exitosamente 
+[BUILD] Ejecutando: docker build -t ev_monitor:local -f ev_cp_monitor/Dockerfile . 
+[BUILD] ---- INICIO OUTPUT DOCKER BUILD MONITOR ---- 
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 615B 0.0s done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 0.3s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/python:3.10-slim
+#4 DONE 0.2s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 275B done
+#5 DONE 0.0s
+
+#6 [1/6] FROM docker.io/library/python:3.10-slim@sha256:7b68a5fa7cf0d20b4cedb1dc9a134fdd394fe27edbc4c2519756c91d21df2313
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 65.92kB 0.0s done
+#7 DONE 0.0s
+
+#8 [2/6] WORKDIR /app
+#8 CACHED
+
+#9 [3/6] COPY requirements.txt ./
+#9 CACHED
+
+#10 [4/6] RUN pip install --no-cache-dir -r requirements.txt
+#10 CACHED
+
+#11 [5/6] COPY ev_cp_monitor/ ev_cp_monitor/
+#11 CACHED
+
+#12 [6/6] COPY ev_common/ ev_common/
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 writing image sha256:69c1dff470849d193ea425d22b3b10f2810b68bd293f50eb01220d40298ab263 done
+#13 naming to docker.io/library/ev_monitor:local done
+#13 DONE 0.0s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/z3nuih0vs79lv6aqx8flqi1w2
+[BUILD] ---- FIN OUTPUT DOCKER BUILD MONITOR ---- 
+[BUILD] Resultado (errorlevel): 0 
+[BUILD OK] ev_monitor construido exitosamente 
+[DEBUG] Ejecutando: docker ps -q --filter "label=component=engine" 
+[DEBUG] CP_OFFSET detectado: 0 
+[LOG] CPs existentes: 0 
+[DEBUG] Antes de mostrar mensaje... 
+[DEBUG] Mensaje mostrado 
+[DEBUG] Iniciando timeout de 2 segundos... 
+[DEBUG] Timeout completado, continuando... 
+ 
+============================================================ 
+[MAIN] INICIANDO LANZAMIENTO DE 1 CPs 
+============================================================ 
+[DEBUG] BASE_PORT=5000 
+[DEBUG] KAFKA_SERVER=172.21.42.15:9092 
+[DEBUG] CENTRAL_IP=172.21.42.15 
+[DEBUG] CP_OFFSET=0 
+[DEBUG] NUM_CPS=1 
+ 
+[DEBUG] Antes de iniciar bucle FOR 
+[DEBUG] Rango del bucle: 1 a 1 
+ 
+[MAIN] ================================================ 
+[MAIN] Iteracion 1 de 1 
+[MAIN] CP_NUM calculado: 1 
+[MAIN] ================================================ 
+[DEBUG] A punto de llamar a LANZAR_CP con CP_NUM=1 
+ 
+============================================================ 
+[FUNCION] LANZAR_CP INICIADA 
+============================================================ 
+[DEBUG] LANZAR_CP llamado con CP_NUM=1 
+[DEBUG] BASE_PORT=5000 
+[DEBUG] KAFKA_SERVER=172.21.42.15:9092 
+[DEBUG] CENTRAL_IP=172.21.42.15 
+[DEBUG] CP_ID calculado: CP_001 
+[DEBUG] ENGINE_PORT calculado: 5001 
+ 
+[DEBUG] ---- COMANDO ENGINE ---- 
+docker run --rm -p 5001:5001 -p 9001:9001 --name engine_CP_001 --label project=evcharging-pc-b --label component=engine --label cp_id=CP_001 -e ENGINE_PORT=5001 -e CP_ID=CP_001 -e KAFKA_SERVER=172.21.42.15:9092 -e WEB_PORT=9001 ev_engine:local 
+ 
+[DEBUG] ---- COMANDO MONITOR ---- 
+docker run --rm --network evnet --name monitor_CP_001 --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 -e CP_ID=CP_001 -e CENTRAL_IP=172.21.42.15 -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=5001 -e REGISTRY_URL= -e WEATHER_API_URL=http://host.docker.internal:5002 ev_monitor:local 
+ 
+[DEBUG] ---- COMANDO POWERSHELL ENGINE ---- 
+Write-Host 'Iniciando Engine (CP_001) en puerto 5001...' -ForegroundColor Cyan; Write-Host ''; docker run --rm -p 5001:5001 -p 9001:9001 --name engine_CP_001 --label project=evcharging-pc-b --label component=engine --label cp_id=CP_001 -e ENGINE_PORT=5001 -e CP_ID=CP_001 -e KAFKA_SERVER=172.21.42.15:9092 -e WEB_PORT=9001 ev_engine:local 
+ 
+[DEBUG] ---- COMANDO POWERSHELL MONITOR ---- 
+Write-Host 'Iniciando Monitor (CP_001)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --network evnet --name monitor_CP_001 --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 -e CP_ID=CP_001 -e CENTRAL_IP=172.21.42.15 -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=5001 -e REGISTRY_URL= -e WEATHER_API_URL=http://host.docker.internal:5002 ev_monitor:local 
+ 
+[DEBUG] Ejecutando START PowerShell para Engine... 
+[DEBUG] START ejecutado para Engine (errorlevel: 0) 
+[DEBUG] Esperando 3 segundos... 
+[DEBUG] Abriendo navegador en http://localhost:9001 
+[DEBUG] Navegador abierto (errorlevel: 0) 
+[DEBUG] Ejecutando START PowerShell para Monitor... 
+[DEBUG] START ejecutado para Monitor (errorlevel: 0) 
+[DEBUG] Lanzando Menu de Control para CP_001... 
+ 
+============================================================ 
+[FUNCION] LANZAR_MENU_CONTROL INICIADA 
+============================================================ 
+[DEBUG] LANZAR_MENU_CONTROL llamado con CP_ID=CP_001, WEB_PORT=9001 
+[DEBUG] API_BASE_URL: http://127.0.0.1:9001/api 
+[DEBUG] Script temporal creado: C:\Users\alumno\AppData\Local\Temp\menu_control_CP_001.bat 
+[DEBUG] Menu de Control lanzado para CP_001 
+============================================================ 
+[DEBUG] Menu de Control lanzado 
+[DEBUG] CP_001 completado 
+============================================================ 
+[DEBUG] Retorno de LANZAR_CP completado 
+[MAIN] Esperando 2 segundos antes del siguiente CP... 
+[DEBUG] Bucle FOR completado 

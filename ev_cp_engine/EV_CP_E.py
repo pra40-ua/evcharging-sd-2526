@@ -60,6 +60,7 @@ def generar_y_enviar_telemetria(cp_id: str, estado_carga: str, kw_entregados: fl
     """
     Crea el mensaje de telemetría y lo envía al topic 'cp_telemetry'.
     """
+    global KAFKA_ENCRYPTION_ERROR_COUNT
     if TELEMETRY_PRODUCER is None:
         return
 
