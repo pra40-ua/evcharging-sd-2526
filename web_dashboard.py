@@ -534,6 +534,11 @@ def consumir_telemetria(broker: str):
                                         # Permitir cambio explícito de FUERA_DE_SERVICIO a ACTIVADO (restauración tras alerta)
                                         estado_carga = estado_carga_recibido
                                         print(f"[DASHBOARD] ✅ Restaurando {cp_id} de FUERA_DE_SERVICIO a ACTIVADO (alerta climatológica desactivada)")
+                                        # Limpiar error de sistema cuando el CP vuelve a estar operativo
+                                        with ERRORES_SISTEMA_LOCK:
+                                            if cp_id in ERRORES_SISTEMA:
+                                                del ERRORES_SISTEMA[cp_id]
+                                                print(f"[DASHBOARD] ✅ Error de sistema limpiado para {cp_id}")
                                     elif estado_recibido_upper not in estados_criticos:
                                         # Preservar estado crítico, no degradar
                                         estado_carga = estado_anterior
@@ -606,6 +611,12 @@ def consumir_telemetria(broker: str):
                                                 'timestamp': time.time()
                                             }
                                         registrar_evento(f"❌ {mensaje_error}", 'error')
+                                    # Limpiar error si el CP vuelve a un estado normal
+                                    elif estado_carga.upper() in ('ACTIVADO', 'REPOSO', 'IDLE', 'READY', 'SUMINISTRANDO', 'CARGANDO'):
+                                        with ERRORES_SISTEMA_LOCK:
+                                            if cp_id in ERRORES_SISTEMA and ERRORES_SISTEMA[cp_id].get('tipo') == 'cp_no_disponible':
+                                                del ERRORES_SISTEMA[cp_id]
+                                                print(f"[DASHBOARD] ✅ Error de sistema limpiado para {cp_id} (estado: {estado_carga})")
                                     elif 'AVERI' in estado_carga.upper():
                                         print(f"[DASHBOARD] ⚠️⚠️⚠️ CAMBIO A AVERÍA: {cp_id} → {estado_carga} ⚠️⚠️⚠️")
                                     elif 'PENDIENTE_CONFIRMACION_CENTRAL' in estado_carga.upper():
