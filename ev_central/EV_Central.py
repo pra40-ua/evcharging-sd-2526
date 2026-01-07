@@ -3988,10 +3988,14 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                         traceback.print_exc()
                 
                 elif cod_op == 'AVR_CLR':
+                    print(f"[CENTRAL] 🔧 Procesando AVR_CLR de {cp_id}")
+                    print(f"[CENTRAL]    Campos recibidos: {campos}")
                     try:
                         motivo = campos[1] if len(campos) > 1 else 'RECUPERADA'
+                        print(f"[CENTRAL]    Motivo: {motivo}")
                         with CP_ALERTA_LOCK:
                             CP_ALERTA[cp_id] = False
+                            print(f"[CENTRAL]    CP_ALERTA[{cp_id}] = False")
                         cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection, motivo=motivo)
                         
                         # IMPORTANTE: Resetear contadores de telemetría tras recuperación de avería
@@ -4009,6 +4013,7 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                                 'tiempo_carga_s': 0,
                                 'tiene_sesion_activa': False,
                                 'driver_id_sesion': None,
+                                'averia_activa': False,
                                 'timestamp': time.time()
                             }
                         
@@ -4022,9 +4027,11 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                                 print(f"[CENTRAL] ⚠️ Error publicando telemetría reseteada: {e_kafka}")
                         
                         registrar_evento(f"✅ {cp_id} recuperado de avería: {motivo}")
-                        print(f"[CENTRAL] {cp_id} marcado como ACTIVADO tras AVR_CLR")
+                        print(f"[CENTRAL] ✅ {cp_id} marcado como ACTIVADO tras AVR_CLR")
                     except Exception as e:
-                        print(f"[CENTRAL] Error procesando AVR_CLR: {e}")
+                        print(f"[CENTRAL] ❌ Error procesando AVR_CLR: {e}")
+                        import traceback
+                        traceback.print_exc()
                 
                 # ====== NUEVO BLOQUE AÑADIDO: MANEJO DE STATE ====== 
                 elif cod_op == 'STATE' and len(campos) >= 2:
