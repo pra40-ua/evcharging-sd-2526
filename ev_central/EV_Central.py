@@ -257,7 +257,7 @@ def obtener_clave_cifrado_cp(cp_id: str, db_connection = None) -> bytes:
     # Si no está en memoria, buscar en BD
     if _verificar_conexion(db_connection):
         try:
-            cursor = db_connection.cursor(dictionary=True)
+            cursor = _db_cursor_dict(db_connection)
             cursor.execute("""
                 SELECT encryption_key FROM cp_encryption_keys 
                 WHERE cp_id = %s AND activo = TRUE
@@ -597,7 +597,7 @@ def api_weather_alert():
         
         # Registrar en BD si hay conexión
         db_conn = globals().get('_DB_CONN_FOR_API')
-        if db_conn and db_conn.is_connected():
+        if db_conn and _verificar_conexion(db_conn):
             try:
                 cursor = db_conn.cursor()
                 cursor.execute("""
@@ -1130,7 +1130,7 @@ def consumir_telemetria_kafka(broker_list: str):
                             # Registrar en auditoría
                             try:
                                 db_conn = globals().get('_DB_CONN_FOR_CONSUMER')
-                                if db_conn and db_conn.is_connected():
+                                if db_conn and _verificar_conexion(db_conn):
                                     registrar_auditoria(
                                         accion="ERROR_DESCIFRADO_KAFKA",
                                         cp_id=cp_id,
@@ -1186,7 +1186,7 @@ def consumir_telemetria_kafka(broker_list: str):
                     try:
                         # Intentar usar variable cerrada sobre db_connection si existe en enclosing scope
                         db_conn = globals().get('_DB_CONN_FOR_CONSUMER')
-                        if db_conn and db_conn.is_connected():
+                        if db_conn and _verificar_conexion(db_conn):
                             cursor = db_conn.cursor()
                             cursor.execute("""
                                 INSERT INTO telemetria_log (cp_id, timestamp, estado_carga, kw_entregados, tiempo_carga_s)
@@ -1748,11 +1748,11 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection):
                         })
 
                         # Paso 2: Validar contra BD (intentar reconectar si es necesario)
-                        if not (db_connection and db_connection.is_connected()):
+                        if not (db_connection and _verificar_conexion(db_connection)):
                             print("[CENTRAL] BD no conectada, intentando reconectar...")
                             db_connection = _asegurar_conexion_bd(db_connection)
                         
-                        if not (db_connection and db_connection.is_connected()):
+                        if not (db_connection and _verificar_conexion(db_connection)):
                             print("[CENTRAL] BD no disponible tras intento de reconexión; denegando solicitud.")
                             notificar_driver(id_driver, 'DENEGADA', {
                                 'motivo': 'BD no disponible; no es posible validar CP'
@@ -2068,13 +2068,22 @@ def _verificar_conexion(connection):
     if connection is None:
         return False
     try:
-        if PYMySQL_AVAILABLE:
+        # Detectar tipo de conexión por el método disponible
+        # PyMySQL tiene ping(), mysql.connector tiene is_connected()
+        if hasattr(connection, 'ping'):
             # PyMySQL: intentar hacer un ping
             connection.ping(reconnect=False)
             return True
-        else:
+        elif hasattr(connection, 'is_connected'):
             # mysql.connector: usar is_connected()
             return connection.is_connected()
+        else:
+            # Fallback: intentar hacer una operación simple
+            try:
+                connection.ping(reconnect=False)
+                return True
+            except:
+                return False
     except:
         return False
 
@@ -2129,7 +2138,7 @@ def conectar_bd(db_config: str):
                     'connection_timeout': 10
                 }
                 connection = mysql.connector.connect(**connection_params)
-                if connection.is_connected():
+                if _verificar_conexion(connection):
                     print(f"[CENTRAL] ✓ Conectado a MariaDB en {host}:{port} (usando mysql.connector)")
                     return connection
             except Exception as e:
@@ -2187,7 +2196,7 @@ def registrar_cp_en_bd(connection,
 def _asegurar_conexion_bd(connection) -> any:
     """Verifica y, si es necesario, reestablece la conexión a BD usando DB_CONFIG_STR."""
     try:
-        if connection and connection.is_connected():
+        if connection and _verificar_conexion(connection):
             return connection
     except Exception:
         pass
@@ -2219,7 +2228,7 @@ def actualizar_estado_cp(connection,
     
     try:
         # Verificar conexión antes de usar
-        if not connection.is_connected():
+        if not _verificar_conexion(connection):
             connection = _asegurar_conexion_bd(connection)
             if connection is None:
                 return False
