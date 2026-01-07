@@ -118,6 +118,10 @@ CP_ENCRYPTION_KEYS_LOCK = threading.Lock()
 WEATHER_ALERTS = {}  # cp_id -> {'activa': bool, 'temperatura': float, 'timestamp': float}
 WEATHER_ALERTS_LOCK = threading.Lock()
 
+# CPs esperando finalizar suministro antes de ir a FUERA_DE_SERVICIO por alerta climatológica
+CP_PENDIENTES_ALERTA_CLIMA = {}  # cp_id -> {'temperatura': float, 'timestamp': float}
+CP_PENDIENTES_ALERTA_CLIMA_LOCK = threading.Lock()
+
 # Configuración de EV_Registry (enforzar HTTPS)
 REGISTRY_URL = os.getenv('REGISTRY_URL', 'https://127.0.0.1:6000/api')
 # Normalizar: si por error viene con http://, forzar https://
@@ -624,22 +628,23 @@ def api_weather_alert():
             except Exception as e:
                 print(f"[CENTRAL] ⚠️ Error guardando alerta en BD: {e}")
         
-        # Si hay alerta activa, cambiar estado a FUERA_DE_SERVICIO inmediatamente
+        # Si hay alerta activa, procesar según el estado del CP
         if alerta_activa:
             with CP_ESTADO_LOCK:
                 estado_cp = CP_ESTADO.get(cp_id, '')
             
-            # Cambiar estado a FUERA_DE_SERVICIO inmediatamente (incluso si está suministrando)
-            try:
-                cambiar_estado_cp(cp_id, 'FUERA_DE_SERVICIO', db_conn)
-                registrar_evento(f"⚠️ CP {cp_id} fuera de servicio por alerta climatológica (T={temperatura}°C)", "warn")
-            except Exception as e:
-                print(f"[CENTRAL] ⚠️ Error cambiando estado a FUERA_DE_SERVICIO: {e}")
-            
-            # Si está suministrando, enviar STOP para detener el suministro inmediatamente
+            # Si está suministrando, enviar STOP y esperar a que finalice normalmente
             if estado_cp == 'SUMINISTRANDO' or estado_cp == 'CARGANDO':
-                registrar_evento(f"⚠️ Alerta climatológica activa para {cp_id} (T={temperatura}°C). Deteniendo suministro activo.", "warn")
-                # Enviar STOP para que finalice el suministro actual
+                registrar_evento(f"⚠️ Alerta climatológica activa para {cp_id} (T={temperatura:.1f}°C). Finalizando suministro activo antes de poner fuera de servicio.", "warn")
+                
+                # Marcar que este CP debe ir a FUERA_DE_SERVICIO después de recibir FIN
+                with CP_PENDIENTES_ALERTA_CLIMA_LOCK:
+                    CP_PENDIENTES_ALERTA_CLIMA[cp_id] = {
+                        'temperatura': temperatura,
+                        'timestamp': time.time()
+                    }
+                
+                # Enviar STOP para que finalice el suministro normalmente
                 try:
                     with CONEXIONES_ACTIVAS_LOCK:
                         conn = CONEXIONES_ACTIVAS.get(cp_id)
@@ -647,32 +652,45 @@ def api_weather_alert():
                         # Enviar STOP cifrado al CP
                         trama_stop = construir_trama('STOP', [], cp_id=cp_id, cifrar=True)
                         conn.sendall(trama_stop)
-                        print(f"[CENTRAL] 📤 STOP enviado a {cp_id} por alerta climatológica (T={temperatura}°C)")
-                        registrar_evento(f"📤 STOP enviado a {cp_id} por alerta climatológica", "warn")
+                        print(f"[CENTRAL] 📤 STOP enviado a {cp_id} por alerta climatológica (T={temperatura:.1f}°C). Esperando FIN para finalizar suministro.")
+                        registrar_evento(f"📤 STOP enviado a {cp_id} por alerta climatológica. Esperando finalización normal del suministro.", "warn")
                 except Exception as e:
                     print(f"[CENTRAL] ⚠️ Error enviando STOP a {cp_id}: {e}")
-            
-            # Publicar telemetría actualizada para que el dashboard refleje el cambio
-            try:
-                with TELEMETRIA_ACTUAL_LOCK:
-                    telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
-                telemetria_actualizada = {
-                    **telemetria_actual,
-                    'cp_id': cp_id,
-                    'estado': 'FUERA_DE_SERVICIO',
-                    'estado_carga': 'FUERA_DE_SERVICIO',
-                    'timestamp': time.time(),
-                    'alerta_clima_activa': True,
-                    'temperatura': temperatura
-                }
-                with TELEMETRIA_ACTUAL_LOCK:
-                    TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
-                if KAFKA_PRODUCER:
-                    KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
-                    KAFKA_PRODUCER.flush(timeout=1)
-                    print(f"[CENTRAL] Telemetría publicada para {cp_id}: FUERA_DE_SERVICIO (alerta climatológica)")
-            except Exception as e:
-                print(f"[CENTRAL] ⚠️ Error publicando telemetría de alerta: {e}")
+                    # Si no se pudo enviar STOP, cambiar directamente a FUERA_DE_SERVICIO
+                    try:
+                        cambiar_estado_cp(cp_id, 'FUERA_DE_SERVICIO', db_conn)
+                        registrar_evento(f"⚠️ CP {cp_id} fuera de servicio por alerta climatológica (T={temperatura:.1f}°C)", "warn")
+                    except Exception as e2:
+                        print(f"[CENTRAL] ⚠️ Error cambiando estado a FUERA_DE_SERVICIO: {e2}")
+            else:
+                # No está suministrando, cambiar directamente a FUERA_DE_SERVICIO
+                try:
+                    cambiar_estado_cp(cp_id, 'FUERA_DE_SERVICIO', db_conn)
+                    registrar_evento(f"⚠️ CP {cp_id} fuera de servicio por alerta climatológica (T={temperatura:.1f}°C)", "warn")
+                except Exception as e:
+                    print(f"[CENTRAL] ⚠️ Error cambiando estado a FUERA_DE_SERVICIO: {e}")
+                
+                # Publicar telemetría actualizada para que el dashboard refleje el cambio
+                try:
+                    with TELEMETRIA_ACTUAL_LOCK:
+                        telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                    telemetria_actualizada = {
+                        **telemetria_actual,
+                        'cp_id': cp_id,
+                        'estado': 'FUERA_DE_SERVICIO',
+                        'estado_carga': 'FUERA_DE_SERVICIO',
+                        'timestamp': time.time(),
+                        'alerta_clima_activa': True,
+                        'temperatura': temperatura
+                    }
+                    with TELEMETRIA_ACTUAL_LOCK:
+                        TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
+                    if KAFKA_PRODUCER:
+                        KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                        KAFKA_PRODUCER.flush(timeout=1)
+                        print(f"[CENTRAL] Telemetría publicada para {cp_id}: FUERA_DE_SERVICIO (alerta climatológica)")
+                except Exception as e:
+                    print(f"[CENTRAL] ⚠️ Error publicando telemetría de alerta: {e}")
         else:
             # Alerta desactivada, restaurar operación (solo si no está en avería o estado interactivo)
             try:
@@ -3395,9 +3413,28 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                             print(f"[CENTRAL] ✗ Error procesando cola de {cp_fin}: {e}")
                         
                         # Solo cambiar a ACTIVADO si NO se procesó nadie de la cola
+                        # Pero primero verificar si hay alerta climatológica pendiente
+                        tiene_alerta_clima_pendiente = False
+                        temperatura_alerta = None
+                        with CP_PENDIENTES_ALERTA_CLIMA_LOCK:
+                            if cp_fin in CP_PENDIENTES_ALERTA_CLIMA:
+                                tiene_alerta_clima_pendiente = True
+                                alerta_info = CP_PENDIENTES_ALERTA_CLIMA.pop(cp_fin)
+                                temperatura_alerta = alerta_info.get('temperatura')
+                        
                         if not cola_procesada:
-                            cambiar_estado_cp(cp_fin, 'ACTIVADO', db_connection)
-                            print(f"[CENTRAL] {cp_fin} sin cola pendiente. Estado: ACTIVADO")
+                            if tiene_alerta_clima_pendiente:
+                                # Hay alerta climatológica pendiente: cambiar a FUERA_DE_SERVICIO
+                                try:
+                                    cambiar_estado_cp(cp_fin, 'FUERA_DE_SERVICIO', db_connection)
+                                    registrar_evento(f"⚠️ CP {cp_fin} fuera de servicio por alerta climatológica (T={temperatura_alerta:.1f}°C) tras finalizar suministro", "warn")
+                                    print(f"[CENTRAL] CP {cp_fin} finalizó suministro y pasó a FUERA_DE_SERVICIO por alerta climatológica (T={temperatura_alerta:.1f}°C)")
+                                except Exception as e:
+                                    print(f"[CENTRAL] ⚠️ Error cambiando estado a FUERA_DE_SERVICIO tras FIN: {e}")
+                            else:
+                                # No hay alerta pendiente: cambiar a ACTIVADO normalmente
+                                cambiar_estado_cp(cp_fin, 'ACTIVADO', db_connection)
+                                print(f"[CENTRAL] {cp_fin} sin cola pendiente. Estado: ACTIVADO")
                         
                         # Limpiar estado manual si estaba PARADO
                         try:
@@ -3407,8 +3444,10 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                         except Exception:
                             pass
                         
-                        # Limpezas y publicación ACTIVADO solo si NO hay siguiente en cola
+                        # Limpezas y publicación ACTIVADO/FUERA_DE_SERVICIO solo si NO hay siguiente en cola
                         if not cola_procesada:
+                            # Determinar el estado final según si hay alerta climatológica
+                            estado_final = 'FUERA_DE_SERVICIO' if tiene_alerta_clima_pendiente else 'ACTIVADO'
                             # Limpiar información de sesión del driver
                             try:
                                 with CP_SESION_OBJETIVO_KWH_LOCK:
@@ -3423,15 +3462,15 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                             except Exception:
                                 pass
                             
-                            # Publicar telemetría actualizada: CP en ACTIVADO, sin sesión, contadores en 0
+                            # Publicar telemetría actualizada según el estado final
                             try:
                                 with TELEMETRIA_ACTUAL_LOCK:
                                     telemetria_actual = TELEMETRIA_ACTUAL.get(cp_fin, {})
                                 telemetria_actualizada = {
                                     **telemetria_actual,
                                     'cp_id': cp_fin,
-                                    'estado_carga': 'ACTIVADO',
-                                    'estado': 'ACTIVADO',
+                                    'estado_carga': estado_final,
+                                    'estado': estado_final,
                                     'timestamp': time.time(),
                                     'tiene_sesion_activa': False,
                                     'driver_id_sesion': None,
@@ -3439,12 +3478,20 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                                     'potencia_actual': 0.0,
                                     'tiempo_carga_s': 0
                                 }
+                                # Si es FUERA_DE_SERVICIO, agregar información de alerta climatológica
+                                if estado_final == 'FUERA_DE_SERVICIO':
+                                    telemetria_actualizada['alerta_clima_activa'] = True
+                                    telemetria_actualizada['temperatura'] = temperatura_alerta
+                                
                                 with TELEMETRIA_ACTUAL_LOCK:
                                     TELEMETRIA_ACTUAL[cp_fin] = telemetria_actualizada
                                 if KAFKA_PRODUCER:
                                     KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
                                     KAFKA_PRODUCER.flush(timeout=1)
-                                    print(f"[CENTRAL] CP {cp_fin} resetado y listo para nuevo servicio (ACTIVADO)")
+                                    if estado_final == 'FUERA_DE_SERVICIO':
+                                        print(f"[CENTRAL] CP {cp_fin} fuera de servicio por alerta climatológica (T={temperatura_alerta:.1f}°C)")
+                                    else:
+                                        print(f"[CENTRAL] CP {cp_fin} resetado y listo para nuevo servicio (ACTIVADO)")
                             except Exception as e:
                                 print(f"[CENTRAL] Error publicando estado tras FIN: {e}")
 
