@@ -1998,7 +1998,8 @@ def api_status():
 @app.route('/api/simular_averia', methods=['POST'])
 def api_simular_averia():
     """Activa/desactiva la simulación de avería."""
-    global SIMULAR_AVERIA
+    global SIMULAR_AVERIA, ACTIVE_MONITOR_CONN, ENGINE_CP_ID
+    global kw_acumulados_global, segundos_global, CURRENT_DRIVER_ID, TARGET_KWH, ESTADO_FLUJO, CHARGING_FLAG
     
     data = request.get_json(silent=True)
     if not data:
@@ -2009,18 +2010,93 @@ def api_simular_averia():
         activar = data.get('activar', True)
         motivo = data.get('motivo', 'Avería simulada desde web')
     
-    with SIMULAR_AVERIA_LOCK:
-        SIMULAR_AVERIA = activar
-    
     cp_id = globals().get('ENGINE_CP_ID') or 'CP_UNKNOWN'
     
     if activar:
-        print(f"\n{'='*70}")
-        print(f"  [{cp_id}] ⚠️  AVERÍA SIMULADA ACTIVADA")
-        print(f"  Motivo: {motivo}")
-        print(f"{'='*70}\n")
+        # Verificar si hay un suministro activo antes de activar la avería
+        tenia_suministro_activo = False
+        with STATE_LOCK, SESSION_LOCK, ESTADO_FLUJO_LOCK:
+            tenia_suministro_activo = CHARGING_FLAG.is_set() or ESTADO_FLUJO == 'CARGANDO'
+            kw_acum = kw_acumulados_global
+            segs = segundos_global
+            driver_id = CURRENT_DRIVER_ID
+            objetivo = TARGET_KWH
+        
+        # Si hay suministro activo, finalizarlo y enviar ticket
+        if tenia_suministro_activo:
+            print(f"\n{'='*70}")
+            print(f"  [{cp_id}] ⚠️  AVERÍA SIMULADA ACTIVADA")
+            print(f"  Motivo: {motivo}")
+            print(f"  ⚠️  Detectado suministro activo. Finalizando suministro...")
+            print(f"{'='*70}\n")
+            
+            # Detener el suministro
+            with STATE_LOCK:
+                CHARGING_FLAG.clear()
+                if 'TELEMETRY_STOP_EVENT' in globals() and TELEMETRY_STOP_EVENT:
+                    try:
+                        TELEMETRY_STOP_EVENT.set()
+                    except Exception:
+                        pass
+            with ESTADO_FLUJO_LOCK:
+                ESTADO_FLUJO = 'REPOSO'
+            
+            # Enviar FIN al Monitor para que Central procese el fin y envíe el ticket al driver
+            if ACTIVE_MONITOR_CONN is not None and driver_id and driver_id != 'UNKNOWN':
+                try:
+                    precio_kwh = 0.48
+                    importe = round(kw_acum * precio_kwh, 2)
+                    tx_id = globals().get('CURRENT_TX_ID') or f"TX-{cp_id}-{int(time.time())}"
+                    motivo_fin = f'Avería simulada: {motivo}'
+                    
+                    trama_fin = construir_trama('FIN', [
+                        cp_id,
+                        driver_id,
+                        f"{kw_acum:.2f}",
+                        f"{importe:.2f}",
+                        str(segs),
+                        motivo_fin,
+                        tx_id
+                    ])
+                    ACTIVE_MONITOR_CONN.sendall(trama_fin)
+                    print(f"[{cp_id}] ✅ FIN enviado a Monitor (avería simulada). kWh={kw_acum:.2f}, €={importe:.2f}, dur_s={segs}, tx={tx_id}")
+                    print(f"[{cp_id}]    Motivo: {motivo_fin}")
+                    
+                    # Limpiar estado persistido si existe
+                    limpiar_estado_persistido(cp_id)
+                    
+                    # Resetear variables de sesión
+                    with SESSION_LOCK:
+                        TARGET_KWH = None
+                        CURRENT_DRIVER_ID = 'UNKNOWN'
+                        CURRENT_TX_ID = None
+                        SESSION_START_TS = None
+                    
+                    # Resetear contadores
+                    with STATE_LOCK:
+                        kw_acumulados_global = 0.0
+                        segundos_global = 0
+                except Exception as e:
+                    print(f"[{cp_id}] ⚠️ Error enviando FIN tras activar avería: {e}")
+            else:
+                print(f"[{cp_id}] ⚠️ No se pudo enviar FIN: Monitor no conectado o sin driver activo")
+        
+        # Activar la avería
+        with SIMULAR_AVERIA_LOCK:
+            SIMULAR_AVERIA = True
+        
+        if not tenia_suministro_activo:
+            print(f"\n{'='*70}")
+            print(f"  [{cp_id}] ⚠️  AVERÍA SIMULADA ACTIVADA")
+            print(f"  Motivo: {motivo}")
+            print(f"{'='*70}\n")
+        
         mensaje = f"Avería simulada activada: {motivo}"
+        if tenia_suministro_activo:
+            mensaje += " (suministro finalizado y ticket enviado)"
     else:
+        with SIMULAR_AVERIA_LOCK:
+            SIMULAR_AVERIA = False
         print(f"\n{'='*70}")
         print(f"  [{cp_id}] ✓ AVERÍA SIMULADA DESACTIVADA")
         print(f"{'='*70}\n")

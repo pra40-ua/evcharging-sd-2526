@@ -539,10 +539,16 @@ def consumir_telemetria(broker: str):
                                         # Preservar estado crítico, no puede ser sobrescrito por estados interactivos o normales
                                         estado_carga = estado_anterior
                                         print(f"[DASHBOARD] Preservando estado crítico {estado_anterior} para {cp_id} (telemetría reporta {estado_carga_recibido})")
-                                # PRIORIDAD 3: Si el estado recibido es interactivo, usarlo directamente
+                                # PRIORIDAD 3: Si el estado recibido es interactivo Y el anterior NO es crítico, usarlo directamente
                                 elif estado_recibido_upper in estados_interactivos:
-                                    estado_carga = estado_carga_recibido
-                                    print(f"[DASHBOARD] Estado interactivo recibido para {cp_id}: {estado_carga_recibido}")
+                                    # Verificar nuevamente que el estado anterior NO sea crítico (doble verificación)
+                                    if estado_anterior_upper not in estados_criticos:
+                                        estado_carga = estado_carga_recibido
+                                        print(f"[DASHBOARD] Estado interactivo recibido para {cp_id}: {estado_carga_recibido}")
+                                    else:
+                                        # El estado anterior es crítico, preservarlo (no puede ser sobrescrito por interactivo)
+                                        estado_carga = estado_anterior
+                                        print(f"[DASHBOARD] ⚠️ Ignorando estado interactivo {estado_carga_recibido} para {cp_id} (preservando estado crítico {estado_anterior})")
                                 # PRIORIDAD 4: Si el estado anterior es interactivo y el recibido es ACTIVADO/REPOSO, preservar el interactivo
                                 elif estado_anterior_upper in estados_interactivos:
                                     if estado_recibido_upper in ('ACTIVADO', 'REPOSO', 'IDLE', 'READY'):
