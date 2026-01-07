@@ -2010,6 +2010,36 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection):
                             })
                             continue
 
+                        # Verificar también el estado en memoria (puede estar más actualizado que la BD)
+                        with CP_ESTADO_LOCK:
+                            estado_memoria = CP_ESTADO.get(cp_id, estado_cp)
+                        
+                        # Verificar si hay alerta climatológica activa
+                        tiene_alerta_clima_activa = False
+                        with WEATHER_ALERTS_LOCK:
+                            alerta_info = WEATHER_ALERTS.get(cp_id, {})
+                            tiene_alerta_clima_activa = alerta_info.get('activa', False)
+                        
+                        # Verificar también en la telemetría actual
+                        with TELEMETRIA_ACTUAL_LOCK:
+                            telemetria_cp = TELEMETRIA_ACTUAL.get(cp_id, {})
+                            alerta_clima_telemetria = telemetria_cp.get('alerta_clima_activa', False)
+                        
+                        # Si hay alerta climatológica activa (en WEATHER_ALERTS o telemetría), el CP está fuera de servicio
+                        tiene_alerta_activa = tiene_alerta_clima_activa or alerta_clima_telemetria
+                        
+                        # Si NO hay alerta activa y el estado en memoria es ACTIVADO, usar ACTIVADO (aunque la BD diga FUERA_DE_SERVICIO)
+                        if tiene_alerta_activa:
+                            # Hay alerta activa, el CP está fuera de servicio independientemente del estado en BD
+                            estado_cp = 'FUERA_DE_SERVICIO'
+                            print(f"[CENTRAL] ⚠️ CP {cp_id} tiene alerta climatológica activa - fuera de servicio")
+                        elif not tiene_alerta_activa and estado_memoria.upper() == 'ACTIVADO' and estado_cp.upper() in ('FUERA_DE_SERVICIO', 'FUERA DE SERVICIO'):
+                            # El estado en memoria es ACTIVADO pero la BD dice FUERA_DE_SERVICIO
+                            # Esto puede pasar si la alerta se desactivó recientemente y la BD aún no se actualizó
+                            # Usar el estado en memoria que es más actualizado
+                            estado_cp = estado_memoria
+                            print(f"[CENTRAL] ✅ Estado en BD desincronizado para {cp_id}. Alerta climatológica desactivada. Usando estado en memoria: {estado_memoria}")
+
                         estado_inferior = estado_cp.strip().lower() if estado_cp else ''
                         
                         # Verificar si el CP ya tiene una sesión activa
@@ -2085,13 +2115,24 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection):
                             registrar_evento(f"Driver {id_driver} en cola para {cp_id} (posición {posicion})", "info")
                             continue
                         elif estado_inferior in estados_no_disponibles:
-                            mensaje_error = f'CP {cp_id} no disponible. CP fuera de servicio'
-                            print(f"[CENTRAL] ❌ {mensaje_error}")
-                            registrar_evento(f"❌ {mensaje_error}", "error")
-                            notificar_driver(id_driver, 'DENEGADA', {
-                                'motivo': mensaje_error
-                            })
-                            continue
+                            # Verificar nuevamente si hay alerta climatológica activa antes de denegar
+                            # Si no hay alerta activa y el estado en memoria es ACTIVADO, permitir la solicitud
+                            if not tiene_alerta_activa and estado_memoria.upper() == 'ACTIVADO':
+                                # La alerta se desactivó pero el estado en BD aún no se actualizó
+                                # Permitir la solicitud usando el estado en memoria
+                                print(f"[CENTRAL] ✅ CP {cp_id} disponible (alerta climatológica desactivada, estado en memoria: ACTIVADO)")
+                                estado_cp = 'ACTIVADO'
+                                estado_inferior = 'activado'
+                                # Continuar con el proceso normalmente
+                            else:
+                                # Realmente está fuera de servicio
+                                mensaje_error = f'CP {cp_id} no disponible. CP fuera de servicio'
+                                print(f"[CENTRAL] ❌ {mensaje_error}")
+                                registrar_evento(f"❌ {mensaje_error}", "error")
+                                notificar_driver(id_driver, 'DENEGADA', {
+                                    'motivo': mensaje_error
+                                })
+                                continue
                         else:
                             # Estado desconocido - intentar permitir si el CP está conectado
                             print(f"[CENTRAL] Estado desconocido '{estado_cp}' para {cp_id}. Verificando conexión...")

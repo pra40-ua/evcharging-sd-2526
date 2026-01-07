@@ -1,0 +1,114 @@
+============================================================ 
+ LOG DE EJECUCION - PC_C_RUN.bat 
+ Fecha/Hora: dc. 07/01/2026 19:57:04,52 
+============================================================ 
+ 
+Docker version 28.2.2, build e6534b4
+[INPUT] Usuario ingreso: NUM_DRIVERS=1 
+[VALIDADO] NUM_DRIVERS final: 1 
+[INPUT] Usuario ingreso: NUM_CPS_DISPONIBLES=1 
+[VALIDADO] NUM_CPS_DISPONIBLES final: 1 
+[BUILD] Iniciando construccion de imagen ev_driver 
+[BUILD] Fecha/Hora: dc. 07/01/2026 19:57:10,22 
+ 
+[BUILD] Ejecutando: docker build -t ev_driver:local -f ev_driver/Dockerfile . 
+[BUILD] ---- INICIO OUTPUT DOCKER BUILD DRIVER ---- 
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 697B 0.0s done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 0.6s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/python:3.10-slim
+#4 DONE 0.5s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 275B done
+#5 DONE 0.0s
+
+#6 [1/6] FROM docker.io/library/python:3.10-slim@sha256:7b68a5fa7cf0d20b4cedb1dc9a134fdd394fe27edbc4c2519756c91d21df2313
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 9.52kB 0.0s done
+#7 DONE 0.0s
+
+#8 [5/6] COPY ev_driver/ ev_driver/
+#8 CACHED
+
+#9 [2/6] WORKDIR /app
+#9 CACHED
+
+#10 [3/6] COPY requirements.txt ./
+#10 CACHED
+
+#11 [4/6] RUN pip install --no-cache-dir -r requirements.txt
+#11 CACHED
+
+#12 [6/6] COPY ev_common/ ev_common/
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 writing image sha256:8c771a0703eeeae078d1aa40e50d4d5abfba8d81891b6cb27dce9f5aca033a39 done
+#13 naming to docker.io/library/ev_driver:local done
+#13 DONE 0.0s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/5teu6pvdhzvzackih7exl2xjt
+[BUILD] ---- FIN OUTPUT DOCKER BUILD DRIVER ---- 
+[BUILD] Resultado (errorlevel): 0 
+[BUILD OK] ev_driver construido exitosamente 
+[DEBUG] Verificando que Docker responde correctamente... 
+[DEBUG] Docker responde correctamente 
+[DEBUG] Ejecutando: docker ps -q --filter "label=component=driver" 
+[DEBUG] DRIVER_OFFSET detectado: 0 
+[LOG] Drivers existentes: 0 
+[DEBUG] Detectando CPs ya asignados... 
+[DEBUG] CPs_OCUPADOS:  
+[LOG] Drivers existentes: 0 
+[LOG] No hay CPs ocupados 
+ 
+============================================================ 
+[MAIN] INICIANDO LANZAMIENTO DE 1 DRIVERS 
+============================================================ 
+[DEBUG] KAFKA_SERVER=172.21.42.15:9092 
+[DEBUG] DRIVER_OFFSET=0 
+[DEBUG] NUM_DRIVERS=1 
+[DEBUG] NUM_CPS_DISPONIBLES=1 
+ 
+ 
+[MAIN] ================================================ 
+[MAIN] Iteracion 1 de 1 
+[MAIN] DRIVER_NUM calculado: 1 
+[MAIN] ================================================ 
+[DEBUG] A punto de llamar a LANZAR_DRIVER con DRIVER_NUM=1 
+ 
+============================================================ 
+[FUNCION] LANZAR_DRIVER INICIADA 
+============================================================ 
+[DEBUG] LANZAR_DRIVER llamado con DRIVER_NUM=1, NUM_CPS_TOTAL=1 
+[DEBUG] CPs ocupados en esta iteracion:  
+[DEBUG] CP disponible encontrado: CP_001 
+[DEBUG] DRIVER_ID: DRIVER_001 
+[DEBUG] CP_ID asignado: CP_001 
+[DEBUG] RANDOM_KW: 21 
+[DEBUG] MAT: 1913-ABC 
+[DEBUG] ---- COMANDO POWERSHELL DRIVER ---- 
+Write-Host 'Iniciando Driver (DRIVER_001) -> CP_001 (21 kWh)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --name driver_DRIVER_001 --network evnet --label project=evcharging-pc-c --label component=driver --label driver_id=DRIVER_001 --label cp_id=CP_001 -e KAFKA_BROKER=172.21.42.15:9092 -e DRIVER_ID=DRIVER_001 -e CP_ID=CP_001 -e MAT=1913-ABC -e KW=21 -e LISTEN=true ev_driver:local 
+ 
+[DEBUG] Ejecutando START PowerShell para Driver... 
+[DEBUG] START ejecutado para Driver (errorlevel: 0) 
+[DEBUG] DRIVER_001 completado exitosamente 
+[DEBUG] Driver DRIVER_001 asignado a CP_001 
+============================================================ 
+[DEBUG] Driver asignado exitosamente. Total: 1 
+[DEBUG] Retorno de LANZAR_DRIVER completado 
+[MAIN] Esperando 5 segundos antes del siguiente driver para que Docker registre el contenedor... 
+[DEBUG] Bucle FOR completado 
+[LOG] Total de drivers asignados: 1 de 1 
