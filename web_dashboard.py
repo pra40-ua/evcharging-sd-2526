@@ -487,87 +487,23 @@ def consumir_telemetria(broker: str):
                                     # WEBSOCKET: Emitir evento de nuevo CP
                                     emitir_actualizacion_cp(cp_id, CPS_STATE[cp_id], 'nuevo_cp')
                                 
-                                estado_carga_recibido = telemetria.get('estado_carga', telemetria.get('estado', 'DESCONOCIDO'))
+                                # SIMPLIFICADO: Usar directamente el estado que Central publica en la telemetría
+                                estado_carga = telemetria.get('estado_carga', telemetria.get('estado', 'DESCONOCIDO'))
                                 
-                                # Mapear ESPERANDO_DRIVER a ESPERANDO_OPERADOR_ENGINE
-                                if estado_carga_recibido.upper() in ('ESPERANDO_DRIVER', 'ESPERANDO DRIVER'):
-                                    estado_carga_recibido = 'ESPERANDO_OPERADOR_ENGINE'
+                                # Mapear ESPERANDO_DRIVER a ESPERANDO_OPERADOR_ENGINE (compatibilidad)
+                                if estado_carga.upper() in ('ESPERANDO_DRIVER', 'ESPERANDO DRIVER'):
+                                    estado_carga = 'ESPERANDO_OPERADOR_ENGINE'
                                 
                                 estado_anterior = CPS_STATE[cp_id].get('estado', 'DESCONOCIDO')
                                 
-                                # Estados interactivos que deben preservarse (no degradar a ACTIVADO)
-                                estados_interactivos = {
-                                    'PENDIENTE_CONFIRMACION_CENTRAL',
-                                    'ESPERANDO_OPERADOR_ENGINE',
-                                    'LISTO_PARA_INICIAR',
-                                    'ESPERANDO_CONFIRMACION_FIN'
-                                }
-                                
-                                # Estados críticos que tienen máxima prioridad (no pueden ser sobrescritos por estados menos importantes)
-                                estados_criticos = {
-                                    'FUERA_DE_SERVICIO', 'FUERA DE SERVICIO',
-                                    'AVERIADO', 'AVERÍA', 'AVERIA'
-                                }
-                                
-                                # Determinar qué estado usar
-                                estado_anterior_upper = estado_anterior.upper()
-                                estado_recibido_upper = estado_carga_recibido.upper()
-                                
-                                # Si el estado recibido es crítico, usarlo directamente (máxima prioridad)
-                                if estado_recibido_upper in estados_criticos:
-                                    estado_carga = estado_carga_recibido
-                                    print(f"[DASHBOARD] Estado crítico recibido para {cp_id}: {estado_carga_recibido}")
-                                # Si el estado recibido es interactivo, usarlo directamente (prioridad)
-                                elif estado_recibido_upper in estados_interactivos:
-                                    estado_carga = estado_carga_recibido
-                                    print(f"[DASHBOARD] Estado interactivo recibido para {cp_id}: {estado_carga_recibido}")
-                                # Si el estado anterior es crítico, preservarlo (no puede ser sobrescrito por estados menos importantes)
-                                # EXCEPCIÓN: Si el anterior es FUERA_DE_SERVICIO y el recibido es ACTIVADO, permitir el cambio
-                                # (significa que Central explícitamente restauró el CP tras quitar alerta climatológica)
-                                elif estado_anterior_upper in estados_criticos:
-                                    # Verificar si la alerta climatológica está desactivada en la telemetría
-                                    alerta_clima_activa = telemetria.get('alerta_clima_activa', True)  # Por defecto True si no se especifica
-                                    
-                                    if (estado_anterior_upper in ('FUERA_DE_SERVICIO', 'FUERA DE SERVICIO') and 
-                                        estado_recibido_upper == 'ACTIVADO' and 
-                                        not alerta_clima_activa):
-                                        # Permitir cambio explícito de FUERA_DE_SERVICIO a ACTIVADO (restauración tras alerta)
-                                        estado_carga = estado_carga_recibido
-                                        print(f"[DASHBOARD] ✅ Restaurando {cp_id} de FUERA_DE_SERVICIO a ACTIVADO (alerta climatológica desactivada)")
-                                        # Limpiar error de sistema cuando el CP vuelve a estar operativo
-                                        with ERRORES_SISTEMA_LOCK:
-                                            if cp_id in ERRORES_SISTEMA:
-                                                del ERRORES_SISTEMA[cp_id]
-                                                print(f"[DASHBOARD] ✅ Error de sistema limpiado para {cp_id}")
-                                    elif estado_recibido_upper not in estados_criticos:
-                                        # Preservar estado crítico, no degradar
-                                        estado_carga = estado_anterior
-                                        print(f"[DASHBOARD] Preservando estado crítico {estado_anterior} para {cp_id} (telemetría reporta {estado_carga_recibido})")
-                                    else:
-                                        # El nuevo estado también es crítico, usarlo
-                                        estado_carga = estado_carga_recibido
-                                # Si el estado anterior es interactivo y el recibido es ACTIVADO/REPOSO, preservar el interactivo
-                                elif estado_anterior_upper in estados_interactivos:
-                                    if estado_recibido_upper in ('ACTIVADO', 'REPOSO', 'IDLE', 'READY'):
-                                        # Preservar estado interactivo, no degradar
-                                        estado_carga = estado_anterior
-                                        print(f"[DASHBOARD] Preservando estado interactivo {estado_anterior} para {cp_id} (telemetría reporta {estado_carga_recibido})")
-                                    else:
-                                        # El nuevo estado es más avanzado (ej: SUMINISTRANDO), usarlo
-                                        estado_carga = estado_carga_recibido
-                                else:
-                                    # Estado anterior no es interactivo ni crítico, usar el recibido
-                                    estado_carga = estado_carga_recibido
-                                
-                                # Extraer datos clave de telemetría para debug
+                                # Extraer datos clave de telemetría
                                 kw_entregados = telemetria.get('kw_entregados', 0)
                                 potencia = telemetria.get('potencia_actual', 0)
                                 tiempo = telemetria.get('tiempo_carga_s', 0)
-                                
-                                # Guardar también información de sesión activa en CPS_STATE
                                 tiene_sesion = telemetria.get('tiene_sesion_activa', False)
                                 driver_id = telemetria.get('driver_id_sesion', None)
                                 
+                                # Actualizar estado del CP (simplemente copiar lo que Central dice)
                                 CPS_STATE[cp_id].update({
                                     'estado': estado_carga,
                                     'ultima_actualizacion': time.time(),
@@ -577,7 +513,16 @@ def consumir_telemetria(broker: str):
                                     'driver_id_sesion': driver_id
                                 })
                                 
-                                # Registrar evento solo si el estado cambió
+                                # Limpiar error de sistema si el estado es válido (no fuera de servicio)
+                                estado_carga_upper = estado_carga.upper().strip()
+                                estados_fuera_servicio = ('FUERA_DE_SERVICIO', 'FUERA DE SERVICIO', 'FUERADESERVICIO')
+                                if not any(fs in estado_carga_upper for fs in estados_fuera_servicio):
+                                    with ERRORES_SISTEMA_LOCK:
+                                        if cp_id in ERRORES_SISTEMA and ERRORES_SISTEMA[cp_id].get('tipo') == 'cp_no_disponible':
+                                            del ERRORES_SISTEMA[cp_id]
+                                            print(f"[DASHBOARD] ✅ Error de sistema limpiado para {cp_id} (estado: {estado_carga})")
+                                
+                                # Registrar evento y emitir WebSocket solo si el estado cambió
                                 if estado_anterior != estado_carga:
                                     registrar_evento(f"{cp_id}: {estado_anterior} → {estado_carga}", 'info')
                                     
@@ -589,46 +534,13 @@ def consumir_telemetria(broker: str):
                                         'tiene_sesion': tiene_sesion
                                     }, 'estado_cambiado')
                                     
-                                    # Detectar errores específicos en el estado
-                                    if 'NO DISPONIBLE' in estado_carga.upper() or 'FUERA DE SERVICIO' in estado_carga.upper():
-                                        mensaje_error = f"CP {cp_id} no disponible. CP fuera de servicio"
-                                        with ERRORES_SISTEMA_LOCK:
-                                            ERRORES_SISTEMA[cp_id] = {
-                                                'tipo': 'cp_no_disponible',
-                                                'mensaje': mensaje_error,
-                                                'timestamp': time.time()
-                                            }
-                                        registrar_evento(f"❌ {mensaje_error}", 'error')
-                                    
-                                    if 'FUERA_DE_SERVICIO' in estado_carga.upper() or 'FUERA DE SERVICIO' in estado_carga.upper():
-                                        print(f"[DASHBOARD] ⚠️⚠️⚠️ CAMBIO A FUERA DE SERVICIO: {cp_id} → {estado_carga} ⚠️⚠️⚠️")
-                                        print(f"[DASHBOARD]    Alerta climatológica activa - CP no disponible")
-                                        mensaje_error = f"CP {cp_id} no disponible. CP fuera de servicio"
-                                        with ERRORES_SISTEMA_LOCK:
-                                            ERRORES_SISTEMA[cp_id] = {
-                                                'tipo': 'cp_no_disponible',
-                                                'mensaje': mensaje_error,
-                                                'timestamp': time.time()
-                                            }
-                                        registrar_evento(f"❌ {mensaje_error}", 'error')
-                                    # Limpiar error si el CP vuelve a un estado normal
-                                    elif estado_carga.upper() in ('ACTIVADO', 'REPOSO', 'IDLE', 'READY', 'SUMINISTRANDO', 'CARGANDO'):
-                                        with ERRORES_SISTEMA_LOCK:
-                                            if cp_id in ERRORES_SISTEMA and ERRORES_SISTEMA[cp_id].get('tipo') == 'cp_no_disponible':
-                                                del ERRORES_SISTEMA[cp_id]
-                                                print(f"[DASHBOARD] ✅ Error de sistema limpiado para {cp_id} (estado: {estado_carga})")
-                                    elif 'AVERI' in estado_carga.upper():
-                                        print(f"[DASHBOARD] ⚠️⚠️⚠️ CAMBIO A AVERÍA: {cp_id} → {estado_carga} ⚠️⚠️⚠️")
-                                    elif 'PENDIENTE_CONFIRMACION_CENTRAL' in estado_carga.upper():
-                                        print(f"\n[DASHBOARD] ╔══════════════════════════════════════════")
-                                        print(f"[DASHBOARD] ║  🚀 SOLICITUD PENDIENTE")
-                                        print(f"[DASHBOARD] ╠══════════════════════════════════════════")
-                                        print(f"[DASHBOARD] ║  CP: {cp_id}")
-                                        print(f"[DASHBOARD] ║  Estado: {estado_anterior} → {estado_carga}")
-                                        print(f"[DASHBOARD] ║  Driver: {driver_id}")
-                                        print(f"[DASHBOARD] ║  Sesión activa: {tiene_sesion}")
-                                        print(f"[DASHBOARD] ║  Este CP debería mostrar botón en web")
-                                        print(f"[DASHBOARD] ╚══════════════════════════════════════════\n")
+                                    # Logs informativos para estados importantes
+                                    if 'FUERA_DE_SERVICIO' in estado_carga_upper or 'FUERA DE SERVICIO' in estado_carga_upper:
+                                        print(f"[DASHBOARD] ⚠️ CP {cp_id} → FUERA DE SERVICIO")
+                                    elif 'AVERI' in estado_carga_upper:
+                                        print(f"[DASHBOARD] ⚠️ CP {cp_id} → AVERÍA")
+                                    elif 'PENDIENTE_CONFIRMACION_CENTRAL' in estado_carga_upper:
+                                        print(f"[DASHBOARD] 🚀 CP {cp_id} → PENDIENTE_CONFIRMACION_CENTRAL (Driver: {driver_id})")
                                         
                                         # WEBSOCKET: Emitir evento especial de driver conectado
                                         emitir_actualizacion_cp(cp_id, {
