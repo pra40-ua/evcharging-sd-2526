@@ -96492,3 +96492,166 @@ icPartition(topic='telemetria_cp', partition=0)]
 2026-01-02 23:13:14,370 - 192.168.24.1 - - [02/Jan/2026 23:13:14] "GET /api/status HTTP/1.1" 200 -
 2026-01-02 23:14:14,679 - 192.168.24.1 - - [02/Jan/2026 23:14:14] "GET /api/status HTTP/1.1" 200 -
 2026-01-02 23:15:14,386 - 192.168.24.1 - - [02/Jan/2026 23:15:14] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:00,761 - Updating subscribed topics to: ('telemetria_cp',)
+2026-01-07 16:05:00,766 - <BrokerConnection node_id=bootstrap-0 host=172.21.42.15:9092 <connecting> [IPv4 ('172.21.42.15', 9092)]>: connecting to 172.21.42.15:9092 [('172.21.42.15', 9092) IPv4]
+2026-01-07 16:05:00,767 - Updating subscribed topics to: ('driver_requests',)
+2026-01-07 16:05:00,767 - <BrokerConnection node_id=bootstrap-0 host=172.21.42.15:9092 <connecting> [IPv4 ('172.21.42.15', 9092)]>: Connection complete.
+2026-01-07 16:05:00,769 - Updating subscribed topics to: ('central_commands',)
+2026-01-07 16:05:00,770 - <BrokerConnection node_id=bootstrap-0 host=172.21.42.15:9092 <connecting> [IPv4 ('172.21.42.15', 9092)]>: connecting to 172.21.42.15:9092 [('172.21.42.15', 9092) IPv4]
+2026-01-07 16:05:00,771 - <BrokerConnection node_id=bootstrap-0 host=172.21.42.15:9092 <connecting> [IPv4 ('172.21.42.15', 9092)]>: connecting to 172.21.42.15:9092 [('172.21.42.15', 9092) IPv4]
+2026-01-07 16:05:00,771 - <BrokerConnection node_id=bootstrap-0 host=172.21.42.15:9092 <connecting> [IPv4 ('172.21.42.15', 9092)]>: Connection complete.
+2026-01-07 16:05:00,771 - [16:05:00] Modo consola simple activado
+2026-01-07 16:05:00,773 - <BrokerConnection node_id=bootstrap-0 host=172.21.42.15:9092 <connecting> [IPv4 ('172.21.42.15', 9092)]>: Connection complete.
+2026-01-07 16:05:00,820 - <BrokerConnection node_id=bootstrap-0 host=172.21.42.15:9092 <connecting> [IPv4 ('172.21.42.15', 9092)]>: connecting to 172.21.42.15:9092 [('172.21.42.15', 9092) IPv4]
+2026-01-07 16:05:00,820 - <BrokerConnection node_id=bootstrap-0 host=172.21.42.15:9092 <connecting> [IPv4 ('172.21.42.15', 9092)]>: Connection complete.
+2026-01-07 16:05:00,982 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='172.21.42.15', port=9092, rack=None)
+2026-01-07 16:05:00,982 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='172.21.42.15', port=9092, rack=None)
+2026-01-07 16:05:00,982 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2026-01-07 16:05:00,983 - Discovered coordinator coordinator-1 for group central_processing_group
+2026-01-07 16:05:00,983 - Starting new heartbeat thread
+2026-01-07 16:05:00,983 - Starting new heartbeat thread
+2026-01-07 16:05:00,984 - Revoking previously assigned partitions set() for group central-telemetry-group
+2026-01-07 16:05:00,985 - Revoking previously assigned partitions set() for group central_processing_group
+2026-01-07 16:05:00,986 - <BrokerConnection node_id=coordinator-1 host=172.21.42.15:9092 <connecting> [IPv4 ('172.21.42.15', 9092)]>: connecting to 172.21.42.15:9092 [('172.21.42.15', 9092) IPv4]
+2026-01-07 16:05:00,987 - <BrokerConnection node_id=coordinator-1 host=172.21.42.15:9092 <connecting> [IPv4 ('172.21.42.15', 9092)]>: connecting to 172.21.42.15:9092 [('172.21.42.15', 9092) IPv4]
+2026-01-07 16:05:00,987 - <BrokerConnection node_id=coordinator-1 host=172.21.42.15:9092 <connecting> [IPv4 ('172.21.42.15', 9092)]>: Connection complete.
+2026-01-07 16:05:00,988 - <BrokerConnection node_id=bootstrap-0 host=172.21.42.15:9092 <connected> [IPv4 ('172.21.42.15', 9092)]>: Closing connection. 
+2026-01-07 16:05:00,988 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='172.21.42.15', port=9092, rack=None)
+2026-01-07 16:05:00,988 - Discovered coordinator coordinator-1 for group central-control-group
+2026-01-07 16:05:00,989 - Starting new heartbeat thread
+2026-01-07 16:05:00,989 - Revoking previously assigned partitions set() for group central-control-group
+2026-01-07 16:05:00,989 - <BrokerConnection node_id=coordinator-1 host=172.21.42.15:9092 <connecting> [IPv4 ('172.21.42.15', 9092)]>: connecting to 172.21.42.15:9092 [('172.21.42.15', 9092) IPv4]
+2026-01-07 16:05:00,990 - <BrokerConnection node_id=coordinator-1 host=172.21.42.15:9092 <connecting> [IPv4 ('172.21.42.15', 9092)]>: Connection complete.
+2026-01-07 16:05:00,990 - <BrokerConnection node_id=bootstrap-0 host=172.21.42.15:9092 <connected> [IPv4 ('172.21.42.15', 9092)]>: Closing connection. 
+2026-01-07 16:05:01,087 - <BrokerConnection node_id=coordinator-1 host=172.21.42.15:9092 <connecting> [IPv4 ('172.21.42.15', 9092)]>: Connection complete.
+2026-01-07 16:05:01,088 - <BrokerConnection node_id=bootstrap-0 host=172.21.42.15:9092 <connected> [IPv4 ('172.21.42.15', 9092)]>: Closing connection. 
+2026-01-07 16:05:01,089 - (Re-)joining group central-telemetry-group
+2026-01-07 16:05:01,090 - (Re-)joining group central-control-group
+2026-01-07 16:05:01,096 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2026-01-07 16:05:01,096 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2026-01-07 16:05:01,188 - (Re-)joining group central_processing_group
+2026-01-07 16:05:01,192 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2026-01-07 16:05:01,198 - <BrokerConnection node_id=1 host=172.21.42.15:9092 <connecting> [IPv4 ('172.21.42.15', 9092)]>: connecting to 172.21.42.15:9092 [('172.21.42.15', 9092) IPv4]
+2026-01-07 16:05:01,198 - <BrokerConnection node_id=1 host=172.21.42.15:9092 <connecting> [IPv4 ('172.21.42.15', 9092)]>: connecting to 172.21.42.15:9092 [('172.21.42.15', 9092) IPv4]
+2026-01-07 16:05:01,198 - <BrokerConnection node_id=1 host=172.21.42.15:9092 <connecting> [IPv4 ('172.21.42.15', 9092)]>: Connection complete.
+2026-01-07 16:05:01,198 - <BrokerConnection node_id=1 host=172.21.42.15:9092 <connecting> [IPv4 ('172.21.42.15', 9092)]>: Connection complete.
+2026-01-07 16:05:01,293 - <BrokerConnection node_id=1 host=172.21.42.15:9092 <connecting> [IPv4 ('172.21.42.15', 9092)]>: connecting to 172.21.42.15:9092 [('172.21.42.15', 9092) IPv4]
+2026-01-07 16:05:01,294 - <BrokerConnection node_id=1 host=172.21.42.15:9092 <connecting> [IPv4 ('172.21.42.15', 9092)]>: Connection complete.
+2026-01-07 16:05:01,303 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='172.21.42.15', port=9092, rack=None)
+2026-01-07 16:05:01,303 - Discovered coordinator coordinator-1 for group central-control-group
+2026-01-07 16:05:01,303 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='172.21.42.15', port=9092, rack=None)
+2026-01-07 16:05:01,303 - (Re-)joining group central-control-group
+2026-01-07 16:05:01,304 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2026-01-07 16:05:01,304 - (Re-)joining group central-telemetry-group
+2026-01-07 16:05:01,307 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2026-01-07 16:05:01,307 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2026-01-07 16:05:01,398 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='172.21.42.15', port=9092, rack=None)
+2026-01-07 16:05:01,398 - Discovered coordinator coordinator-1 for group central_processing_group
+2026-01-07 16:05:01,398 - (Re-)joining group central_processing_group
+2026-01-07 16:05:01,400 - Marking the coordinator dead (node coordinator-1) for group central_processing_group: [Error 16] NotCoordinatorForGroupError.
+2026-01-07 16:05:01,412 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='172.21.42.15', port=9092, rack=None)
+2026-01-07 16:05:01,413 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='172.21.42.15', port=9092, rack=None)
+2026-01-07 16:05:01,413 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2026-01-07 16:05:01,413 - Discovered coordinator coordinator-1 for group central-control-group
+2026-01-07 16:05:01,413 - (Re-)joining group central-telemetry-group
+2026-01-07 16:05:01,413 - (Re-)joining group central-control-group
+2026-01-07 16:05:01,417 - Marking the coordinator dead (node coordinator-1) for group central-telemetry-group: [Error 16] NotCoordinatorForGroupError.
+2026-01-07 16:05:01,417 - Marking the coordinator dead (node coordinator-1) for group central-control-group: [Error 16] NotCoordinatorForGroupError.
+2026-01-07 16:05:01,504 - Group coordinator for central_processing_group is BrokerMetadata(nodeId='coordinator-1', host='172.21.42.15', port=9092, rack=None)
+2026-01-07 16:05:01,504 - Discovered coordinator coordinator-1 for group central_processing_group
+2026-01-07 16:05:01,504 - (Re-)joining group central_processing_group
+2026-01-07 16:05:01,523 - Group coordinator for central-control-group is BrokerMetadata(nodeId='coordinator-1', host='172.21.42.15', port=9092, rack=None)
+2026-01-07 16:05:01,523 - Group coordinator for central-telemetry-group is BrokerMetadata(nodeId='coordinator-1', host='172.21.42.15', port=9092, rack=None)
+2026-01-07 16:05:01,523 - Discovered coordinator coordinator-1 for group central-control-group
+2026-01-07 16:05:01,523 - Discovered coordinator coordinator-1 for group central-telemetry-group
+2026-01-07 16:05:01,523 - (Re-)joining group central-control-group
+2026-01-07 16:05:01,523 - (Re-)joining group central-telemetry-group
+2026-01-07 16:05:01,612 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://172.21.42.15:5001
+2026-01-07 16:05:01,612 - [33mPress CTRL+C to quit[0m
+2026-01-07 16:05:04,542 - Elected group leader -- performing partition assignments using range
+2026-01-07 16:05:04,548 - Elected group leader -- performing partition assignments using range
+2026-01-07 16:05:04,548 - Elected group leader -- performing partition assignments using range
+2026-01-07 16:05:04,614 - Successfully joined group central-telemetry-group with generation 1
+2026-01-07 16:05:04,615 - Successfully joined group central_processing_group with generation 1
+2026-01-07 16:05:04,615 - Updated partition assignment: [TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)]
+2026-01-07 16:05:04,616 - Successfully joined group central-control-group with generation 1
+2026-01-07 16:05:04,616 - Updated partition assignment: [TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)]
+2026-01-07 16:05:04,616 - Setting newly assigned partitions {TopicPartition(topic='telemetria_cp', partition=0), TopicPartition(topic='telemetria_cp', partition=1), TopicPartition(topic='telemetria_cp', partition=2)} for group central-telemetry-group
+2026-01-07 16:05:04,616 - Updated partition assignment: [TopicPartition(topic='central_commands', partition=0)]
+2026-01-07 16:05:04,616 - Setting newly assigned partitions {TopicPartition(topic='driver_requests', partition=0), TopicPartition(topic='driver_requests', partition=1), TopicPartition(topic='driver_requests', partition=2)} for group central_processing_group
+2026-01-07 16:05:04,617 - Setting newly assigned partitions {TopicPartition(topic='central_commands', partition=0)} for group central-control-group
+2026-01-07 16:05:08,530 - 172.21.42.15 - - [07/Jan/2026 16:05:08] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:10,529 - 172.21.42.15 - - [07/Jan/2026 16:05:10] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:12,534 - 172.21.42.15 - - [07/Jan/2026 16:05:12] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:14,236 - 172.21.42.15 - - [07/Jan/2026 16:05:14] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:16,537 - 172.21.42.15 - - [07/Jan/2026 16:05:16] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:18,219 - 172.21.42.15 - - [07/Jan/2026 16:05:18] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:20,549 - 172.21.42.15 - - [07/Jan/2026 16:05:20] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:22,223 - 172.21.42.15 - - [07/Jan/2026 16:05:22] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:24,536 - 172.21.42.15 - - [07/Jan/2026 16:05:24] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:26,218 - 172.21.42.15 - - [07/Jan/2026 16:05:26] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:28,538 - 172.21.42.15 - - [07/Jan/2026 16:05:28] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:30,221 - 172.21.42.15 - - [07/Jan/2026 16:05:30] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:32,540 - 172.21.42.15 - - [07/Jan/2026 16:05:32] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:34,226 - 172.21.42.15 - - [07/Jan/2026 16:05:34] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:36,533 - 172.21.42.15 - - [07/Jan/2026 16:05:36] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:38,219 - 172.21.42.15 - - [07/Jan/2026 16:05:38] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:40,537 - 172.21.42.15 - - [07/Jan/2026 16:05:40] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:42,224 - 172.21.42.15 - - [07/Jan/2026 16:05:42] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:44,528 - 172.21.42.15 - - [07/Jan/2026 16:05:44] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:46,229 - 172.21.42.15 - - [07/Jan/2026 16:05:46] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:48,537 - 172.21.42.15 - - [07/Jan/2026 16:05:48] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:50,216 - 172.21.42.15 - - [07/Jan/2026 16:05:50] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:52,538 - 172.21.42.15 - - [07/Jan/2026 16:05:52] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:54,231 - 172.21.42.15 - - [07/Jan/2026 16:05:54] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:56,534 - 172.21.42.15 - - [07/Jan/2026 16:05:56] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:05:58,213 - 172.21.42.15 - - [07/Jan/2026 16:05:58] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:00,537 - 172.21.42.15 - - [07/Jan/2026 16:06:00] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:02,215 - 172.21.42.15 - - [07/Jan/2026 16:06:02] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:04,536 - 172.21.42.15 - - [07/Jan/2026 16:06:04] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:06,228 - 172.21.42.15 - - [07/Jan/2026 16:06:06] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:08,545 - 172.21.42.15 - - [07/Jan/2026 16:06:08] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:10,218 - 172.21.42.15 - - [07/Jan/2026 16:06:10] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:12,542 - 172.21.42.15 - - [07/Jan/2026 16:06:12] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:14,218 - 172.21.42.15 - - [07/Jan/2026 16:06:14] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:16,535 - 172.21.42.15 - - [07/Jan/2026 16:06:16] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:18,229 - 172.21.42.15 - - [07/Jan/2026 16:06:18] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:20,530 - 172.21.42.15 - - [07/Jan/2026 16:06:20] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:22,230 - 172.21.42.15 - - [07/Jan/2026 16:06:22] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:24,541 - 172.21.42.15 - - [07/Jan/2026 16:06:24] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:26,219 - 172.21.42.15 - - [07/Jan/2026 16:06:26] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:28,532 - 172.21.42.15 - - [07/Jan/2026 16:06:28] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:30,228 - 172.21.42.15 - - [07/Jan/2026 16:06:30] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:32,538 - 172.21.42.15 - - [07/Jan/2026 16:06:32] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:34,215 - 172.21.42.15 - - [07/Jan/2026 16:06:34] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:36,571 - 172.21.42.15 - - [07/Jan/2026 16:06:36] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:38,221 - 172.21.42.15 - - [07/Jan/2026 16:06:38] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:40,534 - 172.21.42.15 - - [07/Jan/2026 16:06:40] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:42,221 - 172.21.42.15 - - [07/Jan/2026 16:06:42] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:44,526 - 172.21.42.15 - - [07/Jan/2026 16:06:44] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:46,223 - 172.21.42.15 - - [07/Jan/2026 16:06:46] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:48,541 - 172.21.42.15 - - [07/Jan/2026 16:06:48] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:50,228 - 172.21.42.15 - - [07/Jan/2026 16:06:50] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:52,538 - 172.21.42.15 - - [07/Jan/2026 16:06:52] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:54,217 - 172.21.42.15 - - [07/Jan/2026 16:06:54] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:56,539 - 172.21.42.15 - - [07/Jan/2026 16:06:56] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:06:58,215 - 172.21.42.15 - - [07/Jan/2026 16:06:58] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:07:00,534 - 172.21.42.15 - - [07/Jan/2026 16:07:00] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:07:02,217 - 172.21.42.15 - - [07/Jan/2026 16:07:02] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:07:04,534 - 172.21.42.15 - - [07/Jan/2026 16:07:04] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:07:06,218 - 172.21.42.15 - - [07/Jan/2026 16:07:06] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:07:08,524 - 172.21.42.15 - - [07/Jan/2026 16:07:08] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:07:10,229 - 172.21.42.15 - - [07/Jan/2026 16:07:10] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:07:12,539 - 172.21.42.15 - - [07/Jan/2026 16:07:12] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:07:14,228 - 172.21.42.15 - - [07/Jan/2026 16:07:14] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:07:16,523 - 172.21.42.15 - - [07/Jan/2026 16:07:16] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:07:18,218 - 172.21.42.15 - - [07/Jan/2026 16:07:18] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:07:20,535 - 172.21.42.15 - - [07/Jan/2026 16:07:20] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:07:22,219 - 172.21.42.15 - - [07/Jan/2026 16:07:22] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:07:24,547 - 172.21.42.15 - - [07/Jan/2026 16:07:24] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:07:26,215 - 172.21.42.15 - - [07/Jan/2026 16:07:26] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:07:28,541 - 172.21.42.15 - - [07/Jan/2026 16:07:28] "GET /api/status HTTP/1.1" 200 -
+2026-01-07 16:07:30,214 - 172.21.42.15 - - [07/Jan/2026 16:07:30] "GET /api/status HTTP/1.1" 200 -

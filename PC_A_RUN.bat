@@ -57,6 +57,63 @@ if %errorlevel% neq 0 (
 )
 
 REM ============================================================
+REM  VERIFICAR E INSTALAR DEPENDENCIAS PYTHON (KAFKA, ETC.)
+REM ============================================================
+echo ============================================================
+echo [0/5] VERIFICANDO DEPENDENCIAS PYTHON
+echo ============================================================
+echo.
+
+if not exist requirements.txt (
+    echo [ADVERTENCIA] No se encuentra requirements.txt
+    echo Continuando sin verificar dependencias...
+    echo.
+    goto :skip_deps_check
+)
+
+REM Verificar si kafka-python-ng está instalado
+echo Verificando dependencias Python (kafka-python-ng, etc.)...
+py -m pip show kafka-python-ng >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [INFO] kafka-python-ng no encontrado, instalando dependencias...
+    echo.
+    
+    REM Desinstalar kafka-python antiguo si existe (incompatible)
+    py -m pip show kafka-python >nul 2>&1
+    if %errorlevel% equ 0 (
+        echo Desinstalando kafka-python antiguo (incompatible)...
+        py -m pip uninstall kafka-python -y --quiet >nul 2>&1
+    )
+    
+    REM Instalar dependencias desde requirements.txt
+    echo Instalando dependencias desde requirements.txt...
+    echo (Esto puede tardar 30-60 segundos)
+    echo.
+    py -m pip install -r requirements.txt --quiet --disable-pip-version-check
+    if %errorlevel% equ 0 (
+        echo [OK] Dependencias Python instaladas correctamente.
+    ) else (
+        echo [ADVERTENCIA] Hubo un problema instalando dependencias.
+        echo El script continuara, pero puede haber errores.
+    )
+    echo.
+) else (
+    REM Verificar otras dependencias críticas
+    py -m pip show pymysql >nul 2>&1
+    if %errorlevel% neq 0 (
+        echo [INFO] Algunas dependencias faltan, instalando...
+        py -m pip install -r requirements.txt --quiet --disable-pip-version-check
+        echo [OK] Dependencias actualizadas.
+        echo.
+    ) else (
+        echo [OK] Dependencias Python verificadas (kafka-python-ng instalado).
+        echo.
+    )
+)
+
+:skip_deps_check
+
+REM ============================================================
 REM  PASO 1: DETECTAR IP LOCAL AUTOMATICAMENTE
 REM ============================================================
 echo ============================================================
@@ -105,7 +162,7 @@ REM ============================================================
 REM  PASO 2: INICIAR KAFKA + MARIADB (DOCKER COMPOSE)
 REM ============================================================
 echo ============================================================
-echo [2/4] INICIANDO KAFKA + MARIADB
+echo [2/5] INICIANDO KAFKA + MARIADB
 echo ============================================================
 echo.
 if not exist docker-compose.yml (
@@ -246,7 +303,7 @@ REM ============================================================
 REM  PASO 2.5: LIMPIAR BASE DE DATOS
 REM ============================================================
 echo ============================================================
-echo [2.5/4] LIMPIANDO BASE DE DATOS
+echo [2.5/5] LIMPIANDO BASE DE DATOS
 echo ============================================================
 echo.
 echo Eliminando datos anteriores de la base de datos...
@@ -267,7 +324,7 @@ REM ============================================================
 REM  PASO 3: INICIAR EV_CENTRAL
 REM ============================================================
 echo ============================================================
-echo [3/4] INICIANDO EV_CENTRAL
+echo [3/5] INICIANDO EV_CENTRAL
 echo ============================================================
 echo.
 echo CONFIGURACION DETECTADA:
@@ -315,7 +372,7 @@ REM  PASO 4: LANZAR DASHBOARD WEB
 REM ============================================================
 echo.
 echo ============================================================
-echo [4/4] LANZANDO DASHBOARD WEB
+echo [4/5] LANZANDO DASHBOARD WEB
 echo ============================================================
 echo.
 echo Iniciando dashboard web en puerto 8080...
