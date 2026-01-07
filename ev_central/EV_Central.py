@@ -1606,8 +1606,21 @@ def consumir_comandos_control_kafka(broker_list: str):
                             estado_telemetria = telemetria_actual.get('estado', '').upper()
                             tiene_sesion_activa = telemetria_actual.get('tiene_sesion_activa', False)
                             
-                            # Si hay suministro activo, finalizarlo y enviar ticket al driver
-                            if tiene_sesion_activa or estado_telemetria in ('SUMINISTRANDO', 'CARGANDO'):
+                            # Estados interactivos que NO deben generar ticket (aún no han comenzado suministro)
+                            estados_interactivos = {
+                                'PENDIENTE_CONFIRMACION_CENTRAL',
+                                'ESPERANDO_OPERADOR_ENGINE',
+                                'LISTO_PARA_INICIAR',
+                                'ESPERANDO_CONFIRMACION_FIN'
+                            }
+                            
+                            # Solo enviar ticket si REALMENTE hay suministro activo (no solo sesión pendiente)
+                            # Si está en estado interactivo, no enviar ticket porque no hubo suministro real
+                            tiene_suministro_real = estado_telemetria in ('SUMINISTRANDO', 'CARGANDO')
+                            en_estado_interactivo = estado_telemetria in estados_interactivos
+                            
+                            # Si hay suministro REAL activo (no solo sesión pendiente), finalizarlo y enviar ticket al driver
+                            if tiene_suministro_real and not en_estado_interactivo:
                                 print(f"[CENTRAL] ⚠️ Monitor de {cp_id} desconectado durante suministro activo. Finalizando suministro...")
                                 
                                 # Obtener información del driver y energía suministrada
@@ -3728,8 +3741,21 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
             estado_telemetria = telemetria_actual.get('estado', '').upper()
             tiene_sesion_activa = telemetria_actual.get('tiene_sesion_activa', False)
             
-            # Si hay suministro activo, finalizarlo y enviar ticket al driver
-            if tiene_sesion_activa or estado_telemetria in ('SUMINISTRANDO', 'CARGANDO'):
+            # Estados interactivos que NO deben generar ticket (aún no han comenzado suministro)
+            estados_interactivos = {
+                'PENDIENTE_CONFIRMACION_CENTRAL',
+                'ESPERANDO_OPERADOR_ENGINE',
+                'LISTO_PARA_INICIAR',
+                'ESPERANDO_CONFIRMACION_FIN'
+            }
+            
+            # Solo enviar ticket si REALMENTE hay suministro activo (no solo sesión pendiente)
+            # Si está en estado interactivo, no enviar ticket porque no hubo suministro real
+            tiene_suministro_real = estado_telemetria in ('SUMINISTRANDO', 'CARGANDO')
+            en_estado_interactivo = estado_telemetria in estados_interactivos
+            
+            # Si hay suministro REAL activo (no solo sesión pendiente), finalizarlo y enviar ticket al driver
+            if tiene_suministro_real and not en_estado_interactivo:
                 print(f"[CENTRAL] ⚠️ Monitor de {cp_id} desconectado inesperadamente durante suministro activo. Finalizando suministro...")
                 
                 # Obtener información del driver y energía suministrada

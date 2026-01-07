@@ -1,0 +1,47 @@
+============================================================ 
+ LOG DE EJECUCION - PC_B_RUN.bat 
+ Fecha/Hora: dc. 07/01/2026 18:42:31,86 
+============================================================ 
+ 
+[DEBUG] Verificando Docker... 
+Docker version 28.2.2, build e6534b4
+[DEBUG] Docker check result: 0 
+[DEBUG] Docker verificado correctamente 
+[DEBUG] Llegando a PANTALLA PRINCIPAL 
+[DEBUG] Llegando a PANTALLA PRINCIPAL (pantalla) 
+[DEBUG] REGISTRY_API_KEY definida (longitud aproximada) 
+[DEBUG] Verificando si Registry está corriendo localmente en puerto 6000... 
+[DEBUG] Registry local detectado (HTTPS) - usando host.docker.internal 
+[DEBUG] REGISTRY_URL final:  
+[DEBUG] Directorio actual: C:\Users\alumno\Downloads\evcharging-sd-2526 
+[DEBUG] Verificando existencia de OPENWEATHER_API_KEY.txt... 
+[DEBUG] Ruta completa buscada: C:\Users\alumno\Downloads\evcharging-sd-2526\OPENWEATHER_API_KEY.txt 
+[DEBUG] Archivo OPENWEATHER_API_KEY.txt encontrado 
+[DEBUG] Contenido leido del archivo: 54076819eadd372702b599c788eb370f 
+[DEBUG] Longitud de la API Key: 
+54076819eadd372702b599c788eb370f 
+[DEBUG] Verificando que la API Key no este vacia... 
+[DEBUG] Valor de OPENWEATHER_API_KEY: "54076819eadd372702b599c788eb370f" 
+[DEBUG] Verificando que la API Key fue leida correctamente... 
+[DEBUG] Valor de OPENWEATHER_API_KEY: "54076819eadd372702b599c788eb370f" 
+[DEBUG] API Key validada: tiene contenido 
+[DEBUG] Verificando Python... 
+[DEBUG] Python encontrado 
+[DEBUG] Verificando ev_weather\EV_W.py... 
+[DEBUG] Archivo ev_weather\EV_W.py encontrado 
+[DEBUG] Llegando a :launch_weather 
+[DEBUG] API Key leida correctamente: 54076819ea... 
+[DEBUG] Iniciando lanzamiento de EV_Weather... 
+[DEBUG] Creando script temporal... 
+[DEBUG] Ruta del script temporal: C:\Users\alumno\AppData\Local\Temp\ev_weather_launch_13901.bat 
+[DEBUG] Variables temporales configuradas 
+[DEBUG] Escribiendo contenido del script temporal... 
+[DEBUG] Ruta completa: C:\Users\alumno\AppData\Local\Temp\ev_weather_launch_13901.bat 
+[DEBUG] Directorio del proyecto: C:\Users\alumno\Downloads\evcharging-sd-2526 
+[DEBUG] Resultado de creacion del script: 0 
+[DEBUG] Script temporal creado exitosamente 
+[DEBUG] Script temporal: C:\Users\alumno\AppData\Local\Temp\ev_weather_launch_13901.bat 
+[DEBUG] API Key: 54076819ea... 
+[DEBUG] Central URL: http://172.21.42.15:5001/api 
+[DEBUG] Comando START ejecutado exitosamente 
+[DEBUG] EV_Weather lanzado, continuando al MENU... 

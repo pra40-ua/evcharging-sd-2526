@@ -46,7 +46,10 @@ echo.
 
 REM Detectar IP de la Central
 if exist central_ip.txt (
-    set /p CENTRAL_IP=<central_ip.txt
+    set /p CENTRAL_IP_TEMP=<central_ip.txt
+    REM Limpiar espacios y saltos de línea
+    set CENTRAL_IP=!CENTRAL_IP_TEMP: =!
+    for /f "delims=" %%a in ("!CENTRAL_IP!") do set CENTRAL_IP=%%a
     echo Central IP detectada: !CENTRAL_IP!
 ) else (
     set CENTRAL_IP=192.168.1.43
@@ -131,6 +134,17 @@ echo [3/3] DETECTANDO DRIVERS EXISTENTES Y CPs OCUPADOS
 echo ============================================================
 echo.
 
+REM Validar que Docker responde correctamente
+echo [DEBUG] Verificando que Docker responde correctamente... >> "%LOG_FILE%"
+docker ps >nul 2>&1
+if !errorlevel! neq 0 (
+    echo [ERROR] Docker no responde correctamente. Verifica que Docker Desktop este ejecutandose.
+    echo [ERROR] Docker no responde correctamente >> "%LOG_FILE%"
+    pause
+    exit /b 1
+)
+echo [DEBUG] Docker responde correctamente >> "%LOG_FILE%"
+
 echo [DEBUG] Ejecutando: docker ps -q --filter "label=component=driver" >> "%LOG_FILE%"
 
 set DRIVER_OFFSET=0
@@ -147,8 +161,12 @@ echo. > "!TEMP_FILE_INIT!"
 
 for /f "tokens=*" %%i in ('docker ps -q --filter "label=component=driver" 2^>nul') do (
     for /f "tokens=*" %%c in ('docker inspect --format={{.Config.Labels.cp_id}} %%i 2^>nul') do (
+        REM Filtrar valores vacíos, <no value> y espacios
         if not "%%c"=="" (
-            echo %%c >> "!TEMP_FILE_INIT!"
+            echo %%c | findstr /V "<no value>" | findstr /V "<none>" | findstr /V "^$" >nul 2>&1
+            if !errorlevel! equ 0 (
+                echo %%c >> "!TEMP_FILE_INIT!"
+            )
         )
     )
 )
@@ -289,8 +307,12 @@ echo. > "!TEMP_FILE!"
 
 for /f "tokens=*" %%i in ('docker ps -q --filter "label=component=driver" 2^>nul') do (
     for /f "tokens=*" %%c in ('docker inspect --format={{.Config.Labels.cp_id}} %%i 2^>nul') do (
+        REM Filtrar valores vacíos, <no value> y espacios
         if not "%%c"=="" (
-            echo %%c >> "!TEMP_FILE!"
+            echo %%c | findstr /V "<no value>" | findstr /V "<none>" | findstr /V "^$" >nul 2>&1
+            if !errorlevel! equ 0 (
+                echo %%c >> "!TEMP_FILE!"
+            )
         )
     )
 )
