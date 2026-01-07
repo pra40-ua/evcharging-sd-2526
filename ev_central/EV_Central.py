@@ -775,6 +775,21 @@ def api_weather_alert():
                 with CP_ALERTA_LOCK:
                     tiene_averia = CP_ALERTA.get(cp_id, False)
                 
+                # Verificar si hay sesión activa
+                tiene_sesion_activa = False
+                with CP_SESION_DRIVER_ID_LOCK:
+                    tiene_sesion_activa = cp_id in CP_SESION_DRIVER_ID and CP_SESION_DRIVER_ID[cp_id] is not None
+                
+                # Verificar también en telemetría
+                with TELEMETRIA_ACTUAL_LOCK:
+                    telemetria_cp = TELEMETRIA_ACTUAL.get(cp_id, {})
+                    tiene_sesion_telemetria = telemetria_cp.get('tiene_sesion_activa', False)
+                    kw_entregados = telemetria_cp.get('kw_entregados', 0.0)
+                    potencia_actual = telemetria_cp.get('potencia_actual', 0.0)
+                
+                # Hay sesión activa si hay driver asignado O si la telemetría indica sesión activa con energía entregada
+                tiene_sesion_activa = tiene_sesion_activa or (tiene_sesion_telemetria and (kw_entregados > 0.0 or potencia_actual > 0.0))
+                
                 estados_interactivos = {
                     'PENDIENTE_CONFIRMACION_CENTRAL',
                     'ESPERANDO_OPERADOR_ENGINE',
@@ -786,47 +801,71 @@ def api_weather_alert():
                 
                 # Verificar si el CP está en FUERA_DE_SERVICIO por alerta climatológica
                 esta_fuera_servicio = estado_actual.upper() in ('FUERA_DE_SERVICIO', 'FUERA DE SERVICIO')
+                esta_en_estado_interactivo = estado_actual.upper() in estados_interactivos
                 
-                # Solo restaurar a ACTIVADO si:
-                # 1. No está en avería
-                # 2. No está en estado interactivo
-                # 3. Está en FUERA_DE_SERVICIO (por alerta climatológica) o no está en ACTIVADO
                 origen_ip_restauracion = request.remote_addr if hasattr(request, 'remote_addr') else '127.0.0.1'
                 
-                if not tiene_averia and estado_actual.upper() not in estados_interactivos:
-                    if esta_fuera_servicio or estado_actual.upper() != 'ACTIVADO':
-                        cambiar_estado_cp(cp_id, 'ACTIVADO', db_conn, origen_ip=origen_ip_restauracion)
-                        print(f"[CENTRAL] ✅ CP {cp_id} restaurado a ACTIVADO tras desactivar alerta climatológica (T={temperatura:.1f}°C)")
-                        registrar_evento(f"✓ CP {cp_id} restaurado tras alerta climatológica (T={temperatura:.1f}°C)", "ok")
-                        
-                        # Registrar en auditoría
-                        registrar_auditoria(
-                            accion="RESTAURACION_ALERTA_CLIMA",
-                            cp_id=cp_id,
-                            origen_ip=origen_ip_restauracion,
-                            descripcion=f"CP restaurado a ACTIVADO tras desactivar alerta climatológica (T={temperatura:.1f}°C)",
-                            resultado="OK",
-                            db_connection=db_conn
-                        )
-                        
-                        # Enviar señal STATE al Monitor para notificar que el CP vuelve a estar ACTIVADO
-                        try:
-                            with CONEXIONES_ACTIVAS_LOCK:
-                                conn = CONEXIONES_ACTIVAS.get(cp_id)
-                            if conn:
-                                # Enviar STATE cifrado al Monitor para notificar el cambio a ACTIVADO
-                                trama_state = construir_trama('STATE', [cp_id, 'ACTIVADO'], cp_id=cp_id, cifrar=True)
-                                conn.sendall(trama_state)
-                                print(f"[CENTRAL] 📤 STATE ACTIVADO enviado a {cp_id} (alerta climatológica desactivada)")
-                                registrar_evento(f"📤 STATE ACTIVADO enviado a {cp_id} tras desactivar alerta climatológica", "ok")
-                        except Exception as e:
-                            print(f"[CENTRAL] ⚠️ Error enviando STATE a {cp_id}: {e}")
-                    else:
-                        # Ya está en ACTIVADO, pero aún así actualizar telemetría para limpiar alerta_clima_activa
-                        print(f"[CENTRAL] CP {cp_id} ya está en ACTIVADO, actualizando telemetría para limpiar alerta climatológica")
+                # Restaurar a ACTIVADO si:
+                # 1. No está en avería
+                # 2. (No está en estado interactivo O no tiene sesión activa) - Si está en estado interactivo pero sin sesión, restaurar
+                # 3. Está en FUERA_DE_SERVICIO o no está en ACTIVADO
+                debe_restaurar = False
+                if not tiene_averia:
+                    if esta_fuera_servicio:
+                        # Siempre restaurar si está en FUERA_DE_SERVICIO (a menos que tenga sesión activa real)
+                        debe_restaurar = not tiene_sesion_activa
+                    elif esta_en_estado_interactivo:
+                        # Si está en estado interactivo pero sin sesión activa, restaurar (estado residual)
+                        debe_restaurar = not tiene_sesion_activa
+                    elif estado_actual.upper() != 'ACTIVADO':
+                        # No está en ACTIVADO y no es interactivo ni fuera de servicio
+                        debe_restaurar = True
+                
+                if debe_restaurar:
+                    cambiar_estado_cp(cp_id, 'ACTIVADO', db_conn, origen_ip=origen_ip_restauracion)
+                    print(f"[CENTRAL] ✅ CP {cp_id} restaurado a ACTIVADO tras desactivar alerta climatológica (T={temperatura:.1f}°C)")
+                    print(f"[CENTRAL]    Estado anterior: {estado_actual}, Sesión activa: {tiene_sesion_activa}")
+                    registrar_evento(f"✓ CP {cp_id} restaurado tras alerta climatológica (T={temperatura:.1f}°C)", "ok")
+                    
+                    # Limpiar ERRORES_SISTEMA si existe
+                    try:
+                        with ERRORES_SISTEMA_LOCK:
+                            if cp_id in ERRORES_SISTEMA:
+                                del ERRORES_SISTEMA[cp_id]
+                                print(f"[CENTRAL] ✅ Error de sistema limpiado para {cp_id}")
+                    except Exception as e:
+                        print(f"[CENTRAL] ⚠️ Error limpiando ERRORES_SISTEMA: {e}")
+                    
+                    # Registrar en auditoría
+                    registrar_auditoria(
+                        accion="RESTAURACION_ALERTA_CLIMA",
+                        cp_id=cp_id,
+                        origen_ip=origen_ip_restauracion,
+                        descripcion=f"CP restaurado a ACTIVADO tras desactivar alerta climatológica (T={temperatura:.1f}°C)",
+                        resultado="OK",
+                        db_connection=db_conn
+                    )
+                    
+                    # Enviar señal STATE al Monitor para notificar que el CP vuelve a estar ACTIVADO
+                    try:
+                        with CONEXIONES_ACTIVAS_LOCK:
+                            conn = CONEXIONES_ACTIVAS.get(cp_id)
+                        if conn:
+                            # Enviar STATE cifrado al Monitor para notificar el cambio a ACTIVADO
+                            trama_state = construir_trama('STATE', [cp_id, 'ACTIVADO'], cp_id=cp_id, cifrar=True)
+                            conn.sendall(trama_state)
+                            print(f"[CENTRAL] 📤 STATE ACTIVADO enviado a {cp_id} (alerta climatológica desactivada)")
+                            registrar_evento(f"📤 STATE ACTIVADO enviado a {cp_id} tras desactivar alerta climatológica", "ok")
+                    except Exception as e:
+                        print(f"[CENTRAL] ⚠️ Error enviando STATE a {cp_id}: {e}")
                 else:
-                    # No restaurar porque está en avería o estado interactivo
-                    motivo_no_restaurar = 'en avería' if tiene_averia else f'en estado interactivo ({estado_actual})'
+                    # No restaurar porque está en avería o tiene sesión activa
+                    if tiene_averia:
+                        motivo_no_restaurar = 'en avería'
+                    elif tiene_sesion_activa:
+                        motivo_no_restaurar = f'en estado interactivo con sesión activa ({estado_actual})'
+                    else:
+                        motivo_no_restaurar = f'en estado interactivo ({estado_actual})'
                     print(f"[CENTRAL] CP {cp_id} no se restaura a ACTIVADO: está {motivo_no_restaurar}")
                 
                 # SIEMPRE publicar telemetría actualizada con alerta_clima_activa=False para que el dashboard y driver detecten el cambio
@@ -839,16 +878,23 @@ def api_weather_alert():
                         estado_actualizado = CP_ESTADO.get(cp_id, estado_actual)
                     
                     # Determinar el estado final para la telemetría
-                    # Si se restauró a ACTIVADO, usar ACTIVADO; si no, mantener el estado actualizado
-                    if not tiene_averia and estado_actual.upper() not in estados_interactivos:
-                        if esta_fuera_servicio or estado_actual.upper() != 'ACTIVADO':
-                            # Se restauró a ACTIVADO
-                            estado_telemetria = 'ACTIVADO'
-                        else:
-                            # Ya estaba en ACTIVADO, mantenerlo
-                            estado_telemetria = 'ACTIVADO'
+                    # Si se restauró a ACTIVADO o no hay sesión activa, usar ACTIVADO
+                    if debe_restaurar:
+                        # Se restauró a ACTIVADO
+                        estado_telemetria = 'ACTIVADO'
+                    elif not tiene_sesion_activa and estado_actualizado.upper() in estados_interactivos:
+                        # No hay sesión activa pero el estado es interactivo (estado residual) - usar ACTIVADO
+                        estado_telemetria = 'ACTIVADO'
+                        print(f"[CENTRAL] ⚠️ Estado interactivo sin sesión activa para {cp_id}, usando ACTIVADO en telemetría")
+                    elif not tiene_sesion_activa and estado_actualizado.upper() in ('FUERA_DE_SERVICIO', 'FUERA DE SERVICIO'):
+                        # No hay sesión activa y está fuera de servicio - restaurar a ACTIVADO en telemetría
+                        estado_telemetria = 'ACTIVADO'
+                        print(f"[CENTRAL] ⚠️ CP {cp_id} fuera de servicio sin sesión activa, usando ACTIVADO en telemetría")
+                    elif not tiene_averia and estado_actualizado.upper() == 'ACTIVADO':
+                        # Ya está en ACTIVADO
+                        estado_telemetria = 'ACTIVADO'
                     else:
-                        # No se pudo restaurar, mantener el estado actualizado
+                        # Mantener el estado actualizado solo si hay sesión activa o está en avería
                         estado_telemetria = estado_actualizado
                     
                     telemetria_actualizada = {
@@ -2028,19 +2074,37 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection):
                         # Si hay alerta climatológica activa (en WEATHER_ALERTS o telemetría), el CP está fuera de servicio
                         tiene_alerta_activa = tiene_alerta_clima_activa or alerta_clima_telemetria
                         
+                        # Debug: mostrar información de verificación
+                        print(f"[CENTRAL] [DEBUG] Verificando disponibilidad de {cp_id} para driver {id_driver}")
+                        print(f"[CENTRAL] [DEBUG]   Estado BD: {estado_cp}")
+                        print(f"[CENTRAL] [DEBUG]   Estado memoria: {estado_memoria}")
+                        print(f"[CENTRAL] [DEBUG]   Alerta activa (WEATHER_ALERTS): {tiene_alerta_clima_activa}")
+                        print(f"[CENTRAL] [DEBUG]   Alerta activa (telemetría): {alerta_clima_telemetria}")
+                        print(f"[CENTRAL] [DEBUG]   Alerta activa (total): {tiene_alerta_activa}")
+                        
                         # Si NO hay alerta activa y el estado en memoria es ACTIVADO, usar ACTIVADO (aunque la BD diga FUERA_DE_SERVICIO)
                         if tiene_alerta_activa:
                             # Hay alerta activa, el CP está fuera de servicio independientemente del estado en BD
                             estado_cp = 'FUERA_DE_SERVICIO'
                             print(f"[CENTRAL] ⚠️ CP {cp_id} tiene alerta climatológica activa - fuera de servicio")
-                        elif not tiene_alerta_activa and estado_memoria.upper() == 'ACTIVADO' and estado_cp.upper() in ('FUERA_DE_SERVICIO', 'FUERA DE SERVICIO'):
-                            # El estado en memoria es ACTIVADO pero la BD dice FUERA_DE_SERVICIO
-                            # Esto puede pasar si la alerta se desactivó recientemente y la BD aún no se actualizó
-                            # Usar el estado en memoria que es más actualizado
-                            estado_cp = estado_memoria
-                            print(f"[CENTRAL] ✅ Estado en BD desincronizado para {cp_id}. Alerta climatológica desactivada. Usando estado en memoria: {estado_memoria}")
+                        elif not tiene_alerta_activa:
+                            # No hay alerta activa - verificar si debemos usar el estado en memoria
+                            estado_cp_upper = estado_cp.upper().strip() if estado_cp else ''
+                            estado_memoria_upper = estado_memoria.upper().strip() if estado_memoria else ''
+                            
+                            # Si el estado en memoria es ACTIVADO y la BD dice FUERA_DE_SERVICIO (cualquier variante), usar ACTIVADO
+                            estados_fuera_servicio = ('FUERA_DE_SERVICIO', 'FUERA DE SERVICIO', 'FUERADESERVICIO', 
+                                                     'FUERA DE SERVICIO', 'FUERADESERVICIO')
+                            if estado_memoria_upper == 'ACTIVADO' and any(fs in estado_cp_upper for fs in estados_fuera_servicio):
+                                estado_cp = estado_memoria
+                                print(f"[CENTRAL] ✅ Estado en BD desincronizado para {cp_id}. Alerta climatológica desactivada. Usando estado en memoria: {estado_memoria}")
+                            # Si el estado en memoria es ACTIVADO y la BD tiene otro estado no crítico, también usar ACTIVADO
+                            elif estado_memoria_upper == 'ACTIVADO' and estado_cp_upper != 'ACTIVADO':
+                                estado_cp = estado_memoria
+                                print(f"[CENTRAL] ✅ Usando estado en memoria (ACTIVADO) para {cp_id} en lugar de estado en BD ({estado_cp_upper})")
 
                         estado_inferior = estado_cp.strip().lower() if estado_cp else ''
+                        print(f"[CENTRAL] [DEBUG]   Estado final usado: {estado_cp} (estado_inferior: {estado_inferior})")
                         
                         # Verificar si el CP ya tiene una sesión activa
                         with CP_SESION_DRIVER_ID_LOCK:
@@ -2117,17 +2181,23 @@ def consumir_solicitudes_driver_kafka(broker_list: str, db_connection):
                         elif estado_inferior in estados_no_disponibles:
                             # Verificar nuevamente si hay alerta climatológica activa antes de denegar
                             # Si no hay alerta activa y el estado en memoria es ACTIVADO, permitir la solicitud
-                            if not tiene_alerta_activa and estado_memoria.upper() == 'ACTIVADO':
+                            estado_memoria_upper_check = estado_memoria.upper().strip() if estado_memoria else ''
+                            if not tiene_alerta_activa and estado_memoria_upper_check == 'ACTIVADO':
                                 # La alerta se desactivó pero el estado en BD aún no se actualizó
                                 # Permitir la solicitud usando el estado en memoria
                                 print(f"[CENTRAL] ✅ CP {cp_id} disponible (alerta climatológica desactivada, estado en memoria: ACTIVADO)")
+                                print(f"[CENTRAL]    Estado en BD: {estado_cp}, Estado en memoria: {estado_memoria}")
                                 estado_cp = 'ACTIVADO'
                                 estado_inferior = 'activado'
-                                # Continuar con el proceso normalmente
+                                # Continuar con el proceso normalmente (pasar a verificación de estados válidos)
                             else:
                                 # Realmente está fuera de servicio
-                                mensaje_error = f'CP {cp_id} no disponible. CP fuera de servicio'
+                                motivo = f'CP {cp_id} no disponible. CP fuera de servicio'
+                                if tiene_alerta_activa:
+                                    motivo += ' (alerta climatológica activa)'
+                                mensaje_error = motivo
                                 print(f"[CENTRAL] ❌ {mensaje_error}")
+                                print(f"[CENTRAL]    Estado BD: {estado_cp}, Estado memoria: {estado_memoria}, Alerta activa: {tiene_alerta_activa}")
                                 registrar_evento(f"❌ {mensaje_error}", "error")
                                 notificar_driver(id_driver, 'DENEGADA', {
                                     'motivo': mensaje_error
