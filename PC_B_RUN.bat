@@ -4,6 +4,12 @@ setlocal EnableDelayedExpansion
 REM Cambiar al directorio del script
 cd /d "%~dp0"
 
+REM Mostrar mensaje de inicio para depuración
+echo [DEBUG] Iniciando PC_B_RUN.bat...
+echo [DEBUG] Directorio actual: %CD%
+echo [DEBUG] Si este script se cierra inmediatamente, revisa el archivo de log en la carpeta logs
+echo.
+
 REM ============================================================
 REM  CONFIGURAR ARCHIVO DE LOG
 REM ============================================================
@@ -11,7 +17,17 @@ set LOG_DIR=logs
 if not exist "%LOG_DIR%" mkdir "%LOG_DIR%"
 
 REM Crear nombre de archivo con timestamp
-for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /value 2^>nul') do set datetime=%%I
+set datetime=
+for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /value 2^>nul') do (
+    set datetime=%%I
+)
+if not defined datetime (
+    REM Fallback: usar fecha/hora del sistema
+    for /f "tokens=1-3 delims=/ " %%a in ('date /t') do set fecha=%%c%%a%%b
+    for /f "tokens=1-2 delims=: " %%a in ('time /t') do set hora=%%a%%b
+    set hora=!hora: =0!
+    set datetime=!fecha!!hora!
+)
 if not defined datetime set datetime=00000000_000000
 set TIMESTAMP=%datetime:~0,8%_%datetime:~8,6%
 set LOG_FILE=%LOG_DIR%\PC_B_RUN_%TIMESTAMP%.log
@@ -24,30 +40,56 @@ echo ============================================================ >> "%LOG_FILE%
 echo. >> "%LOG_FILE%"
 
 REM Verificar que Docker este disponible
+echo [DEBUG] Verificando Docker... >> "%LOG_FILE%"
 docker --version >> "%LOG_FILE%" 2>&1
-if !errorlevel! neq 0 (
+set DOCKER_CHECK=%errorlevel%
+echo [DEBUG] Docker check result: !DOCKER_CHECK! >> "%LOG_FILE%"
+if !DOCKER_CHECK! neq 0 (
     echo.
     echo [ERROR] Docker no esta instalado o no esta en el PATH
+    echo [ERROR] Verifica que Docker Desktop este ejecutandose
+    echo [ERROR] Docker check failed with code: !DOCKER_CHECK! >> "%LOG_FILE%"
     echo.
-    pause
+    echo Presiona cualquier tecla para cerrar...
+    pause >nul
     exit /b 1
 )
+echo [DEBUG] Docker verificado correctamente >> "%LOG_FILE%"
 
 REM ============================================================
 REM  PANTALLA PRINCIPAL
 REM ============================================================
+echo [DEBUG] Llegando a PANTALLA PRINCIPAL >> "%LOG_FILE%"
 echo.
 echo ============================================================
 echo    PC_B - EJECUCION CON DOCKER
 echo ============================================================
 echo.
 echo [LOG] Archivo de log: %LOG_FILE%
+echo [DEBUG] Continuando con la ejecucion...
+echo [DEBUG] Llegando a PANTALLA PRINCIPAL (pantalla) >> "%LOG_FILE%"
 echo.
 
 REM Detectar IP de la Central
 if exist central_ip.txt (
     set /p CENTRAL_IP=<central_ip.txt
     echo Central IP detectada: !CENTRAL_IP!
+    
+    REM Verificar si la IP es una IP de Docker (172.17.x.x, 172.18.x.x, etc.)
+    set IS_DOCKER_IP=0
+    echo !CENTRAL_IP! | findstr /R "^172\.17\." >nul 2>&1
+    if !errorlevel! equ 0 set IS_DOCKER_IP=1
+    if !IS_DOCKER_IP! equ 0 (
+        echo !CENTRAL_IP! | findstr /R "^172\.18\." >nul 2>&1
+        if !errorlevel! equ 0 set IS_DOCKER_IP=1
+    )
+    if !IS_DOCKER_IP! equ 1 (
+        echo [ADVERTENCIA] La IP detectada (!CENTRAL_IP!) parece ser una IP de Docker.
+        echo [ADVERTENCIA] El CP en Docker necesita la IP real de PC_A para conectarse a EV_Central.
+        echo [ADVERTENCIA] Por favor, actualiza central_ip.txt con la IP real de PC_A.
+        echo [ADVERTENCIA] Continuando con la IP detectada, pero puede fallar la conexion...
+        echo.
+    )
 ) else (
     set CENTRAL_IP=192.168.1.43
     echo No se encontro central_ip.txt. Usando IP por defecto: !CENTRAL_IP!
@@ -63,29 +105,31 @@ echo ============================================================
 echo.
 
 REM Verificar si Registry está corriendo localmente (puerto 6000)
+REM Nota: En un escenario normal, PC_B es otro ordenador y el Registry debería estar en PC_B
+REM Pero también verificamos localhost por si se ejecuta todo en el mismo PC
 set REGISTRY_LOCAL=0
 echo [INFO] Verificando si Registry está corriendo localmente (puerto 6000)...
 echo [DEBUG] Verificando si Registry está corriendo localmente en puerto 6000... >> "%LOG_FILE%"
 
-REM Intentar HTTPS primero
-powershell -NoProfile -ExecutionPolicy Bypass -Command "try { $response = Invoke-WebRequest -Uri 'https://127.0.0.1:6000/api/health' -Method GET -SkipCertificateCheck -TimeoutSec 2 -ErrorAction Stop; exit 0 } catch { exit 1 }" >nul 2>&1
+REM Intentar HTTPS primero en localhost
+powershell -NoProfile -ExecutionPolicy Bypass -Command "try { $response = Invoke-WebRequest -Uri 'https://127.0.0.1:6000/api/health' -Method GET -SkipCertificateCheck -TimeoutSec 3 -ErrorAction Stop; exit 0 } catch { exit 1 }" >nul 2>&1
 if !errorlevel! equ 0 (
     set REGISTRY_LOCAL=1
     REM IMPORTANTE: Usar host.docker.internal para que los contenedores Docker puedan acceder al host de Windows
     set REGISTRY_URL=https://host.docker.internal:6000/api
-    echo [OK] Registry detectado localmente (HTTPS)
+    echo [OK] Registry detectado localmente (HTTPS en localhost)
     echo [INFO] Usando host.docker.internal para acceso desde contenedores Docker
     echo [DEBUG] Registry local detectado (HTTPS) - usando host.docker.internal >> "%LOG_FILE%"
     goto :registry_configured
 )
 
-REM Intentar HTTP
-powershell -NoProfile -ExecutionPolicy Bypass -Command "try { $response = Invoke-WebRequest -Uri 'http://127.0.0.1:6000/api/health' -Method GET -TimeoutSec 2 -ErrorAction Stop; exit 0 } catch { exit 1 }" >nul 2>&1
+REM Intentar HTTP en localhost
+powershell -NoProfile -ExecutionPolicy Bypass -Command "try { $response = Invoke-WebRequest -Uri 'http://127.0.0.1:6000/api/health' -Method GET -TimeoutSec 3 -ErrorAction Stop; exit 0 } catch { exit 1 }" >nul 2>&1
 if !errorlevel! equ 0 (
     set REGISTRY_LOCAL=1
     REM IMPORTANTE: Usar host.docker.internal para que los contenedores Docker puedan acceder al host de Windows
     set REGISTRY_URL=http://host.docker.internal:6000/api
-    echo [OK] Registry detectado localmente (HTTP)
+    echo [OK] Registry detectado localmente (HTTP en localhost)
     echo [INFO] Usando host.docker.internal para acceso desde contenedores Docker
     echo [DEBUG] Registry local detectado (HTTP) - usando host.docker.internal >> "%LOG_FILE%"
     goto :registry_configured
@@ -132,7 +176,9 @@ echo   - Debes haber ejecutado PC_A_RUN.bat primero para iniciar MySQL
 echo.
 echo [ERROR] No se puede continuar sin Registry activo >> "%LOG_FILE%"
 echo [ERROR] REGISTRY_URL no configurado porque Registry no está disponible >> "%LOG_FILE%"
-pause
+echo.
+echo Presiona cualquier tecla para cerrar esta ventana...
+pause >nul
 exit /b 1
 
 :registry_configured

@@ -16,31 +16,32 @@ if !errorlevel! neq 0 (
 
 REM --- 2. CONFIGURACION DE RED ---
 REM Al estar en el PC A, la base de datos es LOCALHOST
+REM Modo desarrollo: usar root sin restricciones
 set DB_HOST=127.0.0.1
 set DB_PORT=3306
 set DB_USER=root
-set DB_PASS=root
+set DB_PASS=
 set DB_NAME=evcharging
 
 REM Usamos comillas en el echo para evitar error por parentesis
 echo [OK] Configurado para conectar a BD Local "127.0.0.1:3306"
 
 REM --- 3. VERIFICAR CONEXION A BASE DE DATOS ---
-echo [2/4] Probando conexion con MySQL...
+echo [2/4] Probando conexion con MariaDB...
 
 REM Simplificamos el comando docker para evitar errores de sintaxis con llaves {{.}}
-docker ps | findstr "mysql" >nul
+docker ps | findstr "mariadb" >nul
 
 if !errorlevel! neq 0 (
-    echo [ERROR] Contenedor MySQL no esta corriendo.
+    echo [ERROR] Contenedor MariaDB no esta corriendo.
     echo Causas posibles:
     echo   1. Docker no esta corriendo.
-    echo   2. Contenedor mysql no existe o no esta activo.
+    echo   2. Contenedor mariadb no existe o no esta activo.
     echo   3. Ejecuta PC_A_RUN.bat primero.
     pause
     exit /b 1
 ) else (
-    echo [OK] Contenedor MySQL detectado y corriendo.
+    echo [OK] Contenedor MariaDB detectado y corriendo.
 )
 
 REM --- 4. VERIFICAR CERTIFICADOS SSL (OBLIGATORIO RELEASE 2) ---

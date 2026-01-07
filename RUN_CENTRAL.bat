@@ -33,7 +33,8 @@ REM Ejecutar EV_Central en modo consola (sin TUI)
 REM Nota: La API REST se inicia automáticamente en el puerto 5001
 REM Configurar REGISTRY_URL con HTTPS para conectarse con EV_Registry
 set REGISTRY_URL=https://127.0.0.1:6000/api
-py ev_central\EV_Central.py --port 5000 --kafka %CENTRAL_IP%:9092 --db "127.0.0.1:3306:root:root:evcharging" --no-tui
+REM Usar root SIN CONTRASEÑA (autenticacion eliminada)
+py ev_central\EV_Central.py --port 5000 --kafka %CENTRAL_IP%:9092 --db "127.0.0.1:3306:root::evcharging" --no-tui
 
 echo.
 echo ========================================================================
