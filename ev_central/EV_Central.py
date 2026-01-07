@@ -587,8 +587,23 @@ def api_weather_alert():
                 'message': 'cp_id es requerido'
             }), 400
         
-        # Actualizar estado de alerta
+        # Verificar si la alerta realmente cambió para evitar procesamiento duplicado
+        alerta_anterior = None
         with WEATHER_ALERTS_LOCK:
+            alerta_anterior = WEATHER_ALERTS.get(cp_id, {}).get('activa')
+            # Solo procesar si la alerta cambió de estado
+            if alerta_anterior == alerta_activa:
+                # No hay cambio, solo actualizar temperatura y timestamp sin procesar
+                WEATHER_ALERTS[cp_id] = {
+                    'activa': alerta_activa,
+                    'temperatura': temperatura,
+                    'timestamp': time.time()
+                }
+                return jsonify({
+                    'status': 'ok',
+                    'message': f'Alerta sin cambio para {cp_id} (ya estaba {"activa" if alerta_activa else "inactiva"})'
+                })
+            # Actualizar estado de alerta
             WEATHER_ALERTS[cp_id] = {
                 'activa': alerta_activa,
                 'temperatura': temperatura,
@@ -659,23 +674,48 @@ def api_weather_alert():
             except Exception as e:
                 print(f"[CENTRAL] ⚠️ Error publicando telemetría de alerta: {e}")
         else:
-            # Alerta desactivada, restaurar operación
+            # Alerta desactivada, restaurar operación (solo si no está en avería o estado interactivo)
             try:
-                cambiar_estado_cp(cp_id, 'ACTIVADO', db_conn)
-                registrar_evento(f"✓ CP {cp_id} restaurado tras alerta climatológica (T={temperatura}°C)", "ok")
+                # Verificar estado actual antes de cambiar
+                with CP_ESTADO_LOCK:
+                    estado_actual = CP_ESTADO.get(cp_id, '')
+                with CP_ALERTA_LOCK:
+                    tiene_averia = CP_ALERTA.get(cp_id, False)
                 
-                # Enviar señal STATE al Monitor para notificar que el CP vuelve a estar ACTIVADO
-                try:
-                    with CONEXIONES_ACTIVAS_LOCK:
-                        conn = CONEXIONES_ACTIVAS.get(cp_id)
-                    if conn:
-                        # Enviar STATE cifrado al Monitor para notificar el cambio a ACTIVADO
-                        trama_state = construir_trama('STATE', [cp_id, 'ACTIVADO'], cp_id=cp_id, cifrar=True)
-                        conn.sendall(trama_state)
-                        print(f"[CENTRAL] 📤 STATE ACTIVADO enviado a {cp_id} (alerta climatológica desactivada)")
-                        registrar_evento(f"📤 STATE ACTIVADO enviado a {cp_id} tras desactivar alerta climatológica", "ok")
-                except Exception as e:
-                    print(f"[CENTRAL] ⚠️ Error enviando STATE a {cp_id}: {e}")
+                estados_interactivos = {
+                    'PENDIENTE_CONFIRMACION_CENTRAL',
+                    'ESPERANDO_OPERADOR_ENGINE',
+                    'LISTO_PARA_INICIAR',
+                    'ESPERANDO_CONFIRMACION_FIN',
+                    'CARGANDO',
+                    'SUMINISTRANDO'
+                }
+                
+                # Solo restaurar a ACTIVADO si no está en avería, no está en estado interactivo, y no está ya en ACTIVADO
+                if not tiene_averia and estado_actual.upper() not in estados_interactivos:
+                    if estado_actual.upper() != 'ACTIVADO':
+                        cambiar_estado_cp(cp_id, 'ACTIVADO', db_conn)
+                        registrar_evento(f"✓ CP {cp_id} restaurado tras alerta climatológica (T={temperatura}°C)", "ok")
+                        
+                        # Enviar señal STATE al Monitor para notificar que el CP vuelve a estar ACTIVADO
+                        try:
+                            with CONEXIONES_ACTIVAS_LOCK:
+                                conn = CONEXIONES_ACTIVAS.get(cp_id)
+                            if conn:
+                                # Enviar STATE cifrado al Monitor para notificar el cambio a ACTIVADO
+                                trama_state = construir_trama('STATE', [cp_id, 'ACTIVADO'], cp_id=cp_id, cifrar=True)
+                                conn.sendall(trama_state)
+                                print(f"[CENTRAL] 📤 STATE ACTIVADO enviado a {cp_id} (alerta climatológica desactivada)")
+                                registrar_evento(f"📤 STATE ACTIVADO enviado a {cp_id} tras desactivar alerta climatológica", "ok")
+                        except Exception as e:
+                            print(f"[CENTRAL] ⚠️ Error enviando STATE a {cp_id}: {e}")
+                    else:
+                        # Ya está en ACTIVADO, no hacer nada más
+                        print(f"[CENTRAL] CP {cp_id} ya está en ACTIVADO, no se necesita restaurar")
+                else:
+                    # No restaurar porque está en avería o estado interactivo
+                    motivo_no_restaurar = 'en avería' if tiene_averia else f'en estado interactivo ({estado_actual})'
+                    print(f"[CENTRAL] CP {cp_id} no se restaura a ACTIVADO: está {motivo_no_restaurar}")
                 
                 # Publicar telemetría actualizada para que el dashboard refleje el cambio
                 try:
@@ -2301,9 +2341,30 @@ def actualizar_estado_cp(connection,
             cursor.close()
             return True
         else:
-            print(f"[CENTRAL] CP {cp_id} no encontrado en BD para actualizar estado")
+            # CP no encontrado - intentar registrarlo primero (con valores por defecto)
+            print(f"[CENTRAL] ⚠️ CP {cp_id} no encontrado en BD. Intentando registrar...")
             cursor.close()
-            return False
+            # Intentar registrar con valores por defecto
+            try:
+                ubicacion_default = 'Desconocida'
+                precio_kwh_default = 0.48
+                if registrar_cp_en_bd(connection, cp_id, ubicacion_default, precio_kwh_default):
+                    # Ahora intentar actualizar el estado de nuevo
+                    cursor = connection.cursor()
+                    cursor.execute("""
+                        UPDATE charging_points 
+                        SET estado = %s, fecha_ultima_conexion = %s 
+                        WHERE cp_id = %s
+                    """, (nuevo_estado, datetime.now(), cp_id))
+                    cursor.close()
+                    print(f"[CENTRAL] ✓ CP {cp_id} registrado y estado actualizado a: {nuevo_estado}")
+                    return True
+                else:
+                    print(f"[CENTRAL] ⚠️ No se pudo registrar CP {cp_id} en BD")
+                    return False
+            except Exception as e:
+                print(f"[CENTRAL] ⚠️ Error intentando registrar CP {cp_id} en BD: {e}")
+                return False
             
     except Error as e:
         try:
