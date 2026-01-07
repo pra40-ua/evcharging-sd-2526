@@ -399,9 +399,9 @@ def verificar_registro_cp(cp_id: str, db_connection=None) -> bool:
         True si está registrado y activo, False en caso contrario
     """
     # Prioridad 1: Verificar desde BD compartida (más eficiente)
-    if db_connection and db_connection.is_connected():
+    if _verificar_conexion(db_connection):
         try:
-            cursor = db_connection.cursor(dictionary=True)
+            cursor = _db_cursor_dict(db_connection)
             # Verificar si la tabla cp_registry existe (puede no existir si Registry nunca se ejecutó)
             cursor.execute(
                 "SELECT cp_id, activo FROM cp_registry WHERE cp_id = %s",
@@ -419,17 +419,13 @@ def verificar_registro_cp(cp_id: str, db_connection=None) -> bool:
             else:
                 print(f"[CENTRAL] ⚠️ CP {cp_id} NO encontrado en cp_registry (BD)")
                 return False
-        except Error as e:
-            # Error específico de MySQL (ej: tabla no existe)
+        except Exception as e:
+            # Puede ser error SQL, tabla inexistente o diferencia de driver
             error_msg = str(e).lower()
             if "doesn't exist" in error_msg or "table" in error_msg or "1146" in error_msg:
                 print(f"[CENTRAL] ⚠️ Tabla cp_registry no encontrada en BD, usando método HTTP")
             else:
                 print(f"[CENTRAL] ⚠️ Error consultando BD para verificar registro de {cp_id}: {e}")
-            # Continuar con método HTTP como fallback
-        except Exception as e:
-            # Cualquier otro error (no MySQL)
-            print(f"[CENTRAL] ⚠️ Error consultando BD para verificar registro de {cp_id}: {e}")
             # Continuar con método HTTP como fallback
     
     # Prioridad 2: Verificar vía HTTP con Registry (si BD no disponible o falló)
@@ -454,7 +450,7 @@ def verificar_registro_cp(cp_id: str, db_connection=None) -> bool:
         # Por compatibilidad, permitir conexión si EV_Registry no está disponible
         return True
 
-def verificar_credenciales_registry(cp_id: str, username: str, password: str) -> bool:
+def verificar_credenciales_registry(cp_id: str, username: str, password: str, db_connection=None) -> bool:
     """
     Verifica las credenciales de un CP consultando directamente la BD.
     Según los requisitos, EV_Central consulta la BD (en PC_A) para validar
@@ -469,19 +465,22 @@ def verificar_credenciales_registry(cp_id: str, username: str, password: str) ->
         True si las credenciales son válidas, False en caso contrario
     """
     try:
-        # Obtener conexión a BD
-        cfg = globals().get('DB_CONFIG_STR')
-        if not cfg:
-            print(f"[CENTRAL] ❌ No hay configuración de BD disponible")
-            return False
-        
-        connection = conectar_bd(cfg)
-        if not _verificar_conexion(connection):
-            print(f"[CENTRAL] ❌ No se pudo conectar a la BD para verificar credenciales")
-            return False
+        # Usar conexión compartida si está disponible; evita reconexiones lentas durante AUTH
+        connection = db_connection if _verificar_conexion(db_connection) else None
+        created_conn = False
+        if connection is None:
+            cfg = globals().get('DB_CONFIG_STR')
+            if not cfg:
+                print(f"[CENTRAL] ❌ No hay configuración de BD disponible")
+                return False
+            connection = conectar_bd(cfg)
+            created_conn = True
+            if not _verificar_conexion(connection):
+                print(f"[CENTRAL] ❌ No se pudo conectar a la BD para verificar credenciales")
+                return False
         
         try:
-            cursor = connection.cursor(dictionary=True)
+            cursor = _db_cursor_dict(connection)
             
             # Verificar que el CP esté registrado y activo en cp_registry
             cursor.execute("""
@@ -494,7 +493,11 @@ def verificar_credenciales_registry(cp_id: str, username: str, password: str) ->
             
             resultado = cursor.fetchone()
             cursor.close()
-            connection.close()
+            if created_conn:
+                try:
+                    connection.close()
+                except Exception:
+                    pass
             
             if not resultado:
                 print(f"[CENTRAL] ❌ CP {cp_id} no encontrado en cp_registry")
@@ -534,10 +537,13 @@ def verificar_credenciales_registry(cp_id: str, username: str, password: str) ->
             print(f"[CENTRAL] ✓ Credenciales verificadas en BD para CP {cp_id}")
             return True
             
-        except Error as e:
+        except Exception as e:
             print(f"[CENTRAL] ❌ Error de BD verificando credenciales: {e}")
-            if _verificar_conexion(connection):
-                connection.close()
+            if created_conn:
+                try:
+                    connection.close()
+                except Exception:
+                    pass
             return False
             
     except Exception as e:
@@ -997,6 +1003,20 @@ KAFKA_PRODUCER_LOCK = threading.Lock()
 
 # Configuración de BD global para reconexión
 DB_CONFIG_STR = None
+
+def _db_cursor_dict(connection):
+    """
+    Devuelve un cursor "dict" compatible con PyMySQL y mysql.connector.
+    - PyMySQL: en conectar_bd usamos DictCursor, así que cursor() ya devuelve dicts.
+    - mysql.connector: cursor(dictionary=True) devuelve dicts.
+    """
+    if connection is None:
+        return None
+    try:
+        return connection.cursor(dictionary=True)
+    except TypeError:
+        # PyMySQL no soporta dictionary=True
+        return connection.cursor()
 
 def publicar_telemetria_kafka(cp_id: str, telemetria_data: dict):
     """
@@ -2806,7 +2826,7 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                 print(f"[CENTRAL]    Username: {username}")
                 print(f"[CENTRAL]    Verificando con EV_Registry...")
                 
-                if not verificar_credenciales_registry(cp_id, username, password):
+                if not verificar_credenciales_registry(cp_id, username, password, db_connection):
                     # Credenciales inválidas
                     respuesta_trama = construir_trama('AUTH', ['FAIL', 'Credenciales inválidas. Verifique username y password de EV_Registry.'], cp_id=None, cifrar=False)
                     conn.sendall(respuesta_trama)
