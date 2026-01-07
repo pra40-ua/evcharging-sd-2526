@@ -120,13 +120,16 @@ def obtener_clave_cifrado_cp(cp_id: str) -> bytes:
         
         host, port, user, password, database = parts
         
-        # Conectar a BD
+        # Conectar a BD con collation compatible con MySQL 5.7
         connection = mysql.connector.connect(
             host=host,
             port=int(port),
             user=user,
             password=password,
-            database=database
+            database=database,
+            charset='utf8mb4',
+            collation='utf8mb4_general_ci',
+            use_unicode=True
         )
         
         if connection.is_connected():
@@ -172,13 +175,16 @@ def cargar_estado_inicial_bd():
         
         host, port, user, password, database = parts
         
-        # Conectar a BD
+        # Conectar a BD con collation compatible con MySQL 5.7
         connection = mysql.connector.connect(
             host=host,
             port=int(port),
             user=user,
             password=password,
-            database=database
+            database=database,
+            charset='utf8mb4',
+            collation='utf8mb4_general_ci',
+            use_unicode=True
         )
         
         if connection.is_connected():

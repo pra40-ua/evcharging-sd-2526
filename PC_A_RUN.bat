@@ -66,12 +66,24 @@ echo.
 
 REM Detectar IP local usando ipconfig
 echo Detectando IP local automaticamente...
+REM Excluir IPs de loopback, APIPA y Docker (172.17.x.x, 172.18.x.x, etc.)
 for /f "tokens=2 delims=:" %%a in ('ipconfig ^| findstr /C:"IPv4" ^| findstr /V "127.0.0.1" ^| findstr /V "169.254"') do (
     set TEMP_IP=%%a
     set TEMP_IP=!TEMP_IP: =!
     if not "!TEMP_IP!"=="" (
-        set CENTRAL_IP=!TEMP_IP!
-        goto :ip_found
+        REM Verificar que no sea una IP de Docker (172.17.x.x, 172.18.x.x, etc.)
+        echo !TEMP_IP! | findstr /R "^172\.17\." >nul 2>&1
+        if !errorlevel! neq 0 (
+            echo !TEMP_IP! | findstr /R "^172\.18\." >nul 2>&1
+            if !errorlevel! neq 0 (
+                echo !TEMP_IP! | findstr /R "^172\.19\." >nul 2>&1
+                if !errorlevel! neq 0 (
+                    REM No es una IP de Docker, usar esta IP
+                    set CENTRAL_IP=!TEMP_IP!
+                    goto :ip_found
+                )
+            )
+        )
     )
 )
 
@@ -88,15 +100,12 @@ REM Guardar IP en central_ip.txt para PC_B
 echo !CENTRAL_IP!> central_ip.txt
 echo      IP guardada en central_ip.txt para PC_B
 echo.
-echo NOTA: Asegurate de actualizar manualmente docker-compose.yml
-echo       con esta IP en KAFKA_ADVERTISED_LISTENERS si es necesario.
-echo.
 
 REM ============================================================
-REM  PASO 2: INICIAR KAFKA + MYSQL (DOCKER COMPOSE)
+REM  PASO 2: INICIAR KAFKA + MARIADB (DOCKER COMPOSE)
 REM ============================================================
 echo ============================================================
-echo [2/4] INICIANDO KAFKA + MYSQL
+echo [2/4] INICIANDO KAFKA + MARIADB
 echo ============================================================
 echo.
 if not exist docker-compose.yml (
@@ -106,26 +115,67 @@ if not exist docker-compose.yml (
 )
 
 echo Deteniendo contenedores previos (si existen)...
-docker compose down >nul 2>&1
+docker compose down 2>&1
+if %errorlevel% neq 0 (
+    echo [ADVERTENCIA] Error al detener contenedores previos, continuando...
+)
+
+REM Limpiar red si existe y está huérfana
+echo Limpiando red evnet si existe...
+docker network rm evnet >nul 2>&1
+REM Si la red está en uso, intentar desconectar contenedores primero
+docker network inspect evnet >nul 2>&1
+if %errorlevel% equ 0 (
+    echo Desconectando contenedores de la red evnet...
+    for /f "tokens=1" %%c in ('docker network inspect evnet --format "{{range .Containers}}{{.Name}} {{end}}" 2^>nul') do (
+        docker network disconnect evnet %%c >nul 2>&1
+    )
+    docker network rm evnet >nul 2>&1
+)
 
 echo.
-echo Iniciando Kafka + MySQL + configuracion automatica...
+echo Configurando Kafka con IP: !CENTRAL_IP!
+echo Iniciando Kafka + MariaDB + configuracion automatica...
 echo (Esto puede tardar 20-40 segundos la primera vez)
 echo.
+
+REM Actualizar docker-compose.yml con la IP detectada
+echo Actualizando docker-compose.yml con IP: !CENTRAL_IP!...
+echo !CENTRAL_IP!> temp_ip.txt
+powershell -Command "$ip = Get-Content temp_ip.txt -Raw; $ip = $ip.Trim(); $content = Get-Content docker-compose.yml -Raw; $content = $content -replace 'KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://\$\{KAFKA_ADVERTISED_IP:-[^}]*\}:9092', ('KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://' + $ip + ':9092'); $content = $content -replace 'KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://[0-9.]+:9092', ('KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://' + $ip + ':9092'); Set-Content docker-compose.yml -Value $content -NoNewline" >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [ADVERTENCIA] No se pudo actualizar docker-compose.yml, usando IP actual...
+)
+del temp_ip.txt >nul 2>&1
+
+REM Establecer variable de entorno para docker-compose (por si acaso)
+set KAFKA_ADVERTISED_IP=!CENTRAL_IP!
+echo Ejecutando: docker compose up -d
 docker compose up -d
 
 if %errorlevel% neq 0 (
     echo.
     echo [ERROR] No se pudo iniciar Docker Compose.
-    echo Verifica los logs: docker compose logs
+    echo.
+    echo Verificando estado de contenedores...
+    docker compose ps -a
+    echo.
+    echo Verifica los logs: docker compose logs kafka
+    echo.
     pause
     exit /b 1
 )
 
+REM Verificar que los contenedores se crearon correctamente
+echo.
+echo Verificando que los contenedores se crearon...
+timeout /t 2 /nobreak >nul
+docker compose ps
+
 echo.
 echo [OK] Servicios Docker iniciados.
 echo.
-echo Esperando a que Kafka y MySQL esten listos...
+echo Esperando a que Kafka y MariaDB esten listos...
 echo (5 segundos)
 
 REM Esperar con progreso visual
@@ -135,25 +185,62 @@ for /L %%i in (1,1,5) do (
 )
 echo.
 echo.
+s
+REM Verificar que el contenedor de Kafka existe y está corriendo
+echo Verificando estado del contenedor Kafka...
+docker ps -a --filter "name=kafka" --format "table {{.Names}}\t{{.Status}}" 2>&1
+docker inspect kafka >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [ERROR] El contenedor de Kafka NO se creo correctamente.
+    echo.
+    echo Verificando logs de Docker Compose...
+    docker compose logs kafka
+    echo.
+    echo Por favor, revisa los logs anteriores para identificar el problema.
+    pause
+    exit /b 1
+)
 
 REM Verificar que Kafka responde
+echo Esperando a que Kafka este listo...
+timeout /t 5 /nobreak >nul
 docker exec kafka kafka-broker-api-versions --bootstrap-server localhost:9092 >nul 2>&1
 if %errorlevel% equ 0 (
     echo [OK] Kafka esta listo y respondiendo.
 ) else (
-    echo [ADVERTENCIA] Kafka puede no estar listo aun.
-    echo El sistema continuara de todas formas.
+    echo [ADVERTENCIA] Kafka puede no estar listo aun, esperando mas tiempo...
+    timeout /t 10 /nobreak >nul
+    docker exec kafka kafka-broker-api-versions --bootstrap-server localhost:9092 >nul 2>&1
+    if %errorlevel% equ 0 (
+        echo [OK] Kafka esta listo y respondiendo.
+    ) else (
+        echo [ADVERTENCIA] Kafka puede no estar listo aun.
+        echo El sistema continuara de todas formas.
+    )
 )
 echo.
 
-REM Verificar que MySQL está listo antes de limpiar
-echo Verificando que MySQL esta listo...
+REM Verificar que MariaDB está listo antes de limpiar
+echo Verificando que MariaDB esta listo...
 timeout /t 3 /nobreak >nul
-docker exec mysql mysqladmin ping -h localhost -uroot -proot >nul 2>&1
+docker exec mariadb mariadb-admin ping -h localhost -uroot >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [ADVERTENCIA] MySQL puede no estar listo aun, esperando...
+    echo [ADVERTENCIA] MariaDB puede no estar listo aun, esperando...
     timeout /t 5 /nobreak >nul
 )
+
+REM Verificar y configurar root SIN CONTRASEÑA (autenticacion eliminada)
+echo Verificando configuracion de MariaDB: root SIN CONTRASEÑA...
+REM El script setup_sin_autenticacion.sql ya deberia haber configurado root sin contraseña
+REM Solo verificamos y corregimos si es necesario
+docker exec mariadb mysql -u root -e "SELECT User, Host FROM mysql.user WHERE User='root';" >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [ADVERTENCIA] No se puede conectar sin contraseña, configurando...
+    REM Intentar con contraseña temporal 'root' y luego eliminarla
+    docker exec mariadb mysql -u root -proot -e "ALTER USER 'root'@'localhost' IDENTIFIED BY ''; ALTER USER 'root'@'%%' IDENTIFIED BY ''; CREATE USER IF NOT EXISTS 'root'@'127.0.0.1' IDENTIFIED BY ''; GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION; GRANT ALL PRIVILEGES ON *.* TO 'root'@'%%' WITH GRANT OPTION; GRANT ALL PRIVILEGES ON *.* TO 'root'@'127.0.0.1' WITH GRANT OPTION; FLUSH PRIVILEGES;" 2>&1
+)
+echo [OK] MariaDB configurado (root SIN CONTRASEÑA, sin autenticacion).
+echo.
 
 REM ============================================================
 REM  PASO 2.5: LIMPIAR BASE DE DATOS
@@ -165,8 +252,8 @@ echo.
 echo Eliminando datos anteriores de la base de datos...
 echo.
 
-REM Limpiar todas las tablas usando TRUNCATE
-docker exec mysql mysql -u root -proot evcharging -e "SET FOREIGN_KEY_CHECKS=0; TRUNCATE TABLE charging_points; TRUNCATE TABLE telemetria_log; TRUNCATE TABLE cp_encryption_keys; TRUNCATE TABLE audit_log; TRUNCATE TABLE weather_alerts; SET FOREIGN_KEY_CHECKS=1;" >nul 2>&1
+REM Limpiar todas las tablas usando TRUNCATE (sin contraseña)
+docker exec mariadb mysql -u root evcharging -e "SET FOREIGN_KEY_CHECKS=0; TRUNCATE TABLE charging_points; TRUNCATE TABLE telemetria_log; TRUNCATE TABLE cp_encryption_keys; TRUNCATE TABLE audit_log; TRUNCATE TABLE weather_alerts; SET FOREIGN_KEY_CHECKS=1;" >nul 2>&1
 
 if %errorlevel% equ 0 (
     echo [OK] Base de datos limpiada exitosamente.
@@ -187,6 +274,7 @@ echo CONFIGURACION DETECTADA:
 echo   - IP de este PC:    !CENTRAL_IP!
 echo   - Kafka:            !CENTRAL_IP!:9092
 echo   - MySQL:            127.0.0.1:3306
+echo   - Usuario MySQL:    root (SIN CONTRASEÑA)
 echo   - Puerto Central:   5000
 echo.
 echo IMPORTANTE PARA RED LOCAL:
@@ -234,7 +322,8 @@ echo Iniciando dashboard web en puerto 8080...
 echo.
 
 REM Lanzar Dashboard Web en nueva ventana (con acceso a BD para sincronización)
-start "Dashboard-Web-PC_A" cmd /k "py web_dashboard.py --kafka !CENTRAL_IP!:9092 --central-ip !CENTRAL_IP! --central-port 5000 --central-api-port 5001 --db 127.0.0.1:3306:root:root:evcharging"
+REM Usar root SIN CONTRASEÑA (autenticacion eliminada)
+start "Dashboard-Web-PC_A" cmd /k "py web_dashboard.py --kafka !CENTRAL_IP!:9092 --central-ip !CENTRAL_IP! --central-port 5000 --central-api-port 5001 --db 127.0.0.1:3306:root::evcharging"
 
 REM Esperar 5 segundos a que el dashboard inicie
 echo Esperando a que el dashboard inicie...

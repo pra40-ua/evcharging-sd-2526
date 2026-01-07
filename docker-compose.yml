@@ -11,7 +11,7 @@ services:
       - KAFKA_NODE_ID=1
       - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.1.43:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.24.1:9092
       - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
       - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
       - KAFKA_LOG_DIRS=/tmp/kraft-combined-logs
@@ -21,26 +21,34 @@ services:
       # Cluster ID requerido para formatear almacenamiento en KRaft
       - CLUSTER_ID=4L6g3nShT-eMCtK--X86sw
     healthcheck:
-      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      test: ["CMD-SHELL", "kafka-broker-api-versions --bootstrap-server 127.0.0.1:9092 || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     restart: unless-stopped
 
-  # MySQL para persistencia (opcional)
-  mysql:
-    image: mysql:8
-    container_name: mysql
+  # MySQL 5.7 para máxima compatibilidad con Windows y Python
+  # Configurado SIN CONTRASEÑA (modo desarrollo)
+  mariadb:
+    image: mysql:5.7
+    container_name: mariadb
     ports:
       - "3306:3306"
     environment:
+      # Usar contraseña temporal 'root' solo para inicialización
+      # El script setup_sin_autenticacion.sql eliminará la contraseña después
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=evcharging
+      # Permitir conexiones root desde cualquier host (necesario para conexiones externas)
+      - MYSQL_ROOT_HOST=%
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mariadb_data:/var/lib/mysql
       - ./db/init.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - ./db/setup_sin_autenticacion.sql:/docker-entrypoint-initdb.d/02_setup.sql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      # Healthcheck sin contraseña
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -68,7 +76,7 @@ services:
     restart: "no"
 
 volumes:
-  mysql_data:
+  mariadb_data:
     driver: local
 
 networks:

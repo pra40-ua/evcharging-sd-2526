@@ -600,19 +600,35 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, engine_
         # Timeout de conexión para evitar bloqueos indefinidos
         client_socket.settimeout(10)
         
+        # Verificar si la IP parece ser una IP de Docker (172.17.x.x, 172.18.x.x, etc.)
+        if central_ip.startswith('172.17.') or central_ip.startswith('172.18.') or central_ip.startswith('172.19.'):
+            print(f"[CP_M] ⚠️ ADVERTENCIA: La IP {central_ip} parece ser una IP de Docker.")
+            print(f"[CP_M] ⚠️ Si EV_Central está en otro PC (PC_A), necesitas la IP real de ese PC.")
+            print(f"[CP_M] ⚠️ Actualiza central_ip.txt en PC_B con la IP real de PC_A (ej: 192.168.1.43)")
+            print(f"[CP_M] ⚠️ Continuando con el intento de conexión...")
+        
         print(f"[CP_M] Intentando conectar a EV_Central en {central_ip}:{central_port}...")
         
         try:
             client_socket.connect((central_ip, central_port))
         except socket.timeout:
-            raise Exception(f"Timeout al conectar (10s). Verifica que EV_Central esté ejecutándose en {central_ip}:{central_port}")
+            raise Exception(
+                f"Timeout al conectar (10s). Verifica que EV_Central esté ejecutándose en {central_ip}:{central_port}\n"
+                f"  Si estás en un contenedor Docker y EV_Central está en otro PC:\n"
+                f"  1. Verifica que central_ip.txt contiene la IP REAL de PC_A (no una IP de Docker)\n"
+                f"  2. Verifica que el firewall de PC_A permite conexiones en el puerto {central_port}\n"
+                f"  3. Verifica que EV_Central está ejecutándose en PC_A"
+            )
         except ConnectionRefusedError:
             raise Exception(
                 f"Connection refused. Posibles causas:\n"
                 f"  1. EV_Central no está ejecutándose en {central_ip}:{central_port}\n"
                 f"  2. El firewall de PC_A está bloqueando el puerto {central_port}\n"
-                f"  3. La IP {central_ip} es incorrecta (debe ser la IP del PC_A, no 127.0.0.1)\n"
-                f"  4. El contenedor de la Central no tiene el puerto 5000 mapeado correctamente"
+                f"  3. La IP {central_ip} es incorrecta:\n"
+                f"     - Si estás en un contenedor Docker y EV_Central está en otro PC (PC_A),\n"
+                f"       necesitas la IP REAL de PC_A (ej: 192.168.1.43), NO una IP de Docker (172.17.x.x)\n"
+                f"     - Actualiza central_ip.txt en PC_B con la IP correcta de PC_A\n"
+                f"  4. Verifica que EV_Central está escuchando en todas las interfaces (0.0.0.0)"
             )
         except socket.gaierror as e:
             raise Exception(f"No se pudo resolver el hostname/IP {central_ip}: {e}")
@@ -780,9 +796,9 @@ def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, 
                         if central_socket:
                             central_socket.sendall(resp)
                             print(f"[{cp_id}] ✓ AUTH_RESP enviado a Central (cifrado). Esperando acción del operador del Engine...")
-                    else:
-                        mensaje_error = f"Imposible conectar con Central"
-                        print(f"[{cp_id}] ❌ {mensaje_error}")
+                        else:
+                            mensaje_error = f"Imposible conectar con Central"
+                            print(f"[{cp_id}] ❌ {mensaje_error}")
                     except (OSError, BrokenPipeError, ConnectionResetError) as e:
                         print(f"[{cp_id}] ⚠️ Error enviando AUTH_RESP a Central: {e}. Conexión perdida.")
                 except Exception as e:

@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS charging_points (
   precio_kwh DECIMAL(10,2),
   estado VARCHAR(32),
   fecha_ultima_conexion DATETIME
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS telemetria_log (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS telemetria_log (
   estado_carga VARCHAR(30),
   kw_entregados DOUBLE,
   tiempo_carga_s INT
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Tabla para claves de cifrado simétrico por CP
 CREATE TABLE IF NOT EXISTS cp_encryption_keys (

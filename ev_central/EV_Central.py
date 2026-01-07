@@ -4,8 +4,23 @@ import threading
 import time
 from collections import deque
 from queue import Queue, Empty
-import mysql.connector
-from mysql.connector import Error
+# Intentar importar ambos conectores para tener fallback disponible
+PYMySQL_AVAILABLE = False
+MYSQL_CONNECTOR_AVAILABLE = False
+
+try:
+    import pymysql
+    import pymysql.cursors
+    PYMySQL_AVAILABLE = True
+except ImportError:
+    pass
+
+try:
+    import mysql.connector
+    from mysql.connector import Error
+    MYSQL_CONNECTOR_AVAILABLE = True
+except ImportError:
+    pass
 from datetime import datetime
 from kafka import KafkaConsumer, KafkaProducer
 import json
@@ -160,7 +175,7 @@ def registrar_auditoria(accion: str, cp_id: str = None, origen_ip: str = None,
         db_connection: Conexión a la base de datos
     """
     try:
-        if db_connection and db_connection.is_connected():
+        if _verificar_conexion(db_connection):
             cursor = db_connection.cursor()
             cursor.execute("""
                 INSERT INTO audit_log (fecha_hora, origen_ip, cp_id, accion, descripcion, resultado)
@@ -180,10 +195,39 @@ def generar_clave_cifrado() -> bytes:
     """Genera una nueva clave de cifrado Fernet."""
     return Fernet.generate_key()
 
+# Archivo para guardar claves cuando no hay BD disponible
+ENCRYPTION_KEYS_FILE = os.path.join(os.path.dirname(__file__), '..', 'data', 'encryption_keys.json')
+
+def _cargar_claves_desde_archivo() -> dict:
+    """Carga las claves de cifrado desde un archivo JSON local."""
+    try:
+        os.makedirs(os.path.dirname(ENCRYPTION_KEYS_FILE), exist_ok=True)
+        if os.path.exists(ENCRYPTION_KEYS_FILE):
+            with open(ENCRYPTION_KEYS_FILE, 'r') as f:
+                data = json.load(f)
+                # Convertir de base64 a bytes
+                return {cp_id: base64.b64decode(key_b64) for cp_id, key_b64 in data.items()}
+    except Exception as e:
+        print(f"[CENTRAL] ⚠️ Error cargando claves desde archivo: {e}")
+    return {}
+
+def _guardar_claves_en_archivo(claves: dict):
+    """Guarda las claves de cifrado en un archivo JSON local."""
+    try:
+        os.makedirs(os.path.dirname(ENCRYPTION_KEYS_FILE), exist_ok=True)
+        # Convertir de bytes a base64 para JSON
+        data = {cp_id: base64.b64encode(key_bytes).decode('utf-8') 
+                for cp_id, key_bytes in claves.items()}
+        with open(ENCRYPTION_KEYS_FILE, 'w') as f:
+            json.dump(data, f, indent=2)
+    except Exception as e:
+        print(f"[CENTRAL] ⚠️ Error guardando claves en archivo: {e}")
+
 def obtener_clave_cifrado_cp(cp_id: str, db_connection = None) -> bytes:
     """
     Obtiene la clave de cifrado para un CP.
     Si no existe, genera una nueva y la almacena.
+    Usa BD si está disponible, sino usa archivo local como fallback.
     
     Returns:
         Clave de cifrado Fernet (bytes)
@@ -194,7 +238,7 @@ def obtener_clave_cifrado_cp(cp_id: str, db_connection = None) -> bytes:
             return CP_ENCRYPTION_KEYS[cp_id]
     
     # Si no está en memoria, buscar en BD
-    if db_connection and db_connection.is_connected():
+    if _verificar_conexion(db_connection):
         try:
             cursor = db_connection.cursor(dictionary=True)
             cursor.execute("""
@@ -206,19 +250,33 @@ def obtener_clave_cifrado_cp(cp_id: str, db_connection = None) -> bytes:
             
             if resultado:
                 # Cargar clave desde BD
-                key_b64 = resultado['encryption_key']
-                key_bytes = base64.b64decode(key_b64)
-                with CP_ENCRYPTION_KEYS_LOCK:
-                    CP_ENCRYPTION_KEYS[cp_id] = key_bytes
-                return key_bytes
+                if isinstance(resultado, dict):
+                    key_b64 = resultado.get('encryption_key')
+                else:
+                    key_b64 = resultado[0] if resultado else None
+                
+                if key_b64:
+                    key_bytes = base64.b64decode(key_b64)
+                    with CP_ENCRYPTION_KEYS_LOCK:
+                        CP_ENCRYPTION_KEYS[cp_id] = key_bytes
+                    return key_bytes
         except Exception as e:
             print(f"[CENTRAL] ⚠️ Error obteniendo clave de BD: {e}")
+    
+    # Si no está en BD, buscar en archivo local (fallback)
+    claves_archivo = _cargar_claves_desde_archivo()
+    if cp_id in claves_archivo:
+        key_bytes = claves_archivo[cp_id]
+        with CP_ENCRYPTION_KEYS_LOCK:
+            CP_ENCRYPTION_KEYS[cp_id] = key_bytes
+        print(f"[CENTRAL] Clave de {cp_id} cargada desde archivo local (BD no disponible)")
+        return key_bytes
     
     # Si no existe, generar nueva
     nueva_clave = generar_clave_cifrado()
     
-    # Almacenar en BD
-    if db_connection and db_connection.is_connected():
+    # Almacenar en BD si está disponible
+    if _verificar_conexion(db_connection):
         try:
             cursor = db_connection.cursor()
             key_b64 = base64.b64encode(nueva_clave).decode('utf-8')
@@ -232,14 +290,36 @@ def obtener_clave_cifrado_cp(cp_id: str, db_connection = None) -> bytes:
             """, (cp_id, key_b64))
             db_connection.commit()
             cursor.close()
+            print(f"[CENTRAL] Clave de {cp_id} guardada en BD")
         except Exception as e:
             print(f"[CENTRAL] ⚠️ Error guardando clave en BD: {e}")
+            # Si falla BD, guardar en archivo
+            with CP_ENCRYPTION_KEYS_LOCK:
+                claves_temp = CP_ENCRYPTION_KEYS.copy()
+                claves_temp[cp_id] = nueva_clave
+                _guardar_claves_en_archivo(claves_temp)
+                print(f"[CENTRAL] Clave de {cp_id} guardada en archivo local (BD no disponible)")
+    else:
+        # BD no disponible, guardar en archivo
+        with CP_ENCRYPTION_KEYS_LOCK:
+            claves_temp = CP_ENCRYPTION_KEYS.copy()
+            claves_temp[cp_id] = nueva_clave
+            _guardar_claves_en_archivo(claves_temp)
+            print(f"[CENTRAL] Clave de {cp_id} guardada en archivo local (BD no disponible)")
     
     # Almacenar en memoria
     with CP_ENCRYPTION_KEYS_LOCK:
         CP_ENCRYPTION_KEYS[cp_id] = nueva_clave
     
     return nueva_clave
+
+def _inicializar_claves_desde_archivo():
+    """Carga las claves desde archivo al iniciar (si BD no está disponible)."""
+    claves_archivo = _cargar_claves_desde_archivo()
+    if claves_archivo:
+        with CP_ENCRYPTION_KEYS_LOCK:
+            CP_ENCRYPTION_KEYS.update(claves_archivo)
+        print(f"[CENTRAL] {len(claves_archivo)} claves cargadas desde archivo local (BD no disponible)")
 
 def cifrar_mensaje(mensaje: bytes, clave: bytes) -> bytes:
     """Cifra un mensaje usando Fernet."""
@@ -266,7 +346,7 @@ def revocar_clave_cifrado(cp_id: str, db_connection = None) -> bool:
                 del CP_ENCRYPTION_KEYS[cp_id]
         
         # Marcar como inactiva en BD
-        if db_connection and db_connection.is_connected():
+        if _verificar_conexion(db_connection):
             cursor = db_connection.cursor()
             cursor.execute("""
                 UPDATE cp_encryption_keys 
@@ -379,7 +459,7 @@ def verificar_credenciales_registry(cp_id: str, username: str, password: str) ->
             return False
         
         connection = conectar_bd(cfg)
-        if not connection or not connection.is_connected():
+        if not _verificar_conexion(connection):
             print(f"[CENTRAL] ❌ No se pudo conectar a la BD para verificar credenciales")
             return False
         
@@ -439,7 +519,7 @@ def verificar_credenciales_registry(cp_id: str, username: str, password: str) ->
             
         except Error as e:
             print(f"[CENTRAL] ❌ Error de BD verificando credenciales: {e}")
-            if connection and connection.is_connected():
+            if _verificar_conexion(connection):
                 connection.close()
             return False
             
@@ -1570,7 +1650,7 @@ def consumir_comandos_control_kafka(broker_list: str):
             print("[KAFKA CONSUMER] Consumidor de comandos de control cerrado.")
 
 
-def consumir_solicitudes_driver_kafka(broker_list: str, db_connection: mysql.connector.connection.MySQLConnection):
+def consumir_solicitudes_driver_kafka(broker_list: str, db_connection):
     """
     Se conecta a Kafka y consume mensajes del tópico de solicitudes de drivers.
     """
@@ -1946,8 +2026,23 @@ def descomponer_trama(trama_bytes: bytes, cp_id: str = None) -> tuple:
 #                      FUNCIONES DE BASE DE DATOS
 # =================================================================
 
-def conectar_bd(db_config: str) -> mysql.connector.connection.MySQLConnection:
-    """Establece conexión con la base de datos MySQL."""
+def _verificar_conexion(connection):
+    """Verifica si una conexión MySQL está activa (compatible con PyMySQL y mysql.connector)."""
+    if connection is None:
+        return False
+    try:
+        if PYMySQL_AVAILABLE:
+            # PyMySQL: intentar hacer un ping
+            connection.ping(reconnect=False)
+            return True
+        else:
+            # mysql.connector: usar is_connected()
+            return connection.is_connected()
+    except:
+        return False
+
+def conectar_bd(db_config: str):
+    """Establece conexión con la base de datos MariaDB/MySQL."""
     try:
         # Parsear la configuración de BD (formato: host:port:user:password:database)
         if not db_config:
@@ -1959,30 +2054,58 @@ def conectar_bd(db_config: str) -> mysql.connector.connection.MySQLConnection:
         
         host, port, user, password, database = parts
         
-        connection = mysql.connector.connect(
-            host=host,
-            port=int(port),
-            user=user,
-            password=password,
-            database=database,
-            autocommit=True,
-            charset='utf8mb4',
-            collation='utf8mb4_general_ci',
-            ssl_disabled=True  # Deshabilitar SSL para evitar errores con Docker MySQL
-        )
+        # Intentar conexión con PyMySQL (más compatible con MySQL 8)
+        if PYMySQL_AVAILABLE:
+            try:
+                connection = pymysql.connect(
+                    host=host,
+                    port=int(port),
+                    user=user,
+                    password=password,
+                    database=database,
+                    charset='utf8mb4',
+                    cursorclass=pymysql.cursors.DictCursor,
+                    autocommit=True,
+                    connect_timeout=10
+                )
+                print(f"[CENTRAL] ✓ Conectado a MariaDB en {host}:{port} (usando PyMySQL)")
+                return connection
+            except Exception as e:
+                # Si falla, intentar con mysql.connector como fallback
+                print(f"[CENTRAL] ⚠️ PyMySQL falló: {e}, intentando mysql.connector...")
         
-        if connection.is_connected():
-            print(f"[CENTRAL] Conectado a MySQL en {host}:{port}")
-            return connection
+        # Fallback a mysql.connector
+        if MYSQL_CONNECTOR_AVAILABLE:
+            try:
+                connection_params = {
+                    'host': host,
+                    'port': int(port),
+                    'user': user,
+                    'password': password,
+                    'database': database,
+                    'autocommit': True,
+                    'charset': 'utf8mb4',
+                    'collation': 'utf8mb4_general_ci',
+                    'ssl_disabled': True,
+                    'allow_local_infile': True,
+                    'use_unicode': True,
+                    'connection_timeout': 10
+                }
+                connection = mysql.connector.connect(**connection_params)
+                if connection.is_connected():
+                    print(f"[CENTRAL] ✓ Conectado a MariaDB en {host}:{port} (usando mysql.connector)")
+                    return connection
+            except Exception as e:
+                print(f"[CENTRAL] ❌ Error conectando con mysql.connector: {e}")
+                raise
+        else:
+            raise ImportError("Ni PyMySQL ni mysql.connector están disponibles. Instala uno de ellos: pip install pymysql o pip install mysql-connector-python")
             
-    except Error as e:
+    except Exception as e:
         print(f"[CENTRAL] Error conectando a MySQL: {e}")
         raise
-    except Exception as e:
-        print(f"[CENTRAL] Error inesperado en conexión BD: {e}")
-        raise
 
-def registrar_cp_en_bd(connection: mysql.connector.connection.MySQLConnection, 
+def registrar_cp_en_bd(connection, 
                        cp_id: str, ubicacion: str, precio_kwh: float) -> bool:
     """Registra o actualiza un CP en la base de datos y lo marca como Activado."""
     try:
@@ -1994,7 +2117,12 @@ def registrar_cp_en_bd(connection: mysql.connector.connection.MySQLConnection,
         
         if result:
             # CP existe, actualizar estado y fecha de conexión
-            cp_db_id, estado_actual = result
+            # Compatible con PyMySQL (dict) y mysql.connector (tuple)
+            if isinstance(result, dict):
+                cp_db_id = result.get('id')
+                estado_actual = result.get('estado')
+            else:
+                cp_db_id, estado_actual = result
             cursor.execute("""
                 UPDATE charging_points 
                 SET estado = 'Activado', fecha_ultima_conexion = %s 
@@ -2019,7 +2147,7 @@ def registrar_cp_en_bd(connection: mysql.connector.connection.MySQLConnection,
         print(f"[CENTRAL] Error inesperado al registrar CP {cp_id}: {e}")
         return False
 
-def _asegurar_conexion_bd(connection: mysql.connector.connection.MySQLConnection | None) -> mysql.connector.connection.MySQLConnection | None:
+def _asegurar_conexion_bd(connection) -> any:
     """Verifica y, si es necesario, reestablece la conexión a BD usando DB_CONFIG_STR."""
     try:
         if connection and connection.is_connected():
@@ -2038,7 +2166,7 @@ def _asegurar_conexion_bd(connection: mysql.connector.connection.MySQLConnection
         return connection
 
 
-def actualizar_estado_cp(connection: mysql.connector.connection.MySQLConnection | None, 
+def actualizar_estado_cp(connection, 
                          cp_id: str, nuevo_estado: str) -> bool:
     """Actualiza el estado de un CP en la base de datos."""
     if connection is None:
@@ -2109,7 +2237,7 @@ def actualizar_estado_cp(connection: mysql.connector.connection.MySQLConnection 
         traceback.print_exc()
         return False
 
-def obtener_estado_cp(connection: mysql.connector.connection.MySQLConnection, cp_id: str):
+def obtener_estado_cp(connection, cp_id: str):
     """Obtiene el estado actual del CP desde la BD. Devuelve str o None si no existe.
     Primero busca en charging_points, si no encuentra, verifica cp_registry como fallback."""
     try:
@@ -2119,7 +2247,11 @@ def obtener_estado_cp(connection: mysql.connector.connection.MySQLConnection, cp
         result = cursor.fetchone()
         if result:
             cursor.close()
-            return result[0]
+            # Compatible con PyMySQL (dict) y mysql.connector (tuple)
+            if isinstance(result, dict):
+                return result.get('estado')
+            else:
+                return result[0]
         
         # Si no está en charging_points, verificar si está registrado en cp_registry
         # (puede estar registrado en Registry pero no en charging_points si se conectó sin BD)
@@ -2486,7 +2618,7 @@ def iniciar_interfaz_visual():
             live.update(render_panel())
             time.sleep(2)
             
-def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.connector.connection.MySQLConnection):
+def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
     """Función ejecutada por un hilo para manejar la conexión de un CP."""
     
     print(f"[CENTRAL] Conexión establecida con {addr[0]}:{addr[1]}")
@@ -2697,7 +2829,7 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
             clave_b64 = base64.b64encode(clave_cifrado).decode('utf-8')
             
             # --- LÓGICA BD: Insertar/Actualizar CP y marcar como ACTIVADO ---
-            if db_connection and db_connection.is_connected():
+            if _verificar_conexion(db_connection):
                 if registrar_cp_en_bd(db_connection, cp_id, ubicacion, precio_kwh):
                     # Enviar AUTH con clave de cifrado (sin cifrar, es el primer mensaje después de REG)
                     respuesta_trama = construir_trama('AUTH', ['OK', 'Autenticacion exitosa', clave_b64], cp_id=None, cifrar=False)
@@ -2731,7 +2863,7 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                 print(f"[CENTRAL] ADVERTENCIA: Sin conexión a BD, intentando reconectar...")
                 db_connection = _asegurar_conexion_bd(db_connection)
                 
-                if db_connection and db_connection.is_connected():
+                if _verificar_conexion(db_connection):
                     # Reconectó, intentar registrar ahora
                     if registrar_cp_en_bd(db_connection, cp_id, ubicacion, precio_kwh):
                         respuesta_trama = construir_trama('AUTH', ['OK', 'Autenticacion exitosa', clave_b64], cp_id=None, cifrar=False)
@@ -3447,7 +3579,7 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
                     registrar_evento(f"🛑 Suministro finalizado en {cp_id} debido a desconexión inesperada del Monitor", "warn")
             
             # Marcar el CP como DESCONECTADO (no AVERIADO, porque es el Monitor quien se desconectó, no el Engine)
-            if db_connection and db_connection.is_connected():
+            if _verificar_conexion(db_connection):
                 actualizar_estado_cp(db_connection, cp_id, "Desconectado")
             try:
                 cambiar_estado_cp(cp_id, 'DESCONECTADO', db_connection, motivo='Desconexión inesperada del Monitor')
@@ -3484,7 +3616,7 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection: mysql.conne
         conn.close()
         print(f"[CENTRAL] Hilo de conexión con {addr[0]}:{addr[1]} finalizado.")
 
-def cambiar_estado_cp(cp_id: str, nuevo_estado: str, db_connection: mysql.connector.connection.MySQLConnection | None = None, motivo: str | None = None) -> None:
+def cambiar_estado_cp(cp_id: str, nuevo_estado: str, db_connection = None, motivo: str | None = None) -> None:
     """Actualiza el estado interno y la BD, y registra en el log/TUI.
     Estados esperados: DESCONECTADO, ACTIVADO, PRE-SUMINISTRO, SUMINISTRANDO, PARADO, AVERÍA.
     """
@@ -3505,7 +3637,7 @@ def cambiar_estado_cp(cp_id: str, nuevo_estado: str, db_connection: mysql.connec
     registrar_evento(f"[ESTADO] {cp_id} -> {nuevo_estado_norm}{detalle}.{extra}")
     # Persistir en BD si está disponible
     try:
-        if db_connection and db_connection.is_connected():
+        if _verificar_conexion(db_connection):
             # Mapear a nombres en BD (usar Title case como en funciones existentes)
             mapa_bd = {
                 'DESCONECTADO': 'Desconectado',
@@ -3552,12 +3684,21 @@ def main():
     if args.db:
         try:
             db_connection = conectar_bd(args.db)
+            print("[EV_Central] Base de datos conectada correctamente")
         except Exception as e:
             print(f"[EV_Central] ADVERTENCIA: No se pudo conectar a BD: {e}")
+            print("[EV_Central] NOTA: El sistema funcionará sin persistencia de datos.")
+            print("[EV_Central] Las funcionalidades básicas (comunicación con CPs, Kafka) seguirán funcionando.")
+            print("[EV_Central] Las claves de cifrado se guardarán en archivo local como respaldo.")
             print("[EV_Central] Continuando sin persistencia de datos...")
+            db_connection = None
+            # Cargar claves desde archivo si BD no está disponible
+            _inicializar_claves_desde_archivo()
     else:
         print("[EV_Central] ADVERTENCIA: No se proporcionó configuración de BD")
         print("[EV_Central] Continuando sin persistencia de datos...")
+        # Cargar claves desde archivo si no hay BD
+        _inicializar_claves_desde_archivo()
 
     # Hacer accesible la conexión BD y configuración para el consumidor de telemetría (histórico)
     globals()['_DB_CONN_FOR_CONSUMER'] = db_connection
@@ -3566,7 +3707,7 @@ def main():
     # Al iniciar, marcar todos los CPs en BD como Desconectado
     # Solo se marcarán como activos cuando se reconecten
     try:
-        if db_connection and db_connection.is_connected():
+        if _verificar_conexion(db_connection):
             cursor = db_connection.cursor()
             # Marcar todos los CPs como desconectados (inicio limpio)
             cursor.execute("UPDATE charging_points SET estado = 'Desconectado'")
@@ -3730,7 +3871,7 @@ def main():
                     print(f"[EV_Central] Error cerrando servidor socket: {e}")
             
             # Cerrar conexión a BD
-            if db_connection and db_connection.is_connected():
+            if _verificar_conexion(db_connection):
                 try:
                     db_connection.close()
                     print("[EV_Central] Conexión a BD cerrada.")

@@ -7,8 +7,22 @@ Uso:
     python EV_Registry.py --db-host 127.0.0.1 --db-port 3306 --db-user root --db-password root --db-name evcharging --port 6000
 """
 
-import mysql.connector
-from mysql.connector import Error
+try:
+    import pymysql
+    import pymysql.cursors
+    from pymysql import Error
+    PYMySQL_AVAILABLE = True
+    MySQLCursorDict = None  # No se usa con PyMySQL
+except ImportError:
+    import mysql.connector
+    from mysql.connector import Error
+    try:
+        from mysql.connector.cursor import MySQLCursorDict
+    except ImportError:
+        # Fallback para versiones antiguas de mysql.connector
+        from mysql.connector.cursor import MySQLCursor
+        MySQLCursorDict = MySQLCursor
+    PYMySQL_AVAILABLE = False
 import argparse
 import hashlib
 import secrets
@@ -19,6 +33,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import ssl
 import os
+import json
 
 # =================================================================
 #                    CONFIGURACIÓN GLOBAL
@@ -32,6 +47,14 @@ DB_CONFIG = {}
 
 # Puerto del servidor
 REGISTRY_PORT = 6000
+
+# Archivos para fallback cuando BD no está disponible
+REGISTRY_DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'data')
+REGISTRY_CP_FILE = os.path.join(REGISTRY_DATA_DIR, 'cp_registry.json')
+REGISTRY_CREDS_FILE = os.path.join(REGISTRY_DATA_DIR, 'cp_credentials.json')
+
+# Flag para indicar si BD está disponible
+BD_DISPONIBLE = False
 
 # API Key compartida para autenticación de aplicaciones externas (Monitores)
 # Se puede configurar mediante variable de entorno REGISTRY_API_KEY
@@ -74,19 +97,264 @@ def require_api_key(f):
 
 def obtener_conexion_bd():
     """Obtiene una conexión a la base de datos."""
+    global BD_DISPONIBLE
     try:
-        connection = mysql.connector.connect(
-            host=DB_CONFIG['host'],
-            port=DB_CONFIG['port'],
-            user=DB_CONFIG['user'],
-            password=DB_CONFIG['password'],
-            database=DB_CONFIG['database'],
-            ssl_disabled=True  # Deshabilitar SSL para evitar errores con Docker MySQL
-        )
+        if PYMySQL_AVAILABLE:
+            # Usar PyMySQL (más compatible con MySQL 8)
+            connection = pymysql.connect(
+                host=DB_CONFIG['host'],
+                port=DB_CONFIG['port'],
+                user=DB_CONFIG['user'],
+                password=DB_CONFIG['password'],
+                database=DB_CONFIG['database'],
+                charset='utf8mb4',
+                cursorclass=pymysql.cursors.DictCursor,
+                autocommit=True,
+                connect_timeout=10
+            )
+        else:
+            # Fallback a mysql.connector
+            connection = mysql.connector.connect(
+                host=DB_CONFIG['host'],
+                port=DB_CONFIG['port'],
+                user=DB_CONFIG['user'],
+                password=DB_CONFIG['password'],
+                database=DB_CONFIG['database'],
+                charset='utf8mb4',
+                collation='utf8mb4_general_ci',
+                use_unicode=True,
+                ssl_disabled=True
+            )
+        BD_DISPONIBLE = True
         return connection
     except Error as e:
-        print(f"[EV_Registry] ❌ Error conectando a BD: {e}")
+        print(f"[EV_Registry] ⚠️ Error conectando a BD: {e}")
+        print(f"[EV_Registry] Usando almacenamiento en archivos locales como fallback")
+        BD_DISPONIBLE = False
         return None
+    except Exception as e:
+        print(f"[EV_Registry] ⚠️ Error inesperado conectando a BD: {e}")
+        print(f"[EV_Registry] Usando almacenamiento en archivos locales como fallback")
+        BD_DISPONIBLE = False
+        return None
+
+def obtener_cursor_dict(connection):
+    """Obtiene un cursor que devuelve resultados como diccionarios.
+    Compatible con pymysql y mysql.connector."""
+    if PYMySQL_AVAILABLE:
+        # PyMySQL ya está configurado con DictCursor en la conexión
+        return connection.cursor()
+    else:
+        # mysql.connector: usar dictionary=True directamente
+        return connection.cursor(dictionary=True)
+
+# =================================================================
+#                    FUNCIONES DE FALLBACK (ARCHIVOS)
+# =================================================================
+
+def _cargar_registros_desde_archivo() -> dict:
+    """Carga los registros de CPs desde archivo JSON."""
+    try:
+        os.makedirs(REGISTRY_DATA_DIR, exist_ok=True)
+        if os.path.exists(REGISTRY_CP_FILE):
+            with open(REGISTRY_CP_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+    except Exception as e:
+        print(f"[EV_Registry] ⚠️ Error cargando registros desde archivo: {e}")
+    return {}
+
+def _guardar_registros_en_archivo(registros: dict):
+    """Guarda los registros de CPs en archivo JSON."""
+    try:
+        os.makedirs(REGISTRY_DATA_DIR, exist_ok=True)
+        with open(REGISTRY_CP_FILE, 'w', encoding='utf-8') as f:
+            json.dump(registros, f, indent=2, ensure_ascii=False)
+    except Exception as e:
+        print(f"[EV_Registry] ⚠️ Error guardando registros en archivo: {e}")
+
+def _cargar_credenciales_desde_archivo() -> dict:
+    """Carga las credenciales desde archivo JSON."""
+    try:
+        os.makedirs(REGISTRY_DATA_DIR, exist_ok=True)
+        if os.path.exists(REGISTRY_CREDS_FILE):
+            with open(REGISTRY_CREDS_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+    except Exception as e:
+        print(f"[EV_Registry] ⚠️ Error cargando credenciales desde archivo: {e}")
+    return {}
+
+def _guardar_credenciales_en_archivo(credenciales: dict):
+    """Guarda las credenciales en archivo JSON."""
+    try:
+        os.makedirs(REGISTRY_DATA_DIR, exist_ok=True)
+        with open(REGISTRY_CREDS_FILE, 'w', encoding='utf-8') as f:
+            json.dump(credenciales, f, indent=2, ensure_ascii=False)
+    except Exception as e:
+        print(f"[EV_Registry] ⚠️ Error guardando credenciales en archivo: {e}")
+
+def _registrar_cp_archivo(cp_id: str, ubicacion: str):
+    """Registra un CP usando archivos (fallback cuando BD no está disponible)."""
+    registros = _cargar_registros_desde_archivo()
+    credenciales = _cargar_credenciales_desde_archivo()
+    
+    ahora = datetime.now().isoformat()
+    
+    if cp_id in registros:
+        if registros[cp_id].get('activo', True):
+            # CP ya registrado: regenerar credenciales
+            username, password = generar_credenciales()
+            password_hash, salt = generar_password_hash(password)
+            
+            registros[cp_id]['ubicacion'] = ubicacion
+            registros[cp_id]['fecha_ultima_actualizacion'] = ahora
+            
+            credenciales[cp_id] = {
+                'username': username,
+                'password_hash': password_hash,
+                'salt': salt,
+                'activo': True,
+                'fecha_creacion': ahora,
+                'fecha_ultima_actualizacion': ahora
+            }
+            
+            _guardar_registros_en_archivo(registros)
+            _guardar_credenciales_en_archivo(credenciales)
+            
+            print(f"[EV_Registry] ✓ Credenciales regeneradas para CP {cp_id} (archivo)")
+            return jsonify({
+                'status': 'ok',
+                'cp_id': cp_id,
+                'username': username,
+                'password': password,
+                'message': f'CP {cp_id} ya registrado. Credenciales regeneradas.'
+            }), 200
+        else:
+            # Reactivar CP
+            registros[cp_id]['activo'] = True
+            registros[cp_id]['ubicacion'] = ubicacion
+            registros[cp_id]['fecha_ultima_actualizacion'] = ahora
+            
+            username, password = generar_credenciales()
+            password_hash, salt = generar_password_hash(password)
+            
+            credenciales[cp_id] = {
+                'username': username,
+                'password_hash': password_hash,
+                'salt': salt,
+                'activo': True,
+                'fecha_creacion': ahora,
+                'fecha_ultima_actualizacion': ahora
+            }
+            
+            _guardar_registros_en_archivo(registros)
+            _guardar_credenciales_en_archivo(credenciales)
+            
+            print(f"[EV_Registry] ✓ CP {cp_id} reactivado (archivo)")
+            return jsonify({
+                'status': 'ok',
+                'cp_id': cp_id,
+                'username': username,
+                'password': password,
+                'message': f'CP {cp_id} reactivado y credenciales generadas'
+            }), 200
+    
+    # Nuevo CP
+    registros[cp_id] = {
+        'cp_id': cp_id,
+        'ubicacion': ubicacion,
+        'fecha_registro': ahora,
+        'fecha_ultima_actualizacion': ahora,
+        'activo': True
+    }
+    
+    username, password = generar_credenciales()
+    password_hash, salt = generar_password_hash(password)
+    
+    credenciales[cp_id] = {
+        'username': username,
+        'password_hash': password_hash,
+        'salt': salt,
+        'activo': True,
+        'fecha_creacion': ahora,
+        'fecha_ultima_actualizacion': ahora
+    }
+    
+    _guardar_registros_en_archivo(registros)
+    _guardar_credenciales_en_archivo(credenciales)
+    
+    print(f"[EV_Registry] ✓ CP {cp_id} registrado correctamente (archivo)")
+    return jsonify({
+        'status': 'ok',
+        'cp_id': cp_id,
+        'username': username,
+        'password': password,
+        'message': f'CP {cp_id} registrado correctamente'
+    }), 201
+
+def _dar_baja_cp_archivo(cp_id: str):
+    """Da de baja un CP usando archivos (fallback cuando BD no está disponible)."""
+    registros = _cargar_registros_desde_archivo()
+    credenciales = _cargar_credenciales_desde_archivo()
+    
+    if cp_id not in registros:
+        return jsonify({
+            'status': 'error',
+            'message': f'CP {cp_id} no encontrado'
+        }), 404
+    
+    registros[cp_id]['activo'] = False
+    registros[cp_id]['fecha_ultima_actualizacion'] = datetime.now().isoformat()
+    
+    if cp_id in credenciales:
+        credenciales[cp_id]['activo'] = False
+        credenciales[cp_id]['fecha_ultima_actualizacion'] = datetime.now().isoformat()
+    
+    _guardar_registros_en_archivo(registros)
+    _guardar_credenciales_en_archivo(credenciales)
+    
+    print(f"[EV_Registry] ✓ CP {cp_id} dado de baja (archivo)")
+    return jsonify({
+        'status': 'ok',
+        'cp_id': cp_id,
+        'message': f'CP {cp_id} dado de baja correctamente'
+    }), 200
+
+def _autenticar_cp_archivo(cp_id: str, username: str, password: str):
+    """Autentica un CP usando archivos (fallback cuando BD no está disponible)."""
+    registros = _cargar_registros_desde_archivo()
+    credenciales = _cargar_credenciales_desde_archivo()
+    
+    if cp_id not in registros or not registros[cp_id].get('activo', False):
+        return jsonify({
+            'status': 'error',
+            'message': f'CP {cp_id} no registrado o inactivo'
+        }), 401
+    
+    if cp_id not in credenciales or not credenciales[cp_id].get('activo', False):
+        return jsonify({
+            'status': 'error',
+            'message': f'CP {cp_id} no tiene credenciales activas'
+        }), 401
+    
+    cred = credenciales[cp_id]
+    if cred['username'] != username:
+        return jsonify({
+            'status': 'error',
+            'message': 'Credenciales inválidas'
+        }), 401
+    
+    if not verificar_password(password, cred['password_hash'], cred['salt']):
+        return jsonify({
+            'status': 'error',
+            'message': 'Credenciales inválidas'
+        }), 401
+    
+    print(f"[EV_Registry] ✓ CP {cp_id} autenticado correctamente (archivo)")
+    return jsonify({
+        'status': 'ok',
+        'cp_id': cp_id,
+        'message': 'Autenticación exitosa'
+    }), 200
 
 def inicializar_tablas():
     """Inicializa las tablas necesarias en la base de datos."""
@@ -229,14 +497,13 @@ def registrar_cp():
         
         # Verificar si el CP ya está registrado
         connection = obtener_conexion_bd()
-        if not connection:
-            return jsonify({
-                'status': 'error',
-                'message': 'Error de conexión a base de datos'
-            }), 500
+        
+        # Si no hay BD, usar archivos
+        if not connection and not BD_DISPONIBLE:
+            return _registrar_cp_archivo(cp_id, ubicacion)
         
         try:
-            cursor = connection.cursor(dictionary=True)
+            cursor = obtener_cursor_dict(connection)
             
             # Verificar si existe
             cursor.execute("SELECT * FROM cp_registry WHERE cp_id = %s", (cp_id,))
@@ -428,7 +695,7 @@ def consultar_cp(cp_id):
             }), 500
         
         try:
-            cursor = connection.cursor(dictionary=True)
+            cursor = obtener_cursor_dict(connection)
             
             # Obtener información del CP
             cursor.execute("""
@@ -491,8 +758,12 @@ def dar_baja_cp(cp_id):
             "message": "CP dado de baja correctamente"
         }
     """
+    # Si no hay BD, usar archivos
+    connection = obtener_conexion_bd()
+    if not connection and not BD_DISPONIBLE:
+        return _dar_baja_cp_archivo(cp_id)
+    
     try:
-        connection = obtener_conexion_bd()
         if not connection:
             return jsonify({
                 'status': 'error',
@@ -593,6 +864,25 @@ def autenticar_cp():
             }), 400
         
         connection = obtener_conexion_bd()
+        
+        # Si no hay BD, usar archivos
+        if not connection and not BD_DISPONIBLE:
+            # Buscar cp_id por username en archivos
+            credenciales = _cargar_credenciales_desde_archivo()
+            cp_id = None
+            for cp, cred in credenciales.items():
+                if cred.get('username') == username:
+                    cp_id = cp
+                    break
+            
+            if not cp_id:
+                return jsonify({
+                    'status': 'error',
+                    'message': 'Credenciales inválidas'
+                }), 401
+            
+            return _autenticar_cp_archivo(cp_id, username, password)
+        
         if not connection:
             return jsonify({
                 'status': 'error',
@@ -600,7 +890,7 @@ def autenticar_cp():
             }), 500
         
         try:
-            cursor = connection.cursor(dictionary=True)
+            cursor = obtener_cursor_dict(connection)
             
             # Buscar credenciales
             cursor.execute("""
@@ -694,7 +984,7 @@ def listar_cps():
             }), 500
         
         try:
-            cursor = connection.cursor(dictionary=True)
+            cursor = obtener_cursor_dict(connection)
             cursor.execute("""
                 SELECT r.cp_id, r.ubicacion, r.fecha_registro, r.activo,
                        c.username, c.activo as credenciales_activas

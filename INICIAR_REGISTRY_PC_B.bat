@@ -28,24 +28,55 @@ echo.
 REM ============================================================
 REM  PASO 1: DETECTAR IP DE BASE DE DATOS (PC_A)
 REM ============================================================
-echo [1/4] DETECTANDO IP DE BASE DE DATOS EN PC_A
+echo [1/4] DETECTANDO IP DE BASE DE DATOS
 echo.
+
+REM Detectar IP local para verificar si estamos en el mismo PC
+set LOCAL_IP=
+for /f "tokens=2 delims=:" %%a in ('ipconfig ^| findstr /C:"IPv4" ^| findstr /V "127.0.0.1" ^| findstr /V "169.254"') do (
+    set TEMP_IP=%%a
+    set TEMP_IP=!TEMP_IP: =!
+    if not "!TEMP_IP!"=="" (
+        set LOCAL_IP=!TEMP_IP!
+        goto :local_ip_found
+    )
+)
+:local_ip_found
 
 REM Leer IP de PC_A desde central_ip.txt
 set CENTRAL_IP_BD=
 if exist central_ip.txt (
     for /f "tokens=*" %%i in (central_ip.txt) do set CENTRAL_IP_BD=%%i
-    echo [OK] IP de BD ^(PC_A^) detectada desde central_ip.txt: !CENTRAL_IP_BD!
+    echo [INFO] IP en central_ip.txt: !CENTRAL_IP_BD!
+    echo [INFO] IP local detectada: !LOCAL_IP!
+    echo.
+    
+    REM Verificar si estamos en el mismo PC
+    if "!CENTRAL_IP_BD!"=="!LOCAL_IP!" (
+        echo [DETECTADO] Ejecutandose en el mismo PC que Central
+        echo [INFO] Usando localhost para conexion local
+        set CENTRAL_IP_BD=127.0.0.1
+        goto :ip_found
+    )
+    
+    REM Verificar si la IP es de Docker (172.17.x.x o 172.18.x.x)
+    echo !CENTRAL_IP_BD! | findstr /R "^172\.17\." >nul
+    if %errorlevel% equ 0 (
+        echo [DETECTADO] IP de Docker detectada, probablemente mismo PC
+        echo [INFO] Usando localhost para conexion local
+        set CENTRAL_IP_BD=127.0.0.1
+        goto :ip_found
+    )
+    
+    echo [OK] IP de BD remota ^(PC_A^): !CENTRAL_IP_BD!
     goto :ip_found
 )
 
-echo [ERROR] No se encuentra central_ip.txt
-echo.
-echo Debes copiar el archivo central_ip.txt desde PC_A a este directorio.
-echo El archivo se genera automaticamente cuando ejecutas PC_A_RUN.bat
-echo.
-pause
-exit /b 1
+REM Si no hay central_ip.txt, asumir que estamos en el mismo PC
+echo [INFO] No se encuentra central_ip.txt
+echo [INFO] Asumiendo que se ejecuta en el mismo PC que Central
+echo [INFO] Usando localhost para conexion local
+set CENTRAL_IP_BD=127.0.0.1
 
 :ip_found
 echo.
@@ -83,39 +114,118 @@ echo [3/4] VERIFICANDO CONEXIÓN A BASE DE DATOS EN PC_A
 echo.
 
 echo [INFO] Configuracion:
-echo   - Base de datos en PC_A: !CENTRAL_IP_BD!:3306
+if "!CENTRAL_IP_BD!"=="127.0.0.1" (
+    echo   - Base de datos: localhost:3306 ^(mismo PC^)
+) else (
+    echo   - Base de datos en PC_A: !CENTRAL_IP_BD!:3306
+)
 echo   - Database: evcharging
+echo   - Usuario: root ^(SIN CONTRASEÑA^)
 echo   - Puerto Registry: 6000
 echo.
-echo Verificando que MySQL en PC_A esta accesible ^(!CENTRAL_IP_BD!:3306^)...
+echo Verificando que MySQL esta accesible ^(!CENTRAL_IP_BD!:3306^)...
 echo ^(Esto puede tardar unos segundos^)
 echo.
 
-REM Verificar conexión usando Python
-!PYTHON_CMD! -c "import sys; import mysql.connector; conn = mysql.connector.connect(host='!CENTRAL_IP_BD!', port=3306, user='root', password='root', database='evcharging', connection_timeout=5); conn.close(); sys.exit(0)" 2>nul
+REM Verificar conexión usando Python (root sin contraseña) con collation correcta
+!PYTHON_CMD! -c "import sys; import mysql.connector; conn = mysql.connector.connect(host='!CENTRAL_IP_BD!', port=3306, user='root', password='', database='evcharging', charset='utf8mb4', collation='utf8mb4_general_ci', use_unicode=True, connection_timeout=5); conn.close(); sys.exit(0)" 2>nul
 set MYSQL_CHECK_RESULT=%errorlevel%
 
 if !MYSQL_CHECK_RESULT! neq 0 (
-    echo [ERROR] No se pudo conectar a MySQL en PC_A ^(!CENTRAL_IP_BD!:3306^)
+    echo [ERROR] No se pudo conectar a MySQL ^(!CENTRAL_IP_BD!:3306^)
     echo.
-    echo VERIFICA:
-    echo   1. PC_A_RUN.bat esta ejecutandose en PC_A
-    echo   2. MySQL esta activo en PC_A
-    echo   3. Firewall en PC_A permite conexiones al puerto 3306
-    echo   4. La IP !CENTRAL_IP_BD! es correcta ^(verifica en PC_A^)
-    echo   5. Ambos PCs estan en la misma red
+    if "!CENTRAL_IP_BD!"=="127.0.0.1" (
+        echo DIAGNOSTICO:
+        echo.
+        echo [1] Verificando si MariaDB esta corriendo...
+        docker ps --filter "name=mariadb" --format "{{.Names}}\t{{.Status}}" 2>nul
+        REM Verificar de manera mas robusta - probar ejecutar comando directamente
+        docker exec mariadb echo "test" >nul 2>&1
+        if %errorlevel% neq 0 (
+            echo [ERROR] MariaDB NO esta corriendo o no responde
+            echo.
+            echo SOLUCION: Ejecuta PC_A_RUN.bat primero para iniciar MariaDB
+            echo O ejecuta: docker-compose up -d mariadb
+            echo.
+            pause
+            exit /b 1
+        )
+        echo [OK] MariaDB esta corriendo y responde
+        echo.
+        echo [2] Verificando que MariaDB esta listo...
+        docker exec mariadb mariadb-admin ping -h localhost -uroot >nul 2>&1
+        if %errorlevel% neq 0 (
+            echo [ADVERTENCIA] MariaDB puede no estar listo aun
+            echo Esperando 5 segundos...
+            timeout /t 5 /nobreak >nul
+        )
+        echo [OK] MariaDB esta listo
+        echo.
+        echo [3] Verificando usuarios root existentes...
+        docker exec mariadb mysql -u root -e "SELECT User, Host FROM mysql.user WHERE User='root';" 2>&1
+        echo.
+        echo [4] Configurando root sin contraseña si es necesario...
+        REM Intentar primero sin contraseña (puede que ya este configurado)
+        docker exec mariadb mysql -u root -e "SELECT 1;" >nul 2>&1
+        if %errorlevel% neq 0 (
+            REM Si falla, intentar con contraseña temporal 'root' y luego eliminarla
+            docker exec mariadb mysql -u root -proot -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '';" 2>&1
+            docker exec mariadb mysql -u root -proot -e "ALTER USER 'root'@'%%' IDENTIFIED BY '';" 2>&1
+            docker exec mariadb mysql -u root -proot -e "CREATE USER IF NOT EXISTS 'root'@'127.0.0.1' IDENTIFIED BY '';" 2>&1
+            docker exec mariadb mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;" 2>&1
+            docker exec mariadb mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%%' WITH GRANT OPTION;" 2>&1
+            docker exec mariadb mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'127.0.0.1' WITH GRANT OPTION;" 2>&1
+            docker exec mariadb mysql -u root -proot -e "FLUSH PRIVILEGES;" 2>&1
+            echo [OK] root configurado sin contraseña
+        ) else (
+            echo [OK] root ya esta configurado sin contraseña
+        )
+        echo.
+        echo [5] Probando conexion desde Python...
+        !PYTHON_CMD! -c "import sys; import mysql.connector; conn = mysql.connector.connect(host='127.0.0.1', port=3306, user='root', password='', database='evcharging', charset='utf8mb4', collation='utf8mb4_general_ci', use_unicode=True, connection_timeout=5); print('[OK] Conexion exitosa'); conn.close(); sys.exit(0)" 2>&1
+        set MYSQL_CHECK_RESULT=%errorlevel%
+        if !MYSQL_CHECK_RESULT! neq 0 (
+            echo [ERROR] Aun no se puede conectar desde Python
+            echo.
+            echo Probando con PyMySQL...
+            !PYTHON_CMD! -c "import sys; import pymysql; conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', password='', database='evcharging', charset='utf8mb4', connect_timeout=5); print('[OK] Conexion exitosa con PyMySQL'); conn.close(); sys.exit(0)" 2>&1
+            set MYSQL_CHECK_RESULT=%errorlevel%
+            if !MYSQL_CHECK_RESULT! neq 0 (
+                echo [ERROR] Ambos drivers fallan
+                echo.
+                echo VERIFICA:
+                echo   1. Que PC_A_RUN.bat se ejecuto completamente
+                echo   2. Que MariaDB termino de inicializarse ^(espera 10-20 segundos^)
+                echo   3. Ejecuta: ELIMINAR_AUTENTICACION.bat
+                echo.
+                pause
+                exit /b 1
+            )
+        )
+        echo [OK] Conexion exitosa despues de configuracion
+        echo.
+    ) else (
+        echo VERIFICA:
+        echo   1. PC_A_RUN.bat esta ejecutandose en PC_A
+        echo   2. MySQL esta activo en PC_A
+        echo   3. Firewall en PC_A permite conexiones al puerto 3306
+        echo   4. La IP !CENTRAL_IP_BD! es correcta ^(verifica en PC_A^)
+        echo   5. Ambos PCs estan en la misma red
+        echo.
+        echo Comando para abrir firewall en PC_A ^(ejecutar en PowerShell como Admin^):
+        echo   New-NetFirewallRule -DisplayName "MySQL" -Direction Inbound -LocalPort 3306 -Protocol TCP -Action Allow
+        echo.
+        echo Prueba de conectividad:
+        echo   ping !CENTRAL_IP_BD!
+    )
     echo.
-    echo Comando para abrir firewall en PC_A ^(ejecutar en PowerShell como Admin^):
-    echo   New-NetFirewallRule -DisplayName "MySQL" -Direction Inbound -LocalPort 3306 -Protocol TCP -Action Allow
-    echo.
-    echo Prueba de conectividad desde PC_B:
-    echo   ping !CENTRAL_IP_BD!
-    echo.
-    pause
-    exit /b 1
 )
 
-echo [OK] MySQL en PC_A esta accesible ^(!CENTRAL_IP_BD!:3306^)
+if "!CENTRAL_IP_BD!"=="127.0.0.1" (
+    echo [OK] MySQL local esta accesible ^(localhost:3306^)
+) else (
+    echo [OK] MySQL en PC_A esta accesible ^(!CENTRAL_IP_BD!:3306^)
+)
 echo [OK] Conexion a base de datos verificada correctamente
 echo.
 
@@ -160,11 +270,18 @@ if !USE_SSL! equ 1 (
         exit /b 1
     )
     
-    echo [INFO] Iniciando EV_Registry en PC_B con HTTPS ^(SSL obligatorio^)...
-    echo [INFO] Conectandose a BD en PC_A: !CENTRAL_IP_BD!:3306
+    echo [INFO] Iniciando EV_Registry con HTTPS ^(SSL obligatorio^)...
+    if "!CENTRAL_IP_BD!"=="127.0.0.1" (
+        echo [INFO] Conectandose a BD local: localhost:3306
+        echo [INFO] Modo: Mismo PC que Central
+    ) else (
+        echo [INFO] Conectandose a BD en PC_A: !CENTRAL_IP_BD!:3306
+        echo [INFO] Modo: PC remoto
+    )
+    echo [INFO] Usuario: root ^(SIN CONTRASEÑA - autenticacion eliminada^)
     echo [INFO] El Registry compartira la BD con EV_Central para sincronizar CPs
     echo.
-    start "EV_Registry_PC_B" cmd /k "!PYTHON_CMD! ev_registry\EV_Registry.py --db-host !CENTRAL_IP_BD! --db-port 3306 --db-user root --db-password root --db-name evcharging --port 6000 --ssl --ssl-cert certificados\registry_cert.pem --ssl-key certificados\registry_key.pem"
+    start "EV_Registry_PC_B" cmd /k "!PYTHON_CMD! ev_registry\EV_Registry.py --db-host !CENTRAL_IP_BD! --db-port 3306 --db-user root --db-password "" --db-name evcharging --port 6000 --ssl --ssl-cert certificados\registry_cert.pem --ssl-key certificados\registry_key.pem"
     echo [OK] EV_Registry iniciado en PC_B con HTTPS ^(puerto 6000^)
     echo   - API REST: https://localhost:6000/register/cp
     echo   - Health Check: https://localhost:6000/api/health
@@ -199,12 +316,17 @@ echo   EV_Registry INICIADO CORRECTAMENTE EN PC_B
 echo ========================================================================
 echo.
 echo [CONFIGURACION]
-echo   - Ubicacion: PC_B ^(este ordenador^)
+if "!CENTRAL_IP_BD!"=="127.0.0.1" (
+    echo   - Ubicacion: Mismo PC que Central
+    echo   - Base de datos: localhost:3306/evcharging ^(conexion local^)
+) else (
+    echo   - Ubicacion: PC_B ^(este ordenador^)
+    echo   - Base de datos: !CENTRAL_IP_BD!:3306/evcharging ^(en PC_A - conexion remota^)
+)
 echo   - Puerto: 6000
 echo   - Protocolo: HTTPS ^(SSL obligatorio - cifrado del canal^)
 echo   - API REST Base: https://localhost:6000/register/cp
-echo   - Base de datos: !CENTRAL_IP_BD!:3306/evcharging ^(en PC_A - conexion remota^)
-echo   - Compartida con: EV_Central en PC_A para validacion de credenciales
+echo   - Compartida con: EV_Central para validacion de credenciales
 echo.
 echo [API REST DISPONIBLE]
 echo   - REGISTRO: PUT/POST /register/cp - Registra un nuevo CP en el sistema

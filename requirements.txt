@@ -1,4 +1,5 @@
-mysql-connector-python      # Para interactuar con la BD
+pymysql                     # Para interactuar con la BD (más compatible con MySQL 8)
+mysql-connector-python      # Fallback si PyMySQL no está disponible
 kafka-python-ng             # Cliente Kafka para Python (compatible con Python 3.14+)
 rich                        # Para TUI mejorada en Central
 flask==3.0.0                # Framework web para dashboard
