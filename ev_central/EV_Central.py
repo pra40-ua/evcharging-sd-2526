@@ -3325,128 +3325,128 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                         with CP_SESION_OBJETIVO_KWH_LOCK:
                             if cp_fin in CP_SESION_OBJETIVO_KWH:
                                 del CP_SESION_OBJETIVO_KWH[cp_fin]
-                    
-                    # Procesar siguiente driver en cola si existe
-                    cola_procesada = False
-                    try:
-                        with CP_COLA_ESPERA_LOCK:
-                            if cp_fin in CP_COLA_ESPERA and not CP_COLA_ESPERA[cp_fin].empty():
-                                from queue import Empty
-                                try:
-                                    next_driver, next_kw, timestamp_cola = CP_COLA_ESPERA[cp_fin].get_nowait()
-                                    print(f"[CENTRAL] 🔄 Procesando siguiente en cola: {next_driver} para {cp_fin}")
-                                    cola_procesada = True
-                                    
-                                    # Autorizar al siguiente driver
-                                    with CP_SESION_DRIVER_ID_LOCK:
-                                        CP_SESION_DRIVER_ID[cp_fin] = next_driver
-                                    with CP_SESION_OBJETIVO_KWH_LOCK:
-                                        CP_SESION_OBJETIVO_KWH[cp_fin] = next_kw
-                                    
-                                    # NO enviar AUTH_REQ aún: seguir el flujo interactivo.
-                                    # Estado: PENDIENTE_CONFIRMACION_CENTRAL para que Central pulse "PREPARAR SUMINISTRO"
+                        
+                        # Procesar siguiente driver en cola si existe
+                        cola_procesada = False
+                        try:
+                            with CP_COLA_ESPERA_LOCK:
+                                if cp_fin in CP_COLA_ESPERA and not CP_COLA_ESPERA[cp_fin].empty():
+                                    from queue import Empty
                                     try:
-                                        cambiar_estado_cp(cp_fin, 'PENDIENTE_CONFIRMACION_CENTRAL', db_connection)
-                                    except Exception:
-                                        pass
+                                        next_driver, next_kw, timestamp_cola = CP_COLA_ESPERA[cp_fin].get_nowait()
+                                        print(f"[CENTRAL] 🔄 Procesando siguiente en cola: {next_driver} para {cp_fin}")
+                                        cola_procesada = True
+                                        
+                                        # Autorizar al siguiente driver
+                                        with CP_SESION_DRIVER_ID_LOCK:
+                                            CP_SESION_DRIVER_ID[cp_fin] = next_driver
+                                        with CP_SESION_OBJETIVO_KWH_LOCK:
+                                            CP_SESION_OBJETIVO_KWH[cp_fin] = next_kw
+                                        
+                                        # NO enviar AUTH_REQ aún: seguir el flujo interactivo.
+                                        # Estado: PENDIENTE_CONFIRMACION_CENTRAL para que Central pulse "PREPARAR SUMINISTRO"
+                                        try:
+                                            cambiar_estado_cp(cp_fin, 'PENDIENTE_CONFIRMACION_CENTRAL', db_connection)
+                                        except Exception:
+                                            pass
 
-                                    # Publicar telemetría para que aparezca el botón en el dashboard
-                                    try:
-                                        with TELEMETRIA_ACTUAL_LOCK:
-                                            telemetria_actual = TELEMETRIA_ACTUAL.get(cp_fin, {})
-                                        # Resetear contadores para nueva sesión
-                                        telemetria_actualizada = {
-                                            **telemetria_actual,
+                                        # Publicar telemetría para que aparezca el botón en el dashboard
+                                        try:
+                                            with TELEMETRIA_ACTUAL_LOCK:
+                                                telemetria_actual = TELEMETRIA_ACTUAL.get(cp_fin, {})
+                                            # Resetear contadores para nueva sesión
+                                            telemetria_actualizada = {
+                                                **telemetria_actual,
+                                                'cp_id': cp_fin,
+                                                'estado_carga': 'PENDIENTE_CONFIRMACION_CENTRAL',
+                                                'estado': 'PENDIENTE_CONFIRMACION_CENTRAL',
+                                                'timestamp': time.time(),
+                                                'tiene_sesion_activa': True,
+                                                'driver_id_sesion': next_driver,
+                                                'objetivo_kwh': next_kw,
+                                                # Resetear contadores
+                                                'kw_entregados': 0.0,
+                                                'energia_total': 0.0,
+                                                'potencia_actual': 0.0,
+                                                'tiempo_carga_s': 0
+                                            }
+                                            with TELEMETRIA_ACTUAL_LOCK:
+                                                TELEMETRIA_ACTUAL[cp_fin] = telemetria_actualizada
+                                            if KAFKA_PRODUCER:
+                                                KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                                                KAFKA_PRODUCER.flush(timeout=1)
+                                                print(f"[CENTRAL] ✓ Telemetría PENDIENTE_CONFIRMACION_CENTRAL publicada para {cp_fin} (driver: {next_driver}, contadores reseteados)")
+                                        except Exception as e:
+                                            print(f"[CENTRAL] No se pudo publicar telemetría (cola→pendiente): {e}")
+
+                                        # Notificar al driver que su turno está pendiente de confirmación de Central
+                                        notificar_driver(next_driver, 'EN_ESPERA_CONFIRMACION', {
+                                            'mensaje': f'Solicitud en cola ahora pendiente de confirmación del operador de Central.',
                                             'cp_id': cp_fin,
-                                            'estado_carga': 'PENDIENTE_CONFIRMACION_CENTRAL',
-                                            'estado': 'PENDIENTE_CONFIRMACION_CENTRAL',
-                                            'timestamp': time.time(),
-                                            'tiene_sesion_activa': True,
-                                            'driver_id_sesion': next_driver,
-                                            'objetivo_kwh': next_kw,
-                                            # Resetear contadores
-                                            'kw_entregados': 0.0,
-                                            'energia_total': 0.0,
-                                            'potencia_actual': 0.0,
-                                            'tiempo_carga_s': 0
-                                        }
-                                        with TELEMETRIA_ACTUAL_LOCK:
-                                            TELEMETRIA_ACTUAL[cp_fin] = telemetria_actualizada
-                                        if KAFKA_PRODUCER:
-                                            KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
-                                            KAFKA_PRODUCER.flush(timeout=1)
-                                            print(f"[CENTRAL] ✓ Telemetría PENDIENTE_CONFIRMACION_CENTRAL publicada para {cp_fin} (driver: {next_driver}, contadores reseteados)")
-                                    except Exception as e:
-                                        print(f"[CENTRAL] No se pudo publicar telemetría (cola→pendiente): {e}")
+                                            'kw_disponibles': next_kw
+                                        })
+                                        print(f"[CENTRAL] ✅ Driver {next_driver} notificado: EN_ESPERA_CONFIRMACION")
 
-                                    # Notificar al driver que su turno está pendiente de confirmación de Central
-                                    notificar_driver(next_driver, 'EN_ESPERA_CONFIRMACION', {
-                                        'mensaje': f'Solicitud en cola ahora pendiente de confirmación del operador de Central.',
-                                        'cp_id': cp_fin,
-                                        'kw_disponibles': next_kw
-                                    })
-                                    print(f"[CENTRAL] ✅ Driver {next_driver} notificado: EN_ESPERA_CONFIRMACION")
-
-                                    registrar_evento(f"✅ Driver {next_driver} pasado de cola a pendiente de confirmación en {cp_fin}", "ok")
-                                    
-                                except Empty:
-                                    pass
-                    except Exception as e:
-                        print(f"[CENTRAL] ✗ Error procesando cola de {cp_fin}: {e}")
-                    
-                    # Solo cambiar a ACTIVADO si NO se procesó nadie de la cola
-                    if not cola_procesada:
-                        cambiar_estado_cp(cp_fin, 'ACTIVADO', db_connection)
-                        print(f"[CENTRAL] {cp_fin} sin cola pendiente. Estado: ACTIVADO")
-                    
-                    # Limpiar estado manual si estaba PARADO
-                    try:
-                        with CP_ESTADO_MANUAL_LOCK:
-                            if cp_fin in CP_ESTADO_MANUAL:
-                                del CP_ESTADO_MANUAL[cp_fin]
-                    except Exception:
-                        pass
-                    
-                    # Limpezas y publicación ACTIVADO solo si NO hay siguiente en cola
-                    if not cola_procesada:
-                        # Limpiar información de sesión del driver
+                                        registrar_evento(f"✅ Driver {next_driver} pasado de cola a pendiente de confirmación en {cp_fin}", "ok")
+                                        
+                                    except Empty:
+                                        pass
+                        except Exception as e:
+                            print(f"[CENTRAL] ✗ Error procesando cola de {cp_fin}: {e}")
+                        
+                        # Solo cambiar a ACTIVADO si NO se procesó nadie de la cola
+                        if not cola_procesada:
+                            cambiar_estado_cp(cp_fin, 'ACTIVADO', db_connection)
+                            print(f"[CENTRAL] {cp_fin} sin cola pendiente. Estado: ACTIVADO")
+                        
+                        # Limpiar estado manual si estaba PARADO
                         try:
-                            with CP_SESION_OBJETIVO_KWH_LOCK:
-                                if cp_fin in CP_SESION_OBJETIVO_KWH:
-                                    del CP_SESION_OBJETIVO_KWH[cp_fin]
-                        except Exception:
-                            pass
-                        try:
-                            with CP_SESION_DRIVER_ID_LOCK:
-                                if cp_fin in CP_SESION_DRIVER_ID:
-                                    del CP_SESION_DRIVER_ID[cp_fin]
+                            with CP_ESTADO_MANUAL_LOCK:
+                                if cp_fin in CP_ESTADO_MANUAL:
+                                    del CP_ESTADO_MANUAL[cp_fin]
                         except Exception:
                             pass
                         
-                        # Publicar telemetría actualizada: CP en ACTIVADO, sin sesión, contadores en 0
-                        try:
-                            with TELEMETRIA_ACTUAL_LOCK:
-                                telemetria_actual = TELEMETRIA_ACTUAL.get(cp_fin, {})
-                            telemetria_actualizada = {
-                                **telemetria_actual,
-                                'cp_id': cp_fin,
-                                'estado_carga': 'ACTIVADO',
-                                'estado': 'ACTIVADO',
-                                'timestamp': time.time(),
-                                'tiene_sesion_activa': False,
-                                'driver_id_sesion': None,
-                                'kw_entregados': 0.0,
-                                'potencia_actual': 0.0,
-                                'tiempo_carga_s': 0
-                            }
-                            with TELEMETRIA_ACTUAL_LOCK:
-                                TELEMETRIA_ACTUAL[cp_fin] = telemetria_actualizada
-                            if KAFKA_PRODUCER:
-                                KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
-                                KAFKA_PRODUCER.flush(timeout=1)
-                                print(f"[CENTRAL] CP {cp_fin} resetado y listo para nuevo servicio (ACTIVADO)")
-                        except Exception as e:
-                            print(f"[CENTRAL] Error publicando estado tras FIN: {e}")
+                        # Limpezas y publicación ACTIVADO solo si NO hay siguiente en cola
+                        if not cola_procesada:
+                            # Limpiar información de sesión del driver
+                            try:
+                                with CP_SESION_OBJETIVO_KWH_LOCK:
+                                    if cp_fin in CP_SESION_OBJETIVO_KWH:
+                                        del CP_SESION_OBJETIVO_KWH[cp_fin]
+                            except Exception:
+                                pass
+                            try:
+                                with CP_SESION_DRIVER_ID_LOCK:
+                                    if cp_fin in CP_SESION_DRIVER_ID:
+                                        del CP_SESION_DRIVER_ID[cp_fin]
+                            except Exception:
+                                pass
+                            
+                            # Publicar telemetría actualizada: CP en ACTIVADO, sin sesión, contadores en 0
+                            try:
+                                with TELEMETRIA_ACTUAL_LOCK:
+                                    telemetria_actual = TELEMETRIA_ACTUAL.get(cp_fin, {})
+                                telemetria_actualizada = {
+                                    **telemetria_actual,
+                                    'cp_id': cp_fin,
+                                    'estado_carga': 'ACTIVADO',
+                                    'estado': 'ACTIVADO',
+                                    'timestamp': time.time(),
+                                    'tiene_sesion_activa': False,
+                                    'driver_id_sesion': None,
+                                    'kw_entregados': 0.0,
+                                    'potencia_actual': 0.0,
+                                    'tiempo_carga_s': 0
+                                }
+                                with TELEMETRIA_ACTUAL_LOCK:
+                                    TELEMETRIA_ACTUAL[cp_fin] = telemetria_actualizada
+                                if KAFKA_PRODUCER:
+                                    KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                                    KAFKA_PRODUCER.flush(timeout=1)
+                                    print(f"[CENTRAL] CP {cp_fin} resetado y listo para nuevo servicio (ACTIVADO)")
+                            except Exception as e:
+                                print(f"[CENTRAL] Error publicando estado tras FIN: {e}")
 
                 # NUEVO: Manejar READY_TO_START desde Monitor/Engine
                 elif cod_op == 'READY_TO_START' and len(campos) >= 2:
