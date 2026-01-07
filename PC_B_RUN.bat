@@ -84,7 +84,7 @@ if exist central_ip.txt (
         if !errorlevel! equ 0 set IS_DOCKER_IP=1
     )
     if !IS_DOCKER_IP! equ 1 (
-        echo [ADVERTENCIA] La IP detectada (!CENTRAL_IP!) parece ser una IP de Docker.
+        echo [ADVERTENCIA] La IP detectada !CENTRAL_IP! parece ser una IP de Docker.
         echo [ADVERTENCIA] El CP en Docker necesita la IP real de PC_A para conectarse a EV_Central.
         echo [ADVERTENCIA] Por favor, actualiza central_ip.txt con la IP real de PC_A.
         echo [ADVERTENCIA] Continuando con la IP detectada, pero puede fallar la conexion...
@@ -103,6 +103,12 @@ echo ============================================================
 echo [INFO] CONFIGURANDO REGISTRY_URL
 echo ============================================================
 echo.
+
+REM API key para EV_Registry (debe coincidir con la configurada en EV_Registry)
+REM Si no se define, usa la por defecto (NO recomendado).
+if not defined REGISTRY_API_KEY set "REGISTRY_API_KEY=ev-registry-api-key-2024-secure"
+echo [INFO] REGISTRY_API_KEY configurada (oculta por seguridad)
+echo [DEBUG] REGISTRY_API_KEY definida (longitud aproximada) >> "%LOG_FILE%"
 
 REM Verificar si Registry está corriendo localmente (puerto 6000)
 REM Nota: En un escenario normal, PC_B es otro ordenador y el Registry debería estar en PC_B
@@ -123,17 +129,7 @@ if !errorlevel! equ 0 (
     goto :registry_configured
 )
 
-REM Intentar HTTP en localhost
-powershell -NoProfile -ExecutionPolicy Bypass -Command "try { $response = Invoke-WebRequest -Uri 'http://127.0.0.1:6000/api/health' -Method GET -TimeoutSec 3 -ErrorAction Stop; exit 0 } catch { exit 1 }" >nul 2>&1
-if !errorlevel! equ 0 (
-    set REGISTRY_LOCAL=1
-    REM IMPORTANTE: Usar host.docker.internal para que los contenedores Docker puedan acceder al host de Windows
-    set REGISTRY_URL=http://host.docker.internal:6000/api
-    echo [OK] Registry detectado localmente (HTTP en localhost)
-    echo [INFO] Usando host.docker.internal para acceso desde contenedores Docker
-    echo [DEBUG] Registry local detectado (HTTP) - usando host.docker.internal >> "%LOG_FILE%"
-    goto :registry_configured
-)
+REM HTTP deshabilitado: solo se acepta HTTPS
 
 REM Registry no está local, intentar en PC_A (Central)
 echo [INFO] Registry no detectado localmente. Verificando en PC_A...
@@ -146,14 +142,7 @@ if !errorlevel! equ 0 (
     goto :registry_configured
 )
 
-REM Intentar HTTP en PC_A
-powershell -NoProfile -ExecutionPolicy Bypass -Command "try { $response = Invoke-WebRequest -Uri 'http://!CENTRAL_IP!:6000/api/health' -Method GET -TimeoutSec 2 -ErrorAction Stop; exit 0 } catch { exit 1 }" >nul 2>&1
-if !errorlevel! equ 0 (
-    set REGISTRY_URL=http://!CENTRAL_IP!:6000/api
-    echo [OK] Registry detectado en PC_A (HTTP)
-    echo [DEBUG] Registry detectado en PC_A (HTTP): !REGISTRY_URL! >> "%LOG_FILE%"
-    goto :registry_configured
-)
+REM HTTP deshabilitado: solo se acepta HTTPS
 
 REM Si no se encuentra, mostrar error crítico
 echo [ERROR] Registry NO detectado ni localmente ni en PC_A
@@ -909,7 +898,7 @@ echo [4/4] LANZANDO MONITOR
 echo ============================================================
 echo.
 
-start "Monitor-PC_B" powershell -NoExit -Command "Write-Host 'Iniciando Monitor (CP_001)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --network evnet --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 --name monitor -e CP_ID=CP_001 -e CENTRAL_IP=!CENTRAL_IP! -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=5001 -e REGISTRY_URL=!REGISTRY_URL! -e WEATHER_API_URL=http://host.docker.internal:5002 ev_monitor:local"
+start "Monitor-PC_B" powershell -NoExit -Command "Write-Host 'Iniciando Monitor (CP_001)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --network evnet --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 --name monitor -e CP_ID=CP_001 -e CENTRAL_IP=!CENTRAL_IP! -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=5001 -e REGISTRY_URL=!REGISTRY_URL! -e REGISTRY_API_KEY=!REGISTRY_API_KEY! -e WEATHER_API_URL=http://host.docker.internal:5002 ev_monitor:local"
 
 echo [OK] Monitor iniciado en ventana separada
 echo.
@@ -981,7 +970,7 @@ set /a WEB_PORT_ENGINE=9000+%CP_NUM%
 
 REM Construir comando ENGINE: Sin --network host, con mapeo de puertos TCP y Web
 set "ENGINE_CMD=docker run --rm -p !ENGINE_PORT!:!ENGINE_PORT! -p !WEB_PORT_ENGINE!:!WEB_PORT_ENGINE! --name engine_!CP_ID! --label project=evcharging-pc-b --label component=engine --label cp_id=!CP_ID! -e ENGINE_PORT=!ENGINE_PORT! -e CP_ID=!CP_ID! -e KAFKA_SERVER=%KAFKA_SERVER% -e WEB_PORT=!WEB_PORT_ENGINE! ev_engine:local"
-set "MONITOR_CMD=docker run --rm --network evnet --name monitor_!CP_ID! --label project=evcharging-pc-b --label component=monitor --label cp_id=!CP_ID! -e CP_ID=!CP_ID! -e CENTRAL_IP=%CENTRAL_IP% -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=!ENGINE_PORT! -e REGISTRY_URL=!REGISTRY_URL! -e WEATHER_API_URL=http://host.docker.internal:5002 ev_monitor:local"
+set "MONITOR_CMD=docker run --rm --network evnet --name monitor_!CP_ID! --label project=evcharging-pc-b --label component=monitor --label cp_id=!CP_ID! -e CP_ID=!CP_ID! -e CENTRAL_IP=%CENTRAL_IP% -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=!ENGINE_PORT! -e REGISTRY_URL=!REGISTRY_URL! -e REGISTRY_API_KEY=!REGISTRY_API_KEY! -e WEATHER_API_URL=http://host.docker.internal:5002 ev_monitor:local"
 
 echo. >> "%LOG_FILE%"
 echo [DEBUG] ---- COMANDO ENGINE ---- >> "%LOG_FILE%"

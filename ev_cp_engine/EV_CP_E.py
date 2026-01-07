@@ -119,35 +119,34 @@ def generar_y_enviar_telemetria(cp_id: str, estado_carga: str, kw_entregados: fl
         with KAFKA_ENCRYPTION_KEY_LOCK:
             encryption_key = KAFKA_ENCRYPTION_KEY
         
-        if encryption_key:
-            try:
-                # Convertir mensaje a JSON y cifrarlo
-                mensaje_json = json.dumps(telemetria_msg_plain)
-                fernet = Fernet(encryption_key)
-                mensaje_cifrado = fernet.encrypt(mensaje_json.encode('utf-8'))
-                
-                # Estructura: cp_id fuera del cifrado, payload cifrado
-                telemetria_msg = {
-                    'cp_id': cp_id,  # Identificador fuera del cifrado
-                    'payload': base64.b64encode(mensaje_cifrado).decode('utf-8')  # Mensaje cifrado
-                }
-                
-                # Reset contador de errores si cifrado exitoso
-                KAFKA_ENCRYPTION_ERROR_COUNT = 0
-            except Exception as e:
-                # Error al cifrar - incrementar contador y mostrar error
-                KAFKA_ENCRYPTION_ERROR_COUNT += 1
-                print(f"[{cp_id}] ❌ ERROR cifrando mensaje para Kafka: {e}")
-                print(f"[{cp_id}] ⚠️ Errores consecutivos de cifrado: {KAFKA_ENCRYPTION_ERROR_COUNT}")
-                if KAFKA_ENCRYPTION_ERROR_COUNT >= 3:
-                    print(f"[{cp_id}] 🚨 INCIDENCIA: Clave de cifrado inválida o corrupta")
-                # Intentar enviar sin cifrar como fallback (no recomendado en producción)
-                telemetria_msg = telemetria_msg_plain
-        else:
-            # No hay clave - enviar sin cifrar (modo compatibilidad)
+        # ENFORCE: sin clave, NO se envía telemetría a Kafka (evita MITM en topics)
+        if not encryption_key:
             if KAFKA_ENCRYPTION_ERROR_COUNT == 0:
-                print(f"[{cp_id}] ⚠️ No hay clave de cifrado. Enviando mensaje sin cifrar.")
-            telemetria_msg = telemetria_msg_plain
+                print(f"[{cp_id}] ❌ Telemetría NO enviada: falta clave de cifrado Kafka (esperando SET_KEY del Monitor).")
+            return
+
+        try:
+            # Convertir mensaje a JSON y cifrarlo
+            mensaje_json = json.dumps(telemetria_msg_plain)
+            fernet = Fernet(encryption_key)
+            mensaje_cifrado = fernet.encrypt(mensaje_json.encode('utf-8'))
+            
+            # Estructura: cp_id fuera del cifrado, payload cifrado
+            telemetria_msg = {
+                'cp_id': cp_id,  # Identificador fuera del cifrado
+                'payload': base64.b64encode(mensaje_cifrado).decode('utf-8')  # Mensaje cifrado
+            }
+            
+            # Reset contador de errores si cifrado exitoso
+            KAFKA_ENCRYPTION_ERROR_COUNT = 0
+        except Exception as e:
+            # Error al cifrar - incrementar contador y NO enviar en claro
+            KAFKA_ENCRYPTION_ERROR_COUNT += 1
+            print(f"[{cp_id}] ❌ ERROR cifrando mensaje para Kafka (NO se envía en claro): {e}")
+            print(f"[{cp_id}] ⚠️ Errores consecutivos de cifrado: {KAFKA_ENCRYPTION_ERROR_COUNT}")
+            if KAFKA_ENCRYPTION_ERROR_COUNT >= 3:
+                print(f"[{cp_id}] 🚨 INCIDENCIA: Clave de cifrado inválida o corrupta")
+            return
         
         # Envía el mensaje de forma asíncrona
         future = TELEMETRY_PRODUCER.send(TOPIC_TELEMETRY, value=telemetria_msg)

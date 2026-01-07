@@ -1,0 +1,11 @@
+============================================================ 
+ LOG DE EJECUCION - PC_B_RUN.bat 
+ Fecha/Hora: dc. 07/01/2026 17:12:33,84 
+============================================================ 
+ 
+[DEBUG] Verificando Docker... 
+Docker version 28.2.2, build e6534b4
+[DEBUG] Docker check result: 0 
+[DEBUG] Docker verificado correctamente 
+[DEBUG] Llegando a PANTALLA PRINCIPAL 
+[DEBUG] Llegando a PANTALLA PRINCIPAL (pantalla) 

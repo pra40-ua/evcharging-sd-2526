@@ -124,6 +124,20 @@ REGISTRY_URL = os.getenv('REGISTRY_URL', 'https://127.0.0.1:6000/api')
 if REGISTRY_URL.startswith('http://'):
     REGISTRY_URL = 'https://' + REGISTRY_URL[len('http://'):]
 
+# Verbosidad de logs (para evitar spam en consola)
+# - CENTRAL_VERBOSE_MESSAGES=1 -> imprime cada trama recibida
+# - CENTRAL_VERBOSE_MESSAGES=0 -> modo resumido (por defecto)
+CENTRAL_VERBOSE_MESSAGES = os.getenv('CENTRAL_VERBOSE_MESSAGES', '0').strip() == '1'
+
+# Operaciones ruidosas a resumir cuando CENTRAL_VERBOSE_MESSAGES=0
+# (STATE suele ser frecuente; puedes añadir aquí otras si lo necesitas)
+CENTRAL_NOISY_OPS = {'STATE'}
+
+# Throttle para logs resumidos (por CP y por op)
+_MSG_THROTTLE_LOCK = threading.Lock()
+_MSG_THROTTLE = {}  # (cp_id, cod_op) -> {'count': int, 'last_ts': float}
+_MSG_THROTTLE_SECS = float(os.getenv('CENTRAL_THROTTLE_SECS', '10').strip() or '10')
+
 # Flask app para API REST
 API_APP = Flask(__name__)
 CORS(API_APP)
@@ -3015,13 +3029,33 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                     break
             
             if cod_op:
-                # Registrar TODOS los mensajes recibidos con formato claro
-                registrar_evento(f"📨 MENSAJE de {cp_id}: [{cod_op}] Campos={campos}", "info")
-                print(f"[CENTRAL] ========================================")
-                print(f"[CENTRAL] 📨 TRAMA RECIBIDA de {cp_id}")
-                print(f"[CENTRAL]    Código Operación: {cod_op}")
-                print(f"[CENTRAL]    Campos: {campos}")
-                print(f"[CENTRAL] ========================================")
+                # Evitar saturar consola: modo resumido por defecto (configurable por env)
+                if (not CENTRAL_VERBOSE_MESSAGES) and (cod_op in CENTRAL_NOISY_OPS):
+                    try:
+                        ahora = time.time()
+                        key = (cp_id, cod_op)
+                        with _MSG_THROTTLE_LOCK:
+                            entry = _MSG_THROTTLE.get(key)
+                            if not entry:
+                                entry = {'count': 0, 'last_ts': 0.0}
+                                _MSG_THROTTLE[key] = entry
+                            entry['count'] += 1
+                            if (ahora - entry['last_ts']) >= _MSG_THROTTLE_SECS:
+                                count = entry['count']
+                                entry['count'] = 0
+                                entry['last_ts'] = ahora
+                                registrar_evento(f"📨 {cp_id}: [{cod_op}] x{count} (resumido)", "info")
+                    except Exception:
+                        # Si falla el throttle, no romper el bucle
+                        pass
+                else:
+                    # Registrar TODOS los mensajes recibidos con formato claro
+                    registrar_evento(f"📨 MENSAJE de {cp_id}: [{cod_op}] Campos={campos}", "info")
+                    print(f"[CENTRAL] ========================================")
+                    print(f"[CENTRAL] 📨 TRAMA RECIBIDA de {cp_id}")
+                    print(f"[CENTRAL]    Código Operación: {cod_op}")
+                    print(f"[CENTRAL]    Campos: {campos}")
+                    print(f"[CENTRAL] ========================================")
                 # Manejo de tramas específicas desde el CP
                 if cod_op == 'AUTH_RESP' and len(campos) >= 2:
                     # Esperado: AUTH_RESP#<driver_id>#<OK|KO>#<mensaje?>

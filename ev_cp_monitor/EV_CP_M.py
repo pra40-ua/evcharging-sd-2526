@@ -532,38 +532,43 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, engine_
     precio_kwh = "0.48"
     client_socket = None
 
-    # ====== PASO 1: COMPROBACIÓN DE EV_Registry (SIN AUTENTICACIÓN) ======
+    # ====== PASO 1: REGISTRO/AUTENTICACIÓN EN EV_Registry (API KEY + credenciales) ======
     print(f"\n{'='*70}")
-    print(f"  [CP_M] PASO 1: COMPROBACIÓN DE EV_Registry (sin autenticación)")
+    print(f"  [CP_M] PASO 1: REGISTRO/AUTENTICACIÓN EN EV_Registry")
     print(f"{'='*70}")
 
-    # Verificar disponibilidad del Registry y consultar información pública del CP (si existe)
-    try:
-        base_url = REGISTRY_URL.rstrip('/')
-        print(f"[CP_M] Verificando disponibilidad del Registry en {base_url}...")
-        if verificar_registry_disponible(base_url):
-            # Consultar endpoint público del CP (cualquiera puede consultarlo)
-            try:
-                url_consulta = f"{REGISTRY_URL.rstrip('/')}/register/cp/{cp_id}"
-                print(f"[CP_M] Consultando información pública del CP en: {url_consulta}")
-                resp = requests.get(url_consulta, timeout=5, verify=False)
-                if resp.status_code == 200:
-                    data = resp.json()
-                    print(f"[CP_M] ✓ CP encontrado en Registry: activo={data.get('activo')}, ubicacion='{data.get('ubicacion')}'")
-                elif resp.status_code == 404:
-                    print(f"[CP_M] ⚠️ CP {cp_id} no existe en Registry (consulta pública). Continuando sin registro.")
-                else:
-                    print(f"[CP_M] ⚠️ Respuesta inesperada de Registry al consultar CP: HTTP {resp.status_code}")
-            except Exception as e:
-                print(f"[CP_M] ⚠️ No se pudo consultar CP en Registry (consulta pública): {e}")
-        else:
-            print(f"[CP_M] ⚠️ Registry no disponible. Continuando sin interacción con Registry.")
-    except Exception as e:
-        print(f"[CP_M] ⚠️ Error en comprobación de Registry: {e}")
-
-    # No se usan credenciales desde ahora: autenticación deshabilitada
     username = None
     password = None
+
+    # Verificar si ya tenemos credenciales almacenadas
+    with REGISTRY_CREDENTIALS_LOCK:
+        if REGISTRY_CREDENTIALS.get('username') and REGISTRY_CREDENTIALS.get('password'):
+            username = REGISTRY_CREDENTIALS['username']
+            password = REGISTRY_CREDENTIALS['password']
+            print(f"[CP_M] ✓ Credenciales de Registry encontradas en memoria")
+            print(f"[CP_M]   Username: {username}")
+            print(f"[CP_M]   Intentando autenticación con Registry...")
+
+            # Intentar autenticar con las credenciales existentes
+            if autenticar_en_registry(username, password):
+                print(f"[CP_M] ✓ Autenticación exitosa con Registry usando credenciales existentes")
+            else:
+                print(f"[CP_M] ⚠️ Autenticación fallida. Intentando registro nuevo...")
+                username = None
+                password = None
+
+    # Si no hay credenciales o la autenticación falló, registrar CP (requiere X-API-Key)
+    if not username or not password:
+        print(f"[CP_M] Registrando CP {cp_id} en EV_Registry...")
+        success, username, password = registrar_en_registry(cp_id, ubicacion_cp)
+
+        if not success or not username or not password:
+            print(f"[CP_M] ❌ ERROR: No se pudo registrar/autenticar en EV_Registry")
+            raise Exception("No se pudo registrar/autenticar en EV_Registry (requerido para obtener credenciales)")
+        else:
+            print(f"[CP_M] ✓ Registro exitoso en EV_Registry")
+            print(f"[CP_M]   Username: {username}")
+            print(f"[CP_M]   Password: {password[:10]}... (mostrando primeros 10 caracteres)")
 
     print(f"{'='*70}\n")
 
@@ -634,21 +639,35 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, engine_
         # Quitar timeout para la comunicación posterior
         client_socket.settimeout(None)
 
-        # ====== PASO 2: ENVIAR REG A CENTRAL (sin autenticación) ======
+        # ====== PASO 2: ENVIAR REG A CENTRAL (con credenciales del Registry) ======
         print(f"\n{'='*70}")
-        print(f"  [CP_M] PASO 2: ENVIANDO REG A CENTRAL (sin autenticación)")
+        print(f"  [CP_M] PASO 2: ENVIANDO REG A CENTRAL (con credenciales)")
         print(f"{'='*70}")
         
         # Construir mensaje REG con credenciales si están disponibles
         campos_reg = [cp_id, ubicacion_cp, precio_kwh]
-        print(f"[CP_M] Enviando REG sin credenciales (autenticación deshabilitada)")
+        if username and password:
+            campos_reg.extend([username, password])
+            print(f"[CP_M] ✓ Enviando REG con credenciales del Registry")
+            print(f"[CP_M]   Username: {username}")
+        else:
+            # No debería ocurrir: sin credenciales no se debería continuar
+            print(f"[CP_M] ❌ ERROR: credenciales no disponibles para enviar REG")
+            raise Exception("No hay credenciales para enviar REG a Central")
         
         print(f"{'='*70}\n")
         
         trama_registro = construir_trama('REG', campos_reg)
         client_socket.sendall(trama_registro)
 
-        respuesta_bytes = client_socket.recv(1024)
+        # Evitar quedarse colgado si Central no responde
+        client_socket.settimeout(15)
+        try:
+            respuesta_bytes = client_socket.recv(1024)
+        except socket.timeout:
+            raise Exception("Timeout esperando AUTH de Central tras enviar REG (15s). Revisa EV_Central, BD y Kafka.")
+        finally:
+            client_socket.settimeout(None)
         if not respuesta_bytes:
             raise Exception("No se recibió respuesta o Central cerró la conexión.")
 
@@ -785,19 +804,11 @@ def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, 
                         try:
                             central_socket.sendall(resp)
                             print(f"[{cp_id}] ✓ AUTH_RESP enviado a Central (cifrado). Esperando acción del operador del Engine...")
-<<<<<<< HEAD
                         except (OSError, BrokenPipeError, ConnectionResetError) as e:
                             print(f"[{cp_id}] ⚠️ Error enviando AUTH_RESP a Central: {e}. Conexión perdida.")
                     else:
                         mensaje_error = f"Imposible conectar con Central"
                         print(f"[{cp_id}] ❌ {mensaje_error}")
-=======
-                        else:
-                            mensaje_error = f"Imposible conectar con Central"
-                            print(f"[{cp_id}] ❌ {mensaje_error}")
-                    except (OSError, BrokenPipeError, ConnectionResetError) as e:
-                        print(f"[{cp_id}] ⚠️ Error enviando AUTH_RESP a Central: {e}. Conexión perdida.")
->>>>>>> 07ca5223a62fd98b50f630db5bddab4f16861b24
                 except Exception as e:
                     print(f"[{cp_id}] Error procesando AUTH_REQ: {e}")
                 continue
