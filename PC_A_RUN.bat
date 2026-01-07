@@ -299,6 +299,16 @@ if %errorlevel% neq 0 (
 echo [OK] MariaDB configurado (root SIN CONTRASEÑA, sin autenticacion).
 echo.
 
+REM Crear/asegurar usuario dedicado para Registry con acceso remoto
+echo Configurando usuario dedicado 'registry' para acceso remoto desde PC_B...
+docker exec mariadb mysql -u root -e "CREATE USER IF NOT EXISTS 'registry'@'%%' IDENTIFIED BY 'registry_pwd'; GRANT ALL PRIVILEGES ON evcharging.* TO 'registry'@'%%' WITH GRANT OPTION; FLUSH PRIVILEGES;" >nul 2>&1
+if %errorlevel% equ 0 (
+    echo [OK] Usuario 'registry' configurado con privilegios sobre evcharging.*
+) else (
+    echo [ADVERTENCIA] No se pudo configurar el usuario 'registry' ^(verifica logs de MariaDB^)
+)
+echo.
+
 REM ============================================================
 REM  PASO 2.5: LIMPIAR BASE DE DATOS
 REM ============================================================

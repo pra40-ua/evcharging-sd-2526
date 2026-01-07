@@ -59,14 +59,7 @@ if exist central_ip.txt (
         goto :ip_found
     )
     
-    REM Verificar si la IP es de Docker (172.17.x.x o 172.18.x.x)
-    echo !CENTRAL_IP_BD! | findstr /R "^172\.17\." >nul
-    if %errorlevel% equ 0 (
-        echo [DETECTADO] IP de Docker detectada, probablemente mismo PC
-        echo [INFO] Usando localhost para conexion local
-        set CENTRAL_IP_BD=127.0.0.1
-        goto :ip_found
-    )
+    REM No forzar localhost por IPs de Docker; usar siempre la IP de central_ip.txt si es distinta a la local
     
     echo [OK] IP de BD remota ^(PC_A^): !CENTRAL_IP_BD!
     goto :ip_found
@@ -120,15 +113,25 @@ if "!CENTRAL_IP_BD!"=="127.0.0.1" (
     echo   - Base de datos en PC_A: !CENTRAL_IP_BD!:3306
 )
 echo   - Database: evcharging
-echo   - Usuario: root ^(SIN CONTRASEÑA^)
+echo   - Usuario: (segun entorno)
 echo   - Puerto Registry: 6000
 echo.
 echo Verificando que MySQL esta accesible ^(!CENTRAL_IP_BD!:3306^)...
 echo ^(Esto puede tardar unos segundos^)
 echo.
 
-REM Verificar conexión usando Python (root sin contraseña) con collation correcta
-!PYTHON_CMD! -c "import sys; import mysql.connector; conn = mysql.connector.connect(host='!CENTRAL_IP_BD!', port=3306, user='root', password='', database='evcharging', charset='utf8mb4', collation='utf8mb4_general_ci', use_unicode=True, connection_timeout=5); conn.close(); sys.exit(0)" 2>nul
+REM Configurar password de MySQL: en remoto (PC_A) usar 'root'; en local permitir vacio
+if "!CENTRAL_IP_BD!"=="127.0.0.1" (
+    set "DB_USER=root"
+    set "DB_PASS="
+) else (
+    REM Usuario dedicado para Registry en PC_A (creado desde PC_A_RUN.bat)
+    set "DB_USER=registry"
+    set "DB_PASS=registry_pwd"
+)
+
+REM Verificar conexión usando Python con collation correcta
+!PYTHON_CMD! -c "import sys; import mysql.connector; conn = mysql.connector.connect(host='!CENTRAL_IP_BD!', port=3306, user='!DB_USER!', password='!DB_PASS!', database='evcharging', charset='utf8mb4', collation='utf8mb4_general_ci', use_unicode=True, connection_timeout=5); conn.close(); sys.exit(0)" 2>nul
 set MYSQL_CHECK_RESULT=%errorlevel%
 
 if !MYSQL_CHECK_RESULT! neq 0 (
@@ -278,10 +281,14 @@ if !USE_SSL! equ 1 (
         echo [INFO] Conectandose a BD en PC_A: !CENTRAL_IP_BD!:3306
         echo [INFO] Modo: PC remoto
     )
-    echo [INFO] Usuario: root ^(SIN CONTRASEÑA - autenticacion eliminada^)
+    if "!CENTRAL_IP_BD!"=="127.0.0.1" (
+        echo [INFO] Usuario: !DB_USER! ^(sin contraseña - entorno local^)
+    ) else (
+        echo [INFO] Usuario: !DB_USER! ^(password configurada en PC_A^)
+    )
     echo [INFO] El Registry compartira la BD con EV_Central para sincronizar CPs
     echo.
-    start "EV_Registry_PC_B" cmd /k "!PYTHON_CMD! ev_registry\EV_Registry.py --db-host !CENTRAL_IP_BD! --db-port 3306 --db-user root --db-password "" --db-name evcharging --port 6000 --ssl --ssl-cert certificados\registry_cert.pem --ssl-key certificados\registry_key.pem"
+    start "EV_Registry_PC_B" cmd /k "!PYTHON_CMD! ev_registry\EV_Registry.py --db-host !CENTRAL_IP_BD! --db-port 3306 --db-user !DB_USER! --db-password "!DB_PASS!" --db-name evcharging --port 6000 --ssl --ssl-cert certificados\registry_cert.pem --ssl-key certificados\registry_key.pem"
     echo [OK] EV_Registry iniciado en PC_B con HTTPS ^(puerto 6000^)
     echo   - API REST: https://localhost:6000/register/cp
     echo   - Health Check: https://localhost:6000/api/health
