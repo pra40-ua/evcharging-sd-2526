@@ -3153,99 +3153,99 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                 decrypt_errors_consecutivos = 0
             
                 if cod_op:
-                # Evitar saturar consola: modo resumido por defecto (configurable por env)
-                if (not CENTRAL_VERBOSE_MESSAGES) and (cod_op in CENTRAL_NOISY_OPS):
-                    try:
-                        ahora = time.time()
-                        key = (cp_id, cod_op)
-                        with _MSG_THROTTLE_LOCK:
-                            entry = _MSG_THROTTLE.get(key)
-                            if not entry:
-                                entry = {'count': 0, 'last_ts': 0.0}
-                                _MSG_THROTTLE[key] = entry
-                            entry['count'] += 1
-                            if (ahora - entry['last_ts']) >= _MSG_THROTTLE_SECS:
-                                count = entry['count']
-                                entry['count'] = 0
-                                entry['last_ts'] = ahora
-                                registrar_evento(f"📨 {cp_id}: [{cod_op}] x{count} (resumido)", "info")
-                    except Exception:
-                        # Si falla el throttle, no romper el bucle
-                        pass
-                else:
-                    # Registrar TODOS los mensajes recibidos con formato claro
-                    registrar_evento(f"📨 MENSAJE de {cp_id}: [{cod_op}] Campos={campos}", "info")
-                    print(f"[CENTRAL] ========================================")
-                    print(f"[CENTRAL] 📨 TRAMA RECIBIDA de {cp_id}")
-                    print(f"[CENTRAL]    Código Operación: {cod_op}")
-                    print(f"[CENTRAL]    Campos: {campos}")
-                    print(f"[CENTRAL] ========================================")
+                    # Evitar saturar consola: modo resumido por defecto (configurable por env)
+                    if (not CENTRAL_VERBOSE_MESSAGES) and (cod_op in CENTRAL_NOISY_OPS):
+                        try:
+                            ahora = time.time()
+                            key = (cp_id, cod_op)
+                            with _MSG_THROTTLE_LOCK:
+                                entry = _MSG_THROTTLE.get(key)
+                                if not entry:
+                                    entry = {'count': 0, 'last_ts': 0.0}
+                                    _MSG_THROTTLE[key] = entry
+                                entry['count'] += 1
+                                if (ahora - entry['last_ts']) >= _MSG_THROTTLE_SECS:
+                                    count = entry['count']
+                                    entry['count'] = 0
+                                    entry['last_ts'] = ahora
+                                    registrar_evento(f"📨 {cp_id}: [{cod_op}] x{count} (resumido)", "info")
+                        except Exception:
+                            # Si falla el throttle, no romper el bucle
+                            pass
+                    else:
+                        # Registrar TODOS los mensajes recibidos con formato claro
+                        registrar_evento(f"📨 MENSAJE de {cp_id}: [{cod_op}] Campos={campos}", "info")
+                        print(f"[CENTRAL] ========================================")
+                        print(f"[CENTRAL] 📨 TRAMA RECIBIDA de {cp_id}")
+                        print(f"[CENTRAL]    Código Operación: {cod_op}")
+                        print(f"[CENTRAL]    Campos: {campos}")
+                        print(f"[CENTRAL] ========================================")
                     # Manejo de tramas específicas desde el CP
                     if cod_op == 'AUTH_RESP' and len(campos) >= 2:
-                    # Esperado: AUTH_RESP#<driver_id>#<OK|KO>#<mensaje?>
-                    try:
-                        driver_id = campos[0]
-                        resultado = campos[1].upper()
-                        mensaje = campos[2] if len(campos) >= 3 else ''
+                        # Esperado: AUTH_RESP#<driver_id>#<OK|KO>#<mensaje?>
+                        try:
+                            driver_id = campos[0]
+                            resultado = campos[1].upper()
+                            mensaje = campos[2] if len(campos) >= 3 else ''
                             if resultado == 'OK':
-                            registrar_evento(f"[CONTROL] Confirmación síncrona de {cp_id}: AUTH_ACK#OK.")
-                            # DEPRECADO: NO notificar "AUTORIZADO" aquí - se notificará tras confirmar inicio
-                            # El driver debe esperar a que el operador del Engine inicie el suministro
-                            print(f"[CENTRAL] {cp_id} confirmó AUTH_REQ. Esperando acción del operador del Engine...")
-                            # NO cambiar estado aquí - mantener ESPERANDO_OPERADOR_ENGINE que se puso al enviar AUTH_REQ
-                        else:
-                            registrar_evento(f"[CONTROL] Confirmación síncrona de {cp_id}: AUTH_ACK#KO ({mensaje}).")
-                            notificar_driver(driver_id, 'DENEGADO', {
-                                'cp_id': cp_id,
-                                'motivo': mensaje or 'CP denegó la autorización'
-                            })
-                            # Volver a ACTIVADO si denegado
-                            try:
-                                cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection)
-                            except Exception:
-                                pass
-                    except Exception as e:
-                        print(f"[CENTRAL] Error procesando AUTH_RESP: {e}")
-                
-                # ====== NUEVO BLOQUE AÑADIDO: MANEJO DE FIN ====== 
-                elif cod_op == 'FIN' and len(campos) >= 4:
-                    # FIN puede traer campos extra: [cp_id, driver_id, energia, importe, dur_s?, motivo?, tx_id?]
-                    cp_fin = campos[0]
-                    driver_id = campos[1]
-                    energia = campos[2]
-                    importe = campos[3]
-                    dur_s = campos[4] if len(campos) > 4 else None
-                    motivo = campos[5] if len(campos) > 5 else 'Consumo completado'
-                    tx_id = campos[6] if len(campos) > 6 else None
-
-                    registrar_evento(f"[CONTROL] Fin de carga recibido de {cp_fin}: {energia} kWh, {importe} €")
-
-                    detalle_ticket = {
-                        'cp_id': cp_fin,
-                        'energia_kwh': energia,
-                        'importe_eur': importe,
-                    }
-                    if dur_s is not None:
-                        detalle_ticket['duracion_seg'] = dur_s
-                    if motivo is not None:
-                        detalle_ticket['motivo'] = motivo
-                    if tx_id is not None:
-                        detalle_ticket['tx_id'] = tx_id
-
-                    # Enviar ticket al driver ANTES de limpiar sesión
-                    notificar_driver(driver_id, 'TICKET_FINAL', detalle_ticket)
+                                registrar_evento(f"[CONTROL] Confirmación síncrona de {cp_id}: AUTH_ACK#OK.")
+                                # DEPRECADO: NO notificar "AUTORIZADO" aquí - se notificará tras confirmar inicio
+                                # El driver debe esperar a que el operador del Engine inicie el suministro
+                                print(f"[CENTRAL] {cp_id} confirmó AUTH_REQ. Esperando acción del operador del Engine...")
+                                # NO cambiar estado aquí - mantener ESPERANDO_OPERADOR_ENGINE que se puso al enviar AUTH_REQ
+                            else:
+                                registrar_evento(f"[CONTROL] Confirmación síncrona de {cp_id}: AUTH_ACK#KO ({mensaje}).")
+                                notificar_driver(driver_id, 'DENEGADO', {
+                                    'cp_id': cp_id,
+                                    'motivo': mensaje or 'CP denegó la autorización'
+                                })
+                                # Volver a ACTIVADO si denegado
+                                try:
+                                    cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection)
+                                except Exception:
+                                    pass
+                        except Exception as e:
+                            print(f"[CENTRAL] Error procesando AUTH_RESP: {e}")
                     
-                    print(f"[CENTRAL] ✅ Ticket enviado a {driver_id}. CP {cp_fin} listo para nuevo servicio.")
-                    registrar_evento(f"✅ Ticket enviado a {driver_id}: {energia} kWh, {importe} €", "ok")
+                    # ====== NUEVO BLOQUE AÑADIDO: MANEJO DE FIN ====== 
+                    elif cod_op == 'FIN' and len(campos) >= 4:
+                        # FIN puede traer campos extra: [cp_id, driver_id, energia, importe, dur_s?, motivo?, tx_id?]
+                        cp_fin = campos[0]
+                        driver_id = campos[1]
+                        energia = campos[2]
+                        importe = campos[3]
+                        dur_s = campos[4] if len(campos) > 4 else None
+                        motivo = campos[5] if len(campos) > 5 else 'Consumo completado'
+                        tx_id = campos[6] if len(campos) > 6 else None
 
-                    # Limpiar sesión actual ANTES de procesar la cola
-                    with CP_SESION_DRIVER_ID_LOCK:
-                        if cp_fin in CP_SESION_DRIVER_ID:
-                            del CP_SESION_DRIVER_ID[cp_fin]
-                            print(f"[CENTRAL] Sesión de {driver_id} en {cp_fin} limpiada")
-                    with CP_SESION_OBJETIVO_KWH_LOCK:
-                        if cp_fin in CP_SESION_OBJETIVO_KWH:
-                            del CP_SESION_OBJETIVO_KWH[cp_fin]
+                        registrar_evento(f"[CONTROL] Fin de carga recibido de {cp_fin}: {energia} kWh, {importe} €")
+
+                        detalle_ticket = {
+                            'cp_id': cp_fin,
+                            'energia_kwh': energia,
+                            'importe_eur': importe,
+                        }
+                        if dur_s is not None:
+                            detalle_ticket['duracion_seg'] = dur_s
+                        if motivo is not None:
+                            detalle_ticket['motivo'] = motivo
+                        if tx_id is not None:
+                            detalle_ticket['tx_id'] = tx_id
+
+                        # Enviar ticket al driver ANTES de limpiar sesión
+                        notificar_driver(driver_id, 'TICKET_FINAL', detalle_ticket)
+                        
+                        print(f"[CENTRAL] ✅ Ticket enviado a {driver_id}. CP {cp_fin} listo para nuevo servicio.")
+                        registrar_evento(f"✅ Ticket enviado a {driver_id}: {energia} kWh, {importe} €", "ok")
+
+                        # Limpiar sesión actual ANTES de procesar la cola
+                        with CP_SESION_DRIVER_ID_LOCK:
+                            if cp_fin in CP_SESION_DRIVER_ID:
+                                del CP_SESION_DRIVER_ID[cp_fin]
+                                print(f"[CENTRAL] Sesión de {driver_id} en {cp_fin} limpiada")
+                        with CP_SESION_OBJETIVO_KWH_LOCK:
+                            if cp_fin in CP_SESION_OBJETIVO_KWH:
+                                del CP_SESION_OBJETIVO_KWH[cp_fin]
                     
                     # Procesar siguiente driver en cola si existe
                     cola_procesada = False
