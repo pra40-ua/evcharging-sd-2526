@@ -185,16 +185,36 @@ def registrar_auditoria(accion: str, cp_id: str = None, origen_ip: str = None,
                         descripcion: str = None, resultado: str = "OK", 
                         db_connection = None) -> None:
     """
-    Registra un evento de auditoría en la base de datos.
+    Registra un evento de auditoría en la base de datos y muestra en terminal de forma estructurada.
     
     Args:
-        accion: Tipo de acción (ej: "AUTENTICACION", "REGISTRO", "ALERTA_CLIMA", etc.)
+        accion: Tipo de acción (ej: "AUTENTICACION", "REGISTRO", "ALERTA_CLIMA", "CAMBIO_ESTADO", "ERROR", etc.)
         cp_id: ID del CP (opcional)
         origen_ip: IP de origen (opcional)
         descripcion: Descripción detallada del evento
         resultado: Resultado de la acción ("OK", "ERROR", "DENEGADO", etc.)
         db_connection: Conexión a la base de datos
     """
+    from datetime import datetime
+    
+    # Obtener fecha y hora actual
+    fecha_hora = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
+    # Mostrar en terminal de forma estructurada
+    print(f"\n{'='*70}")
+    print(f"[AUDITORÍA] {fecha_hora}")
+    print(f"{'='*70}")
+    print(f"  Acción: {accion}")
+    if cp_id:
+        print(f"  CP: {cp_id}")
+    if origen_ip:
+        print(f"  Origen IP: {origen_ip}")
+    if descripcion:
+        print(f"  Descripción: {descripcion}")
+    print(f"  Resultado: {resultado}")
+    print(f"{'='*70}\n")
+    
+    # Registrar en base de datos
     try:
         if _verificar_conexion(db_connection):
             cursor = db_connection.cursor()
@@ -206,7 +226,7 @@ def registrar_auditoria(accion: str, cp_id: str = None, origen_ip: str = None,
             cursor.close()
     except Exception as e:
         # No fallar si hay error en auditoría, solo log
-        print(f"[CENTRAL] ⚠️ Error registrando auditoría: {e}")
+        print(f"[CENTRAL] ⚠️ Error registrando auditoría en BD: {e}")
 
 # =================================================================
 #                    FUNCIONES DE CIFRADO
@@ -630,11 +650,32 @@ def api_weather_alert():
         
         # Si hay alerta activa, procesar según el estado del CP
         if alerta_activa:
+            # Obtener IP de origen (si viene de EV_W, puede ser localhost)
+            origen_ip_alerta = request.remote_addr if hasattr(request, 'remote_addr') else '127.0.0.1'
+            
+            # Mensaje visible en terminal
+            print("\n" + "="*70)
+            print(f"[CENTRAL] ⚠️  ALERTA CLIMATOLÓGICA ACTIVADA")
+            print(f"  CP: {cp_id}")
+            print(f"  Temperatura: {temperatura:.1f}°C (< 0°C)")
+            print("="*70 + "\n")
+            
+            # Registrar en auditoría
+            registrar_auditoria(
+                accion="ALERTA_CLIMATOLOGICA",
+                cp_id=cp_id,
+                origen_ip=origen_ip_alerta,
+                descripcion=f"Alerta climatológica activada: Temperatura {temperatura:.1f}°C por debajo de 0°C",
+                resultado="ALERTA_ACTIVA",
+                db_connection=db_conn
+            )
+            
             with CP_ESTADO_LOCK:
                 estado_cp = CP_ESTADO.get(cp_id, '')
             
             # Si está suministrando, enviar STOP y esperar a que finalice normalmente
             if estado_cp == 'SUMINISTRANDO' or estado_cp == 'CARGANDO':
+                print(f"[CENTRAL] ⚠️  CP {cp_id} está en suministro activo. Finalizando suministro antes de poner fuera de servicio...")
                 registrar_evento(f"⚠️ Alerta climatológica activa para {cp_id} (T={temperatura:.1f}°C). Finalizando suministro activo antes de poner fuera de servicio.", "warn")
                 
                 # Marcar que este CP debe ir a FUERA_DE_SERVICIO después de recibir FIN
@@ -652,13 +693,15 @@ def api_weather_alert():
                         # Enviar STOP cifrado al CP
                         trama_stop = construir_trama('STOP', [], cp_id=cp_id, cifrar=True)
                         conn.sendall(trama_stop)
-                        print(f"[CENTRAL] 📤 STOP enviado a {cp_id} por alerta climatológica (T={temperatura:.1f}°C). Esperando FIN para finalizar suministro.")
+                        print(f"[CENTRAL] 📤 STOP enviado a {cp_id} por alerta climatológica (T={temperatura:.1f}°C)")
+                        print(f"[CENTRAL] ⏳ Esperando FIN para finalizar suministro y enviar ticket al driver...")
                         registrar_evento(f"📤 STOP enviado a {cp_id} por alerta climatológica. Esperando finalización normal del suministro.", "warn")
                 except Exception as e:
                     print(f"[CENTRAL] ⚠️ Error enviando STOP a {cp_id}: {e}")
                     # Si no se pudo enviar STOP, cambiar directamente a FUERA_DE_SERVICIO
                     try:
                         cambiar_estado_cp(cp_id, 'FUERA_DE_SERVICIO', db_conn)
+                        print(f"[CENTRAL] ⚠️  CP {cp_id} fuera de servicio por alerta climatológica (T={temperatura:.1f}°C)")
                         registrar_evento(f"⚠️ CP {cp_id} fuera de servicio por alerta climatológica (T={temperatura:.1f}°C)", "warn")
                     except Exception as e2:
                         print(f"[CENTRAL] ⚠️ Error cambiando estado a FUERA_DE_SERVICIO: {e2}")
@@ -666,6 +709,7 @@ def api_weather_alert():
                 # No está suministrando, cambiar directamente a FUERA_DE_SERVICIO
                 try:
                     cambiar_estado_cp(cp_id, 'FUERA_DE_SERVICIO', db_conn)
+                    print(f"[CENTRAL] ⚠️  CP {cp_id} fuera de servicio por alerta climatológica (T={temperatura:.1f}°C)")
                     registrar_evento(f"⚠️ CP {cp_id} fuera de servicio por alerta climatológica (T={temperatura:.1f}°C)", "warn")
                 except Exception as e:
                     print(f"[CENTRAL] ⚠️ Error cambiando estado a FUERA_DE_SERVICIO: {e}")
@@ -2874,6 +2918,7 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                 esta_bloqueado = cp_id in CP_MONITOR_BLOQUEADO
             
             if esta_bloqueado:
+                origen_ip = addr[0] if addr else None
                 print(f"\n[CENTRAL] ╔═══════════════════════════════════════════╗")
                 print(f"[CENTRAL] ║  🚫 CONEXIÓN RECHAZADA                    ║")
                 print(f"[CENTRAL] ╚═══════════════════════════════════════════╝")
@@ -2882,6 +2927,16 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                 print(f"[CENTRAL]    Acción: Use 'Reconectar Monitor' en el dashboard")
                 print(f"[CENTRAL] ═══════════════════════════════════════════\n")
                 registrar_evento(f"🚫 CONEXIÓN RECHAZADA: {cp_id} está bloqueado manualmente", "warn")
+                
+                # Registrar en auditoría
+                registrar_auditoria(
+                    accion="BLOQUEO_CONEXION",
+                    cp_id=cp_id,
+                    origen_ip=origen_ip,
+                    descripcion="Intento de conexión rechazado: Monitor bloqueado manualmente",
+                    resultado="BLOQUEADO",
+                    db_connection=db_connection
+                )
                 
                 # Enviar mensaje de rechazo al Monitor (sin cifrar, es antes del registro)
                 try:
@@ -2912,16 +2967,18 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
             print(f"[CENTRAL]    Estado: ACTIVADO")
             print(f"[CENTRAL] ═══════════════════════════════════════════\n")
             
+            origen_ip = addr[0] if addr else None
+            
             if ya_conectado:
                 try:
-                    cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection)
+                    cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection, origen_ip=origen_ip)
                 except Exception:
                     pass
             
             registrar_evento(f"⚡ CP {cp_id} registrado y conectado ({ubicacion})", "ok")
             # Estado: ACTIVADO tras registro exitoso
             try:
-                cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection)
+                cambiar_estado_cp(cp_id, 'ACTIVADO', db_connection, origen_ip=origen_ip)
             except Exception:
                 pass
             # Guardar el precio comunicado por el CP para cálculos de importe en tiempo real
@@ -2964,7 +3021,7 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                 traceback.print_exc()
             
             # --- VERIFICAR REGISTRO Y CREDENCIALES EN EV_Registry ---
-            origen_ip = addr[0] if addr else None
+            # origen_ip ya definido arriba
             
             # Verificar que el CP esté registrado (usando BD compartida si está disponible)
             if not verificar_registro_cp(cp_id, db_connection):
@@ -3315,6 +3372,31 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                         motivo = campos[5] if len(campos) > 5 else 'Consumo completado'
                         tx_id = campos[6] if len(campos) > 6 else None
 
+                        # Verificar si hay alerta climatológica pendiente para actualizar el motivo
+                        # NO eliminar aún la entrada, se eliminará más adelante cuando se procese el cambio de estado
+                        tiene_alerta_clima_pendiente = False
+                        temperatura_alerta = None
+                        with CP_PENDIENTES_ALERTA_CLIMA_LOCK:
+                            if cp_fin in CP_PENDIENTES_ALERTA_CLIMA:
+                                tiene_alerta_clima_pendiente = True
+                                alerta_info = CP_PENDIENTES_ALERTA_CLIMA.get(cp_fin)
+                                temperatura_alerta = alerta_info.get('temperatura') if alerta_info else None
+                                # Actualizar motivo si es necesario
+                                if motivo and 'alerta climatológica' not in motivo.lower() and 'temperatura' not in motivo.lower():
+                                    motivo = f"{motivo} - Finalizado por alerta climatológica (T={temperatura_alerta:.1f}°C)"
+
+                        print(f"\n[CENTRAL] {'='*70}")
+                        print(f"[CENTRAL] 📨 FIN DE CARGA RECIBIDO de {cp_fin}")
+                        print(f"[CENTRAL]    Driver: {driver_id}")
+                        print(f"[CENTRAL]    Energía: {energia} kWh")
+                        print(f"[CENTRAL]    Importe: {importe} €")
+                        if dur_s:
+                            print(f"[CENTRAL]    Duración: {dur_s} segundos")
+                        print(f"[CENTRAL]    Motivo: {motivo}")
+                        if tiene_alerta_clima_pendiente:
+                            print(f"[CENTRAL]    ⚠️  Alerta climatológica activa (T={temperatura_alerta:.1f}°C) - CP pasará a FUERA_DE_SERVICIO")
+                        print(f"[CENTRAL] {'='*70}\n")
+
                         registrar_evento(f"[CONTROL] Fin de carga recibido de {cp_fin}: {energia} kWh, {importe} €")
 
                         detalle_ticket = {
@@ -3332,7 +3414,12 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                         # Enviar ticket al driver ANTES de limpiar sesión
                         notificar_driver(driver_id, 'TICKET_FINAL', detalle_ticket)
                         
-                        print(f"[CENTRAL] ✅ Ticket enviado a {driver_id}. CP {cp_fin} listo para nuevo servicio.")
+                        print(f"[CENTRAL] ✅ Ticket enviado a {driver_id}")
+                        print(f"[CENTRAL]    Energía: {energia} kWh")
+                        print(f"[CENTRAL]    Importe: {importe} €")
+                        if tiene_alerta_clima_pendiente:
+                            print(f"[CENTRAL]    ⚠️  Motivo: {motivo}")
+                        print()
                         registrar_evento(f"✅ Ticket enviado a {driver_id}: {energia} kWh, {importe} €", "ok")
 
                         # Limpiar sesión actual ANTES de procesar la cola
@@ -3427,8 +3514,13 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                                 # Hay alerta climatológica pendiente: cambiar a FUERA_DE_SERVICIO
                                 try:
                                     cambiar_estado_cp(cp_fin, 'FUERA_DE_SERVICIO', db_connection)
+                                    print(f"\n[CENTRAL] {'='*70}")
+                                    print(f"[CENTRAL] ⚠️  CP {cp_fin} FUERA DE SERVICIO")
+                                    print(f"[CENTRAL]    Motivo: Alerta climatológica (T={temperatura_alerta:.1f}°C)")
+                                    print(f"[CENTRAL]    Suministro finalizado correctamente")
+                                    print(f"[CENTRAL]    Ticket enviado al driver {driver_id}")
+                                    print(f"[CENTRAL] {'='*70}\n")
                                     registrar_evento(f"⚠️ CP {cp_fin} fuera de servicio por alerta climatológica (T={temperatura_alerta:.1f}°C) tras finalizar suministro", "warn")
-                                    print(f"[CENTRAL] CP {cp_fin} finalizó suministro y pasó a FUERA_DE_SERVICIO por alerta climatológica (T={temperatura_alerta:.1f}°C)")
                                 except Exception as e:
                                     print(f"[CENTRAL] ⚠️ Error cambiando estado a FUERA_DE_SERVICIO tras FIN: {e}")
                             else:
@@ -3781,8 +3873,30 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
 
     except ConnectionResetError:
         print(f"[CENTRAL] Conexión con {cp_id} perdida inesperadamente (Reset).")
+        # Registrar en auditoría
+        origen_ip_error = addr[0] if addr else None
+        registrar_auditoria(
+            accion="ERROR_CONEXION",
+            cp_id=cp_id if cp_id != "Desconocido" else None,
+            origen_ip=origen_ip_error,
+            descripcion="Conexión perdida inesperadamente (ConnectionResetError)",
+            resultado="ERROR",
+            db_connection=db_connection
+        )
     except Exception as e:
         print(f"[CENTRAL] Error en bucle de cliente {cp_id}: {e}")
+        import traceback
+        error_trace = traceback.format_exc()
+        # Registrar en auditoría
+        origen_ip_error = addr[0] if addr else None
+        registrar_auditoria(
+            accion="ERROR_SISTEMA",
+            cp_id=cp_id if cp_id != "Desconocido" else None,
+            origen_ip=origen_ip_error,
+            descripcion=f"Error en bucle de cliente: {str(e)}",
+            resultado="ERROR",
+            db_connection=db_connection
+        )
     finally:
         if cp_id != "Desconocido":
             registrar_evento(f"Monitor desconectado: {cp_id}")
@@ -3881,8 +3995,9 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
             # Marcar el CP como DESCONECTADO (no AVERIADO, porque es el Monitor quien se desconectó, no el Engine)
             if _verificar_conexion(db_connection):
                 actualizar_estado_cp(db_connection, cp_id, "Desconectado")
+            origen_ip_desconexion = addr[0] if addr else None
             try:
-                cambiar_estado_cp(cp_id, 'DESCONECTADO', db_connection, motivo='Desconexión inesperada del Monitor')
+                cambiar_estado_cp(cp_id, 'DESCONECTADO', db_connection, motivo='Desconexión inesperada del Monitor', origen_ip=origen_ip_desconexion)
             except Exception:
                 pass
             
@@ -3916,7 +4031,7 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
         conn.close()
         print(f"[CENTRAL] Hilo de conexión con {addr[0]}:{addr[1]} finalizado.")
 
-def cambiar_estado_cp(cp_id: str, nuevo_estado: str, db_connection = None, motivo: str | None = None) -> None:
+def cambiar_estado_cp(cp_id: str, nuevo_estado: str, db_connection = None, motivo: str | None = None, origen_ip: str = None) -> None:
     """Actualiza el estado interno y la BD, y registra en el log/TUI.
     Estados esperados: DESCONECTADO, ACTIVADO, PRE-SUMINISTRO, SUMINISTRANDO, PARADO, AVERÍA.
     """
@@ -3930,11 +4045,21 @@ def cambiar_estado_cp(cp_id: str, nuevo_estado: str, db_connection = None, motiv
             if alerta:
                 # Ignorar cambio mientras persista avería
                 registrar_evento(f"[IGNORADO] {cp_id}: en AVERÍA → se ignora cambio a {nuevo_estado_norm}")
+                # Registrar en auditoría el intento de cambio bloqueado
+                descripcion = f"Intento de cambio de estado bloqueado: {anterior} → {nuevo_estado_norm}. CP en AVERÍA activa."
+                registrar_auditoria("CAMBIO_ESTADO_BLOQUEADO", cp_id, origen_ip, descripcion, "BLOQUEADO", db_connection)
                 return
         CP_ESTADO[cp_id] = nuevo_estado_norm
     detalle = f" (antes: {anterior})" if anterior and anterior != nuevo_estado_norm else ""
     extra = f" Motivo: {motivo}" if motivo else ""
     registrar_evento(f"[ESTADO] {cp_id} -> {nuevo_estado_norm}{detalle}.{extra}")
+    
+    # Registrar en auditoría si hay cambio de estado
+    if anterior != nuevo_estado_norm:
+        descripcion = f"Cambio de estado: {anterior or 'N/A'} → {nuevo_estado_norm}"
+        if motivo:
+            descripcion += f". Motivo: {motivo}"
+        registrar_auditoria("CAMBIO_ESTADO", cp_id, origen_ip, descripcion, "OK", db_connection)
     # Persistir en BD si está disponible
     try:
         if _verificar_conexion(db_connection):
