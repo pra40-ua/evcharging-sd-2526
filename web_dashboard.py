@@ -513,15 +513,11 @@ def consumir_telemetria(broker: str):
                                 estado_anterior_upper = estado_anterior.upper()
                                 estado_recibido_upper = estado_carga_recibido.upper()
                                 
-                                # Si el estado recibido es crítico, usarlo directamente (máxima prioridad)
+                                # PRIORIDAD 1: Si el estado recibido es crítico, usarlo directamente (máxima prioridad)
                                 if estado_recibido_upper in estados_criticos:
                                     estado_carga = estado_carga_recibido
                                     print(f"[DASHBOARD] Estado crítico recibido para {cp_id}: {estado_carga_recibido}")
-                                # Si el estado recibido es interactivo, usarlo directamente (prioridad)
-                                elif estado_recibido_upper in estados_interactivos:
-                                    estado_carga = estado_carga_recibido
-                                    print(f"[DASHBOARD] Estado interactivo recibido para {cp_id}: {estado_carga_recibido}")
-                                # Si el estado anterior es crítico, preservarlo (no puede ser sobrescrito por estados menos importantes)
+                                # PRIORIDAD 2: Si el estado anterior es crítico, preservarlo (no puede ser sobrescrito por estados menos importantes)
                                 # EXCEPCIÓN: Si el anterior es FUERA_DE_SERVICIO y el recibido es ACTIVADO, permitir el cambio
                                 # (significa que Central explícitamente restauró el CP tras quitar alerta climatológica)
                                 elif estado_anterior_upper in estados_criticos:
@@ -539,14 +535,15 @@ def consumir_telemetria(broker: str):
                                             if cp_id in ERRORES_SISTEMA:
                                                 del ERRORES_SISTEMA[cp_id]
                                                 print(f"[DASHBOARD] ✅ Error de sistema limpiado para {cp_id}")
-                                    elif estado_recibido_upper not in estados_criticos:
-                                        # Preservar estado crítico, no degradar
+                                    else:
+                                        # Preservar estado crítico, no puede ser sobrescrito por estados interactivos o normales
                                         estado_carga = estado_anterior
                                         print(f"[DASHBOARD] Preservando estado crítico {estado_anterior} para {cp_id} (telemetría reporta {estado_carga_recibido})")
-                                    else:
-                                        # El nuevo estado también es crítico, usarlo
-                                        estado_carga = estado_carga_recibido
-                                # Si el estado anterior es interactivo y el recibido es ACTIVADO/REPOSO, preservar el interactivo
+                                # PRIORIDAD 3: Si el estado recibido es interactivo, usarlo directamente
+                                elif estado_recibido_upper in estados_interactivos:
+                                    estado_carga = estado_carga_recibido
+                                    print(f"[DASHBOARD] Estado interactivo recibido para {cp_id}: {estado_carga_recibido}")
+                                # PRIORIDAD 4: Si el estado anterior es interactivo y el recibido es ACTIVADO/REPOSO, preservar el interactivo
                                 elif estado_anterior_upper in estados_interactivos:
                                     if estado_recibido_upper in ('ACTIVADO', 'REPOSO', 'IDLE', 'READY'):
                                         # Preservar estado interactivo, no degradar
