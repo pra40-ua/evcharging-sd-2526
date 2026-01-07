@@ -3267,6 +3267,9 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                                 # El driver debe esperar a que el operador del Engine inicie el suministro
                                 print(f"[CENTRAL] {cp_id} confirmó AUTH_REQ. Esperando acción del operador del Engine...")
                                 # NO cambiar estado aquí - mantener ESPERANDO_OPERADOR_ENGINE que se puso al enviar AUTH_REQ
+                                # IMPORTANTE: Resetear contadores de errores al procesar correctamente AUTH_RESP
+                                lrc_errors_consecutivos = 0
+                                decrypt_errors_consecutivos = 0
                             else:
                                 registrar_evento(f"[CONTROL] Confirmación síncrona de {cp_id}: AUTH_ACK#KO ({mensaje}).")
                                 notificar_driver(driver_id, 'DENEGADO', {
@@ -3280,6 +3283,8 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                                     pass
                         except Exception as e:
                             print(f"[CENTRAL] Error procesando AUTH_RESP: {e}")
+                            import traceback
+                            traceback.print_exc()
                     
                     # ====== NUEVO BLOQUE AÑADIDO: MANEJO DE FIN ====== 
                     elif cod_op == 'FIN' and len(campos) >= 4:
