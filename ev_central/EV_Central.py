@@ -761,6 +761,13 @@ def api_weather_alert():
                     print(f"[CENTRAL] ⚠️ Error publicando telemetría de alerta: {e}")
         else:
             # Alerta desactivada, restaurar operación (solo si no está en avería o estado interactivo)
+            # Mensaje visible en terminal
+            print("\n" + "="*70)
+            print(f"[CENTRAL] ✓  ALERTA CLIMATOLÓGICA DESACTIVADA")
+            print(f"  CP: {cp_id}")
+            print(f"  Temperatura: {temperatura:.1f}°C (>= 0°C)")
+            print("="*70 + "\n")
+            
             try:
                 # Verificar estado actual antes de cambiar
                 with CP_ESTADO_LOCK:
@@ -777,11 +784,30 @@ def api_weather_alert():
                     'SUMINISTRANDO'
                 }
                 
-                # Solo restaurar a ACTIVADO si no está en avería, no está en estado interactivo, y no está ya en ACTIVADO
+                # Verificar si el CP está en FUERA_DE_SERVICIO por alerta climatológica
+                esta_fuera_servicio = estado_actual.upper() in ('FUERA_DE_SERVICIO', 'FUERA DE SERVICIO')
+                
+                # Solo restaurar a ACTIVADO si:
+                # 1. No está en avería
+                # 2. No está en estado interactivo
+                # 3. Está en FUERA_DE_SERVICIO (por alerta climatológica) o no está en ACTIVADO
+                origen_ip_restauracion = request.remote_addr if hasattr(request, 'remote_addr') else '127.0.0.1'
+                
                 if not tiene_averia and estado_actual.upper() not in estados_interactivos:
-                    if estado_actual.upper() != 'ACTIVADO':
-                        cambiar_estado_cp(cp_id, 'ACTIVADO', db_conn)
-                        registrar_evento(f"✓ CP {cp_id} restaurado tras alerta climatológica (T={temperatura}°C)", "ok")
+                    if esta_fuera_servicio or estado_actual.upper() != 'ACTIVADO':
+                        cambiar_estado_cp(cp_id, 'ACTIVADO', db_conn, origen_ip=origen_ip_restauracion)
+                        print(f"[CENTRAL] ✅ CP {cp_id} restaurado a ACTIVADO tras desactivar alerta climatológica (T={temperatura:.1f}°C)")
+                        registrar_evento(f"✓ CP {cp_id} restaurado tras alerta climatológica (T={temperatura:.1f}°C)", "ok")
+                        
+                        # Registrar en auditoría
+                        registrar_auditoria(
+                            accion="RESTAURACION_ALERTA_CLIMA",
+                            cp_id=cp_id,
+                            origen_ip=origen_ip_restauracion,
+                            descripcion=f"CP restaurado a ACTIVADO tras desactivar alerta climatológica (T={temperatura:.1f}°C)",
+                            resultado="OK",
+                            db_connection=db_conn
+                        )
                         
                         # Enviar señal STATE al Monitor para notificar que el CP vuelve a estar ACTIVADO
                         try:
@@ -796,24 +822,42 @@ def api_weather_alert():
                         except Exception as e:
                             print(f"[CENTRAL] ⚠️ Error enviando STATE a {cp_id}: {e}")
                     else:
-                        # Ya está en ACTIVADO, no hacer nada más
-                        print(f"[CENTRAL] CP {cp_id} ya está en ACTIVADO, no se necesita restaurar")
+                        # Ya está en ACTIVADO, pero aún así actualizar telemetría para limpiar alerta_clima_activa
+                        print(f"[CENTRAL] CP {cp_id} ya está en ACTIVADO, actualizando telemetría para limpiar alerta climatológica")
                 else:
                     # No restaurar porque está en avería o estado interactivo
                     motivo_no_restaurar = 'en avería' if tiene_averia else f'en estado interactivo ({estado_actual})'
                     print(f"[CENTRAL] CP {cp_id} no se restaura a ACTIVADO: está {motivo_no_restaurar}")
                 
-                # Publicar telemetría actualizada para que el dashboard refleje el cambio
+                # SIEMPRE publicar telemetría actualizada con alerta_clima_activa=False para que el dashboard y driver detecten el cambio
                 try:
                     with TELEMETRIA_ACTUAL_LOCK:
                         telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                    
+                    # Obtener el estado actualizado después de cambiar_estado_cp (si se cambió)
+                    with CP_ESTADO_LOCK:
+                        estado_actualizado = CP_ESTADO.get(cp_id, estado_actual)
+                    
+                    # Determinar el estado final para la telemetría
+                    # Si se restauró a ACTIVADO, usar ACTIVADO; si no, mantener el estado actualizado
+                    if not tiene_averia and estado_actual.upper() not in estados_interactivos:
+                        if esta_fuera_servicio or estado_actual.upper() != 'ACTIVADO':
+                            # Se restauró a ACTIVADO
+                            estado_telemetria = 'ACTIVADO'
+                        else:
+                            # Ya estaba en ACTIVADO, mantenerlo
+                            estado_telemetria = 'ACTIVADO'
+                    else:
+                        # No se pudo restaurar, mantener el estado actualizado
+                        estado_telemetria = estado_actualizado
+                    
                     telemetria_actualizada = {
                         **telemetria_actual,
                         'cp_id': cp_id,
-                        'estado': 'ACTIVADO',
-                        'estado_carga': 'ACTIVADO',
+                        'estado': estado_telemetria,
+                        'estado_carga': estado_telemetria,
                         'timestamp': time.time(),
-                        'alerta_clima_activa': False,
+                        'alerta_clima_activa': False,  # IMPORTANTE: Limpiar la alerta
                         'temperatura': temperatura
                     }
                     with TELEMETRIA_ACTUAL_LOCK:
@@ -821,9 +865,13 @@ def api_weather_alert():
                     if KAFKA_PRODUCER:
                         KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
                         KAFKA_PRODUCER.flush(timeout=1)
-                        print(f"[CENTRAL] Telemetría publicada para {cp_id}: ACTIVADO (alerta climatológica desactivada)")
+                        print(f"[CENTRAL] ✅ Telemetría publicada para {cp_id}: {estado_telemetria} (alerta climatológica desactivada, alerta_clima_activa=False)")
+                        print(f"[CENTRAL]    Estado en telemetría: {estado_telemetria}")
+                        print(f"[CENTRAL]    alerta_clima_activa: False")
                 except Exception as e:
                     print(f"[CENTRAL] ⚠️ Error publicando telemetría de restauración: {e}")
+                    import traceback
+                    traceback.print_exc()
             except Exception:
                 pass
         
