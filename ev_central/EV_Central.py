@@ -673,9 +673,33 @@ def api_weather_alert():
             with CP_ESTADO_LOCK:
                 estado_cp = CP_ESTADO.get(cp_id, '')
             
+            # Verificar si hay suministro activo basándose en estado Y telemetría
+            # Estados donde puede haber suministro activo
+            estados_con_suministro = {'SUMINISTRANDO', 'CARGANDO', 'ESPERANDO_OPERADOR_ENGINE', 
+                                     'LISTO_PARA_INICIAR', 'PRE-SUMINISTRO'}
+            
+            # Verificar telemetría para detectar si realmente hay energía siendo entregada
+            tiene_suministro_activo = False
+            energia_entregada = 0.0
+            with TELEMETRIA_ACTUAL_LOCK:
+                telemetria_cp = TELEMETRIA_ACTUAL.get(cp_id, {})
+                energia_entregada = telemetria_cp.get('kw_entregados', 0.0) or telemetria_cp.get('energia_total', 0.0)
+                tiene_sesion_activa = telemetria_cp.get('tiene_sesion_activa', False)
+                potencia_actual = telemetria_cp.get('potencia_actual', 0.0)
+            
+            # Hay suministro activo si:
+            # 1. El estado indica suministro, O
+            # 2. Hay sesión activa Y hay energía entregada (> 0), O
+            # 3. Hay potencia actual (> 0) indicando que está entregando energía
+            if estado_cp in estados_con_suministro:
+                tiene_suministro_activo = True
+            elif tiene_sesion_activa and (energia_entregada > 0.0 or potencia_actual > 0.0):
+                tiene_suministro_activo = True
+                print(f"[CENTRAL] ⚠️  Detectado suministro activo en {cp_id} por telemetría (E={energia_entregada:.2f} kWh, P={potencia_actual:.2f} kW)")
+            
             # Si está suministrando, enviar STOP y esperar a que finalice normalmente
-            if estado_cp == 'SUMINISTRANDO' or estado_cp == 'CARGANDO':
-                print(f"[CENTRAL] ⚠️  CP {cp_id} está en suministro activo. Finalizando suministro antes de poner fuera de servicio...")
+            if tiene_suministro_activo:
+                print(f"[CENTRAL] ⚠️  CP {cp_id} está en suministro activo (Estado: {estado_cp}, Energía: {energia_entregada:.2f} kWh). Finalizando suministro antes de poner fuera de servicio...")
                 registrar_evento(f"⚠️ Alerta climatológica activa para {cp_id} (T={temperatura:.1f}°C). Finalizando suministro activo antes de poner fuera de servicio.", "warn")
                 
                 # Marcar que este CP debe ir a FUERA_DE_SERVICIO después de recibir FIN
