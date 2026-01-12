@@ -895,6 +895,11 @@
                     html += '<span style="color: #999; font-size: 12px;">-</span>';
                 }
                 
+                // Botón para restaurar/revocar claves de cifrado (siempre visible si el CP está conectado)
+                if (estado !== 'DESCONECTADO' && estado !== 'AVERIADO' && estado !== 'AVERÍA') {
+                    html += `<br><button class="btn-control" onclick="restaurarClaves('${cp.cp_id}')" style="background: #ffc107; color: #000; margin-top: 4px; font-size: 11px; font-weight: bold;">🔑 Restaurar Claves</button>`;
+                }
+                
                 html += '</td>';
                 html += '</tr>';
             });
@@ -1001,6 +1006,33 @@ El suministro comenzará inmediatamente.`)) return;
         }
         
         // Función para desconectar el Monitor de un CP (simular caída)
+        function restaurarClaves(cpId) {
+            if (!confirm(`¿Restaurar claves de cifrado para ${cpId}?
+
+Esto revocará las claves actuales y el CP quedará fuera de servicio hasta que se re-autentique.`)) return;
+            
+            fetch(`/api/restaurar_claves/${cpId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    mostrarNotificacion(`✓ ${data.message}`, 'success');
+                    // Actualizar dashboard después de un breve delay
+                    setTimeout(() => actualizarDashboard(), 1000);
+                } else {
+                    mostrarNotificacion(`⚠ ${data.message}`, 'error');
+                }
+            })
+            .catch(error => {
+                mostrarNotificacion(`Error: ${error}`, 'error');
+                console.error('Error restaurando claves:', error);
+            });
+        }
+        
         function desconectarMonitor(cpId) {
             if (!confirm(`¿Desconectar el Monitor de ${cpId}?
 

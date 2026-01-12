@@ -376,6 +376,7 @@ def revocar_clave_cifrado(cp_id: str, db_connection = None) -> bool:
     """
     Revoca la clave de cifrado de un CP.
     Esto forzará una nueva autenticación.
+    Cierra la conexión TCP para forzar al CP a reconectarse y re-autenticarse.
     
     Returns:
         True si se revocó correctamente
@@ -397,7 +398,26 @@ def revocar_clave_cifrado(cp_id: str, db_connection = None) -> bool:
             db_connection.commit()
             cursor.close()
         
-        registrar_evento(f"🔑 Clave de cifrado revocada para {cp_id}", "warn")
+        # Cerrar conexión TCP para forzar re-autenticación
+        with CONEXIONES_ACTIVAS_LOCK:
+            if cp_id in CONEXIONES_ACTIVAS:
+                try:
+                    socket_cp = CONEXIONES_ACTIVAS[cp_id]
+                    socket_cp.close()
+                    del CONEXIONES_ACTIVAS[cp_id]
+                    print(f"[CENTRAL] Conexión TCP de {cp_id} cerrada tras revocación de clave")
+                    registrar_evento(f"🔌 Conexión de {cp_id} cerrada tras revocación de clave", "warn")
+                except Exception as e:
+                    print(f"[CENTRAL] ⚠️ Error cerrando conexión de {cp_id}: {e}")
+        
+        # Cambiar estado a FUERA_DE_SERVICIO para indicar que necesita re-autenticación
+        try:
+            cambiar_estado_cp(cp_id, 'FUERA_DE_SERVICIO', db_connection, origen_ip='central')
+            registrar_evento(f"🔑 CP {cp_id} marcado como FUERA_DE_SERVICIO (requiere re-autenticación)", "warn")
+        except Exception as e:
+            print(f"[CENTRAL] ⚠️ Error cambiando estado de {cp_id}: {e}")
+        
+        registrar_evento(f"🔑 Clave de cifrado revocada para {cp_id}. El CP deberá re-autenticarse.", "warn")
         return True
     except Exception as e:
         print(f"[CENTRAL] ❌ Error revocando clave: {e}")

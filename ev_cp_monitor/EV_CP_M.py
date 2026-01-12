@@ -1266,6 +1266,11 @@ def main():
     try:
         # 1. Registro en la Central
         central_socket = conectar_y_registrar(args.central_ip, args.central_port, args.cp_id, args.engine_ip, args.engine_port)
+        
+        # Actualizar socket global
+        with CENTRAL_SOCKET_LOCK:
+            global CENTRAL_SOCKET
+            CENTRAL_SOCKET = central_socket
 
         # 2. Hilo de escucha de comandos de la Central
         central_listener_thread = threading.Thread(
@@ -1284,6 +1289,75 @@ def main():
         health_check_thread.start()
 
         print("\n[CP_M] Sistema ACTIVADO. Monitorización local de Engine iniciada.")
+        print(f"[CP_M] Para re-autenticarse y obtener nuevas claves, escriba 'reauth' y presione Enter")
+
+        # Hilo para escuchar comandos de terminal (re-autenticación)
+        def escuchar_comandos_terminal():
+            """Escucha comandos de terminal para re-autenticación."""
+            nonlocal central_socket, central_listener_thread
+            while True:
+                try:
+                    if sys.stdin and sys.stdin.isatty():
+                        comando = input().strip().lower()
+                        if comando == 'reauth':
+                            print(f"\n[{args.cp_id}] 🔄 Iniciando re-autenticación...")
+                            print(f"[{args.cp_id}] Esto cerrará la conexión actual y establecerá una nueva con nuevas claves de cifrado.")
+                            
+                            # Cerrar conexión actual
+                            with CENTRAL_SOCKET_LOCK:
+                                if CENTRAL_SOCKET:
+                                    try:
+                                        CENTRAL_SOCKET.close()
+                                    except:
+                                        pass
+                                    CENTRAL_SOCKET = None
+                            
+                            # Limpiar clave de cifrado actual
+                            with ENCRYPTION_KEY_LOCK:
+                                ENCRYPTION_KEY = None
+                            
+                            # Intentar reconectar y re-autenticar
+                            try:
+                                nuevo_socket = conectar_y_registrar(
+                                    args.central_ip, 
+                                    args.central_port, 
+                                    args.cp_id, 
+                                    args.engine_ip, 
+                                    args.engine_port
+                                )
+                                
+                                # Actualizar socket global y local
+                                with CENTRAL_SOCKET_LOCK:
+                                    CENTRAL_SOCKET = nuevo_socket
+                                central_socket = nuevo_socket
+                                
+                                # Reiniciar hilo de escucha
+                                central_listener_thread = threading.Thread(
+                                    target=escuchar_central,
+                                    args=(nuevo_socket, args.cp_id, args.engine_ip, args.engine_port),
+                                    daemon=True
+                                )
+                                central_listener_thread.start()
+                                
+                                print(f"[{args.cp_id}] ✓ Re-autenticación exitosa. Nuevas claves de cifrado obtenidas.")
+                            except Exception as e:
+                                print(f"[{args.cp_id}] ❌ Error durante re-autenticación: {e}")
+                                print(f"[{args.cp_id}] El sistema intentará reconectar automáticamente.")
+                        elif comando == 'help':
+                            print(f"\n[{args.cp_id}] Comandos disponibles:")
+                            print(f"  reauth  - Re-autenticarse y obtener nuevas claves de cifrado")
+                            print(f"  help    - Mostrar esta ayuda")
+                        else:
+                            print(f"[{args.cp_id}] Comando desconocido. Escriba 'help' para ver comandos disponibles.")
+                except (EOFError, KeyboardInterrupt):
+                    break
+                except Exception as e:
+                    print(f"[{args.cp_id}] Error en terminal: {e}")
+                    time.sleep(1)
+        
+        # Iniciar hilo de comandos de terminal
+        terminal_thread = threading.Thread(target=escuchar_comandos_terminal, daemon=True)
+        terminal_thread.start()
 
         # Bucle principal para mantener el proceso vivo
         while True:

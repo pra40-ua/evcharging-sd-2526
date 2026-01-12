@@ -1289,6 +1289,58 @@ def api_confirmar_inicio(cp_id):
         }), 500
 
 
+@app.route('/api/restaurar_claves/<cp_id>', methods=['POST'])
+def api_restaurar_claves(cp_id):
+    """
+    Restaura (revoca) las claves de cifrado de un CP.
+    Esto fuerza al CP a re-autenticarse para obtener nuevas claves.
+    """
+    try:
+        print(f"[DASHBOARD] Solicitud de restauración de claves para {cp_id}")
+        
+        # Llamar al endpoint de EV_Central para revocar la clave
+        central_api_url = f"http://{CONFIG.get('central_ip', '127.0.0.1')}:{CONFIG.get('central_api_port', 5001)}/api/revoke_key/{cp_id}"
+        
+        import requests
+        try:
+            response = requests.post(central_api_url, timeout=5)
+            response.raise_for_status()
+            data = response.json()
+            
+            if data.get('status') == 'ok':
+                registrar_evento(f"🔑 Claves restauradas para {cp_id}", 'info')
+                # Limpiar cache de claves de cifrado para este CP
+                with ENCRYPTION_KEYS_CACHE_LOCK:
+                    if cp_id in ENCRYPTION_KEYS_CACHE:
+                        del ENCRYPTION_KEYS_CACHE[cp_id]
+                
+                return jsonify({
+                    'status': 'ok',
+                    'message': f'Claves restauradas para {cp_id}. El CP deberá re-autenticarse.'
+                })
+            else:
+                return jsonify({
+                    'status': 'error',
+                    'message': data.get('message', 'Error desconocido al restaurar claves')
+                }), 500
+                
+        except requests.exceptions.RequestException as e:
+            print(f"[DASHBOARD] Error llamando a EV_Central: {e}")
+            return jsonify({
+                'status': 'error',
+                'message': f'Error conectando con EV_Central: {str(e)}'
+            }), 503
+        
+    except Exception as e:
+        print(f"[DASHBOARD] Error en api_restaurar_claves: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
 @app.route('/api/confirmar_fin/<cp_id>', methods=['POST'])
 def api_confirmar_fin(cp_id):
     """
