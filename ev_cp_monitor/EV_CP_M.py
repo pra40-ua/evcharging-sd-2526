@@ -201,6 +201,10 @@ ENCRYPTION_KEY_LOCK = threading.Lock()
 PENDING_KEY_TO_ENGINE = False
 PENDING_KEY_LOCK = threading.Lock()
 
+# Estado de HCK para evitar notificar avería múltiples veces
+ULTIMO_ESTADO_HCK = None  # 'OK' o 'KO'
+ULTIMO_ESTADO_HCK_LOCK = threading.Lock()
+
 # URL de EV_Registry
 # Según la guía, el Registry debe usar HTTPS obligatoriamente
 REGISTRY_URL_ENV = os.getenv('REGISTRY_URL', '')
@@ -233,8 +237,10 @@ def notificar_averia_central(central_socket: socket.socket, cp_id: str, motivo: 
             print(f"[{cp_id}] ❌ {mensaje_error}")
             return
         
-        # Intentar enviar el estado de AVERÍA (se cifrará automáticamente si hay clave)
-        trama_averia = construir_trama('AVR', [cp_id, motivo], cifrar=True)
+        # Formato AVR según Central: AVR#motivo#codigo
+        # El cp_id ya se conoce del contexto de la conexión en Central
+        codigo = "KO"  # Código estándar para avería
+        trama_averia = construir_trama('AVR', [motivo, codigo], cifrar=True)
         central_socket.sendall(trama_averia)
         print(f"[{cp_id}] -> ENVIADO AVR a Central. Motivo: {motivo}")
 
@@ -948,7 +954,7 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                     engine_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                     engine_socket.settimeout(3.0)  # Timeout para el connect
                     engine_socket.connect((engine_ip, engine_port))
-                    print(f"[{cp_id}] ✓ Conexión con Engine establecida.")
+                    print(f"[{cp_id}] ✓✓✓ Conexión con Engine establecida (connect() exitoso). Socket: {engine_socket.getsockname()} -> {engine_socket.getpeername()}")
                     engine_socket.settimeout(HCK_INTERVAL * 0.8)
                     conexion_perdida_notificada = False
                 except (ConnectionRefusedError, socket.timeout, OSError) as e:
@@ -1089,15 +1095,25 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
             def _procesar_trama_engine(cod: str, args: list, trama_completa: bytes = None):
                 if cod == 'HCK_RESP' and args:
                     status = args[0]
+                    global ULTIMO_ESTADO_HCK
+                    
+                    with ULTIMO_ESTADO_HCK_LOCK:
+                        estado_anterior = ULTIMO_ESTADO_HCK
+                        ULTIMO_ESTADO_HCK = status
+                    
                     if status == 'OK':
+                        # Si cambió de KO a OK, no hacer nada (la avería se resolvió)
                         return
                     if status == 'KO':
-                        print(f"[{cp_id}] HCK KO recibido. Notificando avería a Central.")
-                        socket_central = obtener_socket_central()
-                        if socket_central:
-                            notificar_averia_central(socket_central, cp_id, "Fallo reportado por Engine")
-                        else:
-                            print(f"[{cp_id}] ⚠️ No hay conexión con Central. No se puede notificar avería.")
+                        # Solo notificar si cambió de OK a KO (o si es la primera vez)
+                        if estado_anterior != 'KO':
+                            print(f"[{cp_id}] HCK KO recibido. Notificando avería a Central.")
+                            socket_central = obtener_socket_central()
+                            if socket_central:
+                                notificar_averia_central(socket_central, cp_id, "Fallo reportado por Engine")
+                            else:
+                                print(f"[{cp_id}] ⚠️ No hay conexión con Central. No se puede notificar avería.")
+                        # Si ya estaba en KO, no notificar de nuevo
                     else:
                         print(f"[{cp_id}] Respuesta HCK_RESP inválida: {status}")
                     return

@@ -893,11 +893,12 @@ echo [2/4] LANZANDO ENGINE
 echo ============================================================
 echo.
 
-start "Engine-PC_B" powershell -NoExit -Command "Write-Host 'Iniciando Engine (CP_001) en puerto 5001...' -ForegroundColor Cyan; Write-Host ''; docker run --rm -p 5001:5001 -p 9001:9001 --label project=evcharging-pc-b --label component=engine --label cp_id=CP_001 --name engine -e ENGINE_PORT=5001 -e CP_ID=CP_001 -e KAFKA_SERVER=!CENTRAL_IP!:9092 -e WEB_PORT=9001 ev_engine:local"
+start "Engine-PC_B" powershell -NoExit -Command "Write-Host 'Iniciando Engine (CP_001) en puerto 5001...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --network evnet -p 5001:5001 -p 9001:9001 --label project=evcharging-pc-b --label component=engine --label cp_id=CP_001 --name engine -e ENGINE_PORT=5001 -e CP_ID=CP_001 -e KAFKA_SERVER=!CENTRAL_IP!:9092 -e WEB_PORT=9001 ev_engine:local"
 
 echo [OK] Engine iniciado en ventana separada
 echo.
-timeout /t 3 /nobreak >nul
+echo [INFO] Esperando 5 segundos para que el Engine esté listo...
+timeout /t 5 /nobreak >nul
 
 REM Abrir interfaz web del engine (puerto 9001 para CP_001) - DESHABILITADO
 REM echo Abriendo interfaz web en http://localhost:9001...
@@ -926,7 +927,7 @@ echo ============================================================
 echo.
 
 set /a MONITOR_API_PORT_CLASICO=8001
-start "Monitor-PC_B" powershell -NoExit -Command "Write-Host 'Iniciando Monitor (CP_001)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --network evnet -p !MONITOR_API_PORT_CLASICO!:!MONITOR_API_PORT_CLASICO! --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 --name monitor -e CP_ID=CP_001 -e CENTRAL_IP=!CENTRAL_IP! -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=5001 -e ENGINE_WEB_PORT=9001 -e MONITOR_API_PORT=!MONITOR_API_PORT_CLASICO! -e REGISTRY_URL=!REGISTRY_URL! -e REGISTRY_API_KEY=!REGISTRY_API_KEY! -e WEATHER_API_URL=http://host.docker.internal:5002 ev_monitor:local"
+start "Monitor-PC_B" powershell -NoExit -Command "Write-Host 'Iniciando Monitor (CP_001)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --network evnet -p !MONITOR_API_PORT_CLASICO!:!MONITOR_API_PORT_CLASICO! --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 --name monitor -e CP_ID=CP_001 -e CENTRAL_IP=!CENTRAL_IP! -e CENTRAL_PORT=5000 -e ENGINE_IP=engine -e ENGINE_PORT=5001 -e ENGINE_WEB_PORT=9001 -e MONITOR_API_PORT=!MONITOR_API_PORT_CLASICO! -e REGISTRY_URL=!REGISTRY_URL! -e REGISTRY_API_KEY=!REGISTRY_API_KEY! -e WEATHER_API_URL=http://host.docker.internal:5002 ev_monitor:local"
 
 echo [OK] Monitor iniciado en ventana separada
 echo.
@@ -995,11 +996,12 @@ echo [DEBUG] ENGINE_PORT calculado: !ENGINE_PORT! >> "%LOG_FILE%"
 REM Calcular puerto web (9000 + CP_NUM)
 set /a WEB_PORT_ENGINE=9000+%CP_NUM%
 
-REM Construir comando ENGINE: Sin --network host, con mapeo de puertos TCP y Web
-set "ENGINE_CMD=docker run --rm -p !ENGINE_PORT!:!ENGINE_PORT! -p !WEB_PORT_ENGINE!:!WEB_PORT_ENGINE! --name engine_!CP_ID! --label project=evcharging-pc-b --label component=engine --label cp_id=!CP_ID! -e ENGINE_PORT=!ENGINE_PORT! -e CP_ID=!CP_ID! -e KAFKA_SERVER=%KAFKA_SERVER% -e WEB_PORT=!WEB_PORT_ENGINE! ev_engine:local"
+REM Construir comando ENGINE: Con --network evnet para comunicación directa con Monitor
+set "ENGINE_CMD=docker run --rm --network evnet -p !ENGINE_PORT!:!ENGINE_PORT! -p !WEB_PORT_ENGINE!:!WEB_PORT_ENGINE! --name engine_!CP_ID! --label project=evcharging-pc-b --label component=engine --label cp_id=!CP_ID! -e ENGINE_PORT=!ENGINE_PORT! -e CP_ID=!CP_ID! -e KAFKA_SERVER=%KAFKA_SERVER% -e WEB_PORT=!WEB_PORT_ENGINE! ev_engine:local"
 REM Calcular puerto del Monitor API (8000 + CP_NUM)
 set /a MONITOR_API_PORT=8000+%CP_NUM%
-set "MONITOR_CMD=docker run --rm --network evnet -p !MONITOR_API_PORT!:!MONITOR_API_PORT! --name monitor_!CP_ID! --label project=evcharging-pc-b --label component=monitor --label cp_id=!CP_ID! -e CP_ID=!CP_ID! -e CENTRAL_IP=%CENTRAL_IP% -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=!ENGINE_PORT! -e ENGINE_WEB_PORT=!WEB_PORT_ENGINE! -e MONITOR_API_PORT=!MONITOR_API_PORT! -e REGISTRY_URL=!REGISTRY_URL! -e REGISTRY_API_KEY=!REGISTRY_API_KEY! -e WEATHER_API_URL=http://host.docker.internal:5002 ev_monitor:local"
+REM Usar nombre del contenedor del Engine en lugar de host.docker.internal cuando ambos están en evnet
+set "MONITOR_CMD=docker run --rm --network evnet -p !MONITOR_API_PORT!:!MONITOR_API_PORT! --name monitor_!CP_ID! --label project=evcharging-pc-b --label component=monitor --label cp_id=!CP_ID! -e CP_ID=!CP_ID! -e CENTRAL_IP=%CENTRAL_IP% -e CENTRAL_PORT=5000 -e ENGINE_IP=engine_!CP_ID! -e ENGINE_PORT=!ENGINE_PORT! -e ENGINE_WEB_PORT=!WEB_PORT_ENGINE! -e MONITOR_API_PORT=!MONITOR_API_PORT! -e REGISTRY_URL=!REGISTRY_URL! -e REGISTRY_API_KEY=!REGISTRY_API_KEY! -e WEATHER_API_URL=http://host.docker.internal:5002 ev_monitor:local"
 
 echo. >> "%LOG_FILE%"
 echo [DEBUG] ---- COMANDO ENGINE ---- >> "%LOG_FILE%"
@@ -1027,9 +1029,9 @@ echo [DEBUG] Ejecutando START PowerShell para Engine... >> "%LOG_FILE%"
 start "Engine_!CP_ID!" powershell -NoExit -Command "!PS_ENGINE_CMD!"
 echo [DEBUG] START ejecutado para Engine (errorlevel: !errorlevel!) >> "%LOG_FILE%"
 
-REM Esperar para que el Engine este listo
-echo [DEBUG] Esperando 3 segundos... >> "%LOG_FILE%"
-timeout /t 3 /nobreak >nul
+REM Esperar para que el Engine este listo y escuchando
+echo [DEBUG] Esperando 5 segundos para que el Engine esté listo... >> "%LOG_FILE%"
+timeout /t 5 /nobreak >nul
 
 REM Calcular puerto web del engine (9000 + CP_NUM)
 set /a WEB_PORT=9000+%CP_NUM%

@@ -121,8 +121,11 @@ def generar_y_enviar_telemetria(cp_id: str, estado_carga: str, kw_entregados: fl
         
         # ENFORCE: sin clave, NO se envía telemetría a Kafka (evita MITM en topics)
         if not encryption_key:
-            if KAFKA_ENCRYPTION_ERROR_COUNT == 0:
+            # Solo mostrar el mensaje una vez para no saturar los logs
+            global KAFKA_MISSING_KEY_MESSAGE_SHOWN
+            if not KAFKA_MISSING_KEY_MESSAGE_SHOWN:
                 print(f"[{cp_id}] ❌ Telemetría NO enviada: falta clave de cifrado Kafka (esperando SET_KEY del Monitor).")
+                KAFKA_MISSING_KEY_MESSAGE_SHOWN = True
             return
 
         try:
@@ -396,6 +399,7 @@ SIMULAR_AVERIA_LOCK = threading.Lock()
 KAFKA_ENCRYPTION_KEY = None
 KAFKA_ENCRYPTION_KEY_LOCK = threading.Lock()
 KAFKA_ENCRYPTION_ERROR_COUNT = 0  # Contador de errores de cifrado
+KAFKA_MISSING_KEY_MESSAGE_SHOWN = False  # Flag para mostrar mensaje de falta de clave solo una vez
 
 # Flask app para interfaz web (configurar rutas absolutas para templates)
 import os as os_flask
@@ -612,6 +616,7 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
     global SESSION_START_TS, CURRENT_TX_ID, ACTIVE_MONITOR_CONN
     print(f"\n{'='*70}")
     print(f"  [{cp_id}] 🔗 MONITOR CONECTADO desde {addr[0]}:{addr[1]}")
+    print(f"  [{cp_id}] Hilo de manejo de conexión iniciado")
     print(f"{'='*70}\n")
     # Guardar conexión activa para permitir al menú enviar señales de 'enchufado'
     try:
@@ -666,13 +671,37 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
             print(f"[{cp_id}] ⚠️ Error enviando FIN tras recuperación: {e}")
     
     try:
+        print(f"[{cp_id}] Iniciando bucle de recepción de mensajes del Monitor...")
         while True:
-            # Esperar la trama HCK
-            trama_bytes = conn.recv(1024)
-            if not trama_bytes:
+            # Esperar la trama HCK (con timeout configurado en el socket)
+            try:
+                # Debug: mostrar que estamos esperando datos
+                # print(f"[{cp_id}] Esperando datos del Monitor (timeout 3s)...")
+                trama_bytes = conn.recv(1024)
+                if not trama_bytes:
+                    print(f"[{cp_id}] Engine recibió conexión cerrada del Monitor.")
+                    break
+                # No mostrar mensaje de datos recibidos para HCK (muy frecuente)
+                # print(f"[{cp_id}] ✓ Datos recibidos: {len(trama_bytes)} bytes")
+            except socket.timeout:
+                # Timeout esperando datos - esto es normal si el Monitor no envía nada
+                # Continuar el bucle para esperar el siguiente mensaje
+                # Debug: comentado para no saturar logs
+                # print(f"[{cp_id}] Timeout esperando datos (normal si Monitor no envía nada)")
+                continue
+            except (ConnectionResetError, BrokenPipeError, OSError) as e:
+                print(f"[{cp_id}] Conexión con Monitor perdida: {e}")
                 break
             
             cod_op, campos = descomponer_trama(trama_bytes)
+            
+            # Si la trama no se pudo descomponer, ignorar y continuar
+            if cod_op is None:
+                # Trama inválida - continuar esperando siguiente mensaje
+                # Debug para diagnosticar problemas
+                print(f"[{cp_id}] ⚠️ Trama inválida recibida ({len(trama_bytes)} bytes)")
+                print(f"[{cp_id}] DEBUG: Primeros bytes: {trama_bytes[:min(50, len(trama_bytes))].hex()}")
+                continue
 
             if cod_op == 'HCK':
                 # --- Lógica de Simulación de Estado ---
@@ -683,9 +712,20 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                     else:
                         status = "OK"
                 
-                respuesta = construir_trama('HCK_RESP', [status])
-                conn.sendall(respuesta)
-                # HCK es muy frecuente, no mostrar para no saturar la pantalla
+                # Responder inmediatamente al HCK
+                try:
+                    respuesta = construir_trama('HCK_RESP', [status])
+                    conn.sendall(respuesta)
+                    # HCK es muy frecuente, no mostrar para no saturar la pantalla
+                    # print(f"[{cp_id}] ✓ HCK_RESP enviado: {status}")
+                except (BrokenPipeError, ConnectionResetError, OSError) as e:
+                    print(f"[{cp_id}] ⚠️ Error enviando HCK_RESP: {e}. Conexión perdida.")
+                    break  # Salir del bucle para reconectar
+                except Exception as e:
+                    print(f"[{cp_id}] ⚠️ Error inesperado enviando HCK_RESP: {e}")
+                    import traceback
+                    traceback.print_exc()
+                    break  # Salir del bucle para reconectar
             elif cod_op == 'SET_KEY':
                 # Nuevo mensaje: Monitor envía la clave de cifrado para Kafka
                 # SET_KEY#<clave_b64>
@@ -697,6 +737,8 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                         with KAFKA_ENCRYPTION_KEY_LOCK:
                             KAFKA_ENCRYPTION_KEY = clave_bytes
                             KAFKA_ENCRYPTION_ERROR_COUNT = 0  # Reset contador de errores
+                            global KAFKA_MISSING_KEY_MESSAGE_SHOWN
+                            KAFKA_MISSING_KEY_MESSAGE_SHOWN = False  # Reset flag para permitir mostrar mensaje de nuevo si se pierde la clave
                         print(f"[{cp_id}] ✓ Clave de cifrado Kafka recibida y almacenada")
                         respuesta = construir_trama('ACK', ['KEY_OK'])
                         conn.sendall(respuesta)
@@ -921,12 +963,25 @@ def handle_monitor_connection(conn: socket.socket, addr: tuple, cp_id: str):
                  print(f"[ENGINE] Recibido mensaje desconocido: {cod_op}")
             
     except ConnectionResetError:
-        print(f"[ENGINE] Conexión con Monitor ({addr[0]}) perdida inesperadamente.")
+        print(f"[{cp_id}] Conexión con Monitor ({addr[0]}) perdida inesperadamente.")
+    except socket.timeout:
+        print(f"[{cp_id}] Timeout en conexión con Monitor ({addr[0]}).")
     except Exception as e:
-        print(f"[ENGINE] Error en bucle de conexión con Monitor: {e}")
+        print(f"[{cp_id}] Error en bucle de conexión con Monitor: {e}")
+        import traceback
+        traceback.print_exc()
     finally:
-        conn.close()
-        print("[ENGINE] Conexión con Monitor cerrada.")
+        # Limpiar referencia global de conexión activa
+        try:
+            if globals().get('ACTIVE_MONITOR_CONN') == conn:
+                globals()['ACTIVE_MONITOR_CONN'] = None
+        except:
+            pass
+        try:
+            conn.close()
+            print(f"[{cp_id}] Conexión con Monitor cerrada.")
+        except:
+            pass
 
 
 def enviar_estado_al_monitor(estado: str) -> None:
@@ -2677,11 +2732,12 @@ def main():
     
     print("="*40)
     print("[EV_CP_E] INICIADO")
-    print(f"Puerto de escucha: {args.port}")
+    print(f"Puerto de escucha TCP: {args.port}")
     print(f"CP ID: {args.cp_id}")
     print(f"Kafka: {KAFKA_SERVER}")
     print(f"Puerto Web: {WEB_PORT}")
     print("="*40)
+    print(f"[EV_CP_E] Iniciando servidor TCP en puerto {args.port}...")
 
     # El hilo de telemetría NO se inicia en arranque; solo tras recibir START
     print(f"[EV_CP_E] Telemetría en reposo. A la espera de START para {args.cp_id}")
@@ -2727,27 +2783,72 @@ def main():
             menu_thread.start()
         else:
             print("[ENGINE] Menú deshabilitado (STDIN no interactivo). Use el Monitor para PLUG/STOP.")
+        
+        # Iniciar servidor TCP para recibir conexiones del Monitor
+        print(f"[EV_CP_E] [{args.cp_id}] Iniciando servidor TCP en puerto {args.port}...")
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        server_socket.bind(('', args.port))
-        server_socket.listen(1)
+        try:
+            server_socket.bind(('0.0.0.0', args.port))  # Escuchar en todas las interfaces
+            print(f"[EV_CP_E] [{args.cp_id}] ✓ Socket bind exitoso en 0.0.0.0:{args.port}")
+        except OSError as e:
+            print(f"[EV_CP_E] [{args.cp_id}] ❌ Error haciendo bind en puerto {args.port}: {e}")
+            import traceback
+            traceback.print_exc()
+            raise
+        server_socket.listen(5)  # Permitir múltiples conexiones en cola (escalable para múltiples CPs)
         # Configurar timeout para no bloquear indefinidamente
         server_socket.settimeout(5.0)
         
-        print(f"[EV_CP_E] Servidor escuchando en TCP (:{args.port}). Esperando Monitor...")
+        print(f"[EV_CP_E] [{args.cp_id}] ✓ Servidor TCP escuchando en 0.0.0.0:{args.port}. Esperando Monitor...")
         
         # Bucle para aceptar conexiones (reconexión automática)
+        # Cada conexión se maneja en un hilo separado para permitir múltiples CPs simultáneos
+        # Esto es escalable: cada CP tiene su propio Engine en un puerto diferente
+        connection_count = 0
         while True:
             try:
-                conn, addr = server_socket.accept()
-                # Una vez conectado, quitar timeout para la comunicación
-                conn.settimeout(None)
-                print(f"[EV_CP_E] Monitor conectado desde {addr[0]}:{addr[1]}")
-                handle_monitor_connection(conn, addr, args.cp_id)
-                # Si la conexión se cierra, volver a esperar
-                print(f"[EV_CP_E] Conexión cerrada. Esperando nueva conexión del Monitor...")
+                # Mostrar mensaje cada vez para diagnosticar problemas de conexión
+                if connection_count % 5 == 0:  # Cada 5 intentos (cada ~25 segundos)
+                    print(f"[EV_CP_E] [{args.cp_id}] Esperando conexión del Monitor en puerto {args.port}... (intento {connection_count})")
+                connection_count += 1
+                # accept() bloquea hasta que llegue una conexión o expire el timeout (5s)
+                # Si el Monitor se conecta pero no llega aquí, puede ser un problema de red Docker
+                try:
+                    conn, addr = server_socket.accept()
+                    print(f"[EV_CP_E] [{args.cp_id}] ✓✓✓ CONEXIÓN RECIBIDA EN accept() desde {addr[0]}:{addr[1]}")
+                except socket.timeout:
+                    # Timeout normal, continuar esperando
+                    continue
+                except Exception as e:
+                    print(f"[EV_CP_E] [{args.cp_id}] ⚠️ Error en accept(): {e}")
+                    import traceback
+                    traceback.print_exc()
+                    continue
+                # Configurar timeout para la comunicación (necesario para responder HCK a tiempo)
+                # El Monitor envía HCK cada 2 segundos y espera respuesta en 1.6s (HCK_INTERVAL * 0.8)
+                # Usar un timeout de 3 segundos (mayor que el intervalo HCK de 2s) para asegurar que recibimos los HCK
+                conn.settimeout(3.0)
+                print(f"[EV_CP_E] [{args.cp_id}] ✓ Monitor conectado desde {addr[0]}:{addr[1]} - Iniciando hilo de manejo...")
+                # Crear un hilo para manejar esta conexión (permite múltiples CPs simultáneos)
+                # Cada CP tiene su propio Engine, así que normalmente solo habrá una conexión por Engine
+                monitor_thread = threading.Thread(
+                    target=handle_monitor_connection,
+                    args=(conn, addr, args.cp_id),
+                    daemon=True
+                )
+                monitor_thread.start()
+                print(f"[EV_CP_E] [{args.cp_id}] ✓ Hilo de manejo iniciado para Monitor {addr[0]}:{addr[1]}")
+                # Continuar aceptando más conexiones sin esperar a que termine esta
+                # (útil si el Monitor se reconecta)
             except socket.timeout:
-                # Timeout de accept(), seguir esperando
+                # Timeout de accept(), seguir esperando (normal, no es un error)
+                # No mostrar mensaje para no saturar logs
+                continue
+            except Exception as e:
+                print(f"[EV_CP_E] [{args.cp_id}] ⚠️ Error aceptando conexión: {e}")
+                import traceback
+                traceback.print_exc()
                 continue
             except KeyboardInterrupt:
                 raise
