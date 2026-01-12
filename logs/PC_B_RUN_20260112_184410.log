@@ -1,0 +1,15 @@
+============================================================ 
+ LOG DE EJECUCION - PC_B_RUN.bat 
+ Fecha/Hora: dl. 12/01/2026 18:44:10,63 
+============================================================ 
+ 
+[DEBUG] Verificando Docker... 
+Docker version 28.2.2, build e6534b4
+[DEBUG] Docker check result: 0 
+[DEBUG] Docker verificado correctamente 
+[DEBUG] Verificando red Docker evnet... 
+[DEBUG] Red evnet ya existe 
+[DEBUG] Llegando a PANTALLA PRINCIPAL 
+[DEBUG] Llegando a PANTALLA PRINCIPAL (pantalla) 
+[DEBUG] REGISTRY_API_KEY definida (longitud aproximada) 
+[DEBUG] Verificando si Registry está corriendo localmente en puerto 6000... 

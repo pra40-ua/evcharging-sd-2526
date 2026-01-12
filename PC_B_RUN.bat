@@ -57,6 +57,33 @@ if !DOCKER_CHECK! neq 0 (
 echo [DEBUG] Docker verificado correctamente >> "%LOG_FILE%"
 
 REM ============================================================
+REM  VERIFICAR/CREAR RED DOCKER evnet
+REM ============================================================
+echo [DEBUG] Verificando red Docker evnet... >> "%LOG_FILE%"
+docker network inspect evnet >nul 2>&1
+if !errorlevel! neq 0 (
+    echo [INFO] Red evnet no existe. Creandola...
+    echo [DEBUG] Creando red evnet... >> "%LOG_FILE%"
+    docker network create evnet --driver bridge >> "%LOG_FILE%" 2>&1
+    if !errorlevel! equ 0 (
+        echo [OK] Red evnet creada correctamente
+        echo [DEBUG] Red evnet creada exitosamente >> "%LOG_FILE%"
+    ) else (
+        echo [ERROR] No se pudo crear la red evnet
+        echo [ERROR] Error al crear red evnet >> "%LOG_FILE%"
+        echo.
+        echo Verifica que Docker Desktop este ejecutandose correctamente.
+        echo.
+        pause
+        exit /b 1
+    )
+) else (
+    echo [OK] Red evnet ya existe
+    echo [DEBUG] Red evnet ya existe >> "%LOG_FILE%"
+)
+echo.
+
+REM ============================================================
 REM  PANTALLA PRINCIPAL
 REM ============================================================
 echo [DEBUG] Llegando a PANTALLA PRINCIPAL >> "%LOG_FILE%"
@@ -898,7 +925,7 @@ echo [4/4] LANZANDO MONITOR
 echo ============================================================
 echo.
 
-start "Monitor-PC_B" powershell -NoExit -Command "Write-Host 'Iniciando Monitor (CP_001)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --network evnet --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 --name monitor -e CP_ID=CP_001 -e CENTRAL_IP=!CENTRAL_IP! -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=5001 -e REGISTRY_URL=!REGISTRY_URL! -e REGISTRY_API_KEY=!REGISTRY_API_KEY! -e WEATHER_API_URL=http://host.docker.internal:5002 ev_monitor:local"
+start "Monitor-PC_B" powershell -NoExit -Command "Write-Host 'Iniciando Monitor (CP_001)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --network evnet --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 --name monitor -e CP_ID=CP_001 -e CENTRAL_IP=!CENTRAL_IP! -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=5001 -e ENGINE_WEB_PORT=9001 -e REGISTRY_URL=!REGISTRY_URL! -e REGISTRY_API_KEY=!REGISTRY_API_KEY! -e WEATHER_API_URL=http://host.docker.internal:5002 ev_monitor:local"
 
 echo [OK] Monitor iniciado en ventana separada
 echo.
@@ -970,7 +997,7 @@ set /a WEB_PORT_ENGINE=9000+%CP_NUM%
 
 REM Construir comando ENGINE: Sin --network host, con mapeo de puertos TCP y Web
 set "ENGINE_CMD=docker run --rm -p !ENGINE_PORT!:!ENGINE_PORT! -p !WEB_PORT_ENGINE!:!WEB_PORT_ENGINE! --name engine_!CP_ID! --label project=evcharging-pc-b --label component=engine --label cp_id=!CP_ID! -e ENGINE_PORT=!ENGINE_PORT! -e CP_ID=!CP_ID! -e KAFKA_SERVER=%KAFKA_SERVER% -e WEB_PORT=!WEB_PORT_ENGINE! ev_engine:local"
-set "MONITOR_CMD=docker run --rm --network evnet --name monitor_!CP_ID! --label project=evcharging-pc-b --label component=monitor --label cp_id=!CP_ID! -e CP_ID=!CP_ID! -e CENTRAL_IP=%CENTRAL_IP% -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=!ENGINE_PORT! -e REGISTRY_URL=!REGISTRY_URL! -e REGISTRY_API_KEY=!REGISTRY_API_KEY! -e WEATHER_API_URL=http://host.docker.internal:5002 ev_monitor:local"
+set "MONITOR_CMD=docker run --rm --network evnet --name monitor_!CP_ID! --label project=evcharging-pc-b --label component=monitor --label cp_id=!CP_ID! -e CP_ID=!CP_ID! -e CENTRAL_IP=%CENTRAL_IP% -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=!ENGINE_PORT! -e ENGINE_WEB_PORT=!WEB_PORT_ENGINE! -e REGISTRY_URL=!REGISTRY_URL! -e REGISTRY_API_KEY=!REGISTRY_API_KEY! -e WEATHER_API_URL=http://host.docker.internal:5002 ev_monitor:local"
 
 echo. >> "%LOG_FILE%"
 echo [DEBUG] ---- COMANDO ENGINE ---- >> "%LOG_FILE%"
@@ -1075,6 +1102,9 @@ echo echo   [1] - Iniciar Suministro
 echo echo   [2] - Solicitar Fin del Suministro
 echo echo   [3] - Simular Avería
 echo echo   [4] - Recuperar Avería
+echo echo   [5] - Re-autenticarse con Central ^(obtener nuevas claves^)
+echo echo   [6] - Registrar CP en Registry
+echo echo   [7] - Autenticar CP con Registry y conectar con Central
 echo echo   [0] - SALIR
 echo echo.
 echo echo ============================================================
@@ -1124,6 +1154,26 @@ echo     set "COMANDO_PS=Invoke-WebRequest -Method POST -Uri %%API_BASE_URL%%/re
 echo     goto EJECUTAR
 echo ^)
 echo.
+echo if "%%OPCION%%"=="5" ^(
+echo     set "DESCRIPCION=Re-autenticarse con Central"
+echo     set "OPCION_ESPECIAL="
+echo     set "COMANDO_PS=Invoke-WebRequest -Method POST -Uri %%API_BASE_URL%%/reauth"
+echo     goto EJECUTAR
+echo ^)
+echo.
+echo if "%%OPCION%%"=="6" ^(
+echo     set "DESCRIPCION=Registrar CP en Registry"
+echo     set "OPCION_ESPECIAL=6"
+echo     goto EJECUTAR
+echo ^)
+echo.
+echo if "%%OPCION%%"=="7" ^(
+echo     set "DESCRIPCION=Autenticar CP con Registry y conectar con Central"
+echo     set "OPCION_ESPECIAL="
+echo     set "COMANDO_PS=Invoke-WebRequest -Method POST -Uri %%API_BASE_URL%%/authenticate_cp"
+echo     goto EJECUTAR
+echo ^)
+echo.
 echo if "%%OPCION%%"=="0" ^(
 echo     echo Saliendo...
 echo     timeout /t 1 /nobreak ^>nul
@@ -1151,6 +1201,8 @@ echo REM Ejecutar el comando de PowerShell
 echo if defined OPCION_ESPECIAL ^(
 echo     if "%%OPCION_ESPECIAL%%"=="3" ^(
 echo         powershell -NoProfile -ExecutionPolicy Bypass -Command "$body = @{activar=$true;motivo='Avería simulada'} | ConvertTo-Json; try { $response = Invoke-WebRequest -Method POST -Uri '%%API_BASE_URL%%/simular_averia' -ContentType 'application/json' -Body $body; $result = $response.Content | ConvertFrom-Json; Write-Host '[ÉXITO]' $result.mensaje -ForegroundColor Green } catch { Write-Host '[ERROR] Error al ejecutar la operación:' -ForegroundColor Red; Write-Host $_.Exception.Message -ForegroundColor Red }"
+echo     ^) else if "%%OPCION_ESPECIAL%%"=="6" ^(
+echo         powershell -NoProfile -ExecutionPolicy Bypass -Command "$ubicacion = Read-Host 'Ingrese ubicación del CP (ej: Madrid,ES)'; if ([string]::IsNullOrWhiteSpace($ubicacion)) { $ubicacion = 'Madrid,ES' }; $body = @{ubicacion=$ubicacion} | ConvertTo-Json; try { $response = Invoke-WebRequest -Method POST -Uri '%%API_BASE_URL%%/register_cp' -ContentType 'application/json' -Body $body; $result = $response.Content | ConvertFrom-Json; if ($result.status -eq 'ok') { Write-Host '[ÉXITO]' $result.mensaje -ForegroundColor Green } else { Write-Host '[ERROR]' $result.mensaje -ForegroundColor Red } } catch { Write-Host '[ERROR] Error al ejecutar la operación:' -ForegroundColor Red; Write-Host $_.Exception.Message -ForegroundColor Red; if ($_.Exception.Response) { try { $errorBody = $_.Exception.Response.GetResponseStream(); $reader = New-Object System.IO.StreamReader($errorBody); $errorContent = $reader.ReadToEnd() | ConvertFrom-Json; Write-Host 'Detalle:' $errorContent.mensaje -ForegroundColor Red } catch {} } }"
 echo     ^)
 echo ^) else ^(
 echo     powershell -NoProfile -ExecutionPolicy Bypass -Command "try { $response = %%COMANDO_PS%%; if ($response.StatusCode -eq 200) { $result = $response.Content | ConvertFrom-Json; if ($result.status -eq 'ok') { Write-Host '[ÉXITO]' $result.mensaje -ForegroundColor Green } else { Write-Host '[ADVERTENCIA]' $result.mensaje -ForegroundColor Yellow } } else { Write-Host '[ERROR] Código de respuesta:' $response.StatusCode -ForegroundColor Red } } catch { Write-Host '[ERROR] Error al ejecutar la operación:' -ForegroundColor Red; Write-Host $_.Exception.Message -ForegroundColor Red; if ($_.Exception.Response) { try { $errorBody = $_.Exception.Response.GetResponseStream(); $reader = New-Object System.IO.StreamReader($errorBody); $errorContent = $reader.ReadToEnd() | ConvertFrom-Json; Write-Host 'Detalle:' $errorContent.mensaje -ForegroundColor Red } catch {} } }"

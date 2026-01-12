@@ -2456,6 +2456,184 @@ def api_solicitar_cierre_suministro():
     # Redirigir al nuevo endpoint
     return api_solicitar_fin()
 
+# Variable global para señal de re-autenticación
+REAUTH_REQUESTED = False
+REAUTH_LOCK = threading.Lock()
+
+@app.route('/api/reauth', methods=['POST'])
+def api_reauth():
+    """
+    Endpoint para solicitar re-autenticación con Central y obtener nuevas claves de cifrado.
+    Activa una señal que el Monitor detectará consultando este endpoint.
+    """
+    global ENGINE_CP_ID, REAUTH_REQUESTED
+    
+    cp_id = ENGINE_CP_ID or 'CP_UNKNOWN'
+    
+    try:
+        with REAUTH_LOCK:
+            REAUTH_REQUESTED = True
+        
+        print(f"[WEB API] ✓ Señal de re-autenticación activada para {cp_id}")
+        
+        return jsonify({
+            'status': 'ok',
+            'mensaje': f'Señal de re-autenticación enviada al Monitor. El Monitor detectará la señal y se re-autenticará con Central para obtener nuevas claves de cifrado.'
+        }), 200
+        
+    except Exception as e:
+        print(f"[WEB API] ❌ Error activando señal de re-autenticación: {e}")
+        return jsonify({
+            'status': 'error',
+            'mensaje': f'Error al activar señal de re-autenticación: {str(e)}'
+        }), 500
+
+@app.route('/api/check_reauth', methods=['GET'])
+def api_check_reauth():
+    """
+    Endpoint que el Monitor consulta periódicamente para verificar si hay una solicitud de re-autenticación.
+    Retorna True si hay una solicitud pendiente y la marca como procesada.
+    """
+    global REAUTH_REQUESTED
+    
+    try:
+        with REAUTH_LOCK:
+            if REAUTH_REQUESTED:
+                REAUTH_REQUESTED = False  # Marcar como procesada
+                return jsonify({
+                    'reauth_requested': True
+                }), 200
+            else:
+                return jsonify({
+                    'reauth_requested': False
+                }), 200
+    except Exception as e:
+        return jsonify({
+            'reauth_requested': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/register_cp', methods=['POST'])
+def api_register_cp():
+    """
+    Endpoint para registrar el CP en Registry a través del Monitor.
+    """
+    global ENGINE_CP_ID, ACTIVE_MONITOR_CONN
+    cp_id = ENGINE_CP_ID or 'CP_UNKNOWN'
+    
+    data = request.get_json(silent=True) or {}
+    ubicacion = data.get('ubicacion', 'Madrid,ES')
+    
+    # Obtener puerto del Monitor desde variable de entorno o calcularlo
+    monitor_port = os.getenv('MONITOR_API_PORT', '0')
+    if monitor_port == '0':
+        try:
+            cp_num = int(''.join(filter(str.isdigit, cp_id)))
+            monitor_port = str(8000 + cp_num)
+        except:
+            monitor_port = '8001'
+    
+    # Construir URL del Monitor
+    monitor_url = f'http://127.0.0.1:{monitor_port}/'
+    
+    try:
+        response = requests.post(
+            monitor_url,
+            json={'command': 'register', 'ubicacion': ubicacion},
+            timeout=10
+        )
+        
+        if response.status_code == 200:
+            result = response.json()
+            if result.get('status') == 'ok':
+                print(f"[{cp_id}] ✓ Registro exitoso en Registry")
+                return jsonify({
+                    'status': 'ok',
+                    'message': 'CP registrado exitosamente en Registry'
+                }), 200
+            else:
+                return jsonify({
+                    'status': 'error',
+                    'message': result.get('message', 'Error en registro')
+                }), 400
+        else:
+            return jsonify({
+                'status': 'error',
+                'message': f'Error comunicándose con Monitor: HTTP {response.status_code}'
+            }), 500
+    except requests.exceptions.ConnectionError:
+        return jsonify({
+            'status': 'error',
+            'message': 'No se pudo conectar con el Monitor. Verifica que esté ejecutándose.'
+        }), 500
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': f'Error durante registro: {str(e)}'
+        }), 500
+
+@app.route('/api/authenticate_cp', methods=['POST'])
+def api_authenticate_cp():
+    """
+    Endpoint para autenticar el CP con Registry y conectar con Central a través del Monitor.
+    """
+    global ENGINE_CP_ID
+    cp_id = ENGINE_CP_ID or 'CP_UNKNOWN'
+    
+    # Obtener puerto del Monitor desde variable de entorno o calcularlo
+    monitor_port = os.getenv('MONITOR_API_PORT', '0')
+    if monitor_port == '0':
+        try:
+            cp_num = int(''.join(filter(str.isdigit, cp_id)))
+            monitor_port = str(8000 + cp_num)
+        except:
+            monitor_port = '8001'
+    
+    # Construir URL del Monitor
+    monitor_url = f'http://127.0.0.1:{monitor_port}/'
+    
+    try:
+        response = requests.post(
+            monitor_url,
+            json={'command': 'authenticate'},
+            timeout=30  # Timeout mayor porque puede tardar en conectar con Central
+        )
+        
+        if response.status_code == 200:
+            result = response.json()
+            if result.get('status') == 'ok':
+                print(f"[{cp_id}] ✓ Autenticación exitosa. CP conectado a Central")
+                return jsonify({
+                    'status': 'ok',
+                    'message': 'CP autenticado y conectado a Central exitosamente'
+                }), 200
+            else:
+                error_msg = result.get('message', 'Error en autenticación')
+                if 'no registrado' in error_msg.lower():
+                    return jsonify({
+                        'status': 'error',
+                        'message': 'El CP no está registrado. Use la opción [6] para registrar primero.'
+                    }), 400
+                return jsonify({
+                    'status': 'error',
+                    'message': error_msg
+                }), 400
+        else:
+            return jsonify({
+                'status': 'error',
+                'message': f'Error comunicándose con Monitor: HTTP {response.status_code}'
+            }), 500
+    except requests.exceptions.ConnectionError:
+        return jsonify({
+            'status': 'error',
+            'message': 'No se pudo conectar con el Monitor. Verifica que esté ejecutándose.'
+        }), 500
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': f'Error durante autenticación: {str(e)}'
+        }), 500
+
 def iniciar_servidor_web(puerto: int):
     """Inicia el servidor Flask en un hilo separado."""
     print(f"[WEB] Iniciando servidor (solo endpoints) en puerto {puerto}...")

@@ -1092,6 +1092,66 @@ def main():
         print("[EV_Registry] ❌ Error inicializando tablas. Verifique la conexión a BD.")
         return
     
+    # Iniciar hilo para mostrar terminal con listado de CPs
+    def mostrar_listado_cps():
+        """Muestra y actualiza periódicamente el listado de CPs registrados."""
+        import time
+        while True:
+            try:
+                connection = obtener_conexion_bd()
+                if connection:
+                    cursor = obtener_cursor_dict(connection)
+                    cursor.execute("""
+                        SELECT r.cp_id, r.ubicacion, r.fecha_registro, r.activo,
+                               c.username, c.activo as credenciales_activas
+                        FROM cp_registry r
+                        LEFT JOIN cp_credentials c ON r.cp_id = c.cp_id
+                        ORDER BY r.fecha_registro DESC
+                    """)
+                    cps = cursor.fetchall()
+                    cursor.close()
+                    connection.close()
+                    
+                    # Limpiar pantalla (Windows)
+                    import os
+                    os.system('cls' if os.name == 'nt' else 'clear')
+                    
+                    print("="*70)
+                    print("  EV_Registry - Listado de Charging Points Registrados")
+                    print("="*70)
+                    print(f"  Total de CPs: {len(cps)}")
+                    print(f"  Última actualización: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+                    print("="*70)
+                    print()
+                    
+                    if not cps:
+                        print("  No hay CPs registrados aún.")
+                    else:
+                        print(f"{'CP ID':<12} {'Ubicación':<25} {'Estado':<12} {'Username':<30} {'Credenciales':<12}")
+                        print("-"*70)
+                        for cp in cps:
+                            estado = "ACTIVO" if cp['activo'] else "INACTIVO"
+                            creds_activas = "SÍ" if cp['credenciales_activas'] else "NO"
+                            username = cp['username'] or "N/A"
+                            ubicacion = (cp['ubicacion'] or "N/A")[:25]
+                            print(f"{cp['cp_id']:<12} {ubicacion:<25} {estado:<12} {username[:30]:<30} {creds_activas:<12}")
+                    
+                    print()
+                    print("="*70)
+                    print("  Presiona Ctrl+C para salir")
+                    print("="*70)
+                else:
+                    print("[EV_Registry] ⚠️ No se pudo conectar a BD para mostrar listado")
+            except Exception as e:
+                print(f"[EV_Registry] ⚠️ Error mostrando listado: {e}")
+            
+            time.sleep(5)  # Actualizar cada 5 segundos
+    
+    # Iniciar hilo para mostrar listado
+    listado_thread = threading.Thread(target=mostrar_listado_cps, daemon=True)
+    listado_thread.start()
+    print("[EV_Registry] Terminal de listado de CPs iniciada (se actualiza cada 5 segundos)")
+    
     # Iniciar servidor Flask
     print(f"[EV_Registry] Iniciando servidor en puerto {REGISTRY_PORT}...")
     

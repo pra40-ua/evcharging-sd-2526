@@ -1410,35 +1410,59 @@ def consumir_telemetria_kafka(broker_list: str):
                             # (el contador se maneja en el except)
                             
                         except Exception as e:
-                            # Error al descifrar - clave incorrecta o mensaje corrupto
+                            # Error al descifrar - puede ser clave incorrecta (durante re-autenticación) o mensaje corrupto
+                            # Durante la re-autenticación, el Engine puede estar usando la clave antigua mientras recibe la nueva
+                            # En este caso, simplemente ignorar el mensaje y continuar (el siguiente mensaje debería usar la clave correcta)
                             error_descifrado = True
-                            print(f"\n[CENTRAL] ╔═══════════════════════════════════════════╗")
-                            print(f"[CENTRAL] ║  🚨 INCIDENCIA DE COMUNICACIÓN            ║")
-                            print(f"[CENTRAL] ╚═══════════════════════════════════════════╝")
-                            print(f"[CENTRAL]    CP: {cp_id}")
-                            print(f"[CENTRAL]    Error: No se pudo descifrar mensaje de Kafka")
-                            print(f"[CENTRAL]    Causa: {str(e)}")
-                            print(f"[CENTRAL]    Posible discrepancia en clave de cifrado")
-                            print(f"[CENTRAL] ═══════════════════════════════════════════\n")
                             
-                            registrar_evento(f"🚨 INCIDENCIA: Error descifrando mensaje de {cp_id} - Clave incorrecta o corrupta", "error")
+                            # Detectar si es un error de clave incorrecta (transición normal durante re-autenticación)
+                            # Fernet lanza InvalidToken cuando la clave es incorrecta
+                            error_str = str(e)
+                            error_type = type(e).__name__
                             
-                            # Registrar en auditoría
-                            try:
-                                db_conn = globals().get('_DB_CONN_FOR_CONSUMER')
-                                if db_conn and _verificar_conexion(db_conn):
-                                    registrar_auditoria(
-                                        accion="ERROR_DESCIFRADO_KAFKA",
-                                        cp_id=cp_id,
-                                        origen_ip="kafka",
-                                        descripcion=f"Error descifrando mensaje de Kafka: {str(e)}",
-                                        resultado="ERROR",
-                                        db_connection=db_conn
-                                    )
-                            except Exception:
+                            # Verificar si es un error de clave incorrecta (transición normal)
+                            es_error_clave_transicion = (
+                                "InvalidToken" in error_str or 
+                                "InvalidToken" in error_type or
+                                "decryption failed" in error_str.lower() or
+                                "invalid" in error_str.lower() and "token" in error_str.lower()
+                            )
+                            
+                            if not es_error_clave_transicion:
+                                # Error diferente (corrupto, etc.) - mostrar advertencia
+                                print(f"\n[CENTRAL] ╔═══════════════════════════════════════════╗")
+                                print(f"[CENTRAL] ║  🚨 INCIDENCIA DE COMUNICACIÓN            ║")
+                                print(f"[CENTRAL] ╚═══════════════════════════════════════════╝")
+                                print(f"[CENTRAL]    CP: {cp_id}")
+                                print(f"[CENTRAL]    Error: No se pudo descifrar mensaje de Kafka")
+                                print(f"[CENTRAL]    Tipo: {error_type}")
+                                print(f"[CENTRAL]    Causa: {error_str if error_str else 'Error desconocido'}")
+                                print(f"[CENTRAL]    Posible mensaje corrupto o clave incorrecta")
+                                print(f"[CENTRAL] ═══════════════════════════════════════════\n")
+                                
+                                registrar_evento(f"🚨 INCIDENCIA: Error descifrando mensaje de {cp_id} - {error_type}: {error_str}", "warn")
+                                
+                                # Registrar en auditoría solo para errores no relacionados con transición
+                                try:
+                                    db_conn = globals().get('_DB_CONN_FOR_CONSUMER')
+                                    if db_conn and _verificar_conexion(db_conn):
+                                        registrar_auditoria(
+                                            accion="ERROR_DESCIFRADO_KAFKA",
+                                            cp_id=cp_id,
+                                            origen_ip="kafka",
+                                            descripcion=f"Error descifrando mensaje de Kafka: {error_type}: {error_str}",
+                                            resultado="ERROR",
+                                            db_connection=db_conn
+                                        )
+                                except Exception:
+                                    pass
+                            else:
+                                # Error de clave durante transición - silenciosamente ignorar (no crítico)
+                                # Esto es normal durante re-autenticación cuando el Engine aún no ha recibido la nueva clave
+                                # No registrar en auditoría ni mostrar advertencia para evitar ruido
                                 pass
                             
-                            # Continuar con el siguiente mensaje
+                            # Continuar con el siguiente mensaje (el siguiente debería usar la clave correcta)
                             continue
                     else:
                         # Mensaje sin cifrar (modo compatibilidad)

@@ -10,6 +10,8 @@ import os
 import json
 from cryptography.fernet import Fernet
 import urllib3
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from urllib.parse import urlparse, parse_qs
 
 # Deshabilitar advertencias SSL para certificados autofirmados
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -169,6 +171,15 @@ CENTRAL_SOCKET = None
 CENTRAL_SOCKET_LOCK = threading.Lock()
 CENTRAL_IP = None
 CENTRAL_PORT = None
+
+# Hilo de escucha de Central (para poder reiniciarlo en re-autenticación)
+CENTRAL_LISTENER_THREAD = None
+CENTRAL_LISTENER_THREAD_LOCK = threading.Lock()
+
+# Estado de registro y autenticación (para control manual desde Engine)
+MONITOR_REGISTRADO = False
+MONITOR_AUTENTICADO = False
+MONITOR_STATE_LOCK = threading.Lock()
 
 # Credenciales de EV_Registry
 REGISTRY_CREDENTIALS = {
@@ -485,19 +496,36 @@ def autenticar_en_registry(username: str, password: str) -> bool:
             print(f"[CP_M] ❌ Error de conexión al autenticar: {conn_err}")
             return False
         
+        print(f"[CP_M] DEBUG: Respuesta de Registry: status_code={response.status_code}", flush=True)
         if response.status_code == 200:
-            data = response.json()
-            cp_id = data.get('cp_id')
-            if cp_id:
-                with REGISTRY_CREDENTIALS_LOCK:
-                    REGISTRY_CREDENTIALS['cp_id'] = cp_id
-                print(f"[CP_M] ✓ Autenticación exitosa en EV_Registry (CP: {cp_id})")
-                return True
-            else:
-                print(f"[CP_M] ❌ Respuesta de autenticación inválida")
+            try:
+                print(f"[CP_M] DEBUG: Parseando JSON...", flush=True)
+                data = response.json()
+                print(f"[CP_M] DEBUG: Respuesta JSON: {data}", flush=True)
+                print(f"[CP_M] DEBUG: Extrayendo cp_id...", flush=True)
+                cp_id = data.get('cp_id')
+                print(f"[CP_M] DEBUG: cp_id extraído: {cp_id}, tipo: {type(cp_id)}", flush=True)
+                print(f"[CP_M] DEBUG: cp_id es truthy? {bool(cp_id)}", flush=True)
+                if cp_id:
+                    print(f"[CP_M] DEBUG: Entrando en bloque if cp_id", flush=True)
+                    with REGISTRY_CREDENTIALS_LOCK:
+                        REGISTRY_CREDENTIALS['cp_id'] = cp_id
+                    print(f"[CP_M] ✓ Autenticación exitosa en EV_Registry (CP: {cp_id})", flush=True)
+                    print(f"[CP_M] DEBUG: Retornando True desde autenticar_en_registry", flush=True)
+                    return True
+                else:
+                    print(f"[CP_M] ❌ Respuesta de autenticación inválida: no hay cp_id en la respuesta", flush=True)
+                    print(f"[CP_M] DEBUG: cp_id es None o vacío. Respuesta completa: {data}", flush=True)
+                    return False
+            except Exception as e:
+                print(f"[CP_M] ❌ Error parseando respuesta JSON: {e}", flush=True)
+                import traceback
+                print(f"[CP_M] DEBUG: Traceback: {traceback.format_exc()}", flush=True)
+                print(f"[CP_M] DEBUG: Texto de respuesta: {response.text[:200]}", flush=True)
                 return False
         else:
             print(f"[CP_M] ❌ Autenticación fallida: HTTP {response.status_code}")
+            print(f"[CP_M] DEBUG: Texto de respuesta: {response.text[:200]}")
             return False
             
     except Exception as e:
@@ -541,6 +569,8 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, engine_
     password = None
 
     # Verificar si ya tenemos credenciales almacenadas
+    # IMPORTANTE: Leer credenciales dentro del lock, pero llamar a autenticar_en_registry FUERA del lock
+    # para evitar deadlock (autenticar_en_registry también adquiere el lock)
     with REGISTRY_CREDENTIALS_LOCK:
         if REGISTRY_CREDENTIALS.get('username') and REGISTRY_CREDENTIALS.get('password'):
             username = REGISTRY_CREDENTIALS['username']
@@ -548,14 +578,18 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, engine_
             print(f"[CP_M] ✓ Credenciales de Registry encontradas en memoria")
             print(f"[CP_M]   Username: {username}")
             print(f"[CP_M]   Intentando autenticación con Registry...")
-
-            # Intentar autenticar con las credenciales existentes
-            if autenticar_en_registry(username, password):
-                print(f"[CP_M] ✓ Autenticación exitosa con Registry usando credenciales existentes")
-            else:
-                print(f"[CP_M] ⚠️ Autenticación fallida. Intentando registro nuevo...")
-                username = None
-                password = None
+    
+    # Llamar a autenticar_en_registry FUERA del lock para evitar deadlock
+    if username and password:
+        print(f"[CP_M] DEBUG: Llamando a autenticar_en_registry con username={username[:20] if username else None}...", flush=True)
+        resultado_auth = autenticar_en_registry(username, password)
+        print(f"[CP_M] DEBUG: autenticar_en_registry devolvió: {resultado_auth}", flush=True)
+        if resultado_auth:
+            print(f"[CP_M] ✓ Autenticación exitosa con Registry usando credenciales existentes")
+        else:
+            print(f"[CP_M] ⚠️ Autenticación fallida. Intentando registro nuevo...")
+            username = None
+            password = None
 
     # Si no hay credenciales o la autenticación falló, registrar CP (requiere X-API-Key)
     if not username or not password:
@@ -570,7 +604,10 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, engine_
             print(f"[CP_M]   Username: {username}")
             print(f"[CP_M]   Password: {password[:10]}... (mostrando primeros 10 caracteres)")
 
-    print(f"{'='*70}\n")
+    print(f"{'='*70}\n", flush=True)
+    print(f"[CP_M] DEBUG: Después de PASO 1, username={username[:20] if username else None}, password={'***' if password else None}", flush=True)
+    print(f"[CP_M] DEBUG: Continuando al registro en EV_W y conexión con Central...", flush=True)
+    print(f"[CP_M] DEBUG: central_ip={central_ip}, central_port={central_port}", flush=True)
 
     try:
         # Registrar localización en EV_W si está disponible
@@ -608,10 +645,13 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, engine_
             print(f"[CP_M] ⚠️ Actualiza central_ip.txt en PC_B con la IP real de PC_A (ej: 192.168.1.43)")
             print(f"[CP_M] ⚠️ Continuando con el intento de conexión...")
         
-        print(f"[CP_M] Intentando conectar a EV_Central en {central_ip}:{central_port}...")
+        print(f"[CP_M] Intentando conectar a EV_Central en {central_ip}:{central_port}...", flush=True)
+        print(f"[CP_M] DEBUG: Creando socket y estableciendo timeout de 10s...", flush=True)
         
         try:
+            print(f"[CP_M] DEBUG: Llamando a client_socket.connect(({central_ip}, {central_port}))...", flush=True)
             client_socket.connect((central_ip, central_port))
+            print(f"[CP_M] DEBUG: ✓ Conexión establecida exitosamente", flush=True)
         except socket.timeout:
             raise Exception(
                 f"Timeout al conectar (10s). Verifica que EV_Central esté ejecutándose en {central_ip}:{central_port}\n"
@@ -657,18 +697,31 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, engine_
         
         print(f"{'='*70}\n")
         
-        trama_registro = construir_trama('REG', campos_reg)
+        # IMPORTANTE: REG siempre se envía SIN cifrar (aún no hay clave de cifrado)
+        trama_registro = construir_trama('REG', campos_reg, cifrar=False)
+        print(f"[CP_M] DEBUG: Enviando REG a Central (sin cifrar)...", flush=True)
         client_socket.sendall(trama_registro)
+        print(f"[CP_M] DEBUG: REG enviado. Esperando respuesta AUTH de Central (timeout 30s)...", flush=True)
 
         # Evitar quedarse colgado si Central no responde
-        client_socket.settimeout(15)
+        # Aumentado a 30s porque Central puede tardar en verificar credenciales con Registry, BD y Kafka
+        client_socket.settimeout(30)
         try:
             respuesta_bytes = client_socket.recv(1024)
+            print(f"[CP_M] DEBUG: Respuesta recibida de Central: {len(respuesta_bytes) if respuesta_bytes else 0} bytes", flush=True)
         except socket.timeout:
-            raise Exception("Timeout esperando AUTH de Central tras enviar REG (15s). Revisa EV_Central, BD y Kafka.")
+            print(f"[CP_M] DEBUG: Timeout esperando respuesta de Central (30s)", flush=True)
+            raise Exception("Timeout esperando AUTH de Central tras enviar REG (30s). Revisa EV_Central, BD y Kafka.")
+        except ConnectionResetError as e:
+            print(f"[CP_M] DEBUG: Central cerró la conexión: {e}", flush=True)
+            raise Exception(f"Central cerró la conexión antes de responder: {e}")
+        except Exception as e:
+            print(f"[CP_M] DEBUG: Error recibiendo respuesta: {e}", flush=True)
+            raise
         finally:
             client_socket.settimeout(None)
         if not respuesta_bytes:
+            print(f"[CP_M] DEBUG: respuesta_bytes está vacío o None", flush=True)
             raise Exception("No se recibió respuesta o Central cerró la conexión.")
 
         # Usar descomponer_trama_cifrada para manejar mensajes cifrados
@@ -1263,34 +1316,165 @@ def main():
     CENTRAL_PORT = args.central_port
     
     central_socket = None
+    central_listener_thread = None
+    
+    # Variables globales para funciones de registro/autenticación
+    global MONITOR_REGISTRADO, MONITOR_AUTENTICADO
+    MONITOR_REGISTRADO = False
+    MONITOR_AUTENTICADO = False
+    
     try:
-        # 1. Registro en la Central
-        central_socket = conectar_y_registrar(args.central_ip, args.central_port, args.cp_id, args.engine_ip, args.engine_port)
+        # NO se registra automáticamente - debe hacerlo manualmente desde el Engine
+        print("\n[CP_M] Sistema iniciado. Esperando registro y autenticación manual desde el Engine.")
+        print(f"[CP_M] Use las opciones [6] y [7] en el menú de control del Engine para registrar y autenticar.")
         
-        # Actualizar socket global
-        with CENTRAL_SOCKET_LOCK:
-            global CENTRAL_SOCKET
-            CENTRAL_SOCKET = central_socket
-
-        # 2. Hilo de escucha de comandos de la Central
-        central_listener_thread = threading.Thread(
-            target=escuchar_central,
-            args=(central_socket, args.cp_id, args.engine_ip, args.engine_port),
-            daemon=True
-        )
-        central_listener_thread.start()
-
-        # 3. Hilo de Chequeo de Salud local (HCK)
+        # Inicializar hilos sin conexión a Central (se establecerá después de autenticar)
+        # 3. Hilo de Chequeo de Salud local (HCK) - sin conexión a Central aún
         health_check_thread = threading.Thread(
             target=chequear_salud_engine,
-            args=(args.engine_ip, args.engine_port, central_socket, args.cp_id),
+            args=(args.engine_ip, args.engine_port, None, args.cp_id),
             daemon=True
         )
         health_check_thread.start()
 
         print("\n[CP_M] Sistema ACTIVADO. Monitorización local de Engine iniciada.")
         print(f"[CP_M] Para re-autenticarse y obtener nuevas claves, escriba 'reauth' y presione Enter")
+        print(f"[CP_M] Para ver las credenciales del Registry, escriba 'credenciales' y presione Enter")
+        print(f"[CP_M] O use las opciones en el menú de control del Engine")
 
+        # Función para ejecutar re-autenticación
+        def ejecutar_reauth():
+            """Ejecuta la re-autenticación con Central."""
+            global CENTRAL_SOCKET, CENTRAL_LISTENER_THREAD
+            print(f"\n[{args.cp_id}] 🔄 Iniciando re-autenticación...")
+            print(f"[{args.cp_id}] Esto cerrará la conexión actual y establecerá una nueva con nuevas claves de cifrado.")
+            
+            # Cerrar conexión actual
+            with CENTRAL_SOCKET_LOCK:
+                if CENTRAL_SOCKET:
+                    try:
+                        CENTRAL_SOCKET.close()
+                    except:
+                        pass
+                    CENTRAL_SOCKET = None
+            
+            # Limpiar clave de cifrado actual
+            with ENCRYPTION_KEY_LOCK:
+                ENCRYPTION_KEY = None
+            
+            # Intentar reconectar y re-autenticar
+            try:
+                nuevo_socket = conectar_y_registrar(
+                    args.central_ip, 
+                    args.central_port, 
+                    args.cp_id, 
+                    args.engine_ip, 
+                    args.engine_port
+                )
+                
+                # Actualizar socket global
+                with CENTRAL_SOCKET_LOCK:
+                    CENTRAL_SOCKET = nuevo_socket
+                
+                # Reiniciar hilo de escucha (usando variable global)
+                with CENTRAL_LISTENER_THREAD_LOCK:
+                    # Detener hilo anterior si existe y está vivo
+                    if CENTRAL_LISTENER_THREAD and CENTRAL_LISTENER_THREAD.is_alive():
+                        # El hilo se detendrá automáticamente cuando se cierre el socket
+                        pass
+                    
+                    CENTRAL_LISTENER_THREAD = threading.Thread(
+                        target=escuchar_central,
+                        args=(nuevo_socket, args.cp_id, args.engine_ip, args.engine_port),
+                        daemon=True
+                    )
+                    CENTRAL_LISTENER_THREAD.start()
+                
+                print(f"[{args.cp_id}] ✓ Re-autenticación exitosa. Nuevas claves de cifrado obtenidas.")
+                return True
+            except Exception as e:
+                print(f"[{args.cp_id}] ❌ Error durante re-autenticación: {e}")
+                import traceback
+                print(f"[{args.cp_id}] Traceback: {traceback.format_exc()}")
+                print(f"[{args.cp_id}] El sistema intentará reconectar automáticamente.")
+                return False
+
+        # Hilo para verificar señales de re-autenticación desde el Engine
+        def verificar_senales_reauth():
+            """Verifica periódicamente si el Engine ha solicitado re-autenticación consultando su API."""
+            # Obtener puerto web del Engine desde variable de entorno o calcularlo
+            engine_web_port = os.getenv('ENGINE_WEB_PORT')
+            if not engine_web_port:
+                # Intentar calcular desde ENGINE_PORT (si está disponible)
+                engine_port = os.getenv('ENGINE_PORT', '5001')
+                try:
+                    # El puerto web suele ser 9000 + número del CP
+                    cp_num = int(''.join(filter(str.isdigit, args.cp_id)))
+                    engine_web_port = str(9000 + cp_num)
+                except:
+                    engine_web_port = '9001'  # Puerto por defecto
+            
+            # Construir URL del Engine (usar host.docker.internal si estamos en Docker)
+            engine_host = args.engine_ip if args.engine_ip else '127.0.0.1'
+            # Si engine_ip es host.docker.internal, usar eso; si no, usar localhost
+            if engine_host == 'host.docker.internal':
+                check_url = f'http://host.docker.internal:{engine_web_port}/api/check_reauth'
+            else:
+                check_url = f'http://127.0.0.1:{engine_web_port}/api/check_reauth'
+            
+            print(f"[{args.cp_id}] Hilo de verificación de re-autenticación iniciado (consultando: {check_url})")
+            
+            while True:
+                try:
+                    time.sleep(2)  # Verificar cada 2 segundos
+                    
+                    # Consultar endpoint del Engine
+                    try:
+                        response = requests.get(check_url, timeout=1)
+                        if response.status_code == 200:
+                            data = response.json()
+                            if data.get('reauth_requested', False):
+                                print(f"[{args.cp_id}] 📨 Señal de re-autenticación detectada desde el Engine")
+                                # Ejecutar re-autenticación
+                                ejecutar_reauth()
+                    except requests.exceptions.RequestException:
+                        # El Engine puede no estar disponible aún, continuar
+                        pass
+                    except Exception as e:
+                        # Otros errores, loguear pero continuar
+                        if "Connection" not in str(e) and "timeout" not in str(e).lower():
+                            print(f"[{args.cp_id}] ⚠️ Error verificando señal de re-autenticación: {e}")
+                        
+                except Exception as e:
+                    print(f"[{args.cp_id}] ⚠️ Error en hilo de verificación de re-autenticación: {e}")
+                    time.sleep(5)  # Esperar más tiempo si hay error
+        
+        # Iniciar hilo de verificación de señales
+        signals_thread = threading.Thread(target=verificar_senales_reauth, daemon=True)
+        signals_thread.start()
+        print(f"[{args.cp_id}] Hilo de verificación de señales de re-autenticación iniciado")
+
+        # Función para mostrar credenciales
+        def mostrar_credenciales():
+            """Muestra las credenciales del Registry almacenadas en memoria."""
+            with REGISTRY_CREDENTIALS_LOCK:
+                username = REGISTRY_CREDENTIALS.get('username')
+                password = REGISTRY_CREDENTIALS.get('password')
+                cp_id_reg = REGISTRY_CREDENTIALS.get('cp_id')
+            
+            print(f"\n{'='*70}")
+            print(f"  [CP_M] CREDENCIALES DE EV_Registry")
+            print(f"{'='*70}")
+            if username and password:
+                print(f"[CP_M] CP ID: {cp_id_reg if cp_id_reg else args.cp_id}")
+                print(f"[CP_M] Username: {username}")
+                print(f"[CP_M] Password: {password}")
+                print(f"{'='*70}\n")
+            else:
+                print(f"[CP_M] ⚠️ No hay credenciales almacenadas en memoria")
+                print(f"[CP_M] Las credenciales se obtendrán al registrarse en EV_Registry")
+                print(f"{'='*70}\n")
+        
         # Hilo para escuchar comandos de terminal (re-autenticación)
         def escuchar_comandos_terminal():
             """Escucha comandos de terminal para re-autenticación."""
@@ -1300,53 +1484,14 @@ def main():
                     if sys.stdin and sys.stdin.isatty():
                         comando = input().strip().lower()
                         if comando == 'reauth':
-                            print(f"\n[{args.cp_id}] 🔄 Iniciando re-autenticación...")
-                            print(f"[{args.cp_id}] Esto cerrará la conexión actual y establecerá una nueva con nuevas claves de cifrado.")
-                            
-                            # Cerrar conexión actual
-                            with CENTRAL_SOCKET_LOCK:
-                                if CENTRAL_SOCKET:
-                                    try:
-                                        CENTRAL_SOCKET.close()
-                                    except:
-                                        pass
-                                    CENTRAL_SOCKET = None
-                            
-                            # Limpiar clave de cifrado actual
-                            with ENCRYPTION_KEY_LOCK:
-                                ENCRYPTION_KEY = None
-                            
-                            # Intentar reconectar y re-autenticar
-                            try:
-                                nuevo_socket = conectar_y_registrar(
-                                    args.central_ip, 
-                                    args.central_port, 
-                                    args.cp_id, 
-                                    args.engine_ip, 
-                                    args.engine_port
-                                )
-                                
-                                # Actualizar socket global y local
-                                with CENTRAL_SOCKET_LOCK:
-                                    CENTRAL_SOCKET = nuevo_socket
-                                central_socket = nuevo_socket
-                                
-                                # Reiniciar hilo de escucha
-                                central_listener_thread = threading.Thread(
-                                    target=escuchar_central,
-                                    args=(nuevo_socket, args.cp_id, args.engine_ip, args.engine_port),
-                                    daemon=True
-                                )
-                                central_listener_thread.start()
-                                
-                                print(f"[{args.cp_id}] ✓ Re-autenticación exitosa. Nuevas claves de cifrado obtenidas.")
-                            except Exception as e:
-                                print(f"[{args.cp_id}] ❌ Error durante re-autenticación: {e}")
-                                print(f"[{args.cp_id}] El sistema intentará reconectar automáticamente.")
+                            ejecutar_reauth()
+                        elif comando in ('credenciales', 'creds', 'show_creds'):
+                            mostrar_credenciales()
                         elif comando == 'help':
                             print(f"\n[{args.cp_id}] Comandos disponibles:")
-                            print(f"  reauth  - Re-autenticarse y obtener nuevas claves de cifrado")
-                            print(f"  help    - Mostrar esta ayuda")
+                            print(f"  reauth       - Re-autenticarse y obtener nuevas claves de cifrado")
+                            print(f"  credenciales - Mostrar credenciales del Registry almacenadas")
+                            print(f"  help         - Mostrar esta ayuda")
                         else:
                             print(f"[{args.cp_id}] Comando desconocido. Escriba 'help' para ver comandos disponibles.")
                 except (EOFError, KeyboardInterrupt):
@@ -1358,6 +1503,135 @@ def main():
         # Iniciar hilo de comandos de terminal
         terminal_thread = threading.Thread(target=escuchar_comandos_terminal, daemon=True)
         terminal_thread.start()
+        
+        # Funciones para registro y autenticación (llamadas desde Engine)
+        def ejecutar_registro(ubicacion: str = None):
+            """Ejecuta el registro en Registry."""
+            global MONITOR_REGISTRADO, MONITOR_AUTENTICADO
+            if not ubicacion:
+                ubicacion = os.getenv(f'CP_{args.cp_id}_UBICACION', 'Madrid,ES')
+            
+            print(f"\n[{args.cp_id}] 📝 Iniciando registro en EV_Registry...")
+            print(f"[{args.cp_id}] Ubicación: {ubicacion}")
+            
+            try:
+                success, username, password = registrar_en_registry(args.cp_id, ubicacion)
+                if success:
+                    with MONITOR_STATE_LOCK:
+                        MONITOR_REGISTRADO = True
+                    print(f"[{args.cp_id}] ✓ Registro exitoso en EV_Registry")
+                    return True, "Registro exitoso"
+                else:
+                    print(f"[{args.cp_id}] ❌ Error en registro")
+                    return False, "Error en registro"
+            except Exception as e:
+                print(f"[{args.cp_id}] ❌ Error durante registro: {e}")
+                return False, str(e)
+        
+        def ejecutar_autenticacion():
+            """Ejecuta la autenticación con Registry y conexión con Central."""
+            global MONITOR_REGISTRADO, MONITOR_AUTENTICADO, central_socket, central_listener_thread
+            
+            # Verificar que esté registrado primero
+            with MONITOR_STATE_LOCK:
+                if not MONITOR_REGISTRADO:
+                    print(f"[{args.cp_id}] ❌ Error: El CP no está registrado. Use la opción [6] primero.")
+                    return False, "CP no registrado"
+            
+            print(f"\n[{args.cp_id}] 🔐 Iniciando autenticación con Registry y conexión con Central...")
+            
+            try:
+                # Conectar y autenticar con Central
+                nuevo_socket = conectar_y_registrar(
+                    args.central_ip, 
+                    args.central_port, 
+                    args.cp_id, 
+                    args.engine_ip, 
+                    args.engine_port
+                )
+                
+                # Actualizar socket global
+                with CENTRAL_SOCKET_LOCK:
+                    global CENTRAL_SOCKET
+                    CENTRAL_SOCKET = nuevo_socket
+                central_socket = nuevo_socket
+                
+                # Iniciar hilo de escucha de Central
+                central_listener_thread = threading.Thread(
+                    target=escuchar_central,
+                    args=(nuevo_socket, args.cp_id, args.engine_ip, args.engine_port),
+                    daemon=True
+                )
+                central_listener_thread.start()
+                
+                # Guardar también en variable global
+                with CENTRAL_LISTENER_THREAD_LOCK:
+                    global CENTRAL_LISTENER_THREAD
+                    CENTRAL_LISTENER_THREAD = central_listener_thread
+                
+                # Actualizar estado de autenticación
+                with MONITOR_STATE_LOCK:
+                    MONITOR_AUTENTICADO = True
+                
+                print(f"[{args.cp_id}] ✓ Autenticación exitosa. Conectado a Central.")
+                return True, "Autenticación exitosa"
+            except Exception as e:
+                print(f"[{args.cp_id}] ❌ Error durante autenticación: {e}")
+                import traceback
+                print(f"[{args.cp_id}] Traceback: {traceback.format_exc()}")
+                return False, str(e)
+        
+        # Crear servidor HTTP simple para recibir comandos del Engine
+        class MonitorCommandHandler(BaseHTTPRequestHandler):
+            def do_POST(self):
+                global args
+                content_length = int(self.headers.get('Content-Length', 0))
+                body = self.rfile.read(content_length).decode('utf-8')
+                
+                try:
+                    data = json.loads(body) if body else {}
+                    command = data.get('command')
+                    
+                    if command == 'register':
+                        ubicacion = data.get('ubicacion', 'Madrid,ES')
+                        success, message = ejecutar_registro(ubicacion)
+                        response = {'status': 'ok' if success else 'error', 'message': message}
+                        self.send_response(200 if success else 400)
+                    elif command == 'authenticate':
+                        success, message = ejecutar_autenticacion()
+                        response = {'status': 'ok' if success else 'error', 'message': message}
+                        self.send_response(200 if success else 400)
+                    else:
+                        response = {'status': 'error', 'message': 'Comando desconocido'}
+                        self.send_response(400)
+                    
+                    self.send_header('Content-Type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps(response).encode('utf-8'))
+                except Exception as e:
+                    self.send_response(500)
+                    self.send_header('Content-Type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({'status': 'error', 'message': str(e)}).encode('utf-8'))
+            
+            def log_message(self, format, *args):
+                # Suprimir logs del servidor HTTP
+                pass
+        
+        # Iniciar servidor HTTP en un puerto aleatorio (o usar variable de entorno)
+        monitor_port = int(os.getenv('MONITOR_API_PORT', 0))
+        if monitor_port == 0:
+            # Calcular puerto basado en CP_ID (8000 + número del CP)
+            try:
+                cp_num = int(''.join(filter(str.isdigit, args.cp_id)))
+                monitor_port = 8000 + cp_num
+            except:
+                monitor_port = 8001
+        
+        monitor_server = HTTPServer(('0.0.0.0', monitor_port), MonitorCommandHandler)
+        monitor_server_thread = threading.Thread(target=monitor_server.serve_forever, daemon=True)
+        monitor_server_thread.start()
+        print(f"[{args.cp_id}] Servidor HTTP del Monitor iniciado en puerto {monitor_port}")
 
         # Bucle principal para mantener el proceso vivo
         while True:

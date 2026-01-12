@@ -1,0 +1,368 @@
+============================================================ 
+ LOG DE EJECUCION - PC_B_RUN.bat 
+ Fecha/Hora: dl. 12/01/2026 18:22:29,21 
+============================================================ 
+ 
+[DEBUG] Verificando Docker... 
+Docker version 28.2.2, build e6534b4
+[DEBUG] Docker check result: 0 
+[DEBUG] Docker verificado correctamente 
+[DEBUG] Llegando a PANTALLA PRINCIPAL 
+[DEBUG] Llegando a PANTALLA PRINCIPAL (pantalla) 
+[DEBUG] REGISTRY_API_KEY definida (longitud aproximada) 
+[DEBUG] Verificando si Registry está corriendo localmente en puerto 6000... 
+[DEBUG] Registry local detectado (HTTPS) - usando host.docker.internal 
+[DEBUG] REGISTRY_URL final:  
+[DEBUG] Directorio actual: C:\Users\alumno\Downloads\evcharging-sd-2526 
+[DEBUG] Verificando existencia de OPENWEATHER_API_KEY.txt... 
+[DEBUG] Ruta completa buscada: C:\Users\alumno\Downloads\evcharging-sd-2526\OPENWEATHER_API_KEY.txt 
+[DEBUG] Archivo OPENWEATHER_API_KEY.txt encontrado 
+[DEBUG] Contenido leido del archivo: 54076819eadd372702b599c788eb370f 
+[DEBUG] Longitud de la API Key: 
+54076819eadd372702b599c788eb370f 
+[DEBUG] Verificando que la API Key no este vacia... 
+[DEBUG] Valor de OPENWEATHER_API_KEY: "54076819eadd372702b599c788eb370f" 
+[DEBUG] Verificando que la API Key fue leida correctamente... 
+[DEBUG] Valor de OPENWEATHER_API_KEY: "54076819eadd372702b599c788eb370f" 
+[DEBUG] API Key validada: tiene contenido 
+[DEBUG] Verificando Python... 
+[DEBUG] Python encontrado 
+[DEBUG] Verificando ev_weather\EV_W.py... 
+[DEBUG] Archivo ev_weather\EV_W.py encontrado 
+[DEBUG] Llegando a :launch_weather 
+[DEBUG] API Key leida correctamente: 54076819ea... 
+[DEBUG] Iniciando lanzamiento de EV_Weather... 
+[DEBUG] Creando script temporal... 
+[DEBUG] Ruta del script temporal: C:\Users\alumno\AppData\Local\Temp\ev_weather_launch_11679.bat 
+[DEBUG] Variables temporales configuradas 
+[DEBUG] Escribiendo contenido del script temporal... 
+[DEBUG] Ruta completa: C:\Users\alumno\AppData\Local\Temp\ev_weather_launch_11679.bat 
+[DEBUG] Directorio del proyecto: C:\Users\alumno\Downloads\evcharging-sd-2526 
+[DEBUG] Resultado de creacion del script: 0 
+[DEBUG] Script temporal creado exitosamente 
+[DEBUG] Script temporal: C:\Users\alumno\AppData\Local\Temp\ev_weather_launch_11679.bat 
+[DEBUG] API Key: 54076819ea... 
+[DEBUG] Central URL: http://172.21.42.15:5001/api 
+[DEBUG] Comando START ejecutado exitosamente 
+[DEBUG] EV_Weather lanzado, continuando al MENU... 
+[DEBUG] Llegando al MENU 
+ 
+============================================================ 
+[MODO] MULTIPLES CPS SELECCIONADO 
+============================================================ 
+[INPUT] Usuario ingreso: NUM_CPS=1 
+[VALIDADO] NUM_CPS final: 1 
+[BUILD] Iniciando construccion de imagenes 
+[BUILD] Fecha/Hora: dl. 12/01/2026 18:22:43,24 
+ 
+[BUILD] Ejecutando: docker build -t ev_engine:local -f ev_cp_engine/Dockerfile . 
+[BUILD] ---- INICIO OUTPUT DOCKER BUILD ENGINE ---- 
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 580B 0.0s done
+#1 DONE 0.1s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 2.1s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
+#3 resolve docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6 0.0s done
+#3 sha256:77246a01651da592b7bae79e0e20ed3b4f2e4c00a1b54b7c921c91ae3fa9ef07 0B / 13.57MB 0.1s
+#3 sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6 8.40kB / 8.40kB done
+#3 sha256:62b0eac4b38b65f257ba2525a1bc87978b5e339d6133b5daef1bde40fe7aa10f 850B / 850B done
+#3 sha256:6742480c08d7878bbb82a5f5b55d7cb17c5dea60d2068cb2bd37994f3a5c680e 1.33kB / 1.33kB done
+#3 sha256:77246a01651da592b7bae79e0e20ed3b4f2e4c00a1b54b7c921c91ae3fa9ef07 2.10MB / 13.57MB 0.3s
+#3 sha256:77246a01651da592b7bae79e0e20ed3b4f2e4c00a1b54b7c921c91ae3fa9ef07 4.19MB / 13.57MB 0.4s
+#3 sha256:77246a01651da592b7bae79e0e20ed3b4f2e4c00a1b54b7c921c91ae3fa9ef07 9.44MB / 13.57MB 0.6s
+#3 sha256:77246a01651da592b7bae79e0e20ed3b4f2e4c00a1b54b7c921c91ae3fa9ef07 13.57MB / 13.57MB 0.8s done
+#3 extracting sha256:77246a01651da592b7bae79e0e20ed3b4f2e4c00a1b54b7c921c91ae3fa9ef07 0.1s
+#3 extracting sha256:77246a01651da592b7bae79e0e20ed3b4f2e4c00a1b54b7c921c91ae3fa9ef07 0.3s done
+#3 DONE 1.2s
+
+#4 [internal] load metadata for docker.io/library/python:3.10-slim
+#4 DONE 1.5s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 275B done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 140.20kB 0.0s done
+#6 DONE 0.1s
+
+#7 [1/6] FROM docker.io/library/python:3.10-slim@sha256:7b68a5fa7cf0d20b4cedb1dc9a134fdd394fe27edbc4c2519756c91d21df2313
+#7 resolve docker.io/library/python:3.10-slim@sha256:7b68a5fa7cf0d20b4cedb1dc9a134fdd394fe27edbc4c2519756c91d21df2313 0.0s done
+#7 sha256:9c27bc7ba63d1ac690daefc68302197d3ab9a91fc5c0e19f447cd57eda92d87c 0B / 13.82MB 0.1s
+#7 sha256:7b68a5fa7cf0d20b4cedb1dc9a134fdd394fe27edbc4c2519756c91d21df2313 10.37kB / 10.37kB done
+#7 sha256:05be60a538e21a03887c1b1ecbc37e18a204d7abd2ff9d18ec9e95a868d83364 1.75kB / 1.75kB done
+#7 sha256:ce19342c5d49287e941ab558824eb6b0a4244066b18b5a1a9024b6c0f2f818a8 5.48kB / 5.48kB done
+#7 sha256:02d7611c4eae219af91448a4720bdba036575d3bc0356cfe12774af85daa6aff 0B / 29.78MB 0.1s
+#7 sha256:8715e552fa1374bdde269437d9a1c607c817289c2ebbceb9ed9ab1aa9ca86763 0B / 1.29MB 0.1s
+#7 sha256:8715e552fa1374bdde269437d9a1c607c817289c2ebbceb9ed9ab1aa9ca86763 1.29MB / 1.29MB 0.5s done
+#7 sha256:7da4424a113245eb185ea22f2512eceb36f80ca1d0547c64b117f28495d3c3e5 0B / 250B 0.6s
+#7 sha256:9c27bc7ba63d1ac690daefc68302197d3ab9a91fc5c0e19f447cd57eda92d87c 4.19MB / 13.82MB 0.8s
+#7 sha256:9c27bc7ba63d1ac690daefc68302197d3ab9a91fc5c0e19f447cd57eda92d87c 6.29MB / 13.82MB 1.0s
+#7 sha256:02d7611c4eae219af91448a4720bdba036575d3bc0356cfe12774af85daa6aff 4.19MB / 29.78MB 1.0s
+#7 sha256:7da4424a113245eb185ea22f2512eceb36f80ca1d0547c64b117f28495d3c3e5 250B / 250B 0.8s done
+#7 sha256:9c27bc7ba63d1ac690daefc68302197d3ab9a91fc5c0e19f447cd57eda92d87c 9.44MB / 13.82MB 1.2s
+#7 sha256:02d7611c4eae219af91448a4720bdba036575d3bc0356cfe12774af85daa6aff 6.29MB / 29.78MB 1.2s
+#7 sha256:9c27bc7ba63d1ac690daefc68302197d3ab9a91fc5c0e19f447cd57eda92d87c 12.58MB / 13.82MB 1.4s
+#7 sha256:02d7611c4eae219af91448a4720bdba036575d3bc0356cfe12774af85daa6aff 9.44MB / 29.78MB 1.4s
+#7 sha256:9c27bc7ba63d1ac690daefc68302197d3ab9a91fc5c0e19f447cd57eda92d87c 13.82MB / 13.82MB 1.5s done
+#7 sha256:02d7611c4eae219af91448a4720bdba036575d3bc0356cfe12774af85daa6aff 14.68MB / 29.78MB 1.6s
+#7 sha256:02d7611c4eae219af91448a4720bdba036575d3bc0356cfe12774af85daa6aff 18.87MB / 29.78MB 1.8s
+#7 sha256:02d7611c4eae219af91448a4720bdba036575d3bc0356cfe12774af85daa6aff 22.02MB / 29.78MB 1.9s
+#7 sha256:02d7611c4eae219af91448a4720bdba036575d3bc0356cfe12774af85daa6aff 24.12MB / 29.78MB 2.0s
+#7 sha256:02d7611c4eae219af91448a4720bdba036575d3bc0356cfe12774af85daa6aff 27.26MB / 29.78MB 2.1s
+#7 sha256:02d7611c4eae219af91448a4720bdba036575d3bc0356cfe12774af85daa6aff 29.36MB / 29.78MB 2.2s
+#7 sha256:02d7611c4eae219af91448a4720bdba036575d3bc0356cfe12774af85daa6aff 29.78MB / 29.78MB 2.2s done
+#7 extracting sha256:02d7611c4eae219af91448a4720bdba036575d3bc0356cfe12774af85daa6aff
+#7 extracting sha256:02d7611c4eae219af91448a4720bdba036575d3bc0356cfe12774af85daa6aff 3.0s done
+#7 extracting sha256:8715e552fa1374bdde269437d9a1c607c817289c2ebbceb9ed9ab1aa9ca86763
+#7 extracting sha256:8715e552fa1374bdde269437d9a1c607c817289c2ebbceb9ed9ab1aa9ca86763 0.3s done
+#7 extracting sha256:9c27bc7ba63d1ac690daefc68302197d3ab9a91fc5c0e19f447cd57eda92d87c
+#7 extracting sha256:9c27bc7ba63d1ac690daefc68302197d3ab9a91fc5c0e19f447cd57eda92d87c 2.2s done
+#7 extracting sha256:7da4424a113245eb185ea22f2512eceb36f80ca1d0547c64b117f28495d3c3e5
+#7 extracting sha256:7da4424a113245eb185ea22f2512eceb36f80ca1d0547c64b117f28495d3c3e5 done
+#7 DONE 8.2s
+
+#8 [2/6] WORKDIR /app
+#8 DONE 0.2s
+
+#9 [3/6] COPY requirements.txt ./
+#9 DONE 0.0s
+
+#10 [4/6] RUN pip install --no-cache-dir -r requirements.txt
+#10 3.242 Collecting pymysql
+#10 3.310   Downloading pymysql-1.1.2-py3-none-any.whl (45 kB)
+#10 3.324      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 45.3/45.3 kB 5.4 MB/s eta 0:00:00
+#10 3.598 Collecting mysql-connector-python
+#10 3.613   Downloading mysql_connector_python-9.5.0-cp310-cp310-manylinux_2_28_x86_64.whl (34.1 MB)
+#10 4.543      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 34.1/34.1 MB 47.5 MB/s eta 0:00:00
+#10 4.608 Collecting kafka-python-ng
+#10 4.620   Downloading kafka_python_ng-2.2.3-py2.py3-none-any.whl (232 kB)
+#10 4.631      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 232.8/232.8 kB 30.1 MB/s eta 0:00:00
+#10 4.738 Collecting rich
+#10 4.751   Downloading rich-14.2.0-py3-none-any.whl (243 kB)
+#10 4.762      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 243.4/243.4 kB 30.0 MB/s eta 0:00:00
+#10 4.803 Collecting flask==3.0.0
+#10 4.816   Downloading flask-3.0.0-py3-none-any.whl (99 kB)
+#10 4.821      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 99.7/99.7 kB 39.2 MB/s eta 0:00:00
+#10 4.855 Collecting flask-cors==4.0.0
+#10 4.869   Downloading Flask_Cors-4.0.0-py2.py3-none-any.whl (14 kB)
+#10 4.910 Collecting flask-socketio==5.3.6
+#10 4.923   Downloading Flask_SocketIO-5.3.6-py3-none-any.whl (18 kB)
+#10 4.967 Collecting python-socketio==5.10.0
+#10 4.981   Downloading python_socketio-5.10.0-py3-none-any.whl (74 kB)
+#10 4.986      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 74.4/74.4 kB 35.4 MB/s eta 0:00:00
+#10 5.041 Collecting requests
+#10 5.053   Downloading requests-2.32.5-py3-none-any.whl (64 kB)
+#10 5.057      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 64.7/64.7 kB 143.3 MB/s eta 0:00:00
+#10 5.528 Collecting cryptography
+#10 5.541   Downloading cryptography-46.0.3-cp38-abi3-manylinux_2_34_x86_64.whl (4.5 MB)
+#10 5.688      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.5/4.5 MB 31.3 MB/s eta 0:00:00
+#10 5.728 Collecting blinker>=1.6.2
+#10 5.740   Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
+#10 5.793 Collecting Werkzeug>=3.0.0
+#10 5.807   Downloading werkzeug-3.1.5-py3-none-any.whl (225 kB)
+#10 5.820      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 225.0/225.0 kB 25.1 MB/s eta 0:00:00
+#10 5.858 Collecting Jinja2>=3.1.2
+#10 5.871   Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+#10 5.882      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 134.9/134.9 kB 15.5 MB/s eta 0:00:00
+#10 5.941 Collecting click>=8.1.3
+#10 5.954   Downloading click-8.3.1-py3-none-any.whl (108 kB)
+#10 5.959      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 108.3/108.3 kB 47.6 MB/s eta 0:00:00
+#10 5.987 Collecting itsdangerous>=2.1.2
+#10 6.011   Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+#10 6.086 Collecting python-engineio>=4.8.0
+#10 6.104   Downloading python_engineio-4.13.0-py3-none-any.whl (59 kB)
+#10 6.109      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 59.7/59.7 kB 20.8 MB/s eta 0:00:00
+#10 6.141 Collecting bidict>=0.21.0
+#10 6.157   Downloading bidict-0.23.1-py3-none-any.whl (32 kB)
+#10 6.219 Collecting pygments<3.0.0,>=2.13.0
+#10 6.234   Downloading pygments-2.19.2-py3-none-any.whl (1.2 MB)
+#10 6.279      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 29.2 MB/s eta 0:00:00
+#10 6.322 Collecting markdown-it-py>=2.2.0
+#10 6.334   Downloading markdown_it_py-4.0.0-py3-none-any.whl (87 kB)
+#10 6.339      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 87.3/87.3 kB 40.8 MB/s eta 0:00:00
+#10 6.391 Collecting certifi>=2017.4.17
+#10 6.405   Downloading certifi-2026.1.4-py3-none-any.whl (152 kB)
+#10 6.411      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 152.9/152.9 kB 46.2 MB/s eta 0:00:00
+#10 6.484 Collecting urllib3<3,>=1.21.1
+#10 6.497   Downloading urllib3-2.6.3-py3-none-any.whl (131 kB)
+#10 6.503      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 131.6/131.6 kB 42.2 MB/s eta 0:00:00
+#10 6.535 Collecting idna<4,>=2.5
+#10 6.548   Downloading idna-3.11-py3-none-any.whl (71 kB)
+#10 6.552      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 71.0/71.0 kB 65.0 MB/s eta 0:00:00
+#10 6.770 Collecting charset_normalizer<4,>=2
+#10 6.784   Downloading charset_normalizer-3.4.4-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (153 kB)
+#10 6.793      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 153.6/153.6 kB 27.1 MB/s eta 0:00:00
+#10 6.860 Collecting typing-extensions>=4.13.2
+#10 6.873   Downloading typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+#10 6.877      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 44.6/44.6 kB 58.5 MB/s eta 0:00:00
+#10 7.153 Collecting cffi>=2.0.0
+#10 7.167   Downloading cffi-2.0.0-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (216 kB)
+#10 7.178      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 216.5/216.5 kB 26.7 MB/s eta 0:00:00
+#10 7.214 Collecting pycparser
+#10 7.227   Downloading pycparser-2.23-py3-none-any.whl (118 kB)
+#10 7.232      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 118.1/118.1 kB 54.2 MB/s eta 0:00:00
+#10 7.390 Collecting MarkupSafe>=2.0
+#10 7.405   Downloading markupsafe-3.0.3-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (20 kB)
+#10 7.474 Collecting mdurl~=0.1
+#10 7.486   Downloading mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+#10 7.526 Collecting simple-websocket>=0.10.0
+#10 7.539   Downloading simple_websocket-1.1.0-py3-none-any.whl (13 kB)
+#10 7.603 Collecting wsproto
+#10 7.616   Downloading wsproto-1.3.2-py3-none-any.whl (24 kB)
+#10 7.647 Collecting h11<1,>=0.16.0
+#10 7.660   Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+#10 7.832 Installing collected packages: urllib3, typing-extensions, pymysql, pygments, pycparser, mysql-connector-python, mdurl, MarkupSafe, kafka-python-ng, itsdangerous, idna, h11, click, charset_normalizer, certifi, blinker, bidict, wsproto, Werkzeug, requests, markdown-it-py, Jinja2, cffi, simple-websocket, rich, flask, cryptography, python-engineio, flask-cors, python-socketio, flask-socketio
+#10 10.92 Successfully installed Jinja2-3.1.6 MarkupSafe-3.0.3 Werkzeug-3.1.5 bidict-0.23.1 blinker-1.9.0 certifi-2026.1.4 cffi-2.0.0 charset_normalizer-3.4.4 click-8.3.1 cryptography-46.0.3 flask-3.0.0 flask-cors-4.0.0 flask-socketio-5.3.6 h11-0.16.0 idna-3.11 itsdangerous-2.2.0 kafka-python-ng-2.2.3 markdown-it-py-4.0.0 mdurl-0.1.2 mysql-connector-python-9.5.0 pycparser-2.23 pygments-2.19.2 pymysql-1.1.2 python-engineio-4.13.0 python-socketio-5.10.0 requests-2.32.5 rich-14.2.0 simple-websocket-1.1.0 typing-extensions-4.15.0 urllib3-2.6.3 wsproto-1.3.2
+#10 10.92 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+#10 11.03 
+#10 11.03 [notice] A new release of pip is available: 23.0.1 -> 25.3
+#10 11.03 [notice] To update, run: pip install --upgrade pip
+#10 DONE 11.3s
+
+#11 [5/6] COPY ev_cp_engine/ ev_cp_engine/
+#11 DONE 0.0s
+
+#12 [6/6] COPY ev_common/ ev_common/
+#12 DONE 0.0s
+
+#13 exporting to image
+#13 exporting layers
+#13 exporting layers 0.6s done
+#13 writing image sha256:b36e30c01532b1e328dade20bffa33e28a4372ba069d9a248e52da24867c331d done
+#13 naming to docker.io/library/ev_engine:local done
+#13 DONE 0.6s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/nfs0t7tnj9srkp5gdo5p0au4q
+[BUILD] ---- FIN OUTPUT DOCKER BUILD ENGINE ---- 
+[BUILD] Resultado (errorlevel): 0 
+[BUILD OK] ev_engine construido exitosamente 
+[BUILD] Ejecutando: docker build -t ev_monitor:local -f ev_cp_monitor/Dockerfile . 
+[BUILD] ---- INICIO OUTPUT DOCKER BUILD MONITOR ---- 
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 615B done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 0.2s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/python:3.10-slim
+#4 DONE 0.2s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 275B done
+#5 DONE 0.0s
+
+#6 [1/6] FROM docker.io/library/python:3.10-slim@sha256:7b68a5fa7cf0d20b4cedb1dc9a134fdd394fe27edbc4c2519756c91d21df2313
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 71.79kB 0.0s done
+#7 DONE 0.0s
+
+#8 [2/6] WORKDIR /app
+#8 CACHED
+
+#9 [3/6] COPY requirements.txt ./
+#9 CACHED
+
+#10 [4/6] RUN pip install --no-cache-dir -r requirements.txt
+#10 CACHED
+
+#11 [5/6] COPY ev_cp_monitor/ ev_cp_monitor/
+#11 DONE 0.1s
+
+#12 [6/6] COPY ev_common/ ev_common/
+#12 DONE 0.0s
+
+#13 exporting to image
+#13 exporting layers 0.1s done
+#13 writing image sha256:70f53e286d571510dbe68006ad5ccae94114bf23c6b6f253436017fbddd82d32 done
+#13 naming to docker.io/library/ev_monitor:local done
+#13 DONE 0.1s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/rvx5rg1n5g37y6yy3r3sdkydy
+[BUILD] ---- FIN OUTPUT DOCKER BUILD MONITOR ---- 
+[BUILD] Resultado (errorlevel): 0 
+[BUILD OK] ev_monitor construido exitosamente 
+[DEBUG] Ejecutando: docker ps -q --filter "label=component=engine" 
+[DEBUG] CP_OFFSET detectado: 0 
+[LOG] CPs existentes: 0 
+[DEBUG] Antes de mostrar mensaje... 
+[DEBUG] Mensaje mostrado 
+[DEBUG] Iniciando timeout de 2 segundos... 
+[DEBUG] Timeout completado, continuando... 
+ 
+============================================================ 
+[MAIN] INICIANDO LANZAMIENTO DE 1 CPs 
+============================================================ 
+[DEBUG] BASE_PORT=5000 
+[DEBUG] KAFKA_SERVER=172.21.42.15:9092 
+[DEBUG] CENTRAL_IP=172.21.42.15 
+[DEBUG] CP_OFFSET=0 
+[DEBUG] NUM_CPS=1 
+ 
+[DEBUG] Antes de iniciar bucle FOR 
+[DEBUG] Rango del bucle: 1 a 1 
+ 
+[MAIN] ================================================ 
+[MAIN] Iteracion 1 de 1 
+[MAIN] CP_NUM calculado: 1 
+[MAIN] ================================================ 
+[DEBUG] A punto de llamar a LANZAR_CP con CP_NUM=1 
+ 
+============================================================ 
+[FUNCION] LANZAR_CP INICIADA 
+============================================================ 
+[DEBUG] LANZAR_CP llamado con CP_NUM=1 
+[DEBUG] BASE_PORT=5000 
+[DEBUG] KAFKA_SERVER=172.21.42.15:9092 
+[DEBUG] CENTRAL_IP=172.21.42.15 
+[DEBUG] CP_ID calculado: CP_001 
+[DEBUG] ENGINE_PORT calculado: 5001 
+ 
+[DEBUG] ---- COMANDO ENGINE ---- 
+docker run --rm -p 5001:5001 -p 9001:9001 --name engine_CP_001 --label project=evcharging-pc-b --label component=engine --label cp_id=CP_001 -e ENGINE_PORT=5001 -e CP_ID=CP_001 -e KAFKA_SERVER=172.21.42.15:9092 -e WEB_PORT=9001 ev_engine:local 
+ 
+[DEBUG] ---- COMANDO MONITOR ---- 
+docker run --rm --network evnet --name monitor_CP_001 --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 -e CP_ID=CP_001 -e CENTRAL_IP=172.21.42.15 -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=5001 -e REGISTRY_URL= -e REGISTRY_API_KEY=ev-registry-api-key-2024-secure -e WEATHER_API_URL=http://host.docker.internal:5002 ev_monitor:local 
+ 
+[DEBUG] ---- COMANDO POWERSHELL ENGINE ---- 
+Write-Host 'Iniciando Engine (CP_001) en puerto 5001...' -ForegroundColor Cyan; Write-Host ''; docker run --rm -p 5001:5001 -p 9001:9001 --name engine_CP_001 --label project=evcharging-pc-b --label component=engine --label cp_id=CP_001 -e ENGINE_PORT=5001 -e CP_ID=CP_001 -e KAFKA_SERVER=172.21.42.15:9092 -e WEB_PORT=9001 ev_engine:local 
+ 
+[DEBUG] ---- COMANDO POWERSHELL MONITOR ---- 
+Write-Host 'Iniciando Monitor (CP_001)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --network evnet --name monitor_CP_001 --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 -e CP_ID=CP_001 -e CENTRAL_IP=172.21.42.15 -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=5001 -e REGISTRY_URL= -e REGISTRY_API_KEY=ev-registry-api-key-2024-secure -e WEATHER_API_URL=http://host.docker.internal:5002 ev_monitor:local 
+ 
+[DEBUG] Ejecutando START PowerShell para Engine... 
+[DEBUG] START ejecutado para Engine (errorlevel: 0) 
+[DEBUG] Esperando 3 segundos... 
+[DEBUG] Abriendo navegador en http://localhost:9001 
+[DEBUG] Navegador abierto (errorlevel: 0) 
+[DEBUG] Ejecutando START PowerShell para Monitor... 
+[DEBUG] START ejecutado para Monitor (errorlevel: 0) 
+[DEBUG] Lanzando Menu de Control para CP_001... 
+ 
+============================================================ 
+[FUNCION] LANZAR_MENU_CONTROL INICIADA 
+============================================================ 
+[DEBUG] LANZAR_MENU_CONTROL llamado con CP_ID=CP_001, WEB_PORT=9001 
+[DEBUG] API_BASE_URL: http://127.0.0.1:9001/api 
+[DEBUG] Script temporal creado: C:\Users\alumno\AppData\Local\Temp\menu_control_CP_001.bat 
+[DEBUG] Menu de Control lanzado para CP_001 
+============================================================ 
+[DEBUG] Menu de Control lanzado 
+[DEBUG] CP_001 completado 
+============================================================ 
+[DEBUG] Retorno de LANZAR_CP completado 
+[MAIN] Esperando 2 segundos antes del siguiente CP... 
+[DEBUG] Bucle FOR completado 
