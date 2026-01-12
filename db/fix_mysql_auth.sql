@@ -16,3 +16,4 @@ SELECT 'MySQL autenticación arreglada' AS status;
 
 
 
+
