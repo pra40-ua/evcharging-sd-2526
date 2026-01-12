@@ -356,6 +356,40 @@ def _autenticar_cp_archivo(cp_id: str, username: str, password: str):
         'message': 'Autenticación exitosa'
     }), 200
 
+def limpiar_base_datos():
+    """Limpia todas las tablas de CPs y credenciales."""
+    connection = obtener_conexion_bd()
+    if not connection:
+        print("[EV_Registry] ⚠️ No se pudo conectar a BD para limpiar datos")
+        return False
+    
+    try:
+        cursor = connection.cursor()
+        
+        # Eliminar todos los registros de credenciales
+        cursor.execute("DELETE FROM cp_credentials")
+        
+        # Eliminar todos los registros de CPs
+        cursor.execute("DELETE FROM cp_registry")
+        
+        connection.commit()
+        cursor.close()
+        connection.close()
+        
+        print("[EV_Registry] ✓ Base de datos limpiada correctamente")
+        return True
+    except Error as e:
+        if connection:
+            connection.rollback()
+            connection.close()
+        print(f"[EV_Registry] ⚠️ Error limpiando BD: {e}")
+        return False
+    except Exception as e:
+        if connection:
+            connection.close()
+        print(f"[EV_Registry] ⚠️ Error inesperado limpiando BD: {e}")
+        return False
+
 def inicializar_tablas():
     """Inicializa las tablas necesarias en la base de datos."""
     connection = obtener_conexion_bd()
@@ -1091,6 +1125,10 @@ def main():
     if not inicializar_tablas():
         print("[EV_Registry] ❌ Error inicializando tablas. Verifique la conexión a BD.")
         return
+    
+    # Limpiar base de datos al iniciar
+    print("[EV_Registry] Limpiando base de datos...")
+    limpiar_base_datos()
     
     # Iniciar hilo para mostrar terminal con listado de CPs
     def mostrar_listado_cps():

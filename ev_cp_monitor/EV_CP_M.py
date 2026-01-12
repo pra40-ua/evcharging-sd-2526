@@ -197,6 +197,9 @@ REGISTRY_API_KEY = os.getenv('REGISTRY_API_KEY', 'ev-registry-api-key-2024-secur
 # Clave de cifrado recibida de Central
 ENCRYPTION_KEY = None
 ENCRYPTION_KEY_LOCK = threading.Lock()
+# Flag para indicar que hay una clave pendiente de enviar al Engine
+PENDING_KEY_TO_ENGINE = False
+PENDING_KEY_LOCK = threading.Lock()
 
 # URL de EV_Registry
 # Según la guía, el Registry debe usar HTTPS obligatoriamente
@@ -310,8 +313,8 @@ def verificar_registry_disponible(base_url: str) -> bool:
                 verify=False,
                 allow_redirects=True
             )
-            print(f"[CP_M] Respuesta recibida: HTTP {response.status_code}")
             if response.status_code == 200:
+                print(f"[CP_M] Respuesta recibida: {response.status_code} OK (HTTPS)")
                 print(f"[CP_M] ✓ Registry disponible en {url_intento}")
                 # Si la URL que funcionó es diferente a la original, actualizar
                 if url_intento != base_url:
@@ -406,7 +409,10 @@ def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
                 'X-API-Key': REGISTRY_API_KEY
             }
             response = requests.post(url, json=payload, headers=headers, timeout=10, verify=False)
-            print(f"[CP_M] Respuesta recibida: HTTP {response.status_code}")
+            if response.status_code in (200, 201):
+                print(f"[CP_M] Respuesta recibida: {response.status_code} OK (HTTPS)")
+            else:
+                print(f"[CP_M] Respuesta recibida: {response.status_code} (HTTPS)")
         except requests.exceptions.SSLError as ssl_err:
             # Si hay error SSL específico, mostrar mensaje más claro
             print(f"[CP_M] ❌ Error SSL al conectar con EV_Registry: {ssl_err}")
@@ -446,7 +452,7 @@ def registrar_en_registry(cp_id: str, ubicacion: str) -> tuple:
             print(f"[CP_M] ⚠️ CP ya registrado. Use autenticación en su lugar.")
             return False, None, None
         else:
-            print(f"[CP_M] ❌ Error registrando en EV_Registry: HTTP {response.status_code} - {response.text[:100]}")
+            print(f"[CP_M] ❌ Error registrando en EV_Registry: {response.status_code} (HTTPS) - {response.text[:100]}")
             return False, None, None
             
     except requests.exceptions.RequestException as e:
@@ -496,8 +502,8 @@ def autenticar_en_registry(username: str, password: str) -> bool:
             print(f"[CP_M] ❌ Error de conexión al autenticar: {conn_err}")
             return False
         
-        print(f"[CP_M] DEBUG: Respuesta de Registry: status_code={response.status_code}", flush=True)
         if response.status_code == 200:
+            print(f"[CP_M] Respuesta recibida: {response.status_code} OK (HTTPS)", flush=True)
             try:
                 print(f"[CP_M] DEBUG: Parseando JSON...", flush=True)
                 data = response.json()
@@ -524,7 +530,7 @@ def autenticar_en_registry(username: str, password: str) -> bool:
                 print(f"[CP_M] DEBUG: Texto de respuesta: {response.text[:200]}", flush=True)
                 return False
         else:
-            print(f"[CP_M] ❌ Autenticación fallida: HTTP {response.status_code}")
+            print(f"[CP_M] ❌ Autenticación fallida: {response.status_code} (HTTPS)")
             print(f"[CP_M] DEBUG: Texto de respuesta: {response.text[:200]}")
             return False
             
@@ -754,7 +760,7 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, engine_
                             print(f"[CP_M] Enviando clave de cifrado al Engine en {engine_ip}:{engine_port}...")
                             trama_set_key = construir_trama('SET_KEY', [clave_b64], cifrar=False)
                             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as engine_socket:
-                                engine_socket.settimeout(2)
+                                engine_socket.settimeout(5)  # Aumentar timeout a 5 segundos
                                 engine_socket.connect((engine_ip, engine_port))
                                 engine_socket.sendall(trama_set_key)
                                 resp_key = engine_socket.recv(1024)
@@ -768,6 +774,10 @@ def conectar_y_registrar(central_ip: str, central_port: int, cp_id: str, engine_
                             print(f"[CP_M] ⚠️ Error enviando clave al Engine: {e}")
                             print(f"[CP_M]   El Engine no podrá cifrar mensajes de Kafka hasta recibir la clave")
                             print(f"[CP_M]   Se intentará enviar la clave en el siguiente ciclo HCK")
+                            # Marcar que hay una clave pendiente de enviar
+                            with PENDING_KEY_LOCK:
+                                global PENDING_KEY_TO_ENGINE
+                                PENDING_KEY_TO_ENGINE = True
                     else:
                         print(f"[CP_M] ⚠️ engine_ip/engine_port no disponibles. No se puede enviar clave al Engine.")
                 except Exception as e:
@@ -918,7 +928,7 @@ def escuchar_central(central_socket: socket.socket, cp_id: str, engine_ip: str, 
 
 def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: socket.socket, cp_id: str):
     """Hilo para enviar HCK al Engine cada 1 segundo y gestionar la respuesta."""
-    global CENTRAL_SOCKET
+    global CENTRAL_SOCKET, PENDING_KEY_TO_ENGINE
     engine_socket = None
     conexion_perdida_notificada = False
     hck_timeout_count = 0  # Contador de timeouts consecutivos
@@ -1046,6 +1056,30 @@ def chequear_salud_engine(engine_ip: str, engine_port: int, central_socket: sock
                         pass
                     raise
 
+            # 2.5. Si hay una clave pendiente de enviar, intentar enviarla ahora
+            with PENDING_KEY_LOCK:
+                if PENDING_KEY_TO_ENGINE:
+                    with ENCRYPTION_KEY_LOCK:
+                        key = ENCRYPTION_KEY
+                    if key:
+                        try:
+                            import base64
+                            clave_b64 = base64.b64encode(key).decode('utf-8')
+                            print(f"[{cp_id}] 🔑 Intentando enviar clave pendiente al Engine...")
+                            trama_set_key = construir_trama('SET_KEY', [clave_b64], cifrar=False)
+                            engine_socket.sendall(trama_set_key)
+                            resp_key = engine_socket.recv(1024)
+                            if resp_key:
+                                cod_resp, campos_resp = descomponer_trama(resp_key)
+                                if cod_resp == 'ACK' and len(campos_resp) > 0 and campos_resp[0] == 'KEY_OK':
+                                    print(f"[{cp_id}] ✓ Clave de cifrado enviada al Engine correctamente (reintento)")
+                                    PENDING_KEY_TO_ENGINE = False
+                                else:
+                                    print(f"[{cp_id}] ⚠️ Engine respondió con error al recibir clave: {campos_resp[0] if campos_resp else 'UNKNOWN'}")
+                        except Exception as e:
+                            print(f"[{cp_id}] ⚠️ Error enviando clave pendiente al Engine: {e}")
+                            # Mantener el flag para intentar de nuevo en el siguiente ciclo
+            
             # 3. Enviar HCK (NO cifrado - comunicación local con Engine)
             trama_hck = construir_trama('HCK', [cp_id], cifrar=False)
             engine_socket.sendall(trama_hck)

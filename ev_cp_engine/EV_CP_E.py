@@ -2534,7 +2534,13 @@ def api_register_cp():
             monitor_port = '8001'
     
     # Construir URL del Monitor
-    monitor_url = f'http://127.0.0.1:{monitor_port}/'
+    # El Engine está en Docker y el Monitor también está en Docker pero en la red evnet
+    # El Monitor expone su puerto al host, así que desde el Engine necesitamos usar
+    # host.docker.internal para acceder al puerto expuesto del Monitor
+    monitor_host = os.getenv('MONITOR_HOST', 'host.docker.internal')
+    monitor_url = f'http://{monitor_host}:{monitor_port}/'
+    
+    print(f"[{cp_id}] DEBUG: Intentando conectar con Monitor en {monitor_url}")
     
     try:
         response = requests.post(
@@ -2542,6 +2548,7 @@ def api_register_cp():
             json={'command': 'register', 'ubicacion': ubicacion},
             timeout=10
         )
+        print(f"[{cp_id}] DEBUG: Respuesta del Monitor: status_code={response.status_code}")
         
         if response.status_code == 200:
             result = response.json()
@@ -2590,7 +2597,12 @@ def api_authenticate_cp():
             monitor_port = '8001'
     
     # Construir URL del Monitor
-    monitor_url = f'http://127.0.0.1:{monitor_port}/'
+    # Si estamos en Docker, usar host.docker.internal; si no, usar localhost
+    # El Engine puede estar en Docker o no, pero el Monitor siempre está en Docker
+    # y expone su puerto al host, así que desde el Engine (que también está en Docker)
+    # necesitamos usar host.docker.internal para acceder al puerto expuesto
+    monitor_host = os.getenv('MONITOR_HOST', 'host.docker.internal')
+    monitor_url = f'http://{monitor_host}:{monitor_port}/'
     
     try:
         response = requests.post(
@@ -2703,11 +2715,11 @@ def main():
         web_thread = threading.Thread(target=iniciar_servidor_web, args=(WEB_PORT,), daemon=True)
         web_thread.start()
         print(f"[ENGINE] Interfaz web disponible en http://localhost:{WEB_PORT}")
-        # Abrir automáticamente el panel local de este Engine
-        try:
-            webbrowser.open_new_tab(f"http://localhost:{WEB_PORT}/panel_local")
-        except Exception:
-            pass
+        # Abrir automáticamente el panel local - DESHABILITADO
+        # try:
+        #     webbrowser.open_new_tab(f"http://localhost:{WEB_PORT}/panel_local")
+        # except Exception:
+        #     pass
         
         # Lanzar menú interactivo solo si hay TTY; si no, evitar bucle de prompts
         if sys.stdin and sys.stdin.isatty():

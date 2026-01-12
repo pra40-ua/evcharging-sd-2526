@@ -36,6 +36,8 @@ ALERTAS_LOCK = threading.Lock()
 
 # API Key de OpenWeather
 OPENWEATHER_API_KEY: Optional[str] = None
+# Clave default (la inicial, para poder restaurarla)
+OPENWEATHER_API_KEY_DEFAULT: Optional[str] = None
 
 # URL base de la API de EV_Central
 CENTRAL_API_URL: Optional[str] = None
@@ -46,6 +48,45 @@ CHECK_INTERVAL = 4
 # =================================================================
 #                    FUNCIONES DE CLIMA
 # =================================================================
+
+def validar_clave_openweather(api_key: str, ciudad_pais: str = "Madrid,ES") -> Optional[float]:
+    """
+    Valida una clave de OpenWeather haciendo una petición de prueba.
+    
+    Args:
+        api_key: Clave de OpenWeather a validar
+        ciudad_pais: Localización para la prueba (default: "Madrid,ES")
+    
+    Returns:
+        Temperatura en grados Celsius si la clave es válida, None si no lo es
+    """
+    if not api_key:
+        return None
+    
+    try:
+        url = f"http://api.openweathermap.org/data/2.5/weather"
+        params = {
+            'q': ciudad_pais,
+            'appid': api_key,
+            'units': 'metric'
+        }
+        
+        response = requests.get(url, params=params, timeout=5)
+        
+        if response.status_code == 200:
+            data = response.json()
+            temp = data.get('main', {}).get('temp')
+            if temp is not None:
+                return float(temp)
+        elif response.status_code == 401:
+            return None  # Clave inválida
+        elif response.status_code == 404:
+            return None  # Ciudad no encontrada (pero la clave puede ser válida)
+        else:
+            return None
+            
+    except Exception:
+        return None
 
 def obtener_temperatura(ciudad_pais: str) -> Optional[float]:
     """
@@ -82,6 +123,15 @@ def obtener_temperatura(ciudad_pais: str) -> Optional[float]:
                 return None
         elif response.status_code == 401:
             print(f"[EV_W] ❌ ERROR: API Key inválida o expirada")
+            # Notificar a Central sobre el fallo de la clave
+            if CENTRAL_API_URL:
+                try:
+                    url = f"{CENTRAL_API_URL}/weather_key_failed"
+                    response_notif = requests.post(url, json={'error': 'API Key inválida o expirada'}, timeout=5)
+                    if response_notif.status_code == 200:
+                        print(f"[EV_W] ✓ Central notificada sobre fallo de API Key")
+                except Exception as e:
+                    print(f"[EV_W] ⚠️ Error notificando a Central: {e}")
             return None
         elif response.status_code == 404:
             print(f"[EV_W] ⚠️ Ciudad no encontrada: {ciudad_pais}")
@@ -156,7 +206,9 @@ def procesar_localizacion(cp_id: str, ciudad_pais: str):
     temperatura = obtener_temperatura(ciudad_pais)
     
     if temperatura is None:
-        # Error al obtener temperatura, no cambiar estado de alerta
+        # Error al obtener temperatura
+        # Si es un error 401 (clave inválida), ya se notificó a Central en obtener_temperatura
+        # No cambiar estado de alerta en este caso
         return
     
     # Verificar si hay alerta activa actualmente
@@ -253,10 +305,8 @@ def mostrar_menu():
     print("  [1] Añadir localización de CP")
     print("  [2] Eliminar localización de CP")
     print("  [3] Listar localizaciones")
-    print("  [4] Consultar temperatura de una localización")
-    print("  [5] Estado de alertas")
-    print("  [h] Ayuda")
-    print("  [q] Salir")
+    print("  [4] Restaurar clave OpenWeather (default)")
+    print("  [5] Cambiar clave OpenWeather")
     print("="*70)
 
 def añadir_localizacion():
@@ -356,28 +406,85 @@ def consultar_temperatura():
     except Exception as e:
         print(f"[EV_W] ❌ Error consultando temperatura: {e}")
 
-def estado_alertas():
-    """Muestra el estado actual de todas las alertas."""
-    with ALERTAS_LOCK, LOCALIZACIONES_LOCK:
-        if not ALERTAS_ACTIVAS and not LOCALIZACIONES:
-            print("[EV_W] No hay alertas ni localizaciones configuradas")
+def restaurar_clave_default():
+    """Restaura la clave de OpenWeather a la clave default (inicial)."""
+    global OPENWEATHER_API_KEY, OPENWEATHER_API_KEY_DEFAULT
+    try:
+        if not OPENWEATHER_API_KEY_DEFAULT:
+            print("[EV_W] ❌ No hay clave default guardada")
             return
         
-        print("\n" + "="*70)
-        print("  ESTADO DE ALERTAS CLIMATOLÓGICAS")
-        print("="*70)
+        # Validar que la clave default funciona
+        print(f"[EV_W] Restaurando clave OpenWeather a la clave default...")
+        print(f"[EV_W] Validando clave default...")
         
-        alertas_activas_list = [cp_id for cp_id, activa in ALERTAS_ACTIVAS.items() if activa]
+        temp_prueba = validar_clave_openweather(OPENWEATHER_API_KEY_DEFAULT)
         
-        if alertas_activas_list:
-            print("  ⚠️ ALERTAS ACTIVAS:")
-            for cp_id in alertas_activas_list:
-                ciudad = LOCALIZACIONES.get(cp_id, "N/D")
-                print(f"    - {cp_id} ({ciudad})")
-        else:
-            print("  ✓ No hay alertas activas")
+        if temp_prueba is None:
+            print(f"[EV_W] ❌ ERROR: La clave default no es válida")
+            if CENTRAL_API_URL:
+                try:
+                    url = f"{CENTRAL_API_URL}/weather_key_failed"
+                    response = requests.post(url, json={'error': 'Clave default inválida'}, timeout=5)
+                    if response.status_code == 200:
+                        print(f"[EV_W] ✓ Central notificada sobre fallo de clave default")
+                except Exception as e:
+                    print(f"[EV_W] ⚠️ Error notificando a Central: {e}")
+            return
         
-        print("="*70)
+        # La clave default funciona - restaurar
+        OPENWEATHER_API_KEY = OPENWEATHER_API_KEY_DEFAULT
+        print(f"[EV_W] ✓ Clave OpenWeather restaurada a la clave default")
+        print(f"[EV_W]   Clave: {OPENWEATHER_API_KEY_DEFAULT[:10]}...")
+        print(f"[EV_W]   Validación exitosa: Temperatura de prueba (Madrid): {temp_prueba:.1f}°C")
+        
+    except KeyboardInterrupt:
+        print("\n[EV_W] Operación cancelada")
+    except Exception as e:
+        print(f"[EV_W] ❌ Error restaurando clave default: {e}")
+        import traceback
+        traceback.print_exc()
+
+def cambiar_clave_openweather():
+    """Permite al usuario cambiar la clave de OpenWeather."""
+    global OPENWEATHER_API_KEY
+    try:
+        nueva_clave = input("Ingrese la nueva clave de OpenWeather: ").strip()
+        
+        if not nueva_clave:
+            print("[EV_W] ❌ La clave no puede estar vacía")
+            return
+        
+        # Validar la nueva clave
+        print(f"[EV_W] Validando nueva clave de OpenWeather...")
+        
+        temp_prueba = validar_clave_openweather(nueva_clave)
+        
+        if temp_prueba is None:
+            print(f"[EV_W] ❌ ERROR: La nueva clave no es válida")
+            print(f"[EV_W]   La clave no se ha actualizado. Use la opción [4] para restaurar la clave default.")
+            if CENTRAL_API_URL:
+                try:
+                    url = f"{CENTRAL_API_URL}/weather_key_failed"
+                    response = requests.post(url, json={'error': 'API Key inválida'}, timeout=5)
+                    if response.status_code == 200:
+                        print(f"[EV_W] ✓ Central notificada sobre fallo de API Key")
+                except Exception as e:
+                    print(f"[EV_W] ⚠️ Error notificando a Central: {e}")
+            return
+        
+        # La nueva clave funciona - actualizar
+        OPENWEATHER_API_KEY = nueva_clave
+        print(f"[EV_W] ✓ Clave OpenWeather actualizada correctamente")
+        print(f"[EV_W]   Nueva clave: {nueva_clave[:10]}...")
+        print(f"[EV_W]   Validación exitosa: Temperatura de prueba (Madrid): {temp_prueba:.1f}°C")
+        
+    except KeyboardInterrupt:
+        print("\n[EV_W] Operación cancelada")
+    except Exception as e:
+        print(f"[EV_W] ❌ Error cambiando clave: {e}")
+        import traceback
+        traceback.print_exc()
 
 # =================================================================
 #                    API REST - REGISTRO DE CPs
@@ -481,6 +588,68 @@ def api_update_location(cp_id):
             'message': f'Error interno: {str(e)}'
         }), 500
 
+@WEATHER_APP.route('/weather/update_api_key', methods=['POST'])
+def api_update_api_key():
+    """Endpoint para actualizar la API Key de OpenWeather."""
+    global OPENWEATHER_API_KEY
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({
+                'status': 'error',
+                'message': 'No se proporcionó JSON en el body'
+            }), 400
+        
+        nueva_api_key = data.get('api_key', '').strip()
+        
+        if not nueva_api_key:
+            return jsonify({
+                'status': 'error',
+                'message': 'api_key es requerida'
+            }), 400
+        
+        # Validar la nueva clave haciendo una petición de prueba
+        print(f"[EV_W] Validando nueva API Key de OpenWeather...")
+        temp_prueba = validar_clave_openweather(nueva_api_key)
+        
+        if temp_prueba is None:
+            # La clave no funciona - notificar a Central
+            print(f"[EV_W] ❌ ERROR: La nueva API Key no es válida")
+            if CENTRAL_API_URL:
+                try:
+                    url = f"{CENTRAL_API_URL}/weather_key_failed"
+                    response = requests.post(url, json={'error': 'API Key inválida'}, timeout=5)
+                    if response.status_code == 200:
+                        print(f"[EV_W] ✓ Central notificada sobre fallo de API Key")
+                except Exception as e:
+                    print(f"[EV_W] ⚠️ Error notificando a Central: {e}")
+            
+            return jsonify({
+                'status': 'error',
+                'message': 'La API Key proporcionada no es válida. No se actualizó la clave.'
+            }), 400
+        
+        # La clave funciona - actualizar
+        OPENWEATHER_API_KEY = nueva_api_key
+        print(f"[EV_W] ✓ API Key actualizada correctamente")
+        print(f"[EV_W]   Nueva clave: {nueva_api_key[:10]}...")
+        print(f"[EV_W]   Validación exitosa: Temperatura de prueba (Madrid): {temp_prueba:.1f}°C")
+        
+        return jsonify({
+            'status': 'ok',
+            'message': 'API Key actualizada correctamente',
+            'temperatura_prueba': temp_prueba
+        }), 200
+        
+    except Exception as e:
+        print(f"[EV_W] ❌ Error actualizando API Key: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            'status': 'error',
+            'message': f'Error interno: {str(e)}'
+        }), 500
+
 def menu_interactivo():
     """Menú interactivo para gestionar localizaciones."""
     while True:
@@ -495,14 +664,9 @@ def menu_interactivo():
             elif opcion == '3':
                 listar_localizaciones()
             elif opcion == '4':
-                consultar_temperatura()
+                restaurar_clave_default()
             elif opcion == '5':
-                estado_alertas()
-            elif opcion == 'h':
-                mostrar_menu()
-            elif opcion == 'q':
-                print("[EV_W] Saliendo del menú...")
-                break
+                cambiar_clave_openweather()
             else:
                 print(f"[EV_W] ❌ Opción no reconocida: {opcion}")
                 
@@ -517,7 +681,7 @@ def menu_interactivo():
 # =================================================================
 
 def main():
-    global OPENWEATHER_API_KEY, CENTRAL_API_URL
+    global OPENWEATHER_API_KEY, OPENWEATHER_API_KEY_DEFAULT, CENTRAL_API_URL
     
     parser = argparse.ArgumentParser(description="EV_W - Weather Control Office")
     parser.add_argument("--api-key", type=str, required=True,
@@ -528,6 +692,7 @@ def main():
     args = parser.parse_args()
     
     OPENWEATHER_API_KEY = args.api_key
+    OPENWEATHER_API_KEY_DEFAULT = args.api_key  # Guardar la clave default
     CENTRAL_API_URL = args.central_url.rstrip('/')
     
     print("="*70)

@@ -662,8 +662,8 @@ echo.
 echo Ventanas abiertas:
 echo   - EV_Weather: Monitoreo climatológico
 echo   - PowerShell: !NUM_CPS! CPs (Engine + Monitor)
-echo   - Navegador: !NUM_CPS! interfaces web
 echo   - Menú Control: !NUM_CPS! menús de control de suministro
+echo   - Interfaz web: !NUM_CPS! interfaces web (no se abren automáticamente)
 echo.
 echo Interfaces web disponibles:
 for /L %%i in (1,1,!NUM_CPS!) do (
@@ -899,10 +899,10 @@ echo [OK] Engine iniciado en ventana separada
 echo.
 timeout /t 3 /nobreak >nul
 
-REM Abrir interfaz web del engine (puerto 9001 para CP_001)
-echo Abriendo interfaz web en http://localhost:9001...
-start "" "http://localhost:9001"
-timeout /t 1 /nobreak >nul
+REM Abrir interfaz web del engine (puerto 9001 para CP_001) - DESHABILITADO
+REM echo Abriendo interfaz web en http://localhost:9001...
+REM start "" "http://localhost:9001"
+REM timeout /t 1 /nobreak >nul
 
 REM Lanzar Menu de Control de Suministro para CP_001
 call :LANZAR_MENU_CONTROL CP_001 9001
@@ -925,7 +925,8 @@ echo [4/4] LANZANDO MONITOR
 echo ============================================================
 echo.
 
-start "Monitor-PC_B" powershell -NoExit -Command "Write-Host 'Iniciando Monitor (CP_001)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --network evnet --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 --name monitor -e CP_ID=CP_001 -e CENTRAL_IP=!CENTRAL_IP! -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=5001 -e ENGINE_WEB_PORT=9001 -e REGISTRY_URL=!REGISTRY_URL! -e REGISTRY_API_KEY=!REGISTRY_API_KEY! -e WEATHER_API_URL=http://host.docker.internal:5002 ev_monitor:local"
+set /a MONITOR_API_PORT_CLASICO=8001
+start "Monitor-PC_B" powershell -NoExit -Command "Write-Host 'Iniciando Monitor (CP_001)...' -ForegroundColor Cyan; Write-Host ''; docker run --rm --network evnet -p !MONITOR_API_PORT_CLASICO!:!MONITOR_API_PORT_CLASICO! --label project=evcharging-pc-b --label component=monitor --label cp_id=CP_001 --name monitor -e CP_ID=CP_001 -e CENTRAL_IP=!CENTRAL_IP! -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=5001 -e ENGINE_WEB_PORT=9001 -e MONITOR_API_PORT=!MONITOR_API_PORT_CLASICO! -e REGISTRY_URL=!REGISTRY_URL! -e REGISTRY_API_KEY=!REGISTRY_API_KEY! -e WEATHER_API_URL=http://host.docker.internal:5002 ev_monitor:local"
 
 echo [OK] Monitor iniciado en ventana separada
 echo.
@@ -945,10 +946,9 @@ echo.
 echo Ventanas abiertas:
 echo   - EV_Weather: Monitoreo climatológico
 echo   - PowerShell: Engine, Driver, Monitor
-echo   - Navegador: Interfaz web del Engine
 echo   - Menú Control: Menú de control de suministro (CP_001)
 echo.
-echo Interfaz web disponible:
+echo Interfaz web disponible (no se abre automáticamente):
 echo   - CP_001: http://localhost:9001
 echo.
 echo Para DETENER:
@@ -997,7 +997,9 @@ set /a WEB_PORT_ENGINE=9000+%CP_NUM%
 
 REM Construir comando ENGINE: Sin --network host, con mapeo de puertos TCP y Web
 set "ENGINE_CMD=docker run --rm -p !ENGINE_PORT!:!ENGINE_PORT! -p !WEB_PORT_ENGINE!:!WEB_PORT_ENGINE! --name engine_!CP_ID! --label project=evcharging-pc-b --label component=engine --label cp_id=!CP_ID! -e ENGINE_PORT=!ENGINE_PORT! -e CP_ID=!CP_ID! -e KAFKA_SERVER=%KAFKA_SERVER% -e WEB_PORT=!WEB_PORT_ENGINE! ev_engine:local"
-set "MONITOR_CMD=docker run --rm --network evnet --name monitor_!CP_ID! --label project=evcharging-pc-b --label component=monitor --label cp_id=!CP_ID! -e CP_ID=!CP_ID! -e CENTRAL_IP=%CENTRAL_IP% -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=!ENGINE_PORT! -e ENGINE_WEB_PORT=!WEB_PORT_ENGINE! -e REGISTRY_URL=!REGISTRY_URL! -e REGISTRY_API_KEY=!REGISTRY_API_KEY! -e WEATHER_API_URL=http://host.docker.internal:5002 ev_monitor:local"
+REM Calcular puerto del Monitor API (8000 + CP_NUM)
+set /a MONITOR_API_PORT=8000+%CP_NUM%
+set "MONITOR_CMD=docker run --rm --network evnet -p !MONITOR_API_PORT!:!MONITOR_API_PORT! --name monitor_!CP_ID! --label project=evcharging-pc-b --label component=monitor --label cp_id=!CP_ID! -e CP_ID=!CP_ID! -e CENTRAL_IP=%CENTRAL_IP% -e CENTRAL_PORT=5000 -e ENGINE_IP=host.docker.internal -e ENGINE_PORT=!ENGINE_PORT! -e ENGINE_WEB_PORT=!WEB_PORT_ENGINE! -e MONITOR_API_PORT=!MONITOR_API_PORT! -e REGISTRY_URL=!REGISTRY_URL! -e REGISTRY_API_KEY=!REGISTRY_API_KEY! -e WEATHER_API_URL=http://host.docker.internal:5002 ev_monitor:local"
 
 echo. >> "%LOG_FILE%"
 echo [DEBUG] ---- COMANDO ENGINE ---- >> "%LOG_FILE%"
@@ -1033,13 +1035,14 @@ REM Calcular puerto web del engine (9000 + CP_NUM)
 set /a WEB_PORT=9000+%CP_NUM%
 set WEB_URL=http://localhost:!WEB_PORT!
 
-echo [DEBUG] Abriendo navegador en !WEB_URL! >> "%LOG_FILE%"
-echo Abriendo interfaz web para !CP_ID! en !WEB_URL!...
-start "" "!WEB_URL!"
-echo [DEBUG] Navegador abierto (errorlevel: !errorlevel!) >> "%LOG_FILE%"
+REM Abrir navegador - DESHABILITADO
+REM echo [DEBUG] Abriendo navegador en !WEB_URL! >> "%LOG_FILE%"
+REM echo Abriendo interfaz web para !CP_ID! en !WEB_URL!...
+REM start "" "!WEB_URL!"
+REM echo [DEBUG] Navegador abierto (errorlevel: !errorlevel!) >> "%LOG_FILE%"
 
-REM Pequeña pausa para que el navegador se abra
-timeout /t 1 /nobreak >nul
+REM Pequeña pausa para que el navegador se abra - YA NO ES NECESARIA
+REM timeout /t 1 /nobreak >nul
 
 REM Lanzar Monitor en terminal PowerShell separada
 echo [DEBUG] Ejecutando START PowerShell para Monitor... >> "%LOG_FILE%"
@@ -1187,15 +1190,14 @@ echo pause ^>nul
 echo goto MENU
 echo.
 echo :EJECUTAR
-echo echo [INFO] Ejecutando: %%DESCRIPCION%%
-echo echo ------------------------------------------------------------
-echo if "%%OPCION%%"=="3" ^(
-echo     echo Comando: Simular Avería ^(comando especial^)
-echo ^) else ^(
-echo     echo Comando: %%COMANDO_PS%%
-echo ^)
-echo echo ------------------------------------------------------------
-echo echo.
+REM echo echo [INFO] Ejecutando: %%DESCRIPCION%%
+REM echo echo ------------------------------------------------------------
+REM echo if "%%OPCION%%"=="3" ^(
+REM echo     echo Comando: Simular Avería ^(comando especial^)
+REM echo ^) else ^(
+REM echo     echo Comando: %%COMANDO_PS%%
+REM echo ^)
+REM echo echo ------------------------------------------------------------
 echo echo.
 echo REM Ejecutar el comando de PowerShell
 echo if defined OPCION_ESPECIAL ^(

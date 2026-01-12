@@ -1022,6 +1022,221 @@ def api_revoke_key(cp_id):
             'message': str(e)
         }), 500
 
+@API_APP.route('/api/weather/update_key', methods=['POST'])
+def api_update_weather_key():
+    """Endpoint para cambiar la clave de OpenWeather."""
+    import requests
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({
+                'status': 'error',
+                'message': 'No se proporcionó JSON en el body'
+            }), 400
+        
+        nueva_api_key = data.get('api_key', '').strip()
+        
+        if not nueva_api_key:
+            return jsonify({
+                'status': 'error',
+                'message': 'api_key es requerida'
+            }), 400
+        
+        # Validar la clave nueva haciendo una petición de prueba a OpenWeather
+        print(f"[CENTRAL] Validando nueva API Key de OpenWeather...")
+        try:
+            url = "http://api.openweathermap.org/data/2.5/weather"
+            params = {
+                'q': 'Madrid,ES',
+                'appid': nueva_api_key,
+                'units': 'metric'
+            }
+            response = requests.get(url, params=params, timeout=5)
+            
+            if response.status_code != 200:
+                # La clave no funciona
+                print(f"[CENTRAL] ❌ ERROR: La nueva API Key no es válida (HTTP {response.status_code})")
+                return jsonify({
+                    'status': 'error',
+                    'message': f'La API Key proporcionada no es válida (HTTP {response.status_code})'
+                }), 400
+            
+            # La clave funciona - actualizar en EV_W
+            weather_api_url = os.getenv('WEATHER_API_URL', 'http://127.0.0.1:5002')
+            weather_url = f"{weather_api_url}/weather/update_api_key"
+            
+            try:
+                weather_response = requests.post(weather_url, json={'api_key': nueva_api_key}, timeout=10)
+                if weather_response.status_code == 200:
+                    print(f"[CENTRAL] ✓ API Key actualizada en EV_W correctamente")
+                    db_conn = globals().get('_DB_CONN_FOR_API')
+                    registrar_auditoria(
+                        accion="CAMBIO_CLAVE_OPENWEATHER",
+                        cp_id="ALL",
+                        origen_ip=request.remote_addr,
+                        descripcion="Clave de OpenWeather actualizada correctamente",
+                        resultado="OK",
+                        db_connection=db_conn
+                    )
+                    return jsonify({
+                        'status': 'ok',
+                        'message': 'API Key de OpenWeather actualizada correctamente'
+                    }), 200
+                else:
+                    print(f"[CENTRAL] ⚠️ Error actualizando clave en EV_W: HTTP {weather_response.status_code}")
+                    return jsonify({
+                        'status': 'error',
+                        'message': f'Error actualizando clave en EV_W: HTTP {weather_response.status_code}'
+                    }), 500
+            except requests.exceptions.RequestException as e:
+                print(f"[CENTRAL] ⚠️ Error comunicándose con EV_W: {e}")
+                return jsonify({
+                    'status': 'error',
+                    'message': f'Error comunicándose con EV_W: {str(e)}'
+                }), 500
+                
+        except requests.exceptions.RequestException as e:
+            print(f"[CENTRAL] ❌ Error validando API Key: {e}")
+            return jsonify({
+                'status': 'error',
+                'message': f'Error validando API Key: {str(e)}'
+            }), 500
+        
+    except Exception as e:
+        print(f"[CENTRAL] ❌ Error en api_update_weather_key: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            'status': 'error',
+            'message': f'Error interno: {str(e)}'
+        }), 500
+
+@API_APP.route('/api/weather_key_failed', methods=['POST'])
+def api_weather_key_failed():
+    """Endpoint para recibir notificaciones de EV_W cuando la clave de OpenWeather falla."""
+    try:
+        data = request.get_json()
+        error_msg = data.get('error', 'API Key inválida o expirada')
+        
+        print(f"\n[CENTRAL] ╔═══════════════════════════════════════════╗")
+        print(f"[CENTRAL] ║  🚨 FALLO DE CLAVE OPENWEATHER            ║")
+        print(f"[CENTRAL] ╚═══════════════════════════════════════════╝")
+        print(f"[CENTRAL]    Error: {error_msg}")
+        print(f"[CENTRAL]    Acción: Poniendo todos los CPs en FUERA_DE_SERVICIO")
+        print(f"[CENTRAL] ═══════════════════════════════════════════\n")
+        
+        db_conn = globals().get('_DB_CONN_FOR_API')
+        
+        # Obtener todos los CPs conectados
+        with CONEXIONES_ACTIVAS_LOCK:
+            cps_conectados = list(CONEXIONES_ACTIVAS.keys())
+        
+        if not cps_conectados:
+            print(f"[CENTRAL] No hay CPs conectados")
+            return jsonify({
+                'status': 'ok',
+                'message': 'No hay CPs conectados'
+            }), 200
+        
+        # Para cada CP, verificar si está suministrando y finalizar antes de poner en FUERA_DE_SERVICIO
+        for cp_id in cps_conectados:
+            try:
+                # Verificar si está suministrando
+                with CP_ESTADO_LOCK:
+                    estado_cp = CP_ESTADO.get(cp_id, '')
+                
+                estados_suministro = {'SUMINISTRANDO', 'CARGANDO', 'PRE-SUMINISTRO'}
+                tiene_suministro_activo = estado_cp.upper() in estados_suministro
+                
+                if tiene_suministro_activo:
+                    # Está suministrando - enviar STOP y esperar FIN
+                    print(f"[CENTRAL] ⚠️ CP {cp_id} está en suministro activo. Finalizando suministro antes de poner fuera de servicio...")
+                    
+                    # Marcar que este CP debe ir a FUERA_DE_SERVICIO después de recibir FIN
+                    with CP_PENDIENTES_ALERTA_CLIMA_LOCK:
+                        CP_PENDIENTES_ALERTA_CLIMA[cp_id] = {
+                            'temperatura': None,  # No hay temperatura porque es fallo de clave
+                            'timestamp': time.time(),
+                            'motivo': 'Fallo de clave OpenWeather'
+                        }
+                    
+                    # Enviar STOP para que finalice el suministro normalmente
+                    try:
+                        with CONEXIONES_ACTIVAS_LOCK:
+                            conn = CONEXIONES_ACTIVAS.get(cp_id)
+                        if conn:
+                            trama_stop = construir_trama('STOP', [], cp_id=cp_id, cifrar=True)
+                            conn.sendall(trama_stop)
+                            print(f"[CENTRAL] 📤 STOP enviado a {cp_id} por fallo de clave OpenWeather")
+                            print(f"[CENTRAL] ⏳ Esperando FIN para finalizar suministro y enviar ticket al driver...")
+                            registrar_evento(f"📤 STOP enviado a {cp_id} por fallo de clave OpenWeather. Esperando finalización normal del suministro.", "warn")
+                    except Exception as e:
+                        print(f"[CENTRAL] ⚠️ Error enviando STOP a {cp_id}: {e}")
+                        # Si no se pudo enviar STOP, cambiar directamente a FUERA_DE_SERVICIO
+                        try:
+                            cambiar_estado_cp(cp_id, 'FUERA_DE_SERVICIO', db_conn, motivo='Fallo de clave OpenWeather')
+                            print(f"[CENTRAL] ⚠️ CP {cp_id} fuera de servicio por fallo de clave OpenWeather")
+                            registrar_evento(f"⚠️ CP {cp_id} fuera de servicio por fallo de clave OpenWeather", "warn")
+                        except Exception as e2:
+                            print(f"[CENTRAL] ⚠️ Error cambiando estado a FUERA_DE_SERVICIO: {e2}")
+                else:
+                    # No está suministrando, cambiar directamente a FUERA_DE_SERVICIO
+                    try:
+                        cambiar_estado_cp(cp_id, 'FUERA_DE_SERVICIO', db_conn, motivo='Fallo de clave OpenWeather')
+                        print(f"[CENTRAL] ⚠️ CP {cp_id} fuera de servicio por fallo de clave OpenWeather")
+                        registrar_evento(f"⚠️ CP {cp_id} fuera de servicio por fallo de clave OpenWeather", "warn")
+                    except Exception as e:
+                        print(f"[CENTRAL] ⚠️ Error cambiando estado a FUERA_DE_SERVICIO: {e}")
+                    
+                    # Publicar telemetría actualizada
+                    try:
+                        with TELEMETRIA_ACTUAL_LOCK:
+                            telemetria_actual = TELEMETRIA_ACTUAL.get(cp_id, {})
+                        telemetria_actualizada = {
+                            **telemetria_actual,
+                            'cp_id': cp_id,
+                            'estado': 'FUERA_DE_SERVICIO',
+                            'estado_carga': 'FUERA_DE_SERVICIO',
+                            'timestamp': time.time()
+                        }
+                        with TELEMETRIA_ACTUAL_LOCK:
+                            TELEMETRIA_ACTUAL[cp_id] = telemetria_actualizada
+                        if KAFKA_PRODUCER:
+                            KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
+                            KAFKA_PRODUCER.flush(timeout=1)
+                            print(f"[CENTRAL] Telemetría publicada para {cp_id}: FUERA_DE_SERVICIO (fallo de clave OpenWeather)")
+                    except Exception as e:
+                        print(f"[CENTRAL] ⚠️ Error publicando telemetría: {e}")
+                        
+            except Exception as e:
+                print(f"[CENTRAL] ⚠️ Error procesando CP {cp_id}: {e}")
+                import traceback
+                traceback.print_exc()
+        
+        # Registrar en auditoría
+        registrar_auditoria(
+            accion="FALLO_CLAVE_OPENWEATHER",
+            cp_id="ALL",
+            origen_ip=request.remote_addr if hasattr(request, 'remote_addr') else '127.0.0.1',
+            descripcion=f"Fallo de clave OpenWeather detectado. CPs puestos en FUERA_DE_SERVICIO. Error: {error_msg}",
+            resultado="OK",
+            db_connection=db_conn
+        )
+        
+        return jsonify({
+            'status': 'ok',
+            'message': f'Procesando fallo de clave OpenWeather para {len(cps_conectados)} CP(s)'
+        }), 200
+        
+    except Exception as e:
+        print(f"[CENTRAL] ❌ Error en api_weather_key_failed: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            'status': 'error',
+            'message': f'Error interno: {str(e)}'
+        }), 500
+
 def iniciar_api_rest(port: int, db_connection):
     """Inicia el servidor Flask para la API REST en un hilo separado."""
     global _DB_CONN_FOR_API
@@ -3602,18 +3817,31 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                         motivo = campos[5] if len(campos) > 5 else 'Consumo completado'
                         tx_id = campos[6] if len(campos) > 6 else None
 
-                        # Verificar si hay alerta climatológica pendiente para actualizar el motivo
+                        # Verificar si hay alerta climatológica o fallo de clave OpenWeather pendiente
                         # NO eliminar aún la entrada, se eliminará más adelante cuando se procese el cambio de estado
                         tiene_alerta_clima_pendiente = False
                         temperatura_alerta = None
+                        tiene_fallo_clave_pendiente = False
+                        motivo_fallo_clave = None
                         with CP_PENDIENTES_ALERTA_CLIMA_LOCK:
                             if cp_fin in CP_PENDIENTES_ALERTA_CLIMA:
-                                tiene_alerta_clima_pendiente = True
                                 alerta_info = CP_PENDIENTES_ALERTA_CLIMA.get(cp_fin)
-                                temperatura_alerta = alerta_info.get('temperatura') if alerta_info else None
-                                # Actualizar motivo si es necesario
-                                if motivo and 'alerta climatológica' not in motivo.lower() and 'temperatura' not in motivo.lower():
-                                    motivo = f"{motivo} - Finalizado por alerta climatológica (T={temperatura_alerta:.1f}°C)"
+                                if alerta_info:
+                                    # Verificar si es alerta climatológica o fallo de clave
+                                    if alerta_info.get('temperatura') is not None:
+                                        # Es alerta climatológica
+                                        tiene_alerta_clima_pendiente = True
+                                        temperatura_alerta = alerta_info.get('temperatura')
+                                        # Actualizar motivo si es necesario
+                                        if motivo and 'alerta climatológica' not in motivo.lower() and 'temperatura' not in motivo.lower():
+                                            motivo = f"{motivo} - Finalizado por alerta climatológica (T={temperatura_alerta:.1f}°C)"
+                                    elif alerta_info.get('motivo') == 'Fallo de clave OpenWeather':
+                                        # Es fallo de clave OpenWeather
+                                        tiene_fallo_clave_pendiente = True
+                                        motivo_fallo_clave = alerta_info.get('motivo')
+                                        # Actualizar motivo si es necesario
+                                        if motivo and 'fallo de clave' not in motivo.lower() and 'openweather' not in motivo.lower():
+                                            motivo = f"{motivo} - Finalizado por fallo de clave OpenWeather"
 
                         print(f"\n[CENTRAL] {'='*70}")
                         print(f"[CENTRAL] 📨 FIN DE CARGA RECIBIDO de {cp_fin}")
@@ -3625,6 +3853,8 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                         print(f"[CENTRAL]    Motivo: {motivo}")
                         if tiene_alerta_clima_pendiente:
                             print(f"[CENTRAL]    ⚠️  Alerta climatológica activa (T={temperatura_alerta:.1f}°C) - CP pasará a FUERA_DE_SERVICIO")
+                        elif tiene_fallo_clave_pendiente:
+                            print(f"[CENTRAL]    ⚠️  Fallo de clave OpenWeather - CP pasará a FUERA_DE_SERVICIO")
                         print(f"[CENTRAL] {'='*70}\n")
 
                         registrar_evento(f"[CONTROL] Fin de carga recibido de {cp_fin}: {energia} kWh, {importe} €")
@@ -3730,20 +3960,30 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                             print(f"[CENTRAL] ✗ Error procesando cola de {cp_fin}: {e}")
                         
                         # Solo cambiar a ACTIVADO si NO se procesó nadie de la cola
-                        # Pero primero verificar si hay alerta climatológica pendiente
+                        # Pero primero verificar si hay alerta climatológica o fallo de clave pendiente
                         tiene_alerta_clima_pendiente = False
                         temperatura_alerta = None
+                        tiene_fallo_clave_pendiente = False
+                        motivo_fallo_clave = None
                         with CP_PENDIENTES_ALERTA_CLIMA_LOCK:
                             if cp_fin in CP_PENDIENTES_ALERTA_CLIMA:
-                                tiene_alerta_clima_pendiente = True
                                 alerta_info = CP_PENDIENTES_ALERTA_CLIMA.pop(cp_fin)
-                                temperatura_alerta = alerta_info.get('temperatura')
+                                if alerta_info:
+                                    # Verificar si es alerta climatológica o fallo de clave
+                                    if alerta_info.get('temperatura') is not None:
+                                        # Es alerta climatológica
+                                        tiene_alerta_clima_pendiente = True
+                                        temperatura_alerta = alerta_info.get('temperatura')
+                                    elif alerta_info.get('motivo') == 'Fallo de clave OpenWeather':
+                                        # Es fallo de clave OpenWeather
+                                        tiene_fallo_clave_pendiente = True
+                                        motivo_fallo_clave = alerta_info.get('motivo')
                         
                         if not cola_procesada:
                             if tiene_alerta_clima_pendiente:
                                 # Hay alerta climatológica pendiente: cambiar a FUERA_DE_SERVICIO
                                 try:
-                                    cambiar_estado_cp(cp_fin, 'FUERA_DE_SERVICIO', db_connection)
+                                    cambiar_estado_cp(cp_fin, 'FUERA_DE_SERVICIO', db_connection, motivo=f'Alerta climatológica (T={temperatura_alerta:.1f}°C)')
                                     print(f"\n[CENTRAL] {'='*70}")
                                     print(f"[CENTRAL] ⚠️  CP {cp_fin} FUERA DE SERVICIO")
                                     print(f"[CENTRAL]    Motivo: Alerta climatológica (T={temperatura_alerta:.1f}°C)")
@@ -3751,6 +3991,19 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                                     print(f"[CENTRAL]    Ticket enviado al driver {driver_id}")
                                     print(f"[CENTRAL] {'='*70}\n")
                                     registrar_evento(f"⚠️ CP {cp_fin} fuera de servicio por alerta climatológica (T={temperatura_alerta:.1f}°C) tras finalizar suministro", "warn")
+                                except Exception as e:
+                                    print(f"[CENTRAL] ⚠️ Error cambiando estado a FUERA_DE_SERVICIO tras FIN: {e}")
+                            elif tiene_fallo_clave_pendiente:
+                                # Hay fallo de clave OpenWeather pendiente: cambiar a FUERA_DE_SERVICIO
+                                try:
+                                    cambiar_estado_cp(cp_fin, 'FUERA_DE_SERVICIO', db_connection, motivo='Fallo de clave OpenWeather')
+                                    print(f"\n[CENTRAL] {'='*70}")
+                                    print(f"[CENTRAL] ⚠️  CP {cp_fin} FUERA DE SERVICIO")
+                                    print(f"[CENTRAL]    Motivo: Fallo de clave OpenWeather")
+                                    print(f"[CENTRAL]    Suministro finalizado correctamente")
+                                    print(f"[CENTRAL]    Ticket enviado al driver {driver_id}")
+                                    print(f"[CENTRAL] {'='*70}\n")
+                                    registrar_evento(f"⚠️ CP {cp_fin} fuera de servicio por fallo de clave OpenWeather tras finalizar suministro", "warn")
                                 except Exception as e:
                                     print(f"[CENTRAL] ⚠️ Error cambiando estado a FUERA_DE_SERVICIO tras FIN: {e}")
                             else:
@@ -3768,8 +4021,8 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                         
                         # Limpezas y publicación ACTIVADO/FUERA_DE_SERVICIO solo si NO hay siguiente en cola
                         if not cola_procesada:
-                            # Determinar el estado final según si hay alerta climatológica
-                            estado_final = 'FUERA_DE_SERVICIO' if tiene_alerta_clima_pendiente else 'ACTIVADO'
+                            # Determinar el estado final según si hay alerta climatológica o fallo de clave
+                            estado_final = 'FUERA_DE_SERVICIO' if (tiene_alerta_clima_pendiente or tiene_fallo_clave_pendiente) else 'ACTIVADO'
                             # Limpiar información de sesión del driver
                             try:
                                 with CP_SESION_OBJETIVO_KWH_LOCK:
@@ -3800,10 +4053,14 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                                     'potencia_actual': 0.0,
                                     'tiempo_carga_s': 0
                                 }
-                                # Si es FUERA_DE_SERVICIO, agregar información de alerta climatológica
+                                # Si es FUERA_DE_SERVICIO, agregar información de alerta climatológica o fallo de clave
                                 if estado_final == 'FUERA_DE_SERVICIO':
-                                    telemetria_actualizada['alerta_clima_activa'] = True
-                                    telemetria_actualizada['temperatura'] = temperatura_alerta
+                                    if tiene_alerta_clima_pendiente:
+                                        telemetria_actualizada['alerta_clima_activa'] = True
+                                        telemetria_actualizada['temperatura'] = temperatura_alerta
+                                    elif tiene_fallo_clave_pendiente:
+                                        telemetria_actualizada['fallo_clave_openweather'] = True
+                                        telemetria_actualizada['motivo_fuera_servicio'] = 'Fallo de clave OpenWeather'
                                 
                                 with TELEMETRIA_ACTUAL_LOCK:
                                     TELEMETRIA_ACTUAL[cp_fin] = telemetria_actualizada
@@ -3811,7 +4068,10 @@ def manejar_cliente(conn: socket.socket, addr: tuple, db_connection):
                                     KAFKA_PRODUCER.send(TELEMETRIA_TOPIC, value=telemetria_actualizada)
                                     KAFKA_PRODUCER.flush(timeout=1)
                                     if estado_final == 'FUERA_DE_SERVICIO':
-                                        print(f"[CENTRAL] CP {cp_fin} fuera de servicio por alerta climatológica (T={temperatura_alerta:.1f}°C)")
+                                        if tiene_alerta_clima_pendiente:
+                                            print(f"[CENTRAL] CP {cp_fin} fuera de servicio por alerta climatológica (T={temperatura_alerta:.1f}°C)")
+                                        elif tiene_fallo_clave_pendiente:
+                                            print(f"[CENTRAL] CP {cp_fin} fuera de servicio por fallo de clave OpenWeather")
                                     else:
                                         print(f"[CENTRAL] CP {cp_fin} resetado y listo para nuevo servicio (ACTIVADO)")
                             except Exception as e:

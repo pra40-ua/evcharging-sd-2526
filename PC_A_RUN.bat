@@ -348,11 +348,13 @@ echo.
 echo IMPORTANTE PARA RED LOCAL:
 echo   Si PC_B esta en otro ordenador, asegurate de:
 echo   1. Copiar central_ip.txt a PC_B
-echo   2. Abrir firewall para puertos: 5000, 9092, 3306
+echo   2. Abrir firewall para puertos: 5000, 5001, 8080, 9092, 3306
 echo.
 echo Comandos Firewall (ejecutar en PowerShell como Admin):
 echo   New-NetFirewallRule -DisplayName "Kafka" -Direction Inbound -LocalPort 9092 -Protocol TCP -Action Allow
 echo   New-NetFirewallRule -DisplayName "Central" -Direction Inbound -LocalPort 5000 -Protocol TCP -Action Allow
+echo   New-NetFirewallRule -DisplayName "Central API" -Direction Inbound -LocalPort 5001 -Protocol TCP -Action Allow
+echo   New-NetFirewallRule -DisplayName "Dashboard Web" -Direction Inbound -LocalPort 8080 -Protocol TCP -Action Allow
 echo   New-NetFirewallRule -DisplayName "MySQL" -Direction Inbound -LocalPort 3306 -Protocol TCP -Action Allow
 echo.
 pause
