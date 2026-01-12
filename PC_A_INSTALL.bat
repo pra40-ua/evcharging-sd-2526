@@ -89,12 +89,102 @@ py -m pip install -r requirements.txt --quiet --disable-pip-version-check
 
 if %errorlevel% equ 0 (
     echo.
-    echo [OK] Todas las dependencias estan instaladas y actualizadas.
+    echo [OK] Instalacion de paquetes completada.
     echo.
 ) else (
     echo.
     echo [ADVERTENCIA] Hubo algun problema instalando dependencias.
     echo El script continuara de todas formas...
+    echo.
+)
+
+REM Verificar que las dependencias criticas se instalaron correctamente
+echo Verificando instalacion de dependencias criticas...
+echo.
+
+set DEPENDENCIAS_OK=1
+
+REM Verificar kafka-python-ng
+py -c "import kafka" >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [ERROR] kafka-python-ng NO se instalo correctamente.
+    set DEPENDENCIAS_OK=0
+) else (
+    echo [OK] kafka-python-ng instalado correctamente.
+)
+
+REM Verificar pymysql o mysql.connector
+py -c "import pymysql" >nul 2>&1
+if %errorlevel% neq 0 (
+    py -c "import mysql.connector" >nul 2>&1
+    if %errorlevel% neq 0 (
+        echo [ERROR] Ni pymysql ni mysql.connector estan instalados.
+        set DEPENDENCIAS_OK=0
+    ) else (
+        echo [OK] mysql.connector instalado correctamente.
+    )
+) else (
+    echo [OK] pymysql instalado correctamente.
+)
+
+REM Verificar flask
+py -c "import flask" >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [ERROR] flask NO se instalo correctamente.
+    set DEPENDENCIAS_OK=0
+) else (
+    echo [OK] flask instalado correctamente.
+)
+
+REM Verificar flask-socketio
+py -c "import flask_socketio" >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [ERROR] flask-socketio NO se instalo correctamente.
+    set DEPENDENCIAS_OK=0
+) else (
+    echo [OK] flask-socketio instalado correctamente.
+)
+
+REM Verificar rich
+py -c "import rich" >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [ERROR] rich NO se instalo correctamente.
+    set DEPENDENCIAS_OK=0
+) else (
+    echo [OK] rich instalado correctamente.
+)
+
+REM Verificar cryptography
+py -c "import cryptography" >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [ERROR] cryptography NO se instalo correctamente.
+    set DEPENDENCIAS_OK=0
+) else (
+    echo [OK] cryptography instalado correctamente.
+)
+
+REM Verificar requests
+py -c "import requests" >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [ERROR] requests NO se instalo correctamente.
+    set DEPENDENCIAS_OK=0
+) else (
+    echo [OK] requests instalado correctamente.
+)
+
+echo.
+if !DEPENDENCIAS_OK! equ 0 (
+    echo [ERROR] Algunas dependencias criticas NO se instalaron correctamente.
+    echo.
+    echo Por favor, ejecuta manualmente:
+    echo   py -m pip install -r requirements.txt
+    echo.
+    echo Y luego ejecuta este script nuevamente.
+    echo.
+    pause
+    exit /b 1
+) else (
+    echo [OK] Todas las dependencias criticas estan instaladas correctamente.
     echo.
 )
 
@@ -143,6 +233,29 @@ if %errorlevel% neq 0 (
 )
 
 echo [OK] Docker daemon esta corriendo.
+echo.
+
+REM Verificar que docker-compose esta disponible
+docker compose version >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [ADVERTENCIA] docker-compose puede no estar disponible.
+    echo Verificando con comando alternativo...
+    docker-compose --version >nul 2>&1
+    if %errorlevel% neq 0 (
+        echo [ERROR] docker-compose NO esta disponible.
+        echo.
+        echo ACCION REQUERIDA:
+        echo   Docker Compose deberia venir con Docker Desktop.
+        echo   Si no esta disponible, actualiza Docker Desktop.
+        echo.
+        pause
+        exit /b 1
+    ) else (
+        echo [OK] docker-compose encontrado (comando alternativo).
+    )
+) else (
+    echo [OK] docker compose encontrado.
+)
 echo.
 
 REM ============================================================

@@ -66,28 +66,29 @@ echo.
 
 if not exist requirements.txt (
     echo [ADVERTENCIA] No se encuentra requirements.txt
-    echo Continuando sin verificar dependencias...
+    echo Continuando sin verificar dependencias.
     echo.
     goto :skip_deps_check
 )
 
-REM Verificar si kafka-python-ng está instalado
-echo Verificando dependencias Python (kafka-python-ng, etc.)...
+REM Verificar si kafka-python-ng esta instalado
+echo Verificando dependencias Python
 py -m pip show kafka-python-ng >nul 2>&1
-if %errorlevel% neq 0 (
-    echo [INFO] kafka-python-ng no encontrado, instalando dependencias...
+set PIP_ERROR=%errorlevel%
+if "%PIP_ERROR%"=="0" goto :kafka_found
+    echo [INFO] kafka-python-ng no encontrado, instalando dependencias
     echo.
-    
     REM Desinstalar kafka-python antiguo si existe (incompatible)
     py -m pip show kafka-python >nul 2>&1
-    if %errorlevel% equ 0 (
-        echo Desinstalando kafka-python antiguo (incompatible)...
+    set OLD_KAFKA_ERROR=%errorlevel%
+    if "%OLD_KAFKA_ERROR%"=="0" (
+        echo Desinstalando kafka-python antiguo (incompatible)
         py -m pip uninstall kafka-python -y --quiet >nul 2>&1
     )
     
     REM Instalar dependencias desde requirements.txt
-    echo Instalando dependencias desde requirements.txt...
-    echo (Esto puede tardar 30-60 segundos)
+    echo Instalando dependencias desde requirements.txt.
+    echo Esto puede tardar 30-60 segundos
     echo.
     py -m pip install -r requirements.txt --quiet --disable-pip-version-check
     if %errorlevel% equ 0 (
@@ -97,19 +98,20 @@ if %errorlevel% neq 0 (
         echo El script continuara, pero puede haber errores.
     )
     echo.
-) else (
+    goto :deps_check_end
+:kafka_found
     REM Verificar otras dependencias críticas
     py -m pip show pymysql >nul 2>&1
     if %errorlevel% neq 0 (
-        echo [INFO] Algunas dependencias faltan, instalando...
+        echo [INFO] Algunas dependencias faltan, instalando.
         py -m pip install -r requirements.txt --quiet --disable-pip-version-check
         echo [OK] Dependencias actualizadas.
         echo.
     ) else (
-        echo [OK] Dependencias Python verificadas (kafka-python-ng instalado).
+        echo [OK] Dependencias Python verificadas - kafka-python-ng instalado.
         echo.
     )
-)
+:deps_check_end
 
 :skip_deps_check
 
@@ -242,7 +244,6 @@ for /L %%i in (1,1,5) do (
 )
 echo.
 echo.
-s
 REM Verificar que el contenedor de Kafka existe y está corriendo
 echo Verificando estado del contenedor Kafka...
 docker ps -a --filter "name=kafka" --format "table {{.Names}}\t{{.Status}}" 2>&1
